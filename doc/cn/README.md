@@ -17,6 +17,6 @@ let bytom = new Bytom(net, "your-path/main.wasm");
 wasm构建请参考项目[Bytom-WebAssembly](https://github.com/Bytom-Community/Bytom-WebAssembly)。
 
 ## WASM如何与JavaScript交互
-由于wasm是使用Go语言编写，请参考Go语言官方文档[Go-WebAssembly](https://github.com/golang/go/wiki/WebAssembly)。<br>
+由于WASM是使用Go语言编写，请参考Go语言官方文档[Go-WebAssembly](https://github.com/golang/go/wiki/WebAssembly)。<br>
 SDK的具体实现参考其项目目录`src/wasm`内的源码。<br>
 WASM会向JavaScript全局作用域注册相关的函数，JavaScript直接调用即可，这里需要注意一点的是，WASM函数都是异步的。
