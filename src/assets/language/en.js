@@ -4,6 +4,7 @@ const en = {
     use: "Start",
     terms: "Terms of Use",
     confirm: "Confirm",
+    cancel: "Cancel"
   },
   dialog: {
     header: "Info",

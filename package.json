@@ -1,7 +1,7 @@
 {
     "name": "chrome-extension-wallet",
     "description": "Bytom Chrome Extension Wallet",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "author": "yanbo@it709.com",
     "license": "MIT",
     "private": true,
@@ -14,7 +14,7 @@
     "dependencies": {
         "axios": "^0.18.0",
         "babel-preset-es2015": "^6.24.1",
-        "bytom-js-sdk": "^1.3.11",
+        "bytom-js-sdk": "^1.4.0",
         "clipboard": "^2.0.1",
         "file-saver": "^2.0.0-rc.3",
         "iview": "^3.0.0",

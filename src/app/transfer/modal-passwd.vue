@@ -20,6 +20,12 @@
 .btn-inline .btn {
   margin: 10px 15px;
 }
+.form-item-content-en {
+  margin-left: 145px;
+}
+.form-item-content-cn {
+  margin-left: 85px;
+}
 </style>
 
 <template>
@@ -31,13 +37,13 @@
             <div v-show="show" class="confirm form bg-gray">
                 <div class="form-item">
                     <label class="form-item-label">{{ $t('transfer.confirmPassword') }}</label>
-                    <div class="form-item-content" style="margin-left: 85px;">
+                    <div :class="passwdStyle">
                     <input type="password" v-model="passwd" autofocus>
                     </div>
                 </div>
                 <div class="btn-group btn-inline">
-                    <div class="btn bg-green" @click="confirm">确认</div>
-                    <div class="btn bg-red" @click="close">取消</div>
+                    <div class="btn bg-green" @click="confirm">{{ $t('welcome.confirm') }}</div>
+                    <div class="btn bg-red" @click="close">{{ $t('welcome.cancel') }}</div>
                 </div>
             </div>
         </transition>
@@ -45,6 +51,9 @@
 </template>
 
 <script>
+import {have} from "../../assets/language"
+const CLASS_CN = "form-item-content form-item-content-cn";
+const CLASS_EN = "form-item-content form-item-content-en"
 export default {
   data() {
     return {
@@ -52,8 +61,27 @@ export default {
       passwd: ""
     };
   },
+  props: {
+    i18n: {
+      type: String,
+      default: 'cn',
+    }
+  },
+  computed: {
+    passwdStyle: function() {
+      if (this.i18n == "cn") {
+        return CLASS_CN;
+      } else if (this.i18n == "en") {
+        return CLASS_EN;
+      }
+      return CLASS_CN;
+    },
+  },
   methods: {
     open() {
+      if(have(localStorage.lang)) {
+        this.i18n = localStorage.lang;
+      }
       this.show = true;
 
       this.passwd = "";

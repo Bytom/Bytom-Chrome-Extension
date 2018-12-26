@@ -4,6 +4,7 @@ const cn = {
     use: "开始",
     terms: "使用条款",
     confirm: "确认",
+    cancel: "取消"
   },
   dialog: {
     header: "提示",
