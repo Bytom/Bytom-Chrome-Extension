@@ -3,6 +3,13 @@
   height: 385px;
   /* font-size: 12px; */
 }
+.content {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  max-height: 340px;
+  overflow-y: scroll;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
+}
 </style>
 <template>
     <div class="warp bg-gray">
@@ -10,8 +17,10 @@
             <img src="../../assets/logo.png">
         </section>
         <section class="login-content protocol">
-            <div class="title">{{ $t('welcome.terms') }}</div>
-            <p>1.是范德萨发</p>
+            <div class="title" style="font-size: 17px;">{{ $t('protocol.title') }}</div>
+            <div style="font-size: 11px; width: 100%;">
+              <pre class="content">{{ $t('protocol.content') }}</pre>
+            </div>
         </section>
         <section class="welcome-bottom bg-green">
             <div class="btn btn-primary btn-startup" @click="confirm">{{ $t('welcome.confirm') }}</div>
