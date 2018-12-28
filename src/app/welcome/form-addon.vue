@@ -1,16 +1,16 @@
 
 <style scoped>
 .content {
-  margin-left: 135px;
+    margin-left: 135px;
 }
 .content-cn {
-  margin-left: 85px;
+    margin-left: 85px;
 }
 .form-item-label {
-  width: 135px;
+    width: 135px;
 }
 .form-item-label-cn {
-  width: 85px;
+    width: 85px;
 }
 </style>
 
@@ -62,121 +62,115 @@
 </template>
 
 <script>
-import bytom from "../common/bytom";
+import account from "../../models/account";
 let mainNet = null;
 let testNet = null;
 export default {
-  name: "",
-  data() {
-    return {
-      nets: [],
-      selected: mainNet,
-      formItem: {
-        accAlias: "",
-        keyAlias: "",
-        passwd1: "",
-        passwd2: ""
-      }
-    };
-  },
-  computed : {
-    formItemLabel: function() {
-      if (this.i18n == "cn") {
-        return "form-item-label form-item-label-cn";
-      } else if (this.i18n == "en") {
-        return "form-item-label";
-      }
-      return "form-item-label form-item-label-cn";
+    name: "",
+    data() {
+        return {
+            nets: [],
+            selected: mainNet,
+            formItem: {
+                accAlias: "",
+                keyAlias: "",
+                passwd1: "",
+                passwd2: ""
+            }
+        };
     },
-    formItemContent: function() {
-      if (this.i18n == "cn") {
-        return "form-item-content content-cn";
-      } else if (this.i18n == "en") {
-        return "form-item-content content";
-      }
-      return "form-item-label form-item-label-cn";
-    }
-  },
-  props: {
-    i18n: {
-      type: String,
-      default: 'cn',
-    }
-  },
-  methods: {
-    create: function() {
-      if (this.formItem.accAlias == "") {
-        this.$dialog.show({
-          body: this.$t("createAccount.inputAlias")
-        });
-        return;
-      }
-      if (this.formItem.keyAlias == "") {
-        this.$dialog.show({
-          body: this.$t("createAccount.inputKey")
-        });
-        return;
-      }
-      if (this.formItem.passwd1 == "") {
-        this.$dialog.show({
-          body: this.$t("createAccount.inputPass")
-        });
-        return;
-      }
-      if (this.formItem.passwd1 != this.formItem.passwd2) {
-        this.$dialog.show({
-            body: this.$t('createAccount.passwordAgain'),
-        });
-        return;
-      }
-      let loader = this.$loading.show({
-        container: null,
-        canCancel: true,
-        onCancel: this.onCancel
-      });
-      bytom.Account.create(
-        this.formItem.accAlias,
-        this.formItem.keyAlias,
-        this.formItem.passwd1
-      )
-        .then(res => {
-          localStorage.login = true;
-          loader.hide();
-          window.location.reload();
-          this.formItem = {};
-        })
-        .catch(err => {
-          loader.hide();
-          this.$dialog.show({
-            body: err.message,
-          });
-        });
+    computed: {
+        formItemLabel: function () {
+            if (this.i18n == "cn") {
+                return "form-item-label form-item-label-cn";
+            } else if (this.i18n == "en") {
+                return "form-item-label";
+            }
+            return "form-item-label form-item-label-cn";
+        },
+        formItemContent: function () {
+            if (this.i18n == "cn") {
+                return "form-item-content content-cn";
+            } else if (this.i18n == "en") {
+                return "form-item-content content";
+            }
+            return "form-item-label form-item-label-cn";
+        }
     },
-    recover: function() {
-      this.$emit("next");
+    props: {
+        i18n: {
+            type: String,
+            default: 'cn',
+        }
     },
-  },
-  watch: {
-    selected: function(value) {
-      localStorage.bytomNet = value.value;
-      bytom.System.setupNet(value.value);
+    methods: {
+        create: function () {
+            if (this.formItem.accAlias == "") {
+                this.$dialog.show({
+                    body: this.$t("createAccount.inputAlias")
+                });
+                return;
+            }
+            if (this.formItem.keyAlias == "") {
+                this.$dialog.show({
+                    body: this.$t("createAccount.inputKey")
+                });
+                return;
+            }
+            if (this.formItem.passwd1 == "") {
+                this.$dialog.show({
+                    body: this.$t("createAccount.inputPass")
+                });
+                return;
+            }
+            if (this.formItem.passwd1 != this.formItem.passwd2) {
+                this.$dialog.show({
+                    body: this.$t('createAccount.passwordAgain'),
+                });
+                return;
+            }
+            let loader = this.$loading.show({
+                container: null,
+                canCancel: true,
+                onCancel: this.onCancel
+            });
+            account.create(this.formItem.accAlias, this.formItem.keyAlias, this.formItem.passwd1).then(res => {
+                localStorage.login = true;
+                loader.hide();
+                window.location.reload();
+                this.formItem = {};
+            }).catch(err => {
+                loader.hide();
+                this.$dialog.show({
+                    body: err.message,
+                });
+            });
+        },
+        recover: function () {
+            this.$emit("next");
+        },
+    },
+    watch: {
+        selected: function (value) {
+            localStorage.bytomNet = value.value;
+            // bytom.System.setupNet(value.value);
+        }
+    },
+    mounted() {
+        mainNet = { label: this.$t('main.mainNetShort'), value: "mainnet" };
+        testNet = { label: this.$t('main.testNetShort'), value: "testnet" };
+        this.nets = [mainNet, testNet];
+        if (localStorage.bytomNet != undefined) {
+            // bytom.System.setupNet(localStorage.bytomNet);
+            if (localStorage.bytomNet == "mainnet") {
+                this.selected = mainNet;
+            } else if (localStorage.bytomNet == "testnet") {
+                this.selected = testNet;
+            }
+        } else {
+            this.selected = mainNet;
+            localStorage.bytomNet = "mainnet";
+        }
     }
-  },
-  mounted() {
-    mainNet = {label: this.$t('main.mainNetShort'), value: "mainnet"};
-    testNet = {label: this.$t('main.testNetShort'), value: "testnet"};
-    this.nets = [mainNet, testNet];
-    if (localStorage.bytomNet != undefined) {
-      bytom.System.setupNet(localStorage.bytomNet);
-      if (localStorage.bytomNet == "mainnet") {
-        this.selected = mainNet;
-      } else if (localStorage.bytomNet == "testnet") {
-        this.selected = testNet;
-      }
-    } else {
-      this.selected = mainNet;
-      localStorage.bytomNet = "mainnet";
-    }
-  }
 };
 </script>

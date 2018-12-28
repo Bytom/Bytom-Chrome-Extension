@@ -12,7 +12,7 @@
                 <div class="form-item">
                     <label class="form-item-label">{{ $t('createAccount.file') }}</label>
                     <div class="form-item-content" style="margin-left: 95px;">
-                      <input type="file" @change="tirggerFile($event)">
+                        <input type="file" @change="tirggerFile($event)">
                     </div>
                 </div>
                 <div class="btn-group">
@@ -25,40 +25,38 @@
 </template>
 
 <script>
-import bytom from "../common/bytom";
+import account from "../../models/account";
 import getLang from "../../assets/language/sdk";
 export default {
-  name: "",
-  data() {
-    return {
-      formData: {}
-    };
-  },
-  methods: {
-    tirggerFile: function(event) {
-      var reader = new FileReader();
-      reader.onload = e => {
-        this.fileTxt = e.target.result;
-      };
+    name: "",
+    data() {
+        return {
+            formData: {}
+        };
+    },
+    methods: {
+        tirggerFile: function (event) {
+            var reader = new FileReader();
+            reader.onload = e => {
+                this.fileTxt = e.target.result;
+            };
 
-      var file = event.target.files[0];
-      reader.readAsText(file);
-    },
-    recovery: function() {
-      bytom.Account.restore(this.fileTxt)
-        .then(res => {
-          window.location.reload();
-          localStorage.login = true;
-        })
-        .catch(error => {
-          this.$dialog.show({
-            body: getLang(error.message)
-          });
-        });
-    },
-    back: function() {
-      this.$emit("back");
+            var file = event.target.files[0];
+            reader.readAsText(file);
+        },
+        recovery: function () {
+            account.restore(this.fileTxt).then(res => {
+                window.location.reload();
+                localStorage.login = true;
+            }).catch(error => {
+                this.$dialog.show({
+                    body: getLang(error.message)
+                });
+            });
+        },
+        back: function () {
+            this.$emit("back");
+        }
     }
-  }
 };
 </script>

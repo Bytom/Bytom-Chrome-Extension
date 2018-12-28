@@ -1,38 +1,37 @@
 <style scoped>
-
 </style>
 
 <template>
     <MenuPage :title="$t('backup.title')" @back="back">
-      <div style="text-align: center">
-        <div style="width: 200px;" class="btn bg-green" @click="backup">{{ $t('backup.button') }}</div>
-      </div>
+        <div style="text-align: center">
+            <div style="width: 200px;" class="btn bg-green" @click="backup">{{ $t('backup.button') }}</div>
+        </div>
     </MenuPage>
 </template>
 
 <script>
-import bytom from "../common/bytom";
+import account from "../../models/account";
 import FileSaver from "file-saver";
 export default {
-  name: "",
-  data() {
-    return {};
-  },
-  methods: {
-    back: function() {
-      this.$emit("on-back");
+    name: "",
+    data() {
+        return {};
     },
-    close: function() {
-      this.$emit("on-exit");
-    },
-    backup() {
-      bytom.Account.backup().then(txt => {
-        var blob = new Blob([txt], {
-          type: "text/plain;charset=utf-8"
-        });
-        FileSaver.saveAs(blob, "bytom_chrome_wallet_backup.txt");
-      });
+    methods: {
+        back: function () {
+            this.$emit("on-back");
+        },
+        close: function () {
+            this.$emit("on-exit");
+        },
+        backup() {
+            account.backup().then(txt => {
+                var blob = new Blob([txt], {
+                    type: "text/plain;charset=utf-8"
+                });
+                FileSaver.saveAs(blob, "bytom_chrome_wallet_backup.txt");
+            });
+        }
     }
-  }
 };
 </script>

@@ -16,6 +16,7 @@
         "babel-preset-es2015": "^6.24.1",
         "bytom-js-sdk": "^1.4.0",
         "clipboard": "^2.0.1",
+        "extension-streams": "^1.0.7",
         "file-saver": "^2.0.0-rc.3",
         "iview": "^3.0.0",
         "moment": "^2.22.2",
