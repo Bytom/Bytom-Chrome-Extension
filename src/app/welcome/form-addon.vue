@@ -153,7 +153,7 @@ export default {
     watch: {
         selected: function (value) {
             localStorage.bytomNet = value.value;
-            // bytom.System.setupNet(value.value);
+            account.setupNet(value.value);
         }
     },
     mounted() {
@@ -161,7 +161,6 @@ export default {
         testNet = { label: this.$t('main.testNetShort'), value: "testnet" };
         this.nets = [mainNet, testNet];
         if (localStorage.bytomNet != undefined) {
-            // bytom.System.setupNet(localStorage.bytomNet);
             if (localStorage.bytomNet == "mainnet") {
                 this.selected = mainNet;
             } else if (localStorage.bytomNet == "testnet") {
@@ -171,6 +170,7 @@ export default {
             this.selected = mainNet;
             localStorage.bytomNet = "mainnet";
         }
+        account.setupNet(this.selected);
     }
 };
 </script>
