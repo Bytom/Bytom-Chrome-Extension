@@ -1,98 +1,99 @@
 const en = {
   welcome: {
-    title: "Welcome to the BYTOM Chrome Wallet",
-    use: "Start",
-    terms: "Terms of Use",
-    confirm: "Confirm",
-    cancel: "Cancel"
+    title: 'Welcome to the BYTOM Chrome Wallet',
+    use: 'Start',
+    terms: 'Terms of Use',
+    confirm: 'Confirm',
+    cancel: 'Cancel'
   },
   dialog: {
-    header: "Info",
+    header: 'Info',
     copy: {
-      success: "Copied！",
-      fail: "Copy failed！",
+      success: 'Copied！',
+      fail: 'Copy failed！'
     }
   },
   transfer: {
-    address: "Address",
-    quantity: "Quantity",
-    fee: "Fee",
-    feeType: "Standard",
-    send: "Send Transaction",
-    confirmPassword: "Confirm password",
-    confirm: "Confirm",
-    cancel: "Cancel",
-    emptyPassword: "Password can not be empty.",
-    unit: "unit",
-    emptyTo: "Empty address",
-    noneBTM: "Error BTM quantity",
-    transferAmount: "Transfer Amount",
-    transferCost: "Transfer Cost",
-    total: "Total",
-    totalTip: "Transfer Amount+Fee",
-    success: "Transaction sent successfully",
+    address: 'Address',
+    quantity: 'Quantity',
+    fee: 'Fee',
+    feeType: 'Standard',
+    send: 'Send transcation',
+    confirmPassword: 'Confirm password',
+    confirm: 'Confirm',
+    cancel: 'Cancel',
+    emptyPassword: 'Password can not be empty.',
+    unit: 'unit',
+    emptyTo: 'Empty address',
+    noneBTM: 'Error BTM quantity',
+    transferAmount: 'Transfer Amount',
+    transferCost: 'Transfer Cost',
+    total: 'Total',
+    totalTip: 'Transfer Amount+Fee',
+    success: 'transcation sent successfully'
   },
   main: {
-    mainNet: "BYTOM MainNet",
-    testNet: "BYTOM TestNet",
-    mainNetShort: "MainNet",
-    testNetShort: "TestNet",
-    copy: "Click to copy",
-    transfer: "Transfer",
-    record: "Transaction Record",
-    noAccount: "No account information on this network.",
-    create: "Create Account",
+    mainNet: 'BYTOM MainNet',
+    testNet: 'BYTOM TestNet',
+    mainNetShort: 'MainNet',
+    testNetShort: 'TestNet',
+    copy: 'Click to copy',
+    transfer: 'Transfer',
+    record: 'transcation Record',
+    noAccount: 'No account information on this network.',
+    create: 'Create Account'
   },
-  transactionDetail: {
-    title: "Transaction Detail",
-    fee: "Fee",
-    blockHeight: "Block Height",
-    blockSize: "Block Size",
-    transactionID: "Transaction ID",
-    sendAddress: "Send Address",
-    receiveAddress: "Receive Address",
-    myAddress: "(My Address)",
+  transcationDetail: {
+    title: 'transcation Detail',
+    fee: 'Fee',
+    blockHeight: 'Block Height',
+    blockSize: 'Block Size',
+    transcationID: 'transcation ID',
+    sendAddress: 'Send Address',
+    receiveAddress: 'Receive Address',
+    myAddress: '(My Address)'
   },
   menu: {
-    title: "Switch Account",
-    createAccount: "Create Account",
-    backup: "Backup",
-    help: "Help",
-    setting: "Setting",
+    title: 'Switch Account',
+    createAccount: 'Create Account',
+    backup: 'Backup',
+    help: 'Help',
+    setting: 'Setting'
   },
   createAccount: {
-    title: "Create Account",
-    accountAlias: "AccountAlias",
-    keyAlias: "KeyAlias",
-    keyPassword: "KeyPassword",
-    confirmPassword: "ConfirmPassword",
-    create: "Create",
-    import: "Import from Backup",
-    select: "Select network",
-    file: "Backup file",
-    import: "Import",
-    back: "Back",
-    passwordAgain: "The passwords are inconsistent twice. Please check and try again.",
-    inputAlias: "Please enter the account alias.",
-    inputKey: "Please enter the key alias.",
-    inputPass: "Please enter your password.",
+    title: 'Create Account',
+    accountAlias: 'AccountAlias',
+    keyAlias: 'KeyAlias',
+    keyPassword: 'KeyPassword',
+    confirmPassword: 'ConfirmPassword',
+    create: 'Create',
+    import: 'Import from Backup',
+    select: 'Select network',
+    file: 'Backup file',
+    import: 'Import',
+    back: 'Back',
+    passwordAgain:
+      'The passwords are inconsistent twice. Please check and try again.',
+    inputAlias: 'Please enter the account alias.',
+    inputKey: 'Please enter the key alias.',
+    inputPass: 'Please enter your password.'
   },
   help: {
-    title: "Help",
-    page: "Information Page"
+    title: 'Help',
+    page: 'Information Page'
   },
   setting: {
-    title: "Setting",
-    version: "Wallet Version",
-    lang: "Language",
-    unit: "BTM Quantity Unit",
+    title: 'Setting',
+    version: 'Wallet Version',
+    lang: 'Language',
+    unit: 'BTM Quantity Unit'
   },
   backup: {
-    title: "Backup",
-    button: "Backup"
+    title: 'Backup',
+    button: 'Backup'
   },
   protocol: {
-    title: "Bytom Chrome Wallet service agreement",
+    title: 'Bytom Chrome Wallet service agreement',
     content: `Dear users:
     Thank you for choosing Bytom Chrome Wallet service. Bytom Chrome Wallet service agreement (hereinafter referred to as "this agreement") is signed by Bytom. (hereinafter referred to as "Chainboat" or "we") and the user (hereinafter referred to as "you" or "user"). This agreement has the legal effect of the contract between you and Chainboat.
     Chainboat in this special remind you in the use of Bytom Chrome Wallet (hereinafter referred to as "Bytom Chrome Wallet" or "the software"), please read the "Bytom Chrome Wallet service agreement" and later noted that the agreement, in particular the provisions of this agreement "liability and limitation of liability" and other terms will be reflected in the form of a bold, make sure you fully understand the terms of the provisions of this agreement, and independent considering risk.
@@ -105,7 +106,7 @@ const en = {
     1. Bytom Chrome Wallet: refers to the blockchain wallet developed by Chainboat based on Bytom (and other public chains to be supported in the future), including other auxiliary tools developed to facilitate users to use blockchain system.
     2. User:
     (1) the user must be a natural person with full capacity for civil conduct;
-    (2) if you use Bytom Chrome Wallet service for minors under the age of 18, you need to use Bytom Chrome Wallet under the guidance of your parents or guardians. If a person without capacity for civil conduct USES Bytom Chrome Wallet or limits his capacity for civil conduct to conduct transactions beyond the scope of his civil rights or capacity, Bytom Chrome Wallet shall have the right to hold you and your parents or guardian accountable for all the consequences caused.
+    (2) if you use Bytom Chrome Wallet service for minors under the age of 18, you need to use Bytom Chrome Wallet under the guidance of your parents or guardians. If a person without capacity for civil conduct USES Bytom Chrome Wallet or limits his capacity for civil conduct to conduct transcations beyond the scope of his civil rights or capacity, Bytom Chrome Wallet shall have the right to hold you and your parents or guardian accountable for all the consequences caused.
     3. Creating or importing a wallet: means that you use Bytom Chrome Wallet to confirm the fulfillment of this agreement and to create or import a wallet.
     4. Wallet password: during the process of creating Bytom Chrome Wallet wallet, the software operation interface prompts you to fill in the password, which is used for encryption to protect the private key. As a decentralized application, the wallet password is not stored on your PC device or the server of the Chainboat, and once lost you need to reset the new password with the plaintext private key or mnemonic.
     5. Information prompt: the information prompt content involved in the operating interface of Bytom Chrome Wallet software is recommended to users to follow the relevant steps.
@@ -121,8 +122,8 @@ const en = {
     2. Deposit and withdrawal. You can use Bytom Chrome Wallet's deposit and withdrawal functions to manage digital assets. That is to say, you can use the private key for electronic signature and modify the account books of relevant blockchain. Transfer refers to that the payer USES the recipient's block chain address to transfer the asset, and the actual deposit and withdrawal behaviors all occur in the relevant blockchain system (instead of Bytom Chrome Wallet).
     3. Manage digital assets. You can use Bytom Chrome Wallet to add, store, and remove digital tokens supported by Bytom Chrome Wallet (except BTM).
     4. Browse DApp. Users can jump to and use the service provided by the DApp (including CoinEra's own DApp and third-party DApp) through a link on Bytom Chrome Wallet.
-    5. Transaction records. We will copy all or part of your transaction records through the blockchain system. But transaction records are based on blockchain system records.
-    6. Service suspension. You are aware of the "irrevocable" property of transactions based on the blockchain system. We cannot suspend or revoke transaction and other operations for you, but under certain circumstances, we can suspend or restrict the operation of Bytom Chrome Wallet software by a certain user.
+    5. transcation records. We will copy all or part of your transcation records through the blockchain system. But transcation records are based on blockchain system records.
+    6. Service suspension. You are aware of the "irrevocable" property of transcations based on the blockchain system. We cannot suspend or revoke transcation and other operations for you, but under certain circumstances, we can suspend or restrict the operation of Bytom Chrome Wallet software by a certain user.
     7. Other services that Chainboat deems necessary.
     Users should be aware of the following common problems when accepting the above services provided by Chainboat:
     1. Adhering to the decentralization of blockchain and in order to protect the security of users' digital assets, Chainboat provides decentralized services, which is greatly different from banking financial institutions. Users understand that Chainboat does not provide the following services:
@@ -130,47 +131,47 @@ const en = {
     (2) retrieve the user's wallet password, private key, mnemonic word and Keystore;
     (3) frozen wallet;
     (4) report the loss of the wallet;
-    (5) transaction rollback;
+    (5) transcation rollback;
     (6) restore the wallet.
-    2. Since Chainboat does not provide the above services, users should keep PC devices containing Bytom Chrome Wallet, backup Bytom Chrome Wallet, backup wallet password, mnemonic, private key and Keystore by themselves. If the user loses the PC device, deletes and does not back up Bytom Chrome Wallet, deletes and does not back up the wallet, the wallet is stolen or forgotten the wallet password, private key, mnemonic word, and Keystore, Chainboat cannot restore or recover the wallet password, private key, mnemonic word, and Keystore. If a user makes a transaction by mistake (such as sending a wrong address), Chainboat cannot cancel the transaction.
+    2. Since Chainboat does not provide the above services, users should keep PC devices containing Bytom Chrome Wallet, backup Bytom Chrome Wallet, backup wallet password, mnemonic, private key and Keystore by themselves. If the user loses the PC device, deletes and does not back up Bytom Chrome Wallet, deletes and does not back up the wallet, the wallet is stolen or forgotten the wallet password, private key, mnemonic word, and Keystore, Chainboat cannot restore or recover the wallet password, private key, mnemonic word, and Keystore. If a user makes a transcation by mistake (such as sending a wrong address), Chainboat cannot cancel the transcation.
     3. The digital token management services provided by Chainboat and Bytom Chrome Wallet do not include all existing digital assets. Do not operate any digital token not supported by Bytom Chrome Wallet through Bytom Chrome Wallet.
-    4. Bytom Chrome Wallet is only a digital token management tool for users, not an exchange or trading platform. Although this agreement will refer to "transaction" several times, it generally refers to users' deposit and withdrawal operations using Bytom Chrome Wallet, which is fundamentally different from "transaction" on an exchange or trading platform.
-    5. The integrated DApp on Bytom Chrome Wallet includes the independent DApp owned by Chainboat and the DApp provided by the third party platform. For DApp provided by third-party platforms, Bytom Chrome Wallet only provides blockchain explorer for users to enter DApp. Users should make their own judgment and assessment before accepting services or conducting transactions on third-party DApp, and whether the services or transactions provided by such third-party DApp are at risk.
+    4. Bytom Chrome Wallet is only a digital token management tool for users, not an exchange or trading platform. Although this agreement will refer to "transcation" several times, it generally refers to users' deposit and withdrawal operations using Bytom Chrome Wallet, which is fundamentally different from "transcation" on an exchange or trading platform.
+    5. The integrated DApp on Bytom Chrome Wallet includes the independent DApp owned by Chainboat and the DApp provided by the third party platform. For DApp provided by third-party platforms, Bytom Chrome Wallet only provides blockchain explorer for users to enter DApp. Users should make their own judgment and assessment before accepting services or conducting transcations on third-party DApp, and whether the services or transcations provided by such third-party DApp are at risk.
     Iv. Your rights and obligations
     Create or import a wallet
-    1. Create or import a wallet: you have the right to create and/or import a wallet via Bytom Chrome Wallet on your PC device, set the wallet password and other information, and use your own wallet to transfer and receive transactions on the blockchain through Bytom Chrome Wallet app.
+    1. Create or import a wallet: you have the right to create and/or import a wallet via Bytom Chrome Wallet on your PC device, set the wallet password and other information, and use your own wallet to transfer and receive transcations on the blockchain through Bytom Chrome Wallet app.
     2. Authentication: according to relevant laws, regulations and policies, when using the relevant services provided by Bytom Chrome Wallet, specific users shall timely complete relevant authentication in accordance with Bytom Chrome Wallet's prompts, requiring you to submit personal information including but not limited to your name, id number, PC number, bank card number and so on. Otherwise, this particular user will not be able to use the service, and you will be responsible for the loss caused by the delay of this particular user.
     3. Chainboat may be developing different versions of software for different end devices, and you should choose to download the appropriate version for installation based on actual needs. If you obtain the software or an installer with the same name of the software from an unauthorized third party, Chainboat will not guarantee the normal use of the software or its security, and you shall bear the losses caused thereby.
     4. After the new version of the software is released, the old version of the software may not be available. Chainboat does not guarantee the security, continued availability, or customer service of older software. Please check and download the latest version at any time.
     (2) use
     1. Users shall properly keep PC devices, wallet passwords, private keys, mnemonic words, Keystore and other information. Chainboat is not responsible for keeping the above information for the user. All risks, responsibilities, losses and expenses arising from the loss of your PC device, active or passive disclosure, forgotten wallet password, private key, mnemonic word, Keystore or attack or fraud by others shall be borne by you.
     Follow information tips. You understand and agree to follow the information prompts made by Bytom Chrome Wallet to you and operate according to the content of the information prompts. Otherwise, all risks, liabilities, losses and costs caused thereby shall be borne by you.
-    3. You understand and understand that Bytom Chrome Wallet has no obligation to perform due diligence on linked third-party DApp services or transactions, and you should make investment decisions rationally and independently assume corresponding investment risks.
-    4. Complete authentication actively. When Bytom Chrome Wallet reasonably believes that your transaction behavior or transaction situation is abnormal, or that your identity information is questionable, or Bytom Chrome Wallet thinks that your identity document or other necessary documents should be checked, please actively cooperate with Bytom Chrome Wallet to check your valid identity document or other necessary documents and timely complete relevant authentication.
+    3. You understand and understand that Bytom Chrome Wallet has no obligation to perform due diligence on linked third-party DApp services or transcations, and you should make investment decisions rationally and independently assume corresponding investment risks.
+    4. Complete authentication actively. When Bytom Chrome Wallet reasonably believes that your transcation behavior or transcation situation is abnormal, or that your identity information is questionable, or Bytom Chrome Wallet thinks that your identity document or other necessary documents should be checked, please actively cooperate with Bytom Chrome Wallet to check your valid identity document or other necessary documents and timely complete relevant authentication.
     5. Transfer.
     (1) you are aware that the daily account transfer limit and amount you can use in Bytom Chrome Wallet service may be different for the country/region you are in when using the transfer service, regulatory requirements, transfer purpose, risk control of Bytom Chrome Wallet, identity verification and other reasons.
     (2) you understand the "irrevocable" property based on the blockchain operation. When you use the Bytom Chrome Wallet transfer function, you should bear the consequences caused by your operation error (including but not limited to the problem of your wrong transfer address and your own choice of transfer node server).
-    (3) you are aware that when using Bytom Chrome Wallet service, the following situations may lead to the transfer "transaction failure" or "package timeout" :
+    (3) you are aware that when using Bytom Chrome Wallet service, the following situations may lead to the transfer "transcation failure" or "package timeout" :
     A) insufficient wallet balance;
-    B) the transaction gas is insufficient;
+    B) the transcation gas is insufficient;
     C) blockchain fails to execute the contract code;
     D) exceeding the amount of payment required by regulatory authorities, Bytom Chrome Wallet or laws and regulations;
     E) network, equipment, and other technical failures;
-    F) transaction is abandoned due to blockchain network congestion, failure, and other reasons;
-    G) your address or the address of the counterparty of the transaction is recognized as a special address, such as high-risk address, exchange address, ICO address, Token address, etc.
+    F) transcation is abandoned due to blockchain network congestion, failure, and other reasons;
+    G) your address or the address of the counterparty of the transcation is recognized as a special address, such as high-risk address, exchange address, ICO address, Token address, etc.
     (4) you know that Bytom Chrome Wallet only provides you with the transfer tool. After you use Bytom Chrome Wallet to complete the transfer, Chainboat will complete all obligations of the service.
-    6. Legal compliance. You know that you should comply with relevant laws, regulations and national policies when operating Bytom Chrome Wallet or making transactions with DApp on Bytom Chrome Wallet.
-    7. Notice. Bytom Chrome Wallet will send you notices by website announcement, email, sending SMS, phone, message center information, pop-up prompt or client notification, etc., such as informing you of the progress of the transaction or prompting you to perform relevant operations. Please pay attention to it in a timely manner.
+    6. Legal compliance. You know that you should comply with relevant laws, regulations and national policies when operating Bytom Chrome Wallet or making transcations with DApp on Bytom Chrome Wallet.
+    7. Notice. Bytom Chrome Wallet will send you notices by website announcement, email, sending SMS, phone, message center information, pop-up prompt or client notification, etc., such as informing you of the progress of the transcation or prompting you to perform relevant operations. Please pay attention to it in a timely manner.
     8. Service fees and tax obligations:
     (1) Bytom Chrome Wallet will not charge you any service fee or service fee for the time being. The rules will be separately agreed or announced when charging for certain services in the future;
     (2) when you use Bytom Chrome Wallet to transfer money, you should pay the gas . The amount is up to you. Gas  is collected by the relevant blockchain system;
     (3) you are aware that under certain circumstances, if your transfer operation is not completed due to unstable environment and network status, the gas will be charged by the relevant blockchain system;
-    (4) you shall be responsible for all taxes payable and other expenses incurred in connection with your transaction in Bytom Chrome Wallet.
+    (4) you shall be responsible for all taxes payable and other expenses incurred in connection with your transcation in Bytom Chrome Wallet.
     Risk warning
     1. You understand and understand that, as the laws, regulations and policies in the field of digital tokens are not yet sound, the digital tokens in this field may generate significant risks such as uncashing and technical instability. And the price of digital tokens fluctuates much more than other financial assets. We caution that you should rationally choose to hold or dispose of any digital token according to your financial situation and risk preference. The ticker view feature provided by Bytom Chrome Wallet is only a search result that captures the exchange rate information of digital tokens from some exchanges, and does not represent the latest quotation or the best offer.
-    2. When using Bytom Chrome Wallet service, if you or your counterpart fails to comply with this agreement or the operation tips and rules in the description, transaction and payment pages of relevant websites, Bytom Chrome Wallet does not guarantee the fair to be completed smoothly, and Bytom Chrome Wallet does not bear the liability for damages. If the foregoing happens and the payment has been entered into the account of your or your counterparty's Bytom Chrome Wallet wallet or third-party wallet, you understand the "irreversible" property of the blockchain operation and the "irrevocable" feature of the relevant transaction，You and your counterpart shall bear the corresponding consequences at their own risk.
+    2. When using Bytom Chrome Wallet service, if you or your counterpart fails to comply with this agreement or the operation tips and rules in the description, transcation and payment pages of relevant websites, Bytom Chrome Wallet does not guarantee the fair to be completed smoothly, and Bytom Chrome Wallet does not bear the liability for damages. If the foregoing happens and the payment has been entered into the account of your or your counterparty's Bytom Chrome Wallet wallet or third-party wallet, you understand the "irreversible" property of the blockchain operation and the "irrevocable" feature of the relevant transcation，You and your counterpart shall bear the corresponding consequences at their own risk.
     3. You shall determine whether the other party is a person with full capacity for civil conduct and decide whether to transact with the other party or transfer money to the other party at your own risk.
-    4. In the process of transfer, if "transaction failure", "package timeout" and other similar abnormal information prompts occur, you should reconfirm through the official channel of relevant blockchain system or other blockchain query tools to avoid repeated transfer; Otherwise, all losses and expenses arising therefrom shall be borne by you.
+    4. In the process of transfer, if "transcation failure", "package timeout" and other similar abnormal information prompts occur, you should reconfirm through the official channel of relevant blockchain system or other blockchain query tools to avoid repeated transfer; Otherwise, all losses and expenses arising therefrom shall be borne by you.
     5. You understand that after you create or import wallet on Bytom Chrome Wallet, your Keystore, private key, mnemonic and other information are only stored in the current PC device, not on the server of Bytom Chrome Wallet or Chainboat. You can replace PC devices by synchronizing wallets and other means according to the operation guide provided by Bytom Chrome Wallet. However, if you do not save or backup the wallet password, private key, mnemonic word, Keystore and other information, and if your PC device is lost, your digital token will be lost, and Chainboat cannot retrieve it for you, you shall bear the corresponding loss by yourself. If you export, save or backup the wallet password, private key, mnemonic word, Keystore and other information, or the device or server that saves or backs up the above information is attacked or controlled by hackers, your digital token will be lost, and Chainboat cannot retrieve it for you, you shall bear the corresponding loss by yourself.
     6. We recommend that you make a safe backup of your wallet password, private key, mnemonic word, Keystore and other information when creating or importing your wallet. We draw your attention, please do not use the following backup: screenshot, email, notepad, SMS, WeChat, QQ and other electronic backup. We recommend that you copy mnemonic and Keystore information in a paper notepad. You can also store electronic data in the password manager.
     7. We suggest that you use Bytom Chrome Wallet in a secure network environment to ensure that your PC device does not jailbreak or Root to avoid potential security risks
@@ -203,7 +204,7 @@ const en = {
     (3) by using any automated programs, software, engines, web crawlers, web analytics tools, data mining tools or similar tools to access the Chainboat service, collect or process the content provided by Chainboat, or attempt to interfere with any user's or any other access to the Chainboat service;
     (4) provide gambling information or in any way induce others to participate in gambling;
     (5) hack into others' Bytom Chrome Wallet wallet to steal digital tokens;
-    (6) conducting transactions inconsistent with the transactions claimed by the other party, or untrue transactions;
+    (6) conducting transcations inconsistent with the transcations claimed by the other party, or untrue transcations;
     (7) engage in any behavior that infringes or may infringe Bytom Chrome Wallet service system and data;
     (8) other illegal ACTS and ACTS that Chainboat may reasonably consider inappropriate.
     3. You understand and agree that if Chainboat suffers any loss, claim from any third party or penalty imposed by any administrative authority due to your violation of relevant laws (including but not limited to customs and tax regulations) or provisions of this agreement, you shall indemnify Chainboat, including reasonable attorney fees.
@@ -223,17 +224,17 @@ const en = {
     (1) loss of digital tokens caused by users' loss of PC devices, deletion and failure to back up Bytom Chrome Wallet, deletion and failure to back up wallet, wallet theft or forgetting wallet password, private key, mnemonic word and Keystore;
     (2) loss of digital tokens caused by users' disclosure of wallet password, private key, mnemonic word and Keystore, or borrowing, transferring or authorizing others to use their PC devices or Bytom Chrome Wallet wallet, or not downloading Bytom Chrome Wallet application through Chainboat official channel or using Bytom Chrome Wallet application in other unsafe ways;
     (3) loss of digital assets caused by user's wrong operation (including but not limited to the wrong transfer address you input and the server of transfer node you choose);
-    (4) due to time delay, instability of blockchain system and other reasons, transaction records of Chainboat copy users on blockchain are deviated;
+    (4) due to time delay, instability of blockchain system and other reasons, transcation records of Chainboat copy users on blockchain are deviated;
     (5) loss of digital assets due to misoperation by users who do not understand the nature of blockchain technology;
     (6) risks and consequences arising from users' operation on third-party DApp.
-    4. You understand that Bytom Chrome Wallet is only a tool for your digital token management. Chainboat shall not control the quality, safety or legality of the products and services provided by the third party DApp, the authenticity or accuracy of the information and the ability of the other party to fulfill its obligations under the agreement entered into with you. All transactions conducted by you in the third-party DApp are your personal behaviors, and binding contractual relationships are established between you and your counterpart, and have nothing to do with Bytom Chrome Wallet. Chainboat reminds you to determine the authenticity, legitimacy and validity of login DApp and relevant information through your own careful judgment. You shall also bear the risks arising from your dealings with any third party.
+    4. You understand that Bytom Chrome Wallet is only a tool for your digital token management. Chainboat shall not control the quality, safety or legality of the products and services provided by the third party DApp, the authenticity or accuracy of the information and the ability of the other party to fulfill its obligations under the agreement entered into with you. All transcations conducted by you in the third-party DApp are your personal behaviors, and binding contractual relationships are established between you and your counterpart, and have nothing to do with Bytom Chrome Wallet. Chainboat reminds you to determine the authenticity, legitimacy and validity of login DApp and relevant information through your own careful judgment. You shall also bear the risks arising from your dealings with any third party.
     5. Chainboat may provide services to you and your counterparty at the same time. You agree to expressly exempt Chainboat from any actual or potential conflict of interest which may exist in such actions, and shall not claim that there are legal defects in the provision of services by Chainboat, nor thereby increase the liability or duty of care of Chainboat.
     6. Chainboat does not provide the following forms of warranty:
     (1) the timeliness, accuracy, integrity and reliability of the information captured by Chainboat in the digital asset market from third-party exchanges are guaranteed;
     (2) any technology, products, services and information you obtain through the Chainboat service will meet your expectations;
     (3) the Chainboat service will meet all your needs;
-    (4) all parties to your transaction on Bytom Chrome Wallet will timely fulfill their obligations in the transaction agreement reached with you.
-    7. You understand that Bytom Chrome Wallet only serves as a tool for users to manage digital assets and display transaction information. Chainboat does not provide legal, tax or investment advice and other services. You should seek advice from legal, tax and investment professionals on your own, and Chainboat shall not be responsible for any investment loss or data loss suffered by you during the use of our services.
+    (4) all parties to your transcation on Bytom Chrome Wallet will timely fulfill their obligations in the transcation agreement reached with you.
+    7. You understand that Bytom Chrome Wallet only serves as a tool for users to manage digital assets and display transcation information. Chainboat does not provide legal, tax or investment advice and other services. You should seek advice from legal, tax and investment professionals on your own, and Chainboat shall not be responsible for any investment loss or data loss suffered by you during the use of our services.
     8. In any event, the total liability of Chainboat for breach of this agreement shall not exceed 450BTM or RMB 500 yuan, whichever is higher.
     9. You understand that in accordance with the requirements of relevant Chinese policies and regulations, we may change our user access criteria from time to time to limit the scope and mode of providing services to a particular group.
     X. entire agreement
@@ -260,7 +261,7 @@ const en = {
     This policy can be updated by Chainboat online at any time. Once the updated policy is published, it will replace the original policy. If you do not accept the revised terms, please immediately stop using Bytom Chrome Wallet, and your continued use of Bytom Chrome Wallet will be deemed as acceptance of the revised policy. The revised policy will automatically take effect as soon as it is published on Bytom Chrome Wallet. You know that this policy and other relevant provisions are applicable to Bytom Chrome Wallet and DApp independently owned by Chainboat on Bytom Chrome Wallet.
     I. what information do we collect about you
     Please note that we collect the following information of you for the purpose of meeting your needs in Bytom Chrome Wallet service, and we attach great importance to the protection of your privacy. When we collect your information, we will strictly abide by the principle of "legal, legitimate and necessary". Moreover, you know that your service experience in Bytom Chrome Wallet may be affected if you do not provide relevant information required by our service.
-    1. We will collect your PC device information, operation records, transaction records, wallet address and other personal information.
+    1. We will collect your PC device information, operation records, transcation records, wallet address and other personal information.
     2. To meet your specific service requirements, we will collect your name, bank card number, PC phone number, email address and other information.
     3. You are aware that your wallet password, private key, mnemonic word and Keystore on Bytom Chrome Wallet do not store or synchronize to Chainboat server. Chainboat does not provide services to retrieve your wallet password, private key, mnemonic, Keystore.
     4. In addition to the above content, you know that when you use the specific function of Bytom Chrome Wallet, we will make a special reminder to you before collecting your personal information and ask for more personal information from you. If you choose not to agree, it is deemed that you give up the use of Bytom Chrome Wallet, the specific function.
@@ -276,7 +277,7 @@ const en = {
     7. We collect information as follows:
     (1) you provide us with information. For example, you fill in your name, PC phone number or bank card number in the "personal center" page, or provide an email address when giving feedback to questions, or provide additional information to us when using our specific services.
     (2) we obtain information during your use of Bytom Chrome Wallet, including your PC device information and your operation record of Bytom Chrome Wallet;
-    (3) we copy all or part of your transaction records through the blockchain system. However, the transaction records shall be subject to the records of the block chain system.
+    (3) we copy all or part of your transcation records through the blockchain system. However, the transcation records shall be subject to the records of the block chain system.
     How do we use your information
     1. We confirm the correspondence between you and your wallet through the unique serial number of your PC device.
     2. We will timely send you important notices, such as software updates, service agreements and changes to the terms of this policy.
@@ -294,7 +295,7 @@ const en = {
     (2) in "system Settings", you can choose not to turn on the "fingerprint login" option, that is, you can choose not to use the Touch ID authentication service provided by apple;
     (3) in the "personal center", you do not need to provide your name, PC phone number, bank card and other information, but when you use a specific service, you need to provide the above information;
     4. You know that when we collect information from you for a specific purpose, we will give you notice in advance, and you have the right to refuse. However, at the same time, you know that when you choose to refuse to provide relevant information, you give up the relevant services of Bytom Chrome Wallet.
-    5. You know that you and we have no control over whether your transaction records are disclosed, because your transaction records are open and transparent in the whole blockchain system based on the open source properties of the blockchain trading system.
+    5. You know that you and we have no control over whether your transcation records are disclosed, because your transcation records are open and transparent in the whole blockchain system based on the open source properties of the blockchain trading system.
     6. Do you know when you use Bytom Chrome Wallet function after the jump to the third party DApp, our "Bytom Chrome Wallet service agreement", "Bytom Chrome Wallet privacy policy will no longer applicable, for your personal information about you on the third party DApp control problems, we recommend that you read before using third-party DApp and to understand its privacy rules and the related user services agreement, etc.
     7. You have the right to request us to update, change or delete your information.
     8. You are aware that we may collect your information in accordance with article 1, paragraph 6, of this policy without obtaining your authorization and consent.
@@ -331,4 +332,4 @@ const en = {
   }
 }
 
-export default en;
+export default en

@@ -1,4 +1,4 @@
-
+creation
 <style scoped>
 .content {
     margin-left: 135px;
@@ -54,7 +54,7 @@
                 </div>
                 <div class="btn-group">
                     <div class="btn bg-green" @click="create">{{ $t('createAccount.create') }}</div>
-                    <div class="btn bg-green" @click="recover">{{ $t('createAccount.import') }}</div>
+                    <div class="btn bg-green" @click="$router.push({ name: 'welcome-recovery' })">{{ $t('createAccount.import') }}</div>
                 </div>
             </div>
         </section>
@@ -145,9 +145,6 @@ export default {
                     body: err.message,
                 });
             });
-        },
-        recover: function () {
-            this.$emit("next");
         },
     },
     watch: {

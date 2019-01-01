@@ -81,16 +81,16 @@
     width: 200px;
 }
 
-.transactions {
-    font-size: 15px;
-    height: 275px;
-}
-.transactions h3 {
+.transaction-title h3 {
     font-size: 18px;
     font-weight: inherit;
     color: #cacaca;
     text-align: center;
     padding: 5px 0;
+}
+.transactions {
+    font-size: 15px;
+    height: 275px;
 }
 .transactions .list {
     padding: 0 20px;
@@ -116,7 +116,7 @@
 </style>
 
 <template>
-    <div id="app" class="warp">
+    <div class="warp">
         <section class="bg-green">
             <div class="topbar">
                 <div class="topbar-right">
@@ -127,14 +127,14 @@
                     </select>
                 </div>
                 <div class="topbar-left">
-                    <a class="btn-menu" href="#">
-                        <i class="iconfont icon-menu" @click="$refs.menu.open()"></i>
+                    <a class="btn-menu" @click="openMenu">
+                        <i class="iconfont icon-menu"></i>
                     </a>
                     <span class="alias">{{currentAccount.alias}}</span>
                 </div>
             </div>
             <div class="content">
-                <img src="../../assets/logo.png" class="token-icon">
+                <img src="@/assets/logo.png" class="token-icon">
                 <div v-if="currentAccount.address!=undefined" class="amount">
                     <div class="token-amount">
                         {{currentAccount.balance}}
@@ -149,83 +149,112 @@
             </div>
         </section>
 
-        <section v-if="currentAccount.address!=undefined" class="transactions">
-            <h3 class="bg-gray">{{ $t('main.record') }}</h3>
-            <vue-scroll @handle-scroll="handleScroll">
-                <ul class="list">
-                    <li class="list-item" v-for="(transcation, index) in transcations" :key="index" @click="$refs.trxInfo.open(transcation, currentAccount.address)">
-                        <div class="value">{{transcation.direct}} {{transcation.val.toFixed(2)}} BTM</div>
-                        <div>
-                            <div v-if="transcation.is_confirmed" class="time">{{transcation.block_timestamp | moment}}</div>
-                            <div v-else class="time">{{transcation.submission_timestamp | moment}}</div>
-                            <div class="addr">{{transcation.address}}</div>
-                        </div>
-                    </li>
-                </ul>
-            </vue-scroll>
-        </section>
-        <section v-else>
+        <div v-if="currentAccount.address!=undefined">
+            <section class="transaction-title">
+                <h3 class="bg-gray">{{ $t('main.record') }}</h3>
+            </section>
+            <section class="transactions">
+                <vue-scroll @handle-scroll="handleScroll">
+                    <ul class="list">
+                        <li class="list-item" v-for="(transcation, index) in transactions" :key="index" @click="$router.push({name: 'transfer-info', params: {transcation: transcation, address: currentAccount.address}})">
+                            <div class="value">{{transcation.direct}} {{transcation.val.toFixed(2)}} BTM</div>
+                            <div>
+                                <div v-if="transcation.is_confirmed" class="time">{{transcation.block_timestamp | moment}}</div>
+                                <div v-else class="time">{{transcation.submission_timestamp | moment}}</div>
+                                <div class="addr">{{transcation.address}}</div>
+                            </div>
+                        </li>
+                    </ul>
+                </vue-scroll>
+            </section>
+        </div>
+        <div v-else>
             <p style="width: 250px; margin: 30px auto; text-align: center;">{{ $t('main.noAccount') }}</p>
             <a class="btn btn-primary btn-creation bg-green" @click="$refs.menu.open('creation')">{{ $t('main.create') }}</a>
-        </section>
+        </div>
+
+        <!-- child page -->
+        <div class="mask" v-show="maskShow"></div>
+        <transition :enter-active-class="enterActive" :leave-active-class="leaveActive">
+            <router-view></router-view>
+        </transition>
 
         <!-- modal -->
         <Qrcode ref="qrcode"></Qrcode>
-        <Menu ref="menu" :accounts="accounts" :selectedAccount="currentAccount" @on-account-change="accountToggle"></Menu>
-        <Transfer ref="transfer" :fee="fee" :feeTypeOptions="feeTypeOptions" @on-success="refreshAccounts"></Transfer>
-        <TxInfo ref="trxInfo" @on-success="refreshTransactions"></TxInfo>
     </div>
 </template>
 
 <script>
 import ClipboardJS from "clipboard";
-import Menu from "../home/menu";
-import Qrcode from "../transfer/qrcode";
-import Transfer from "../transfer/transfer";
-import TxInfo from "../transfer/detail";
-import account from "../../models/account";
-import transaction from "../../models/transaction";
-import utils from "../common/utils";
+import Menu from "@/views/homeMenu";
+import Qrcode from "@/views/qrcode";
+import Transfer from "@/views/transfer";
+import TxInfo from "@/views/transferDetail";
+import address from "@/utils/address";
+import account from "@/models/account";
+import transaction from "@/models/transaction";
+const EnterActive = 'animated faster fadeInLeft';
+const LeaveActive = 'animated faster fadeOutLeft';
 export default {
     name: "",
     components: {
-        Menu,
         Qrcode,
-        Transfer,
-        TxInfo
     },
     data() {
         return {
-            feeTypeOptions: [this.$t("transfer.feeType")],
-            fee: this.$t("transfer.feeType"),
             network: "mainnet",
             clipboard: new ClipboardJS(".address-text"),
             addressTitle: this.$t("main.copy"),
-            menuOpen: false,
-            maskOpen: false,
             accounts: [],
             currentAccount: {},
-            transcations: [],
+            transactions: [],
+            maskShow: false,
             start: 0,
-            limit: 10
+            limit: 10,
+            enterActive: EnterActive,
+            leaveActive: LeaveActive,
         };
     },
     watch: {
-        currentAccount(newVal) {
-            if (newVal.guid == undefined) {
-                return;
+        '$route'(to, from) {
+            if (to.name.startsWith('menu')) {
+                this.maskShow = true
+            } else if (from.name.startsWith('menu')) {
+                this.maskShow = false
             }
 
-            this.setupShortAddr(newVal.address)
-            this.refreshBalance(newVal.guid);
-            this.refreshTransactions(newVal.guid, newVal.address).then(transcations => {
-                this.transcations = transcations
-            });
-        }
+            //account toggle by the list from menu
+            if (to.name == 'home' && to.params.selectedAccount != undefined && from.name == 'menu') {
+                this.currentAccount = to.params.selectedAccount
+            }
+
+            // remove transition for some page
+            this.enterActive = EnterActive
+            this.leaveActive = LeaveActive
+            if (to.name == 'transfer-confirm' || from.name == 'transfer-confirm') {
+                this.enterActive = ''
+                this.leaveActive = ''
+            }
+        },
+        currentAccount: {
+            deep: true,
+            immediate: true,
+            handler(newVal, oldName) {
+                if (newVal.guid == undefined) {
+                    return;
+                }
+
+                this.setupShortAddr(newVal.address)
+                this.refreshBalance(newVal.guid);
+                this.refreshTransactions(newVal.guid, newVal.address).then(transactions => {
+                    this.transactions = transactions
+                });
+            },
+        },
     },
     methods: {
-        setupShortAddr(address) {
-            this.currentAccount.address_short = utils.shortAddress(address);
+        setupShortAddr(rawAddress) {
+            this.currentAccount.address_short = address.short(rawAddress);
         },
         setupClipboard() {
             this.clipboard.on("success", e => {
@@ -242,6 +271,8 @@ export default {
             });
         },
         setupRefreshTimer() {
+            // todo refresh all accounts
+
             setInterval(() => {
                 this.refreshBalance(this.currentAccount.guid)
             }, 10000)
@@ -263,12 +294,13 @@ export default {
         showQrcode: function () {
             this.$refs.qrcode.open(this.currentAccount.address);
         },
-        transferOpen: function () {
-            this.fee = this.$t("transfer.feeType");
-            this.feeTypeOptions = [this.$t("transfer.feeType")];
-            this.$refs.transfer.open(this.currentAccount);
+        openMenu: function () {
+            this.$router.push({ name: 'menu', params: { accounts: this.accounts, selected: this.currentAccount } })
         },
-        transcationsFormat: function (transactions) {
+        transferOpen: function () {
+            this.$router.push({ name: 'transfer', params: { account: this.currentAccount } })
+        },
+        transactionsFormat: function (transactions) {
             transactions.forEach(transaction => {
                 let inputSum = 0;
                 let outputSum = 0;
@@ -298,11 +330,11 @@ export default {
                 let val = selfoutputSum - selfInputSum;
                 if (val > 0) {
                     transaction.direct = "+";
-                    transaction.address = utils.shortAddress(inputAddresses.pop());
+                    transaction.address = address.short(inputAddresses.pop());
                 } else {
                     val = selfInputSum - selfoutputSum;
                     transaction.direct = "-";
-                    transaction.address = utils.shortAddress(outputAddresses.pop());
+                    transaction.address = address.short(outputAddresses.pop());
                 }
                 transaction.val = Number(val / 100000000);
                 transaction.fee = Number(inputSum - outputSum) / 100000000;
@@ -316,28 +348,30 @@ export default {
                 }
 
                 if (localStorage.currentAccount != undefined) {
+
                     this.currentAccount = JSON.parse(localStorage.currentAccount);
                 } else {
+
                     this.currentAccount = accounts[0];
                 }
-            });
+            })
         },
         refreshBalance: function (guid) {
             account.balance(guid).then(balance => {
-                this.currentAccount.balance = balance
+                this.currentAccount.balance = balance;
             }).catch(error => {
                 console.log(error);
             });
         },
-        refreshTransactions: function (guid, address) {
+        refreshTransactions: function (guid, address, start, limit) {
             return new Promise((resolve, reject) => {
-                transaction.list(guid, address).then(ret => {
+                transaction.list(guid, address, start, limit).then(ret => {
                     let transactions = ret.result.data;
                     if (transactions == null) {
                         return;
                     }
 
-                    this.transcationsFormat(transactions);
+                    this.transactionsFormat(transactions);
                     console.log("formatTx", transactions);
                     resolve(transactions)
                 }).catch(error => {
@@ -349,24 +383,27 @@ export default {
         handleScroll(vertical, horizontal, nativeEvent) {
             if (vertical.process == 0) {
                 this.start = 0;
+                this.refreshTransactions(this.currentAccount.guid, this.currentAccount.address).then(transactions => {
+                    this.transactions = transactions
+                });
                 return;
             }
 
             if (vertical.process == 1) {
                 this.start += this.limit;
-                this.refreshTransactions(this.currentAccount.guid, this.currentAccount.address).then(transcations => {
+                this.refreshTransactions(this.currentAccount.guid, this.currentAccount.address, this.start, this.limit).then(transactions => {
                     transactions.forEach(transaction => {
-                        this.transcations.push(transaction);
+                        this.transactions.push(transaction);
                     });
                 });
             }
         }
     },
     mounted() {
+        this.setupNetwork();
         this.setupClipboard();
         this.setupRefreshTimer();
-        this.setupNetwork();
-        this.refreshAccounts();
+        this.refreshAccounts()
     },
     beforeDestroy() {
         this.clipboard.destroy();

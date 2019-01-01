@@ -2,7 +2,7 @@
 </style>
 
 <template>
-    <MenuPage :title="$t('backup.title')" @back="back">
+    <MenuPage :title="$t('backup.title')">
         <div style="text-align: center">
             <div style="width: 200px;" class="btn bg-green" @click="backup">{{ $t('backup.button') }}</div>
         </div>
@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import account from "../../models/account";
+import account from "@/models/account";
 import FileSaver from "file-saver";
 export default {
     name: "",
@@ -18,12 +18,6 @@ export default {
         return {};
     },
     methods: {
-        back: function () {
-            this.$emit("on-back");
-        },
-        close: function () {
-            this.$emit("on-exit");
-        },
         backup() {
             account.backup().then(txt => {
                 var blob = new Blob([txt], {

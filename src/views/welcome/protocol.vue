@@ -26,7 +26,7 @@
             </div>
         </section>
         <section class="welcome-bottom bg-green">
-            <div class="btn btn-primary btn-startup" @click="confirm">{{ $t('welcome.confirm') }}</div>
+            <div class="btn btn-primary btn-startup" @click="$router.push({ name: 'welcome-creation' })">{{ $t('welcome.confirm') }}</div>
         </section>
     </div>
 </template>

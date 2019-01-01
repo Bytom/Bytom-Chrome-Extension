@@ -2,7 +2,7 @@
 </style>
 
 <template>
-    <MenuPage :title="$t('help.title')" @back="back">
+    <MenuPage :title="$t('help.title')">
         <p>{{ $t("help.page") }}</p>
         <a href="http://github.com/bytom/bytom/wiki" target="_blank">http://github.com/bytom/bytom/wiki</a>
     </MenuPage>
@@ -10,17 +10,11 @@
 
 <script>
 export default {
-  name: "",
-  data() {
-    return {};
-  },
-  methods: {
-    back: function() {
-      this.$emit("on-back");
+    name: "",
+    data() {
+        return {};
     },
-    close: function() {
-      this.$emit("on-exit");
-    },
-  }
+    methods: {
+    }
 };
 </script>

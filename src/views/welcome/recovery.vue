@@ -17,7 +17,7 @@
                 </div>
                 <div class="btn-group">
                     <div class="btn bg-green" @click="recovery">{{ $t('createAccount.import') }}</div>
-                    <div class="btn bg-red" @click="back">{{ $t('createAccount.back') }}</div>
+                    <div class="btn bg-red" @click="$router.go(-1)">{{ $t('createAccount.back') }}</div>
                 </div>
             </div>
         </section>
@@ -46,16 +46,13 @@ export default {
         },
         recovery: function () {
             account.restore(this.fileTxt).then(res => {
-                window.location.reload();
                 localStorage.login = true;
+                this.$router.push('/')
             }).catch(error => {
                 this.$dialog.show({
                     body: getLang(error.message)
                 });
             });
-        },
-        back: function () {
-            this.$emit("back");
         }
     }
 };

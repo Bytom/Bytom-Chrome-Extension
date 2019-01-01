@@ -21,7 +21,7 @@
 </style>
 
 <template>
-    <MenuPage :title="$t('createAccount.title')" @back="back">
+    <MenuPage :title="$t('createAccount.title')">
         <div class="form">
             <div class="form-item">
                 <label class="form-item-label">{{ $t('createAccount.accountAlias') }}</label>
@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import account from "../../models/account";
+import account from "@/models/account";
 export default {
     name: "",
     components: {},
@@ -72,12 +72,6 @@ export default {
         };
     },
     methods: {
-        back: function (accountInfo) {
-            this.$emit("on-back", accountInfo);
-        },
-        close: function () {
-            this.$emit("on-exit", "creation");
-        },
         create: function () {
             if (this.formItem.accAlias == "") {
                 this.$dialog.show({
@@ -111,7 +105,6 @@ export default {
             account.create(this.formItem.accAlias, this.formItem.keyAlias, this.formItem.passwd1).then(res => {
                 console.log("bytom.Account.create", res);
                 this.formItem = {};
-                this.back(res);
                 loader.hide();
             }).catch(err => {
                 console.log(err);

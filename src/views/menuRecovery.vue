@@ -8,7 +8,7 @@ input {
 </style>
 
 <template>
-    <MenuPage title="导入账户" @back="back">
+    <MenuPage title="导入账户">
         <div class="form-item">
             <input type="file" ref="file" @change="tirggerFile($event)">
         </div>
@@ -17,8 +17,8 @@ input {
 </template>
 
 <script>
-import account from "../../models/account";
-import getLang from "../../assets/language/sdk";
+import account from "@/models/account";
+import getLang from "@/assets/language/sdk";
 export default {
     name: "",
     data() {
@@ -27,12 +27,6 @@ export default {
         };
     },
     methods: {
-        back: function () {
-            this.$emit("on-back");
-        },
-        close: function () {
-            this.$emit("on-exit");
-        },
         tirggerFile: function (event) {
             var reader = new FileReader();
             reader.onload = e => {
@@ -44,8 +38,8 @@ export default {
         },
         recovery: function () {
             account.restore(this.fileTxt).then(res => {
-                this.close();
                 console.log("recovery", res);
+                this.$router.go(-1);
             }).catch(error => {
                 this.$dialog.show({
                     body: getLang(error.message),
