@@ -327,8 +327,12 @@ export default {
                     this.currentAccount = {};
                     return;
                 }
-                this.currentAccount = accounts[0];
-                this.refreshBalance(this.currentAccount.guid);
+
+                if (localStorage.currentAccount != undefined && localStorage.currentAccount != '{}') {
+                    this.currentAccount = JSON.parse(localStorage.currentAccount);
+                } else {
+                    this.currentAccount = accounts[0];
+                }
             })
         },
         refreshBalance: function (guid) {
