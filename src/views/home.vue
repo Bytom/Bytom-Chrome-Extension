@@ -240,15 +240,18 @@ export default {
             }
         },
         currentAccount(newVal, oldVal) {
-            if (newVal.guid == undefined) {
-                return;
-            }
+            if (newVal.guid == undefined) return;
             localStorage.currentAccount = JSON.stringify(newVal);
 
             this.refreshTransactions(newVal.guid, newVal.address).then(transactions => {
                 this.transactions = transactions
             });
         },
+        'currentAccount.guid'(guid) {
+            if (guid == undefined) return;
+
+            this.refreshBalance(guid);
+        }
     },
     computed: {
         shortAddress: function () {
@@ -327,13 +330,12 @@ export default {
                 if (this.currentAccount.guid == undefined) {
                     this.currentAccount = accounts[0];
                 }
-
-                console.log(accounts, this.currentAccount, 111)
             })
         },
         refreshBalance: function (guid) {
             account.balance(guid).then(balance => {
                 this.currentAccount.balance = balance;
+                this.currentAccount = Object.assign({}, this.currentAccount);
             }).catch(error => {
                 console.log(error);
             });
