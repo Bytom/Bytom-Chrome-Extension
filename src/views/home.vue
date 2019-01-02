@@ -243,8 +243,8 @@ export default {
             if (newVal.guid == undefined) {
                 return;
             }
-
             localStorage.currentAccount = JSON.stringify(newVal);
+
             this.refreshTransactions(newVal.guid, newVal.address).then(transactions => {
                 this.transactions = transactions
             });
@@ -259,9 +259,6 @@ export default {
         }
     },
     methods: {
-        setupShortAddr(rawAddress) {
-            this.currentAccount.address_short = address.short(rawAddress);
-        },
         setupClipboard() {
             this.clipboard.on("success", e => {
                 this.$dialog.show({
@@ -290,6 +287,7 @@ export default {
         networkToggle: function (val) {
             localStorage.bytomNet = this.network;
             account.setupNet(this.network);
+            this.currentAccount = {}
             this.refreshAccounts();
         },
         showQrcode: function () {
@@ -323,15 +321,14 @@ export default {
             account.list().then(accounts => {
                 this.accounts = accounts;
                 if (accounts.length == 0) {
-                    this.currentAccount = {}
                     return;
                 }
 
-                if (localStorage.currentAccount != undefined) {
-                    this.currentAccount = JSON.parse(localStorage.currentAccount);
-                } else {
+                if (this.currentAccount.guid == undefined) {
                     this.currentAccount = accounts[0];
                 }
+
+                console.log(accounts, this.currentAccount, 111)
             })
         },
         refreshBalance: function (guid) {
@@ -400,6 +397,7 @@ export default {
         },
     },
     mounted() {
+        this.currentAccount = JSON.parse(localStorage.currentAccount);
         this.setupNetwork();
         this.setupClipboard();
         this.setupRefreshTimer();
