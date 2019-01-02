@@ -9,6 +9,11 @@ module.exports = {
     default_popup: 'pages/popup.html',
     default_icon: 'icons/logo.png'
   },
+  icons: {
+    '16': 'icons/logo.png',
+    '48': 'icons/logo.png',
+    '128': 'icons/logo.png'
+  },
   permissions: [
     '*://*/',
     'storage',
