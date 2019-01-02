@@ -206,7 +206,9 @@ export default {
             clipboard: new ClipboardJS(".address-text"),
             addressTitle: this.$t("main.copy"),
             accounts: [],
-            currentAccount: {},
+            currentAccount: {
+                balance: 0.00
+            },
             transactions: [],
             maskShow: false,
             start: 0,
@@ -237,6 +239,7 @@ export default {
             }
         },
         currentAccount(newVal, oldVal) {
+            localStorage.currentAccount = JSON.stringify(newVal);
             if (newVal.guid == undefined) {
                 return;
             }
