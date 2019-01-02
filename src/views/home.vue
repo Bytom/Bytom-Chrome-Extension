@@ -170,7 +170,9 @@
         </div>
         <div v-else>
             <p style="width: 250px; margin: 30px auto; text-align: center;">{{ $t('main.noAccount') }}</p>
-            <a class="btn btn-primary btn-creation bg-green" @click="$refs.menu.open('creation')">{{ $t('main.create') }}</a>
+            <router-link :to="{name: 'menu-account-creation'}">
+                <a class="btn btn-primary btn-creation bg-green">{{ $t('main.create') }}</a>
+            </router-link>
         </div>
 
         <!-- child page -->
