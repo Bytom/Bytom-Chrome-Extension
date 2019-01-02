@@ -240,12 +240,11 @@ export default {
             }
         },
         currentAccount(newVal, oldVal) {
-            console.log(newVal)
-            localStorage.currentAccount = JSON.stringify(newVal);
             if (newVal.guid == undefined) {
                 return;
             }
 
+            localStorage.currentAccount = JSON.stringify(newVal);
             this.refreshTransactions(newVal.guid, newVal.address).then(transactions => {
                 this.transactions = transactions
             });
@@ -324,6 +323,7 @@ export default {
             account.list().then(accounts => {
                 this.accounts = accounts;
                 if (accounts.length == 0) {
+                    this.currentAccount = {}
                     return;
                 }
 
