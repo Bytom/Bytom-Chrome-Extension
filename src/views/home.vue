@@ -326,7 +326,7 @@ export default {
                     return;
                 }
 
-                if (localStorage.currentAccount != undefined) {
+                if (localStorage.currentAccount != undefined && localStorage.currentAccount != '{}') {
                     this.currentAccount = JSON.parse(localStorage.currentAccount);
                 } else {
                     this.currentAccount = accounts[0];
