@@ -137,11 +137,11 @@
                 <img src="@/assets/logo.png" class="token-icon">
                 <div v-if="currentAccount.address!=undefined" class="amount">
                     <div class="token-amount">
-                        {{currentAccount.balance}}
+                        {{accountBalance}}
                         <span class="asset">BTM</span>
                     </div>
                     <p class="account-address">
-                        <span class="address-text" :title="addressTitle" :data-clipboard-text="currentAccount.address">{{currentAccount.address_short}}</span>
+                        <span class="address-text" :title="addressTitle" :data-clipboard-text="currentAccount.address">{{shortAddress}}</span>
                         <i class="iconfont qrcode" @click="showQrcode">&#xe7dd;</i>
                     </p>
                 </div>
@@ -236,21 +236,23 @@ export default {
                 this.leaveActive = ''
             }
         },
-        currentAccount: {
-            deep: true,
-            immediate: true,
-            handler(newVal, oldName) {
-                if (newVal.guid == undefined) {
-                    return;
-                }
+        currentAccount(newVal, oldVal) {
+            if (newVal.guid == undefined) {
+                return;
+            }
 
-                this.setupShortAddr(newVal.address)
-                this.refreshBalance(newVal.guid);
-                this.refreshTransactions(newVal.guid, newVal.address).then(transactions => {
-                    this.transactions = transactions
-                });
-            },
+            this.refreshTransactions(newVal.guid, newVal.address).then(transactions => {
+                this.transactions = transactions
+            });
         },
+    },
+    computed: {
+        shortAddress: function () {
+            return address.short(this.currentAccount.address)
+        },
+        accountBalance: function () {
+            return this.currentAccount.balance
+        }
     },
     methods: {
         setupShortAddr(rawAddress) {
@@ -286,11 +288,6 @@ export default {
             account.setupNet(this.network);
             this.refreshAccounts();
         },
-        accountToggle: function (selectedAccount) {
-            localStorage.currentAccount = JSON.stringify(selectedAccount);
-            this.currentAccount = selectedAccount;
-            this.refreshAccounts();
-        },
         showQrcode: function () {
             this.$refs.qrcode.open(this.currentAccount.address);
         },
@@ -299,6 +296,63 @@ export default {
         },
         transferOpen: function () {
             this.$router.push({ name: 'transfer', params: { account: this.currentAccount } })
+        },
+        handleScroll(vertical, horizontal, nativeEvent) {
+            if (vertical.process == 0) {
+                this.start = 0;
+                this.refreshTransactions(this.currentAccount.guid, this.currentAccount.address).then(transactions => {
+                    this.transactions = transactions
+                });
+                return;
+            }
+
+            if (vertical.process == 1) {
+                this.start += this.limit;
+                this.refreshTransactions(this.currentAccount.guid, this.currentAccount.address, this.start, this.limit).then(transactions => {
+                    transactions.forEach(transaction => {
+                        this.transactions.push(transaction);
+                    });
+                });
+            }
+        },
+        refreshAccounts: function () {
+            account.list().then(accounts => {
+                this.accounts = accounts;
+                if (accounts.length == 0) {
+                    return;
+                }
+
+                if (localStorage.currentAccount != undefined) {
+                    this.currentAccount = JSON.parse(localStorage.currentAccount);
+                } else {
+                    this.currentAccount = accounts[0];
+                }
+            })
+        },
+        refreshBalance: function (guid) {
+            account.balance(guid).then(balance => {
+                this.currentAccount.balance = balance;
+                this.currentAccount = Object.assign({}, this.currentAccount);
+            }).catch(error => {
+                console.log(error);
+            });
+        },
+        refreshTransactions: function (guid, address, start, limit) {
+            return new Promise((resolve, reject) => {
+                transaction.list(guid, address, start, limit).then(ret => {
+                    let transactions = ret.result.data;
+                    if (transactions == null) {
+                        return;
+                    }
+
+                    this.transactionsFormat(transactions);
+                    console.log("formatTx", transactions);
+                    resolve(transactions)
+                }).catch(error => {
+                    console.log(error);
+                    reject(error)
+                });
+            })
         },
         transactionsFormat: function (transactions) {
             transactions.forEach(transaction => {
@@ -340,70 +394,12 @@ export default {
                 transaction.fee = Number(inputSum - outputSum) / 100000000;
             });
         },
-        refreshAccounts: function () {
-            account.list().then(accounts => {
-                this.accounts = accounts;
-                if (accounts.length == 0) {
-                    return;
-                }
-
-                if (localStorage.currentAccount != undefined) {
-
-                    this.currentAccount = JSON.parse(localStorage.currentAccount);
-                } else {
-
-                    this.currentAccount = accounts[0];
-                }
-            })
-        },
-        refreshBalance: function (guid) {
-            account.balance(guid).then(balance => {
-                this.currentAccount.balance = balance;
-            }).catch(error => {
-                console.log(error);
-            });
-        },
-        refreshTransactions: function (guid, address, start, limit) {
-            return new Promise((resolve, reject) => {
-                transaction.list(guid, address, start, limit).then(ret => {
-                    let transactions = ret.result.data;
-                    if (transactions == null) {
-                        return;
-                    }
-
-                    this.transactionsFormat(transactions);
-                    console.log("formatTx", transactions);
-                    resolve(transactions)
-                }).catch(error => {
-                    console.log(error);
-                    reject(error)
-                });
-            })
-        },
-        handleScroll(vertical, horizontal, nativeEvent) {
-            if (vertical.process == 0) {
-                this.start = 0;
-                this.refreshTransactions(this.currentAccount.guid, this.currentAccount.address).then(transactions => {
-                    this.transactions = transactions
-                });
-                return;
-            }
-
-            if (vertical.process == 1) {
-                this.start += this.limit;
-                this.refreshTransactions(this.currentAccount.guid, this.currentAccount.address, this.start, this.limit).then(transactions => {
-                    transactions.forEach(transaction => {
-                        this.transactions.push(transaction);
-                    });
-                });
-            }
-        }
     },
     mounted() {
         this.setupNetwork();
         this.setupClipboard();
         this.setupRefreshTimer();
-        this.refreshAccounts()
+        this.refreshAccounts();
     },
     beforeDestroy() {
         this.clipboard.destroy();

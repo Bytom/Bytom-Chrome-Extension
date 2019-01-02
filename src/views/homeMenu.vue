@@ -91,15 +91,14 @@ export default {
     name: "",
     data() {
         return {
-            accounts: "",
-            selectedAccount: "",
-            enterActive: "animated faster fadeInLeft",
-            leaveActive: "animated faster fadeOutLeft"
+            accounts: [],
+            selectedAccount: {},
         };
     },
     methods: {
         accountSelected: function (accountInfo) {
-            this.$router.push({ name: 'home', params: { selectedAccount: accountInfo } })
+            this.selectedAccount = accountInfo;
+            this.$router.push({ name: 'home', params: { selectedAccount: this.selectedAccount } })
         },
     }, mounted() {
         let params = this.$route.params;
