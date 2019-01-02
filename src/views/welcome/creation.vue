@@ -63,6 +63,7 @@ creation
 
 <script>
 import account from "../../models/account";
+import { getLanguage } from '@/assets/language'
 let mainNet = null;
 let testNet = null;
 export default {
@@ -137,8 +138,8 @@ export default {
             account.create(this.formItem.accAlias, this.formItem.keyAlias, this.formItem.passwd1).then(res => {
                 localStorage.login = true;
                 loader.hide();
-                window.location.reload();
                 this.formItem = {};
+                this.$router.push('/');
             }).catch(err => {
                 loader.hide();
                 this.$dialog.show({
@@ -168,6 +169,7 @@ export default {
             localStorage.bytomNet = "mainnet";
         }
         account.setupNet(this.selected);
+        this.i18n = getLanguage();
     }
 };
 </script>

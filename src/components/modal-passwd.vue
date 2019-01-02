@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { have } from "@/assets/language"
+import { getLanguage } from "@/assets/language"
 const CLASS_CN = "form-item-content form-item-content-cn";
 const CLASS_EN = "form-item-content form-item-content-en"
 export default {
@@ -78,11 +78,8 @@ export default {
     },
     methods: {
         open() {
-            if (have(localStorage.lang)) {
-                this.i18n = localStorage.lang;
-            }
+            this.i18n = getLanguage();
             this.show = true;
-
             this.passwd = "";
         },
         close() {

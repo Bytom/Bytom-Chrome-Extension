@@ -47,7 +47,7 @@ export default {
         recovery: function () {
             account.restore(this.fileTxt).then(res => {
                 localStorage.login = true;
-                this.$router.push('/')
+                this.$router.push('/');
             }).catch(error => {
                 this.$dialog.show({
                     body: getLang(error.message)

@@ -7,6 +7,7 @@ const messages = {
 };
 
 const langSet = ["cn", "en"];
+const defaultLang = "cn";
 
 export function have(lang) {
   if (typeof lang == "undefined" || lang == "") {
@@ -19,5 +20,12 @@ export function have(lang) {
   }
   return false;
 };
+
+export function getLanguage() {
+  if (have(localStorage.lang)) {
+    return localStorage.lang;
+  } 
+  return defaultLang;
+}
 
 export default messages;

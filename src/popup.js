@@ -12,13 +12,13 @@ import ViewBase from '@/views/viewBase'
 import Dialog from '@/components/dialog'
 import vSelect from '@/components/select'
 import MenuPage from '@/components/menu-page'
-import messages, { have } from '@/assets/language'
+import messages, { getLanguage } from '@/assets/language'
 import '@/assets/style.css'
 
 Vue.use(VueI18n)
 const i18n = new VueI18n({
   fallbackLocale: 'en',
-  locale: have(localStorage.lang) ? localStorage.lang : 'cn',
+  locale: getLanguage(),
   messages
 })
 Vue.use(i18n)

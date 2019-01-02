@@ -92,7 +92,9 @@ export default {
                 return;
             }
             if (this.formItem.passwd1 != this.formItem.passwd2) {
-                this.tips = this.$t('createAccount.passwordAgain');
+                this.$dialog.show({
+                    body: this.$t('createAccount.passwordAgain')
+                });
                 return;
             }
 
@@ -106,13 +108,13 @@ export default {
                 console.log("bytom.Account.create", res);
                 this.formItem = {};
                 loader.hide();
+                this.$router.push('/');
             }).catch(err => {
                 console.log(err);
                 loader.hide();
                 this.$dialog.show({
                     body: err.message
                 });
-                // this.tips = err.message;
             });
         }
     },
