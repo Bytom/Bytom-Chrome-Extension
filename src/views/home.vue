@@ -176,7 +176,7 @@
         <!-- child page -->
         <div class="mask" v-show="maskShow"></div>
         <transition :enter-active-class="enterActive" :leave-active-class="leaveActive">
-            <router-view></router-view>
+            <router-view :accounts="accounts" @refreshAccounts="refreshAccounts"></router-view>
         </transition>
 
         <!-- modal -->
