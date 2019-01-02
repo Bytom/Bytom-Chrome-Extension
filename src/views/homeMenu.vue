@@ -97,7 +97,7 @@ export default {
     },
     methods: {
         accountSelected: function (accountInfo) {
-            this.selectedAccount = accountInfo;
+            this.selectedAccount = Object.assign({}, accountInfo);
             this.$router.push({ name: 'home', params: { selectedAccount: this.selectedAccount } })
         },
     }, mounted() {

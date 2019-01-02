@@ -208,9 +208,7 @@ export default {
             clipboard: new ClipboardJS(".address-text"),
             addressTitle: this.$t("main.copy"),
             accounts: [],
-            currentAccount: {
-                balance: 0.00
-            },
+            currentAccount: {},
             transactions: [],
             maskShow: false,
             start: 0,
@@ -228,8 +226,9 @@ export default {
             }
 
             //account toggle by the list from menu
-            if (to.name == 'home' && to.params.selectedAccount != undefined && from.name == 'menu') {
+            if (to.name == 'home' && to.params.selectedAccount != undefined) {
                 this.currentAccount = to.params.selectedAccount
+                this.refreshAccounts();
             }
 
             // remove transition for some page
@@ -241,6 +240,7 @@ export default {
             }
         },
         currentAccount(newVal, oldVal) {
+            console.log(newVal)
             localStorage.currentAccount = JSON.stringify(newVal);
             if (newVal.guid == undefined) {
                 return;
@@ -256,7 +256,7 @@ export default {
             return address.short(this.currentAccount.address)
         },
         accountBalance: function () {
-            return this.currentAccount.balance
+            return this.currentAccount.balance != undefined ? this.currentAccount.balance : '0.00'
         }
     },
     methods: {
@@ -324,7 +324,6 @@ export default {
             account.list().then(accounts => {
                 this.accounts = accounts;
                 if (accounts.length == 0) {
-                    this.currentAccount = {};
                     return;
                 }
 
@@ -338,7 +337,6 @@ export default {
         refreshBalance: function (guid) {
             account.balance(guid).then(balance => {
                 this.currentAccount.balance = balance;
-                this.currentAccount = Object.assign({}, this.currentAccount);
             }).catch(error => {
                 console.log(error);
             });

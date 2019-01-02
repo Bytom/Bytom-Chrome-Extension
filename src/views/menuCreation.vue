@@ -105,10 +105,9 @@ export default {
             });
 
             account.create(this.formItem.accAlias, this.formItem.keyAlias, this.formItem.passwd1).then(res => {
-                console.log("bytom.Account.create", res);
-                this.formItem = {};
                 loader.hide();
-                this.$router.push('/');
+                console.log("bytom.Account.create", res);
+                this.$router.push({ name: "home", params: { selectedAccount: res } });
             }).catch(err => {
                 console.log(err);
                 loader.hide();
