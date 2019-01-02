@@ -319,6 +319,7 @@ export default {
             account.list().then(accounts => {
                 this.accounts = accounts;
                 if (accounts.length == 0) {
+                    this.currentAccount = {};
                     return;
                 }
 
