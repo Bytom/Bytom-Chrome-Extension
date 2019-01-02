@@ -108,7 +108,6 @@ export default {
                 console.log("bytom.Account.create", res);
                 this.formItem = {};
                 loader.hide();
-                this.$emit('refreshAccounts');
                 this.$router.push('/');
             }).catch(err => {
                 console.log(err);

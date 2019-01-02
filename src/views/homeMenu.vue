@@ -82,7 +82,7 @@
         </div>
 
         <!-- child menu -->
-        <router-view @refreshAccounts="refreshAccounts"></router-view>
+        <router-view></router-view>
     </div>
 </template>
 
@@ -91,23 +91,15 @@ export default {
     name: "",
     data() {
         return {
+            accounts: [],
             selectedAccount: {},
         };
-    },
-    props: {
-        accounts: {
-            type: Array,
-            default: [],
-        }
     },
     methods: {
         accountSelected: function (accountInfo) {
             this.selectedAccount = accountInfo;
             this.$router.push({ name: 'home', params: { selectedAccount: this.selectedAccount } })
         },
-        refreshAccounts: function () {
-            this.$emit('refreshAccounts')
-        }
     }, mounted() {
         let params = this.$route.params;
 
