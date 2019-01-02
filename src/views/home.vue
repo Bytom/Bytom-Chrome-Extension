@@ -258,7 +258,7 @@ export default {
             return address.short(this.currentAccount.address)
         },
         accountBalance: function () {
-            return this.currentAccount.balance != undefined ? this.currentAccount.balance : '0.00'
+            return this.currentAccount.balance != 0 ? this.currentAccount.balance : '0.00'
         }
     },
     methods: {
