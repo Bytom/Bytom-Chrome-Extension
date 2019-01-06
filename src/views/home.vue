@@ -90,7 +90,8 @@
 }
 .transactions {
     font-size: 15px;
-    height: 275px;
+    height: 273px;
+    overflow: hidden;
 }
 .transactions .list {
     padding: 0 20px;

@@ -1,5 +1,6 @@
 import { LocalStream } from 'extension-streams'
 import InternalMessage from '@/messages/internal'
+import * as MsgTypes from './messages/types'
 
 export default class Background {
   constructor() {
@@ -17,36 +18,30 @@ export default class Background {
 
   dispatchMessage(sendResponse, message) {
     switch (message.type) {
-      case 'auth':
-        this.transfer()
+      case MsgTypes.TRANSFER:
+        this.transfer(sendResponse, message.payload)
         break
     }
   }
 
-  transfer(sendResponse) {
+  transfer(sendResponse, payload) {
     var promptURL = chrome.extension.getURL('pages/prompt.html')
-    console.log(promptURL)
-    chrome.tabs.query({ url: promptURL }, tabs => {
-      console.log(22, tabs)
-      chrome.windows.create(
-        {
-          url: `${promptURL}#transfer`,
-          type: 'popup',
-          width: 350,
-          height: 625,
-          left: 0
-        },
-        () => {
-          chrome.extension.sendMessage(
-            { cmd: '来自前台页面的主动调用' },
-            function(response) {
-              console.log(123, response)
-            }
-          ) //测试前台掉后台
-        }
-      )
-    })
+    var queryString = new URLSearchParams(payload).toString()
+    console.log(promptURL, queryString)
+    chrome.windows.create(
+      {
+        url: `${promptURL}#transfer?${queryString}`,
+        type: 'popup',
+        width: 350,
+        height: 623,
+        top: 0,
+        left: 0
+      },
+      () => {
+        sendResponse(true)
+      }
+    )
   }
 }
 
-const background = new Background()
+new Background()

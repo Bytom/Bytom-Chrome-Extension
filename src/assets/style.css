@@ -44,6 +44,7 @@ a {
   color: #fff;
   font-size: 18px;
   line-height: 25px;
+  height: 600px;
   overflow: hidden;
 }
 .warp {
@@ -187,7 +188,7 @@ hr {
 
 .mask {
   position: absolute;
-  height: 100%;
+  /* height: 100%; */
   width: 100%;
   z-index: 993;
   top: 0;

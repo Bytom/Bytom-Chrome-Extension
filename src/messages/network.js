@@ -1,4 +1,4 @@
-import * as NetworkMessageTypes from './NetworkTypes'
+import * as MessageTypes from './types'
 
 export default class NetworkMessage {
   constructor(_type = '', _payload = {}, _resolver = '', _domain = '') {
@@ -33,6 +33,6 @@ export default class NetworkMessage {
     return new NetworkMessage(this.type, payload, this.resolver)
   }
   error(payload) {
-    return new NetworkMessage(NetworkMessageTypes.ERROR, payload, this.resolver)
+    return new NetworkMessage(MessageTypes.ERROR, payload, this.resolver)
   }
 }

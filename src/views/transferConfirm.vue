@@ -13,6 +13,8 @@
 
 .content {
     padding: 25px 30px;
+    height: 480px;
+    overflow: hidden;
 }
 
 .ft {
@@ -91,7 +93,7 @@
                 <div class="col value">{{transaction.fee}}<span class="uint">BTM</span></div>
             </div>
 
-            <div class="divider" style="margin-top: 130px; margin-bottom: 10px;"></div>
+            <div class="divider" style="margin-top: 100px; margin-bottom: 10px;"></div>
             <div class="row" style="text-align: right;">
                 <div class="col label" style="line-height: 50px;">{{ $t('transfer.total') }}</div>
                 <div class="col value">

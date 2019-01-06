@@ -1,7 +1,8 @@
 import IdGenerator from '@/utils/IdGenerator'
 import { EncryptedStream } from 'extension-streams'
-// import * as PairingTags from './messages/PairingTags'
-// import * as NetworkMessageTypes from './messages/NetworkMessageTypes'
+import * as MsgTypes from './messages/types'
+import * as EventNames from '@/messages/event'
+import Bytomdapp from './dapp'
 
 /***
  * This is the javascript which gets injected into
@@ -11,19 +12,23 @@ import { EncryptedStream } from 'extension-streams'
 class Inject {
   constructor() {
     // Injecting an encrypted stream into the web application.
-    const stream = new EncryptedStream('inject', IdGenerator.text(64))
+    const stream = new EncryptedStream(EventNames.INJECT, IdGenerator.text(64))
 
     // Waiting for bytomExtension to push itself onto the application
     stream.listenWith(msg => {
-      console.log(1111, msg)
-      if (msg && msg.hasOwnProperty('type') && msg.type === 'scatter') {
+      console.log('inject.stream.listen:', msg)
+      if (
+        msg &&
+        msg.hasOwnProperty('type') &&
+        msg.type === MsgTypes.PUSH_BYTOM
+      ) {
+        window.bytom = new Bytomdapp(stream, msg.payload)
       }
-      // window.scatter = new Scatterdapp(stream, msg.payload)
     })
 
     // Syncing the streams between the extension and the web application
-    stream.sync('bytom', stream.key)
+    stream.sync(EventNames.BYTOM, stream.key)
   }
 }
 
-const inject = new Inject()
+new Inject()

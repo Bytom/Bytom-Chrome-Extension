@@ -46,7 +46,7 @@
             <div class="balance">
                 <img src="@/assets/logo.png" class="token-icon">
                 <div class="token-amount">
-                    {{account.balance}}
+                    {{accountBalance}}
                     <span class="asset">BTM</span>
                 </div>
             </div>
@@ -124,14 +124,12 @@ export default {
             ],
             show: false,
             accounts: [],
-            unit: "",
             assets: {
                 ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff: "BTM"
             },
             guid: null,
-            account: {
-                guid: ""
-            },
+            account: {},
+            accountBalance: 0.00,
             fee: this.$t("transfer.feeType"),
             feeTypeOptions: [this.$t("transfer.feeType")],
             transaction: {
@@ -143,6 +141,11 @@ export default {
             }
         };
     },
+    computed: {
+        unit() {
+            return this.assets[this.transaction.asset];
+        }
+    },
     watch: {
         selectAsset: function (val) {
             this.transaction.asset = val.assets;
@@ -152,12 +155,21 @@ export default {
                 this.transaction.cost = Number(ret.result.data.cny_price * newAmount).toFixed(2);
             });
         },
+        account: function (newAccount) {
+            this.guid = newAccount.guid;
+        },
         guid: function (newGuid) {
             this.accounts.forEach(account => {
                 if (account.guid == newGuid.guid) {
                     this.account = account;
                     return;
                 }
+            });
+
+            account.balance(newGuid).then(balance => {
+                this.accountBalance = balance;
+            }).catch(error => {
+                console.log(error);
             });
         }
     },
@@ -200,17 +212,28 @@ export default {
             });
         }
     }, mounted() {
-        this.account = this.$route.params.account;
-        this.guid = this.account.guid;
-        this.unit = this.assets[this.transaction.asset];
+        if (this.$route.params.account != undefined) {
+            this.account = this.$route.params.account;
+        }
 
+        if (this.$route.query.to != undefined) {
+            this.transaction.to = this.$route.query.to
+        }
+        if (this.$route.query.amount != undefined) {
+            this.transaction.amount = this.$route.query.amount
+        }
+
+        account.setupNet(localStorage.bytomNet);
         account.list().then(accounts => {
             this.accounts = accounts;
             this.accounts.forEach(function (ele) {
                 ele.label = ele.alias
                 ele.value = ele.guid
             });
-            console.log(this.accounts)
+
+            if (Object.keys(this.account).length == 0) {
+                this.account = accounts[0]
+            }
         });
     }
 };
