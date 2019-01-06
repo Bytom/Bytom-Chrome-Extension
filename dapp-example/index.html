@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>bytom-chrome-extension-test</title>
+  </head>
+  <body>
+    <input type="text" id="to" name="to" placeholder="to address" />
+    <input type="number" id="amount" name="amount" placeholder="amount" />
+    <a id="transferButton" href="#">transfer</a>
+
+    <script type="text/javascript">
+      var getById = function(id) {
+        return document.getElementById(id)
+      }
+
+      var bytom
+      getById('transferButton').addEventListener('click', () => {
+        bytom.transfer(getById('to').value, getById('amount').value)
+      })
+
+      // 监听Bytom插件加载成功事件
+      document.addEventListener('chromeBytomLoaded', () => {
+        console.log('chromeBytomLoaded')
+        bytom = window.bytom
+      })
+    </script>
+  </body>
+</html>
