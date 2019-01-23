@@ -72,4 +72,11 @@ export default class Bytomdapp {
       amount: amount
     })
   }
+
+  advancedTransfer(input, output) {
+    return _send(MsgTypes.ADVTRANSFER, {
+      input,
+      output
+    })
+  }
 }

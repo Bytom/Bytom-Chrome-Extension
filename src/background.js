@@ -21,6 +21,9 @@ export default class Background {
       case MsgTypes.TRANSFER:
         this.transfer(sendResponse, message.payload)
         break
+      case MsgTypes.ADVTRANSFER:
+        this.advancedTransfer(sendResponse, message.payload)
+        break
     }
   }
 
@@ -31,6 +34,25 @@ export default class Background {
     chrome.windows.create(
       {
         url: `${promptURL}#transfer?${queryString}`,
+        type: 'popup',
+        width: 350,
+        height: 623,
+        top: 0,
+        left: 0
+      },
+      () => {
+        sendResponse(true)
+      }
+    )
+  }
+
+  advancedTransfer(sendResponse, payload) {
+    var promptURL = chrome.extension.getURL('pages/prompt.html')
+    var queryString = 'object='+JSON.stringify(payload)
+    console.log(promptURL, queryString)
+    chrome.windows.create(
+      {
+        url: `${promptURL}#advancedTransfer?${queryString}`,
         type: 'popup',
         width: 350,
         height: 623,

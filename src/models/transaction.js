@@ -28,6 +28,20 @@ transaction.build = function(guid, to, asset, amount, fee) {
   return retPromise;
 };
 
+transaction.buildTransaction = function(guid, inputs, outputs) {
+  let retPromise = new Promise((resolve, reject) => {
+    bytom.transaction
+      .buildTransaction(guid, inputs, outputs)
+      .then(res => {
+        resolve(res);
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+  return retPromise;
+};
+
 transaction.transfer = function(guid, transaction, password) {
   let retPromise = new Promise((resolve, reject) => {
     bytom.transaction
@@ -35,6 +49,30 @@ transaction.transfer = function(guid, transaction, password) {
       .then(ret => {
         bytom.transaction
           .submitPayment(guid, ret.raw_transaction, ret.signatures)
+          .then(res3 => {
+            resolve(res3);
+          })
+          .catch(error => {
+            reject(error);
+          });
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+
+  return retPromise;
+};
+
+transaction.advancedTransfer = function(guid, transaction, password, arrayData) {
+  let retPromise = new Promise((resolve, reject) => {
+    bytom.transaction
+      .signTransaction(guid, JSON.stringify(transaction), password)
+      .then(ret => {
+        let signatures = ret.signatures
+        signatures[0] = arrayData
+        bytom.transaction
+          .submitPayment(guid, ret.raw_transaction, signatures)
           .then(res3 => {
             resolve(res3);
           })

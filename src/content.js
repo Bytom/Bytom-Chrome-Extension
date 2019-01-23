@@ -58,7 +58,8 @@ class Content {
         this.sync(msg)
         break
       case MsgTypes.TRANSFER:
-        this.transfer(networkMessage)
+      case MsgTypes.ADVTRANSFER:
+        this.transfer(msg.type, networkMessage)
         break
       default:
         stream.send(networkMessage.error('errtest'), EventNames.INJECT)
@@ -85,10 +86,10 @@ class Content {
     stream.synced = true
   }
 
-  transfer(message) {
+  transfer(type, message) {
     if (!isReady) return
 
-    InternalMessage.payload(MsgTypes.TRANSFER, message.payload)
+    InternalMessage.payload(type, message.payload)
       .send()
       .then(res => this.respond(message, res))
   }
