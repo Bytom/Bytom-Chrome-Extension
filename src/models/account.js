@@ -42,12 +42,13 @@ account.balance = function(guid, dstAsset) {
           if (item.balances != null) {
             item.balances.forEach(asset => {
               if (asset.asset == dstAsset) {
-                balance += asset.balance
+                balance += Number(asset.balance)
               }
             })
           }
         })
-        resolve(balance / 100000000)
+        balance = dstAsset === ASSET_BTM? (balance / 100000000): balance
+        resolve(balance)
       })
       .catch(error => {
         reject(error)
