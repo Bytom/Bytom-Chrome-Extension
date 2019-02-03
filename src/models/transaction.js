@@ -28,10 +28,10 @@ transaction.build = function(guid, to, asset, amount, fee) {
   return retPromise;
 };
 
-transaction.buildTransaction = function(guid, inputs, outputs) {
+transaction.buildTransaction = function(guid, inputs, outputs, gas) {
   let retPromise = new Promise((resolve, reject) => {
     bytom.transaction
-      .buildTransaction(guid, inputs, outputs)
+      .buildTransaction(guid, inputs, outputs, gas)
       .then(res => {
         resolve(res);
       })
