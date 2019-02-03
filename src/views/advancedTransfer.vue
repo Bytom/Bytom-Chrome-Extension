@@ -60,7 +60,8 @@
                 </div>
             </div>
             <br>
-            <div style="width: 200px; margin: 0 auto;">
+            <div class="btn-inline" style="width: 200px;">
+              <div class="btn bg-gray" @click="close">{{ $t('transfer.cancel') }}</div>
               <div class="btn bg-green" @click="$refs.modalPasswd.open()">{{ $t('transfer.confirm') }}</div>
             </div>
         </section>
@@ -75,6 +76,7 @@ import account from "@/models/account";
 import transaction from "@/models/transaction";
 import getLang from "@/assets/language/sdk";
 import modalPasswd from "@/components/modal-passwd";
+import { LocalStream } from 'extension-streams'
 
 export default {
     components: {
@@ -124,7 +126,8 @@ export default {
     },
     methods: {
         close: function () {
-            this.$router.go(-1)
+            LocalStream.send({method:'advanced-transfer',action:'reject'});
+            window.close();
         },
         send: function (passwd) {
             let loader = this.$loading.show({
@@ -135,43 +138,47 @@ export default {
             });
             const inout = JSON.parse(this.$route.query.object)
 
-            transaction.buildTransaction(this.account.guid,  inout.input, inout.output).then(ret => {
+            transaction.buildTransaction(this.account.guid,  inout.input, inout.output, inout.gas).then(ret => {
                 const arrayData = ret.result.data.signing_instructions[0].data
                 return transaction.advancedTransfer(this.account.guid, ret.result.data, passwd, arrayData)
-                  .then(() => {
+                  .then((resp) => {
                     loader.hide();
+                    LocalStream.send({method:'advanced-transfer',action:'success', message:resp});
                     this.$dialog.show({
                       body: this.$t("transfer.success")
                     });
-                    this.$router.push('/')
+                    this.$router.push('/');
                   })
                   .catch(error => {
                     throw error
                   });
             }).catch(error => {
                 loader.hide();
+
                 this.$dialog.show({
                     body: getLang(error.message)
                 });
             });
         }
     }, mounted() {
-        if (this.$route.params.account != undefined) {
-            this.account = this.$route.params.account;
-        }
+      const inout = JSON.parse(this.$route.query.object);
 
-        account.setupNet(localStorage.bytomNet);
-        account.list().then(accounts => {
-            this.accounts = accounts;
-            this.accounts.forEach(function (ele) {
-                ele.label = ele.alias
-                ele.value = ele.guid
-            });
+      if (inout.account != undefined) {
+              this.account = inout.account;
+          }
 
-            if (Object.keys(this.account).length == 0) {
-                this.account = accounts[0]
-            }
-        });
-    }
+          account.setupNet(localStorage.bytomNet);
+          account.list().then(accounts => {
+              this.accounts = accounts;
+              this.accounts.forEach(function (ele) {
+                  ele.label = ele.alias
+                  ele.value = ele.guid
+              });
+
+              if (Object.keys(this.account).length == 0) {
+                  this.account = accounts[0]
+              }
+          });
+      }
 };
 </script>

@@ -59,6 +59,7 @@ class Content {
         break
       case MsgTypes.TRANSFER:
       case MsgTypes.ADVTRANSFER:
+      case MsgTypes.SEND:
         this.transfer(msg.type, networkMessage)
         break
       default:
