@@ -33,7 +33,7 @@ const _subscribe = () => {
       if (resolvers[i].id === msg.resolver) {
         if (msg.type === 'error') resolvers[i].reject(msg.payload)
         else resolvers[i].resolve(msg.payload)
-        resolvers = resolvers.slice(i, 1)
+        resolvers.splice(i, 1)
       }
     }
   })
@@ -73,10 +73,19 @@ export default class Bytomdapp {
     })
   }
 
-  advancedTransfer(input, output) {
+  advancedTransfer(account, input, output, gas) {
     return _send(MsgTypes.ADVTRANSFER, {
+      account,
       input,
-      output
+      output,
+      gas
+    })
+  }
+
+  request(action, body=''){
+    return _send(MsgTypes.SEND,{
+      action,
+      body
     })
   }
 }
