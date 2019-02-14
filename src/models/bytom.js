@@ -1,6 +1,7 @@
 import Bytom from 'bytom-js-sdk'
 
 var networks = {
+  solonet: 'http://52.82.12.99:3000/',
   testnet: 'https://api-dev.bycoin.im:8000/',
   mainnet: 'https://api.bycoin.im:8000/'
 }
