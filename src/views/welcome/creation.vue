@@ -66,6 +66,7 @@ import account from "../../models/account";
 import { getLanguage } from '@/assets/language'
 let mainNet = null;
 let testNet = null;
+let soloNet = null;
 export default {
     name: "",
     data() {
@@ -157,12 +158,15 @@ export default {
     mounted() {
         mainNet = { label: this.$t('main.mainNetShort'), value: "mainnet" };
         testNet = { label: this.$t('main.testNetShort'), value: "testnet" };
-        this.nets = [mainNet, testNet];
+        soloNet = { label: this.$t('main.soloNetShort'), value: "solonet" };
+        this.nets = [mainNet, testNet, soloNet];
         if (localStorage.bytomNet != undefined) {
             if (localStorage.bytomNet == "mainnet") {
                 this.selected = mainNet;
             } else if (localStorage.bytomNet == "testnet") {
                 this.selected = testNet;
+            } else if (localStorage.bytomNet == "solonet") {
+                this.selected = soloNet;
             }
         } else {
             this.selected = mainNet;

@@ -54,6 +54,21 @@ const _send = (_type, _payload) => {
   })
 }
 
+/***
+ * Turns message sending between the application
+ * and the content script into async promises
+ * @param _type
+ * @param _payload
+ */
+const _sendSync = (_type, _payload) => {
+  return new Promise((resolve, reject) => {
+    let id = IdGenerator.numeric(24)
+    let message = new NetworkMessage(_type, _payload, id)
+    resolvers.push(new DanglingResolver(id, resolve, reject))
+    stream.send(message, EventNames.BYTOM)
+  })
+}
+
 export default class Bytomdapp {
   constructor(_stream, _options) {
     currentVersion = parseFloat(_options.version)

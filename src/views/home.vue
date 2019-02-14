@@ -125,6 +125,7 @@
                     <select v-model="network" @change="networkToggle">
                         <option value="mainnet">{{ $t('main.mainNet') }}</option>
                         <option value="testnet">{{ $t('main.testNet') }}</option>
+                        <option value="solonet">{{ $t('main.soloNet') }}</option>
                     </select>
                 </div>
                 <div class="topbar-left">

@@ -9,6 +9,7 @@ export default class Background {
   constructor() {
     this.setupInternalMessaging()
     this.setupBytom()
+    window.bytomAPI = bytom
   }
 
   setupBytom(){
@@ -97,17 +98,17 @@ export default class Background {
     if(action){
       let promise
       switch (action){
-        case 'listAllAccount':
-          promise = accountAction.list()
+        case 'balance':
+          const id = body.id
+          const guid = body.guid
+          promise = accountAction.balance(guid, id)
           break
         case 'currentAccount':
           let account = JSON.parse(localStorage.currentAccount)
           sendResponse(account)
           break
-        case 'balance':
-          const id = body.id
-          const guid = body.guid
-          promise = accountAction.balance(guid, id)
+        case 'listAllAccount':
+          promise = accountAction.list()
           break
       }
       if(promise){
