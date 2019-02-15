@@ -139,16 +139,21 @@ export default {
             const inout = JSON.parse(this.$route.query.object)
 
             transaction.buildTransaction(this.account.guid,  inout.input, inout.output, inout.gas).then(ret => {
-                const arrayData = ret.result.data.signing_instructions[0].data
-                return transaction.advancedTransfer(this.account.guid, ret.result.data, passwd, arrayData)
-                  .then((resp) => {
-                    loader.hide();
-                    LocalStream.send({method:'advanced-transfer',action:'success', message:resp});
-                    this.$dialog.show({
-                      body: this.$t("transfer.success")
-                    });
-                    this.$router.push('/');
-                  })
+                return transaction.convertArgument(inout.args)
+                    .then((arrayData) =>{
+                        return transaction.advancedTransfer(this.account.guid, ret.result.data, passwd, arrayData)
+                            .then((resp) => {
+                                loader.hide();
+                                LocalStream.send({method:'advanced-transfer',action:'success', message:resp});
+                                this.$dialog.show({
+                                    body: this.$t("transfer.success")
+                                });
+                                this.$router.push('/');
+                            })
+                            .catch(error => {
+                                 throw error
+                            });
+                     })
                   .catch(error => {
                     throw error
                   });

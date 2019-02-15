@@ -6,6 +6,19 @@ transaction.list = function(guid, address, start, limit) {
   return bytom.transaction.list(guid, address, start, limit);
 };
 
+transaction.convertArgument = function(argArray) {
+  let fn = function asyncConvert(object){
+    const type = object.type
+    const value = object.value
+    return bytom.transaction.convertArgument(type, value)
+      .then(resp => resp.value);
+  };
+
+  let actionFunction = argArray.map(fn)
+  console.log(actionFunction)
+  return Promise.all(actionFunction);
+};
+
 transaction.blockCount = function() {
   return bytom.query.getblockcount();
 };
