@@ -138,7 +138,7 @@ export default {
             });
             const inout = JSON.parse(this.$route.query.object)
 
-            transaction.buildTransaction(this.account.guid,  inout.input, inout.output, inout.gas).then(ret => {
+            transaction.buildTransaction(this.account.guid,  inout.input, inout.output, inout.gas, inout.confirmations).then(ret => {
                 return transaction.convertArgument(inout.args)
                     .then((arrayData) =>{
                         return transaction.advancedTransfer(this.account.guid, ret.result.data, passwd, arrayData)
@@ -148,7 +148,7 @@ export default {
                                 this.$dialog.show({
                                     body: this.$t("transfer.success")
                                 });
-                                this.$router.push('/');
+                              window.close();
                             })
                             .catch(error => {
                                  throw error
