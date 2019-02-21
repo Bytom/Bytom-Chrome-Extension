@@ -104,8 +104,12 @@ export default class Background {
           promise = accountAction.balance(guid, id)
           break
         case 'currentAccount':
-          let account = JSON.parse(localStorage.currentAccount)
+          const account = JSON.parse(localStorage.currentAccount)
           sendResponse(account)
+          break
+        case 'currentNetwork':
+          const netword = JSON.parse(localStorage.bytomNet)
+          sendResponse(netword)
           break
         case 'listAllAccount':
           promise = accountAction.list()

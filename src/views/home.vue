@@ -258,7 +258,10 @@ export default {
             }
         },
         currentAccount(newVal, oldVal) {
-            if (newVal.guid == undefined) return;
+            if (newVal.guid == undefined){
+              localStorage.currentAccount = {}
+              return;
+            }
             localStorage.currentAccount = JSON.stringify(newVal);
 
             this.refreshTransactions(newVal.guid, newVal.address).then(transactions => {
