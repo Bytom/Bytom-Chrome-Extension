@@ -43,7 +43,8 @@ const cn = {
     transfer: '转账',
     record: '交易记录',
     noAccount: '当前网络无账户信息',
-    create: '创建账户'
+    create: '创建账户',
+    unconfirmed :'未确认交易'
   },
   transcationDetail: {
     title: '交易详情',
