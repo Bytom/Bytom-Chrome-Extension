@@ -77,8 +77,22 @@
         <section>
             <vue-scroll>
                 <div class="transcation">
-                    <p v-if="transcation.is_confirmed" class="time">{{transcation.block_timestamp | moment}}</p>
-                    <p v-else class="time">{{transcation.submission_timestamp | moment}}</p>
+                  <div v-if="transcation.is_confirmed" class="time">
+                    <div v-if="transcation.block_timestamp === 0">
+                      {{ $t('main.unconfirmed') }}
+                    </div>
+                    <div v-else>
+                      {{transcation.block_timestamp | moment}}
+                    </div>
+                  </div>
+                  <div v-else class="time">
+                    <div v-if="transcation.submission_timestamp === 0">
+                      {{ $t('main.unconfirmed') }}
+                    </div>
+                    <div v-else>
+                      {{transcation.submission_timestamp | moment}}
+                    </div>
+                  </div>
                     <div class="info">
                         <section>
                             <p class="label">{{ $t('transcationDetail.fee') }}(BTM)</p>

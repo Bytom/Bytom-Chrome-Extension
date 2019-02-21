@@ -161,8 +161,22 @@
                         <li class="list-item" v-for="(transcation, index) in transactions" :key="index" @click="$router.push({name: 'transfer-info', params: {transcation: transcation, address: currentAccount.address}})">
                             <div class="value">{{transcation.direct}} {{transcation.val.toFixed(2)}} BTM</div>
                             <div>
-                                <div v-if="transcation.is_confirmed" class="time">{{transcation.block_timestamp | moment}}</div>
-                                <div v-else class="time">{{transcation.submission_timestamp | moment}}</div>
+                                <div v-if="transcation.is_confirmed" class="time">
+                                    <div v-if="transcation.block_timestamp === 0">
+                                        {{ $t('main.unconfirmed') }}
+                                    </div>
+                                    <div v-else>
+                                        {{transcation.block_timestamp | moment}}
+                                    </div>
+                                </div>
+                                <div v-else class="time">
+                                    <div v-if="transcation.submission_timestamp === 0">
+                                      {{ $t('main.unconfirmed') }}
+                                    </div>
+                                    <div v-else>
+                                      {{transcation.submission_timestamp | moment}}
+                                    </div>
+                                </div>
                                 <div class="addr">{{transcation.address}}</div>
                             </div>
                         </li>
