@@ -2,13 +2,29 @@ import { LocalStream } from 'extension-streams'
 import InternalMessage from '@/messages/internal'
 import * as MsgTypes from './messages/types'
 
+import accountAction from "@/models/account";
+import bytom from "@/models/bytom";
+
 export default class Background {
   constructor() {
     this.setupInternalMessaging()
+    this.setupBytom()
+    window.bytomAPI = bytom
+  }
+
+  setupBytom(){
+    const network = localStorage.bytomNet||'mainnet'
+    bytom.setupNet(network)
+
+    window.addEventListener('storage', storageEventHandler, false);
+    function storageEventHandler(evt){
+      if(evt.key === 'bytomNet'){
+        bytom.setupNet( evt.newValue )
+      }
+    }
   }
 
   setupInternalMessaging() {
-    console.log('messaging')
     LocalStream.watch((request, sendResponse) => {
       console.log(request)
       const message = InternalMessage.fromJson(request)
@@ -20,6 +36,12 @@ export default class Background {
     switch (message.type) {
       case MsgTypes.TRANSFER:
         this.transfer(sendResponse, message.payload)
+        break
+      case MsgTypes.ADVTRANSFER:
+        this.advancedTransfer(sendResponse, message.payload)
+        break
+      case MsgTypes.SEND:
+        this.send(sendResponse, message.payload)
         break
     }
   }
@@ -41,6 +63,65 @@ export default class Background {
         sendResponse(true)
       }
     )
+  }
+
+  advancedTransfer(sendResponse, payload) {
+    var promptURL = chrome.extension.getURL('pages/prompt.html')
+    var queryString = 'object='+JSON.stringify(payload)
+    console.log(promptURL, queryString)
+    chrome.windows.create(
+      {
+        url: `${promptURL}#advancedTransfer?${queryString}`,
+        type: 'popup',
+        width: 350,
+        height: 623,
+        top: 0,
+        left: 0
+      },
+      (window) => {
+        chrome.runtime.onMessage.addListener(function(request, sender) {
+          if(sender.tab.windowId === window.id){
+            switch (request.method){
+              case 'advanced-transfer':
+                sendResponse(request);
+                break
+            }
+          }
+        });
+      }
+    )
+  }
+
+  send(sendResponse, payload) {
+    const action = payload.action
+    const body = payload.body
+    if(action){
+      let promise
+      switch (action){
+        case 'balance':
+          const id = body.id
+          const guid = body.guid
+          promise = accountAction.balance(guid, id)
+          break
+        case 'currentAccount':
+          const account = JSON.parse(localStorage.currentAccount)
+          sendResponse(account)
+          break
+        case 'currentNetwork':
+          const network = JSON.parse(localStorage.bytomNet)
+          sendResponse(network)
+          break
+        case 'listAllAccount':
+          promise = accountAction.list()
+          break
+      }
+      if(promise){
+        promise.then(resp =>
+        {
+          sendResponse(resp)
+        })
+      }
+    }
   }
 }
 

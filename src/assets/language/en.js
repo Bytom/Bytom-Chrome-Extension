@@ -35,8 +35,10 @@ const en = {
   main: {
     mainNet: 'BYTOM MainNet',
     testNet: 'BYTOM TestNet',
+    soloNet: 'BYTOM SoloNet',
     mainNetShort: 'MainNet',
     testNetShort: 'TestNet',
+    soloNetShort: 'SoloNet',
     copy: 'Click to copy',
     transfer: 'Transfer',
     record: 'transcation Record',

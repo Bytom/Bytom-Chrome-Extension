@@ -6,6 +6,19 @@ transaction.list = function(guid, address, start, limit) {
   return bytom.transaction.list(guid, address, start, limit);
 };
 
+transaction.convertArgument = function(argArray) {
+  let fn = function asyncConvert(object){
+    const type = object.type
+    const value = object.value
+    return bytom.transaction.convertArgument(type, value)
+      .then(resp => resp.value);
+  };
+
+  let actionFunction = argArray.map(fn)
+  console.log(actionFunction)
+  return Promise.all(actionFunction);
+};
+
 transaction.blockCount = function() {
   return bytom.query.getblockcount();
 };
@@ -28,6 +41,20 @@ transaction.build = function(guid, to, asset, amount, fee) {
   return retPromise;
 };
 
+transaction.buildTransaction = function(guid, inputs, outputs, gas, confirmations) {
+  let retPromise = new Promise((resolve, reject) => {
+    bytom.transaction
+      .buildTransaction(guid, inputs, outputs, gas, confirmations)
+      .then(res => {
+        resolve(res);
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+  return retPromise;
+};
+
 transaction.transfer = function(guid, transaction, password) {
   let retPromise = new Promise((resolve, reject) => {
     bytom.transaction
@@ -35,6 +62,30 @@ transaction.transfer = function(guid, transaction, password) {
       .then(ret => {
         bytom.transaction
           .submitPayment(guid, ret.raw_transaction, ret.signatures)
+          .then(res3 => {
+            resolve(res3);
+          })
+          .catch(error => {
+            reject(error);
+          });
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+
+  return retPromise;
+};
+
+transaction.advancedTransfer = function(guid, transaction, password, arrayData) {
+  let retPromise = new Promise((resolve, reject) => {
+    bytom.transaction
+      .signTransaction(guid, JSON.stringify(transaction), password)
+      .then(ret => {
+        let signatures = ret.signatures
+        signatures[0] = arrayData
+        bytom.transaction
+          .submitPayment(guid, ret.raw_transaction, signatures)
           .then(res3 => {
             resolve(res3);
           })

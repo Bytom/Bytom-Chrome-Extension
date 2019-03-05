@@ -18,6 +18,14 @@ const routers = [
         }
       },
       {
+        path: '/advancedTransfer',
+        name: 'advanced-transfer',
+        meta: { title: '高级转账' },
+        component: resolve => {
+          require(['@/views/advancedTransfer.vue'], resolve)
+        }
+      },
+      {
         path: '/transfer/info',
         name: 'transfer-info',
         meta: { title: '交易详情' },

@@ -33,7 +33,7 @@ const _subscribe = () => {
       if (resolvers[i].id === msg.resolver) {
         if (msg.type === 'error') resolvers[i].reject(msg.payload)
         else resolvers[i].resolve(msg.payload)
-        resolvers = resolvers.slice(i, 1)
+        resolvers.splice(i, 1)
       }
     }
   })
@@ -46,6 +46,21 @@ const _subscribe = () => {
  * @param _payload
  */
 const _send = (_type, _payload) => {
+  return new Promise((resolve, reject) => {
+    let id = IdGenerator.numeric(24)
+    let message = new NetworkMessage(_type, _payload, id)
+    resolvers.push(new DanglingResolver(id, resolve, reject))
+    stream.send(message, EventNames.BYTOM)
+  })
+}
+
+/***
+ * Turns message sending between the application
+ * and the content script into async promises
+ * @param _type
+ * @param _payload
+ */
+const _sendSync = (_type, _payload) => {
   return new Promise((resolve, reject) => {
     let id = IdGenerator.numeric(24)
     let message = new NetworkMessage(_type, _payload, id)
@@ -70,6 +85,24 @@ export default class Bytomdapp {
     return _send(MsgTypes.TRANSFER, {
       to: to,
       amount: amount
+    })
+  }
+
+  advancedTransfer(account, input, output, gas, args, confirmations) {
+    return _send(MsgTypes.ADVTRANSFER, {
+      account,
+      input,
+      output,
+      gas,
+      args,
+      confirmations
+    })
+  }
+
+  request(action, body=''){
+    return _send(MsgTypes.SEND,{
+      action,
+      body
     })
   }
 }

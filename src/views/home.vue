@@ -125,6 +125,7 @@
                     <select v-model="network" @change="networkToggle">
                         <option value="mainnet">{{ $t('main.mainNet') }}</option>
                         <option value="testnet">{{ $t('main.testNet') }}</option>
+                        <option value="solonet">{{ $t('main.soloNet') }}</option>
                     </select>
                 </div>
                 <div class="topbar-left">
@@ -160,8 +161,22 @@
                         <li class="list-item" v-for="(transcation, index) in transactions" :key="index" @click="$router.push({name: 'transfer-info', params: {transcation: transcation, address: currentAccount.address}})">
                             <div class="value">{{transcation.direct}} {{transcation.val.toFixed(2)}} BTM</div>
                             <div>
-                                <div v-if="transcation.is_confirmed" class="time">{{transcation.block_timestamp | moment}}</div>
-                                <div v-else class="time">{{transcation.submission_timestamp | moment}}</div>
+                                <div v-if="transcation.is_confirmed" class="time">
+                                    <div v-if="transcation.block_timestamp === 0">
+                                        {{ $t('main.unconfirmed') }}
+                                    </div>
+                                    <div v-else>
+                                        {{transcation.block_timestamp | moment}}
+                                    </div>
+                                </div>
+                                <div v-else class="time">
+                                    <div v-if="transcation.submission_timestamp === 0">
+                                      {{ $t('main.unconfirmed') }}
+                                    </div>
+                                    <div v-else>
+                                      {{transcation.submission_timestamp | moment}}
+                                    </div>
+                                </div>
                                 <div class="addr">{{transcation.address}}</div>
                             </div>
                         </li>
@@ -196,6 +211,8 @@ import TxInfo from "@/views/transferDetail";
 import address from "@/utils/address";
 import account from "@/models/account";
 import transaction from "@/models/transaction";
+import { BTM } from "@/utils/constants";
+
 const EnterActive = 'animated faster fadeInLeft';
 const LeaveActive = 'animated faster fadeOutLeft';
 export default {
@@ -241,7 +258,10 @@ export default {
             }
         },
         currentAccount(newVal, oldVal) {
-            if (newVal.guid == undefined) return;
+            if (newVal.guid == undefined){
+              localStorage.currentAccount = {}
+              return;
+            }
             localStorage.currentAccount = JSON.stringify(newVal);
 
             this.refreshTransactions(newVal.guid, newVal.address).then(transactions => {
@@ -349,9 +369,9 @@ export default {
                         return;
                     }
 
-                    this.transactionsFormat(transactions);
-                    console.log("formatTx", transactions);
-                    resolve(transactions)
+                    const formattedTx = this.transactionsFormat(transactions);
+                    console.log("formatTx", formattedTx);
+                    resolve(formattedTx)
                 }).catch(error => {
                     console.log(error);
                     reject(error)
@@ -359,44 +379,41 @@ export default {
             })
         },
         transactionsFormat: function (transactions) {
-            transactions.forEach(transaction => {
-                let inputSum = 0;
-                let outputSum = 0;
-                let selfInputSum = 0;
-                let selfoutputSum = 0;
-                let inputAddresses = [];
-                let outputAddresses = [];
-                transaction.inputs.forEach(input => {
-                    inputSum += input.amount;
-                    if (input.address == this.currentAccount.address) {
-                        selfInputSum += input.amount;
-                        return;
-                    }
+          const formattedTransactions = []
+          const assetID = BTM
 
-                    inputAddresses.push(input.address);
-                });
-                transaction.outputs.forEach(output => {
-                    outputSum += output.amount;
-                    if (output.address == this.currentAccount.address) {
-                        selfoutputSum += output.amount;
-                        return;
-                    }
+          transactions.forEach(transaction => {
+            const balanceObject = transaction.balances
+              .filter(b => b.asset === assetID);
 
-                    outputAddresses.push(output.address);
-                });
+            if(balanceObject.length ===1 ){
 
-                let val = selfoutputSum - selfInputSum;
+                const inputAddresses = transaction.inputs
+                  .filter(input => input.asset === assetID && input.address !== this.currentAccount.address)
+                  .map(input => input.address)
+
+                const outputAddresses = transaction.outputs
+                  .filter(output => output.asset === assetID && output.address !== this.currentAccount.address)
+                  .map(output => output.address)
+
+
+                const val  = assetID===BTM ? Number(balanceObject[0].amount)/ 100000000 : Number(balanceObject[0].amount);
+
                 if (val > 0) {
                     transaction.direct = "+";
                     transaction.address = address.short(inputAddresses.pop());
                 } else {
-                    val = selfInputSum - selfoutputSum;
                     transaction.direct = "-";
                     transaction.address = address.short(outputAddresses.pop());
                 }
-                transaction.val = Number(val / 100000000);
-                transaction.fee = Number(inputSum - outputSum) / 100000000;
+
+                transaction.val = Math.abs(val);
+                transaction.fee = transaction.fee / 100000000;
+
+                formattedTransactions.push(transaction);
+              }
             });
+          return formattedTransactions;
         },
     },
     mounted() {

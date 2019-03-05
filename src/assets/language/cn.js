@@ -35,13 +35,16 @@ const cn = {
   main: {
     mainNet: 'BYTOM主网络',
     testNet: 'BYTOM测试网络',
+    soloNet: 'BYTOM单机网络',
     mainNetShort: 'BYTOM主网络',
     testNetShort: 'BYTOM测试网络',
+    soloNetShort: 'BYTOM单机网络',
     copy: '点击复制',
     transfer: '转账',
     record: '交易记录',
     noAccount: '当前网络无账户信息',
-    create: '创建账户'
+    create: '创建账户',
+    unconfirmed :'未确认交易'
   },
   transcationDetail: {
     title: '交易详情',
