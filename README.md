@@ -1,22 +1,36 @@
-# chrome-extension-wallet
+# Bystore Chrome Extension
 
-> Bytom Chrome Extension Wallet
 
-## Build Setup
+## Building locally
 
-``` bash
-# install dependencies
+- Install [Node.js](https://nodejs.org) version 8 and the latest available npm@6
+- Install dependencies: `npm install`
+- build for production with minification && crx package with `npm run build`
+- Optionally, to rebuild on file changes, run `npm run dev`.
+- To package .zip files for distribution, run `npm run zip`, or run the full build & zip with `gulp dist`.
+
+ Uncompressed builds can be found in `/dist`, compressed builds can be found in `/builds` once they're built.
+
+
+## Architecture
+
+![Architecture Diagram](./doc/architecture-diagram.png)
+
+## Development
+
+```bash
 npm install
-
-# serve with auto reload && import the **dist** folder in the Chrome browser
 npm run dev
+```
 
-# build for production with minification && crx package
+## Build for Publishing
+
+```bash
 npm run build
 ```
 
-## Architecture Diagram
-![png](https://raw.githubusercontent.com/Bytom-Community/Bytom-Chrome-Extension/master/doc/architecture-diagram.png)
 
-## Doc
-[中文](https://github.com/Bytom-Community/Bytom-Chrome-Extension/tree/master/doc/cn)
+## Other Docs
+- [How to add custom build to Chrome](./docs/en/add-to-chrome.md)
+- [How to live reload on local dependency changes](./docs/en/developing-on-deps.md)
+- [中文文档](./doc/cn/README.md)
