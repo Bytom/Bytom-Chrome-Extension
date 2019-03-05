@@ -1,5 +1,5 @@
 # Bystore Chrome Extension
-
+Bystore Chrome Extension wallet is a UTXO base Wallet. The extension in charge of the all the Key and Account Management.
 
 ## Building locally
 
@@ -31,6 +31,7 @@ npm run build
 
 
 ## Other Docs
-- [How to add custom build to Chrome](./docs/en/add-to-chrome.md)
-- [How to live reload on local dependency changes](./docs/en/developing-on-deps.md)
+- [How to add custom build to Chrome](./doc/en/add-to-chrome.md)
+- [How to live reload on local dependency changes](./doc/en/developing-on-deps.md)
+- [How to use Bytom-JS-SDK and WebAssembly](./doc/en/bytom-js-sdk-webassembly.md)
 - [中文文档](./doc/cn/README.md)
