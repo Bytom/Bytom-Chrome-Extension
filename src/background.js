@@ -108,8 +108,8 @@ export default class Background {
           sendResponse(account)
           break
         case 'currentNetwork':
-          const netword = JSON.parse(localStorage.bytomNet)
-          sendResponse(netword)
+          const network = JSON.parse(localStorage.bytomNet)
+          sendResponse(network)
           break
         case 'listAllAccount':
           promise = accountAction.list()
