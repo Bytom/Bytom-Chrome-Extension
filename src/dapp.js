@@ -88,9 +88,8 @@ export default class Bytomdapp {
     })
   }
 
-  advancedTransfer(account, input, output, gas, args, confirmations) {
+  advancedTransfer(input, output, gas, args, confirmations) {
     return _send(MsgTypes.ADVTRANSFER, {
-      account,
       input,
       output,
       gas,

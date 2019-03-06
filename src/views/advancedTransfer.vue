@@ -55,8 +55,8 @@
         <section class="form">
             <div class="form-item-group">
                 <div class="form-item">
-                    <!-- <label>账户</label> -->
-                    <v-select :clearable="false" v-model="account" style="height: 32px;width: 125px;" label="alias" :options="accounts"></v-select>
+                    <!--<label label class="form-item-label">账户</label>-->
+                    <span>{{account.alias}}</span>
                 </div>
             </div>
             <br>
@@ -166,11 +166,7 @@ export default {
             });
         }
     }, mounted() {
-      const inout = JSON.parse(this.$route.query.object);
-
-      if (inout.account != undefined) {
-              this.account = inout.account;
-          }
+          this.account = JSON.parse(localStorage.currentAccount);
 
           account.setupNet(localStorage.bytomNet);
           account.list().then(accounts => {
