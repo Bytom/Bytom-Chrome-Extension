@@ -1,3 +1,14 @@
+@font-face {
+  font-family: 'Robot';
+  src: url('fonts/Roboto-Medium.ttf');
+  font-weight: 500;
+}
+@font-face {
+  font-family: 'Robot';
+  src: url('fonts/Roboto-Regular.ttf');
+  font-weight: 400;
+}
+
 p,
 h1,
 h2,
@@ -9,21 +20,24 @@ body,
 html {
   padding: 0;
   margin: 0;
+  font-family: 'Robot', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+  "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+  SimSun, sans-serif;;
 }
 body {
   width: 350px;
   height: 600px;
-  background-color: #282f38;
+  background-color: #ffffff;
 }
 
-a,
-p,
-div,
-section,
-input,
-select {
-  color: #ffffff;
-}
+/*a,*/
+/*p,*/
+/*div,*/
+/*section,*/
+/*input,*/
+/*select {*/
+  /*color: #010101;*/
+/*}*/
 select {
   background-color: #282f38;
   appearance: none;
@@ -40,7 +54,6 @@ a {
 
 #app,
 #welcome {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
   color: #fff;
   font-size: 18px;
   line-height: 25px;
@@ -79,8 +92,7 @@ ul {
 li:active,
 li:hover,
 li.active {
-  background-color: #1bc1b0;
-  border-radius: 8px;
+  background-color: #f7f7f7;
   cursor: pointer;
 }
 
@@ -103,6 +115,8 @@ hr {
       url('//at.alicdn.com/t/font_806738_pnniif0zn4q.svg?t=1540652693831#iconfont')
       format('svg'); /* iOS 4.1- */
 }
+
+
 
 .iconfont {
   font-family: 'iconfont' !important;
@@ -167,23 +181,51 @@ hr {
 }
 
 .color-black {
-  color: #282f38;
+  color: #010101;
 }
 .color-green {
   color: #1bc1b0;
+}
+.color-white {
+  color: #ffffff;
+}
+.color-grey {
+  color: #7B7B7B;
+}
+.color-lightgrey {
+  color: #e0e0e0;
 }
 
 .bg-red {
   background-color: #d84c4c !important;
 }
 .bg-gray {
-  background-color: #3c454b !important;
+  background-color: #F0F0F0 !important;
 }
 .bg-black {
   background-color: #282f38 !important;
 }
 .bg-green {
   background-color: #1bc1b0 !important;
+}
+
+.bg-image{
+  background-image: url('img/background-1@2x.png');
+  background-repeat: no-repeat;
+  background-size: 360px 420px;
+}
+
+.bg-secondary{
+  background-color: #ffffff !important;
+}
+
+.bg-emptytx{
+  background-image: url('img/Pic-No transaction data@2x.png');
+  background-size: 100px 100px;
+  background-repeat: no-repeat;
+  background-position: bottom;
+  width: 100%;
+  height: 150px;
 }
 
 .mask {
@@ -251,7 +293,7 @@ hr {
   width: 100%;
   position: relative;
   display: inline-block;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 400;
   font-family: inherit;
   text-decoration: none;
@@ -283,12 +325,13 @@ hr {
 }
 .btn-primary {
   color: #ffffff;
-  background-color: #282f38;
+  background-color: #035BD4;;
 }
 .btn-primary.active,
-.btn-primary:active {
+.btn-primary.hover,
+.btn-primary:focus {
   color: #ffffff;
-  background-color: #282f38;
+  background-color: #044BAF;
   border: none;
 }
 .btn-close {
@@ -305,6 +348,7 @@ hr {
 }
 
 .list {
+  color: #010101;
 }
 
 .list-item {
@@ -313,8 +357,7 @@ hr {
 .list-item:active,
 .list-item:hover,
 .list-item.active {
-  background-color: #1bc1b0;
-  border-radius: 5px;
+  background-color: #f7f7f7;
   cursor: pointer;
 }
 .list-item i {
@@ -365,4 +408,8 @@ select {
 .form-item-content {
   position: relative;
   line-height: 32px;
+}
+
+.center-text{
+  text-align: center;
 }

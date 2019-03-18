@@ -5,9 +5,10 @@
 
 .topbar {
     font-size: 19px;
+    display:flex;
 }
 .topbar .topbar-left {
-    width: 120px;
+    width: 85px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -21,14 +22,13 @@
 .topbar-left .btn-menu i {
     font-size: 100%;
 }
-.topbar-left .alias {
+.alias {
     height: 25px;
-    font-size: 19px;
+    font-size: 16px;
     line-height: 28px;
 }
 
-.topbar .topbar-right {
-    float: right;
+.topbar .topbar-middle {
     margin-top: 20px;
     margin-right: 20px;
     border: 2px solid #fff;
@@ -38,7 +38,7 @@
     text-align: center;
 }
 
-.topbar-right .lamp {
+.topbar-middle .lamp {
     display: inline-block;
     width: 6px;
     height: 6px;
@@ -50,9 +50,9 @@
 }
 
 .content {
-    margin-top: 20px;
+    margin-top: 25px;
     text-align: center;
-    padding: 0 30px 20px;
+    padding: 0 30px 10px;
 }
 .content .token-icon {
     display: inline-flex;
@@ -65,7 +65,7 @@
     padding-bottom: 10px;
 }
 .content .token-amount {
-    font-size: 45px;
+    font-size: 32px;
     line-height: 45px;
 }
 .token-amount .asset {
@@ -77,29 +77,61 @@
     vertical-align: middle;
     cursor: pointer;
 }
+
+.btn-send-transfer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.btn-send-transfer .btn {
+    width: 160px;
+    height: 48px;
+    line-height: 27px;
+    font-size: 16px;
+}
+
+.btn-received {
+    background: #0DBF37;
+    border-radius:4px 0px 0px 0px;
+}
+.btn-received:active,
+.btn-received:hover,.btn-received:focus {
+    background: #05A02A;
+}
+
 .btn-transfer {
-    width: 200px;
+    background: #035BD4;
+    border-radius:0px 4px 0px 0px;
+}
+.btn-transfer:active,
+.btn-transfer:hover,.btn-transfer:focus {
+  background: #044BAF;
 }
 
 .transaction-title h3 {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: inherit;
-    color: #cacaca;
-    text-align: center;
-    padding: 5px 0;
+    padding: 10px 0 10px 20px;
 }
 .transactions {
     font-size: 15px;
     height: 273px;
     overflow: hidden;
 }
-.transactions .list {
-    padding: 0 20px;
-}
 .list-item {
+    position: relative;
     display: block;
-    padding: 5px 10px;
-    border-bottom: 1px solid #5e5e5e;
+    padding: 10px 20px;
+}
+
+.list-item:after {
+    content:"";
+    background: #e0e0e0;
+    position: absolute;
+    bottom: 0;
+    left: 20px;
+    height: 1px;
+    width: 90%;
 }
 
 .list-item .value {
@@ -111,16 +143,42 @@
 }
 .btn-creation {
     display: block;
-    width: 200px;
-    margin: 0 auto;
+    width: 310px;
+    height: 48px;
+    margin: auto;
+    padding: 15px 0;
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
 }
+
+.time, .value{
+  font-weight: 500;
+  font-size: 16px;
+}
+.addr{
+  font-size: 12px;
+}
+.no-tx-img{
+  width: 100px;
+  height: 100px;
+}
+.no-record{
+  display: block;
+}
+
 </style>
 
 <template>
     <div class="warp">
-        <section class="bg-green">
+        <section class="bg-image">
             <div class="topbar">
-                <div class="topbar-right">
+                <div class="topbar-left">
+                    <a class="btn-menu" @click="openMenu">
+                        <i class="iconfont icon-menu"></i>
+                    </a>
+                </div>
+                <div class="topbar-middle bg-secondary">
                     <i class="lamp"></i>
                     <select v-model="network" @change="networkToggle">
                         <option value="mainnet">{{ $t('main.mainNet') }}</option>
@@ -128,68 +186,78 @@
                         <option value="solonet">{{ $t('main.soloNet') }}</option>
                     </select>
                 </div>
-                <div class="topbar-left">
-                    <a class="btn-menu" @click="openMenu">
-                        <i class="iconfont icon-menu"></i>
-                    </a>
-                    <span class="alias">{{currentAccount.alias}}</span>
-                </div>
             </div>
             <div class="content">
-                <img src="@/assets/logo.png" class="token-icon">
-                <div v-if="currentAccount.address!=undefined" class="amount">
+                <div v-if="currentAccount.address!=undefined" class="amount color-white">
+                    <span class="alias color-grey">{{currentAccount.alias}}</span>
                     <div class="token-amount">
                         {{accountBalance}}
                         <span class="asset">BTM</span>
                     </div>
-                    <p class="account-address">
-                        <span class="address-text" :title="addressTitle" :data-clipboard-text="currentAccount.address">{{shortAddress}}</span>
-                        <i class="iconfont qrcode" @click="showQrcode">&#xe7dd;</i>
-                    </p>
                 </div>
-                <a v-if="currentAccount.address!=undefined" class="btn btn-primary btn-transfer" @click="transferOpen">{{ $t('main.transfer') }}</a>
+                <div v-else>
+                  <p style="width: 250px; margin: 45px auto; text-align: center;">{{ $t('main.noAccount') }}</p>
+
+                </div>
+            </div>
+            <div class="btn-send-transfer">
+                <a v-if="currentAccount.address!=undefined" class="btn btn-primary btn-received" @click="showQrcode">{{ $t('main.receive') }}</a>
+                <a v-if="currentAccount.address!=undefined" class="btn btn-primary btn-transfer" @click="transferOpen">{{ $t('main.send') }}</a>
             </div>
         </section>
 
-        <div v-if="currentAccount.address!=undefined">
             <section class="transaction-title">
-                <h3 class="bg-gray">{{ $t('main.record') }}</h3>
+                <h3 class="bg-gray color-grey">{{ $t('main.record') }}</h3>
             </section>
             <section class="transactions">
-                <vue-scroll @handle-scroll="handleScroll">
-                    <ul class="list">
-                        <li class="list-item" v-for="(transcation, index) in transactions" :key="index" @click="$router.push({name: 'transfer-info', params: {transcation: transcation, address: currentAccount.address}})">
-                            <div class="value">{{transcation.direct}} {{transcation.val.toFixed(2)}} BTM</div>
-                            <div>
-                                <div v-if="transcation.is_confirmed" class="time">
-                                    <div v-if="transcation.block_timestamp === 0">
+                 <!--<div v-if="currentAccount.address!=undefined">-->
+                  <div v-if="transactions.length != 0">
+                      <vue-scroll @handle-scroll="handleScroll">
+                      <ul class="list">
+                          <li class="list-item" v-for="(transcation, index) in transactions" :key="index" @click="$router.push({name: 'transfer-info', params: {transcation: transcation, address: currentAccount.address}})">
+                              <div class="value">{{transcation.direct}} {{transcation.val.toFixed(2)}} BTM</div>
+                              <div>
+                                  <div v-if="transcation.is_confirmed" class="time">
+                                      <div v-if="transcation.block_timestamp === 0">
+                                          {{ $t('main.unconfirmed') }}
+                                      </div>
+                                      <div v-else>
+                                          {{transcation.block_timestamp | moment}}
+                                      </div>
+                                  </div>
+                                  <div v-else class="time">
+                                      <div v-if="transcation.submission_timestamp === 0">
                                         {{ $t('main.unconfirmed') }}
-                                    </div>
-                                    <div v-else>
-                                        {{transcation.block_timestamp | moment}}
-                                    </div>
-                                </div>
-                                <div v-else class="time">
-                                    <div v-if="transcation.submission_timestamp === 0">
-                                      {{ $t('main.unconfirmed') }}
-                                    </div>
-                                    <div v-else>
-                                      {{transcation.submission_timestamp | moment}}
-                                    </div>
-                                </div>
-                                <div class="addr">{{transcation.address}}</div>
-                            </div>
-                        </li>
-                    </ul>
-                </vue-scroll>
+                                      </div>
+                                      <div v-else>
+                                        {{transcation.submission_timestamp | moment}}
+                                      </div>
+                                  </div>
+                                  <div class="addr color-grey">{{transcation.address}}</div>
+                              </div>
+                          </li>
+                      </ul>
+                  </vue-scroll>
+                  </div>
+                  <div v-else>
+                      <div class="bg-emptytx"></div>
+                      <div>
+                          <span class="color-lightgrey center-text no-record">{{$t('main.noRecord')}}</span>
+                      </div>
+                      <div v-if="currentAccount.address == undefined">
+                          <router-link :to="{name: 'menu-account-creation'}">
+                              <a class="btn btn-primary btn-creation">{{ $t('main.create') }}</a>
+                          </router-link>
+                      </div>
+
+                  </div>
+                  <!--</div>-->
+                  <!--<div v-else>-->
+                      <!--<router-link :to="{name: 'menu-account-creation'}">-->
+                          <!--<a class="btn btn-primary btn-creation bg-green">{{ $t('main.create') }}</a>-->
+                      <!--</router-link>-->
+                  <!--</div>-->
             </section>
-        </div>
-        <div v-else>
-            <p style="width: 250px; margin: 30px auto; text-align: center;">{{ $t('main.noAccount') }}</p>
-            <router-link :to="{name: 'menu-account-creation'}">
-                <a class="btn btn-primary btn-creation bg-green">{{ $t('main.create') }}</a>
-            </router-link>
-        </div>
 
         <!-- child page -->
         <div class="mask" v-show="maskShow"></div>

@@ -18,7 +18,7 @@ const en = {
     quantity: 'Quantity',
     fee: 'Fee',
     feeType: 'Standard',
-    send: 'Send transcation',
+    send: 'Send transaction',
     confirmPassword: 'Confirm password',
     confirm: 'Confirm',
     cancel: 'Cancel',
@@ -30,7 +30,7 @@ const en = {
     transferCost: 'Transfer Cost',
     total: 'Total',
     totalTip: 'Transfer Amount+Fee',
-    success: 'transcation sent successfully'
+    success: 'Transaction sent successfully'
   },
   main: {
     mainNet: 'BYTOM MainNet',
@@ -40,17 +40,19 @@ const en = {
     testNetShort: 'TestNet',
     soloNetShort: 'SoloNet',
     copy: 'Click to copy',
-    transfer: 'Transfer',
-    record: 'transcation Record',
+    send: 'Send',
+    receive: 'Receive',
+    record: 'Transaction Record',
     noAccount: 'No account information on this network.',
-    create: 'Create Account'
+    create: 'Create account',
+    noRecord:"No transaction records found."
   },
   transcationDetail: {
-    title: 'transcation Detail',
+    title: 'Transaction Detail',
     fee: 'Fee',
     blockHeight: 'Block Height',
     blockSize: 'Block Size',
-    transcationID: 'transcation ID',
+    transcationID: 'Transaction ID',
     sendAddress: 'Send Address',
     receiveAddress: 'Receive Address',
     myAddress: '(My Address)'

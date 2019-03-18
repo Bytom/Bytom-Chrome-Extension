@@ -40,11 +40,13 @@ const cn = {
     testNetShort: 'BYTOM测试网络',
     soloNetShort: 'BYTOM单机网络',
     copy: '点击复制',
-    transfer: '转账',
+    send: '发送',
+    receive: '接收',
     record: '交易记录',
     noAccount: '当前网络无账户信息',
     create: '创建账户',
-    unconfirmed :'未确认交易'
+    unconfirmed :'未确认交易',
+    noRecord:"没有交易记录"
   },
   transcationDetail: {
     title: '交易详情',
