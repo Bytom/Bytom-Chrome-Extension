@@ -118,7 +118,7 @@ hr {
 
 .iconfont {
   font-family: 'iconfont' !important;
-  font-size: 16px;
+  font-size: 14px;
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -200,9 +200,15 @@ hr {
 .bg-gray {
   background-color: #F0F0F0 !important;
 }
-.bg-sideBar{
+.bg-white {
+  background-color: #FFFFFF !important;
+}
+.bg-sideBar,
+.bg-header
+{
   background-color: #202020 !important;
 }
+
 .bg-black {
   background-color: #282f38 !important;
 }
@@ -285,7 +291,7 @@ hr {
 }
 
 .divider {
-  border-top: 1px solid #282f38;
+  border-top: 1px dashed #E0E0E0;
 }
 
 /*按钮样式*/
@@ -302,8 +308,8 @@ hr {
   margin: 0;
   background: #dddddd;
   padding: 10px 20px;
-  height: 35px;
-  line-height: 18px;
+  height: 48px;
+  line-height: 24px;
   border-radius: 0.2rem;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -328,13 +334,18 @@ hr {
   color: #ffffff;
   background-color: #035BD4;;
 }
-.btn-primary.active,
-.btn-primary.hover,
+.btn-primary:active,
+.btn-primary:hover,
 .btn-primary:focus {
   color: #ffffff;
   background-color: #044BAF;
   border: none;
 }
+
+.btn-warning {
+  background-color: #E60000;
+}
+
 .btn-close {
   color: #ffffff;
   font-weight: bold;
@@ -372,8 +383,6 @@ hr {
 .form-item {
   margin: 15px 0;
   padding: 0 10px;
-  background-color: #282f38;
-  border-radius: 5px;
 }
 
 .form-item label {
@@ -401,7 +410,6 @@ select {
 .form-item-label {
   text-align: right;
   vertical-align: middle;
-  float: left;
   line-height: 1;
   padding: 10px 12px 10px 0;
   box-sizing: border-box;
@@ -409,6 +417,8 @@ select {
 .form-item-content {
   position: relative;
   line-height: 32px;
+  border-bottom: 1px solid #E0E0E0;
+  margin-bottom: 5px;
 }
 
 .center-text{

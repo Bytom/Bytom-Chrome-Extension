@@ -1,10 +1,16 @@
 <style lang="" scoped>
 .header {
-    height: 150px;
+  display: flex;
+}
+.header p{
+  text-align: center;
+  width: 260px;
+  padding-top: 17px;
 }
 .balance {
-    text-align: center;
-    margin-top: 15px;
+    margin: 20px;
+    background: #2a2a2a;
+    padding: 20px;
 }
 .balance .token-icon {
     height: 38px;
@@ -13,86 +19,76 @@
 }
 .balance .token-amount {
     display: inline-block;
-    font-size: 45px;
-    line-height: 45px;
 }
 .balance .token-amount .asset {
     font-size: 18px;
     margin-left: 2px;
 }
+.form-container{
+  margin: 20px;
+}
 .form {
-    padding: 10px 22px;
+    margin-bottom: 20px;
+    padding: 10px 15px;
+    border-radius:4px;
 }
-.form-item-group {
-    display: flex;
+.form-container .btn{
+    height: 48px;
+    padding-top: 15px;
+    bottom: 20px;
+    position: absolute;
+    width: 320px;
 }
-.form-item-group .form-item {
-    width: 40%;
-}
-
-.btn-inline {
-    display: flex;
-    padding: 0;
-}
-.btn-inline .btn {
-    margin: 10px 15px;
-}
+  .small{
+    font-size: 12px;
+  }
 </style>
 
 <template>
     <div class="warp-chlid bg-gray">
-        <section class="header bg-green">
+        <section class="header bg-header">
             <i class="iconfont icon-back" @click="close"></i>
-            <div class="balance">
-                <img src="@/assets/logo.png" class="token-icon">
-                <div class="token-amount">
-                    {{accountBalance}}
-                    <span class="asset">BTM</span>
-                </div>
+            <p>{{ $t('main.send') }}</p>
+        </section>
+
+        <section class="balance">
+            <div class="token-amount">
+                {{accountBalance}}
+                <span class="asset">BTM</span>
+            </div>
+            <div class="small color-grey">
+              {{account.alias}}
             </div>
         </section>
 
-        <section class="form">
-            <div class="form-item-group">
-                <div class="form-item">
-                    <!-- <label>账户</label> -->
-                    <v-select :clearable="false" v-model="account" style="height: 32px;width: 125px;" label="alias" :options="accounts"></v-select>
-                </div>
-                <div class="form-item" style="margin-left: 20px;">
-                    <!-- <label>资产</label> -->
-                    <v-select :clearable="false" v-model="selectAsset" style="height: 32px;" label="name" :options="assetOptions"></v-select>
-                </div>
-            </div>
-            <div class="form-item">
-                <label class="form-item-label">{{ $t('transfer.address') }}</label>
-                <div class="form-item-content" style="margin-left: 80px;">
-                    <input type="text" v-model="transaction.to">
-                </div>
-            </div>
-            <div class="form-item">
-                <label class="form-item-label">{{ $t('transfer.quantity') }}</label>
-                <div class="form-item-content" style="margin-left: 80px; display: flex;">
-                    <input type="number" v-model="transaction.amount" placeholder="0">
-                    <span style="width: 40px; font-size: 15px;">{{unit}}</span>
-                </div>
-            </div>
-            <div class="form-item">
-                <label class="form-item-label">≈</label>
-                <div class="form-item-content" style="margin-left: 80px; display: flex;">
-                    <input type="number" v-model="transaction.cost" placeholder="0" disabled>
-                    <span style="width: 40px; font-size: 15px;">CNY</span>
-                </div>
-            </div>
-            <div class="form-item">
-                <label class="form-item-label">{{ $t('transfer.fee') }}</label>
-                <div class="form-item-content" style="margin-left: 80px;">
-                    <v-select :clearable="false" v-model="fee" style="height: 32px;" :options="feeTypeOptions"></v-select>
-                </div>
-            </div>
-            <br>
-            <div style="width: 200px; margin: 0 auto;">
-                <div class="btn bg-green" @click="send">{{ $t('transfer.send') }}</div>
-            </div>
+        <section class="form-container">
+          <div class="form bg-white">
+              <div class="form-item">
+                  <label class="form-item-label">{{ $t('transfer.address') }}</label>
+                  <div class="form-item-content" >
+                      <input type="text" v-model="transaction.to">
+                  </div>
+              </div>
+              <div class="form-item">
+                  <label class="form-item-label">
+                    {{ $t('transfer.quantity') }}
+
+                    <small class="float-right" >{{ transaction.cost||0 }} CNY</small>
+                  </label>
+                  <div class="form-item-content" style=" display: flex;">
+                      <input type="number" v-model="transaction.amount" placeholder="0">
+                      <span class="color-grey" style="width: 40px; font-size: 15px;">{{unit}}</span>
+                  </div>
+              </div>
+              <div class="form-item">
+                  <label class="form-item-label">{{ $t('transfer.fee') }}</label>
+                  <div class="form-item-content" >
+                      <!--<v-select :clearable="false" v-model="fee" style="height: 32px;" :options="feeTypeOptions"></v-select>-->
+                    <input type="text"  v-model="fee" disabled >
+                  </div>
+              </div>
+          </div>
+          <a class="btn btn-primary" @click="send">{{ $t('transfer.send') }}</a>
         </section>
     </div>
 </template>

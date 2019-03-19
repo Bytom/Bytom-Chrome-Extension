@@ -19,7 +19,7 @@ const en = {
     fee: 'Fee',
     feeType: 'Standard',
     send: 'Send transaction',
-    confirmPassword: 'Confirm password',
+    confirmPassword: 'password',
     confirm: 'Confirm',
     cancel: 'Cancel',
     emptyPassword: 'Password can not be empty.',
@@ -30,7 +30,10 @@ const en = {
     transferCost: 'Transfer Cost',
     total: 'Total',
     totalTip: 'Transfer Amount+Fee',
-    success: 'Transaction sent successfully'
+    success: 'Transaction sent successfully',
+    confirmTransaction:'Confirm Transaction',
+    from:'From',
+    to:'To'
   },
   main: {
     mainNet: 'BYTOM MainNet',

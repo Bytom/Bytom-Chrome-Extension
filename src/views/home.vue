@@ -270,9 +270,9 @@
 
 <script>
 import ClipboardJS from "clipboard";
-import Menu from "@/views/homeMenu";
+import Menu from "@/views/sideMenu/homeMenu";
 import Qrcode from "@/views/qrcode";
-import Transfer from "@/views/transfer";
+import Transfer from "@/views/sendTransaction/transfer";
 import TxInfo from "@/views/transferDetail";
 import address from "@/utils/address";
 import account from "@/models/account";

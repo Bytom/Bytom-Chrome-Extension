@@ -19,7 +19,7 @@ const cn = {
     fee: '矿工费用',
     feeType: '标准',
     send: '发送交易',
-    confirmPassword: '确认密码',
+    confirmPassword: '密码',
     confirm: '确认发送',
     cancel: '取消发送',
     emptyPassword: '密码不能为空',
@@ -29,8 +29,11 @@ const cn = {
     transferAmount: '转账金额',
     transferCost: '当前价值',
     total: '总计',
+    confirmTransaction:'确认发送交易',
     totalTip: '转账金额+矿工费用',
-    success: '交易发送成功'
+    success: '交易发送成功',
+    from:'发送账户',
+    to:'接收地址'
   },
   main: {
     mainNet: 'BYTOM主网络',

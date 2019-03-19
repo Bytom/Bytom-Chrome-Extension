@@ -65,12 +65,9 @@
 
 <template>
     <div class="bg-black warp-chlid">
-        <section class="header bg-green">
+        <section class="header bg-header">
             <i class="iconfont icon-back" @click="$router.go(-1)"></i>
-            <div class="preview">
-                <i class="iconfont icon-ios-checkmark-circle color-black"></i>
-                <p class="value">{{transcation.direct}}{{transcation.val}}<span>BTM</span></p>
-            </div>
+
         </section>
 
         <h3 class="title bg-gray">{{ $t('transcationDetail.title') }}</h3>

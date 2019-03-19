@@ -14,7 +14,7 @@ const routers = [
         name: 'transfer',
         meta: { title: '转账' },
         component: resolve => {
-          require(['@/views/transfer.vue'], resolve)
+          require(['@/views/sendTransaction/transfer.vue'], resolve)
         }
       },
       {
@@ -22,7 +22,7 @@ const routers = [
         name: 'advanced-transfer',
         meta: { title: '高级转账' },
         component: resolve => {
-          require(['@/views/advancedTransfer.vue'], resolve)
+          require(['@/views/sendTransaction/advancedTransfer.vue'], resolve)
         }
       },
       {
@@ -38,7 +38,7 @@ const routers = [
         name: 'transfer-confirm',
         meta: { title: '交易确认' },
         component: resolve => {
-          require(['@/views/transferConfirm.vue'], resolve)
+          require(['@/views/sendTransaction/transferConfirm.vue'], resolve)
         }
       },
       {
@@ -46,7 +46,7 @@ const routers = [
         name: 'menu',
         meta: { title: '切换账户' },
         component: resolve => {
-          require(['@/views/homeMenu.vue'], resolve)
+          require(['@/views/sideMenu/homeMenu.vue'], resolve)
         },
         children: [
           {
@@ -54,7 +54,7 @@ const routers = [
             name: 'menu-account-creation',
             meta: { title: '创建账户' },
             component: resolve => {
-              require(['@/views/menuCreation.vue'], resolve)
+              require(['@/views/sideMenu/menuCreation.vue'], resolve)
             }
           },
           {
@@ -62,7 +62,7 @@ const routers = [
             name: 'menu-backup',
             meta: { title: '备份' },
             component: resolve => {
-              require(['@/views/menuBackup.vue'], resolve)
+              require(['@/views/sideMenu/menuBackup.vue'], resolve)
             }
           },
           {
@@ -70,7 +70,7 @@ const routers = [
             name: 'menu-help',
             meta: { title: '帮助' },
             component: resolve => {
-              require(['@/views/menuHelp.vue'], resolve)
+              require(['@/views/sideMenu/menuHelp.vue'], resolve)
             }
           },
           {
@@ -78,7 +78,7 @@ const routers = [
             name: 'menu-settings',
             meta: { title: '设置' },
             component: resolve => {
-              require(['@/views/menuSettings.vue'], resolve)
+              require(['@/views/sideMenu/menuSettings.vue'], resolve)
             }
           }
         ]

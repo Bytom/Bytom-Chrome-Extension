@@ -17,10 +17,10 @@
 }
 
 .modal-container {
-  width: 200px;
+  width: 260px;
   margin: 0px auto;
-  padding: 20px 30px;
-  background-color: #1bc1b0;
+  padding: 20px;
+  background-color: #ffffff;
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
   transition: all .3s ease;
@@ -28,27 +28,20 @@
 }
 
 .modal-header {
+  font-size: 16px;
   margin-top: 0;
+  text-align: center;
 }
 
 .modal-body {
-  margin: 20px 0;
+  font-size: 14px;
+  margin: 5px 0 20px;
+  text-align: center;
 }
 
-.modal-default-button {
-  float: right;
-}
-
-.modal-enter {
-  opacity: 0;
-}
-
-.modal-leave-active {
-  opacity: 0;
-}
-
-.modal-footer {
-  height: 35px;
+.modal-footer .btn{
+  padding-top: 15px;
+  height: 48px;
 }
 
 .modal-enter .modal-container,
@@ -64,13 +57,13 @@
       <div class="modal-wrapper">
         <div class="modal-container">
 
-          <div class="modal-header">
+          <div class="modal-header color-black">
             <slot name="header">
               {{ header }}
             </slot>
           </div>
 
-          <div class="modal-body">
+          <div class="modal-body color-grey">
             <slot name="body">
               {{ body }}
             </slot>
@@ -78,7 +71,7 @@
 
           <div class="modal-footer">
             <slot name="footer">
-              <a class="btn btn-primary" @click="closeDialog()">
+              <a class="btn btn-warning" @click="closeDialog()">
                 {{ confirm }}
               </a>
             </slot>

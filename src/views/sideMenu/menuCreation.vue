@@ -4,10 +4,6 @@
       margin: 0;
       padding: 0;
   }
-  .form-item .form-item-content {
-    border-bottom: 1px solid #E0E0E0;
-    margin-bottom: 5px;
-  }
   .form-item .form-item-label {
       float: none;
       width: 200px;
