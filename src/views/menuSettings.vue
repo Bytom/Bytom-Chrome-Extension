@@ -1,6 +1,11 @@
 <style scoped>
 .row {
     margin: 25px 0;
+    display: flex;
+    align-items: center;
+}
+.row .label{
+    flex-grow: 1;
 }
 .value {
     font-size: 15px;
@@ -20,17 +25,17 @@
 <template>
     <MenuPage :title="$t('setting.title')" @back="back">
         <div class="row">
-            <p>{{ $t("setting.version") }}</p>
-            <p class="value">[AIV]{version}[/AIV]-{{hashVersion}}</p>
-        </div>
-        <div class="row">
-            <p>{{ $t("setting.lang") }}</p>
+            <div class="label">
+                <p>{{ $t("setting.lang") }}</p>
+            </div>
             <div class="form-item setting">
                 <v-select style="height: 32px;" class="select" :value="selected" :clearable="false" :onChange="onChange" :options="i18nOptions"></v-select>
             </div>
         </div>
         <div class="row">
-            <p>{{ $t("setting.unit") }}</p>
+            <div class="label">
+                <p>{{ $t("setting.unit") }}</p>
+            </div>
             <div class="form-item setting">
                 <v-select style="height: 32px;" class="select" :value="unit" :clearable="false" :options="['BTM']"></v-select>
             </div>

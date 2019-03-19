@@ -25,7 +25,7 @@ html {
   SimSun, sans-serif;;
 }
 body {
-  width: 350px;
+  width: 360px;
   height: 600px;
   background-color: #ffffff;
 }
@@ -62,14 +62,14 @@ a {
 }
 .warp {
   position: absolute;
-  width: 350px;
+  width: 360px;
   height: 600px;
 }
 .warp-chlid {
   position: absolute;
   top: 0;
   left: 0;
-  width: 350px;
+  width: 360px;
   height: 600px;
   z-index: 995;
 }
@@ -115,8 +115,6 @@ hr {
       url('//at.alicdn.com/t/font_806738_pnniif0zn4q.svg?t=1540652693831#iconfont')
       format('svg'); /* iOS 4.1- */
 }
-
-
 
 .iconfont {
   font-family: 'iconfont' !important;
@@ -184,7 +182,7 @@ hr {
   color: #010101;
 }
 .color-green {
-  color: #1bc1b0;
+  color: #035BD4;
 }
 .color-white {
   color: #ffffff;
@@ -202,11 +200,14 @@ hr {
 .bg-gray {
   background-color: #F0F0F0 !important;
 }
+.bg-sideBar{
+  background-color: #202020 !important;
+}
 .bg-black {
   background-color: #282f38 !important;
 }
 .bg-green {
-  background-color: #1bc1b0 !important;
+  background-color: #035BD4 !important;
 }
 
 .bg-image{
@@ -243,13 +244,13 @@ hr {
 }
 
 .menu-title {
-  font-size: 24px;
-  margin-bottom: 35px;
+  font-size: 18px;
+  margin-bottom: 20px;
 }
 
 .menu-content {
   word-wrap: break-word;
-  font-size: 18px;
+  font-size: 16px;
 }
 .faster {
   animation-duration: 0.3s !important;
@@ -338,8 +339,8 @@ hr {
   color: #ffffff;
   font-weight: bold;
   position: absolute;
-  right: 10px;
-  top: 10px;
+  right: 20px;
+  top: 21px;
   cursor: pointer;
 }
 .btn-group {
@@ -376,13 +377,13 @@ hr {
 }
 
 .form-item label {
-  font-size: 16px;
+  font-size: 14px;
   line-height: 15px;
 }
 .form-item input {
   border: none;
   outline: none;
-  background: transparent;
+  /*background: transparent;*/
   display: inline-block;
   width: 100%;
 }
@@ -412,4 +413,8 @@ select {
 
 .center-text{
   text-align: center;
+}
+
+label{
+  color:#7B7B7B;
 }

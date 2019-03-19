@@ -84,11 +84,11 @@ const en = {
   },
   help: {
     title: 'Help',
-    page: 'Information Page'
+    page: 'Info'
   },
   setting: {
     title: 'Setting',
-    version: 'Wallet Version',
+    version: 'Version',
     lang: 'Language',
     unit: 'BTM Quantity Unit'
   },

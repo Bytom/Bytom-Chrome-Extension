@@ -1,23 +1,29 @@
 <style scoped>
-.form-item {
-    background: transparent;
-    margin: 0;
-}
-.form-item .form-item-content {
-    padding: 0 10px;
-    background-color: #282f38;
-    border-radius: 5px;
-}
-.form-item .form-item-label {
-    float: none;
-    width: 200px;
-    line-height: 35px;
-    margin: 0 5px;
-}
-.form-item .btn {
-    width: 200px;
-    margin-top: 15px;
-}
+  .form-item {
+      background: transparent;
+      margin: 0;
+      padding: 0;
+  }
+  .form-item .form-item-content {
+    border-bottom: 1px solid #E0E0E0;
+    margin-bottom: 5px;
+  }
+  .form-item .form-item-label {
+      float: none;
+      width: 200px;
+      margin: 0;
+      padding: 0;
+  }
+  .submit {
+      margin-top: 15px;
+      height: 48px;
+      padding: 15px;
+  }
+  .form{
+    border-radius:4px;
+    background: white;
+    padding: 20px 20px 28px;
+  }
 </style>
 
 <template>
@@ -48,10 +54,8 @@
                 </div>
             </div>
             <div class="tips">{{tips}}</div>
-            <div class="form-item bg-gray" style="text-align: center">
-                <div class="btn bg-green" @click="create">{{ $t('createAccount.create') }}</div>
-            </div>
         </div>
+        <a class="btn btn-primary submit" @click="create">{{ $t('createAccount.create') }}</a>
     </MenuPage>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-    <div class="mp bg-gray">
+    <div class="mp bg-sideBar">
         <div>
             <i class="iconfont btn-close" @click="$router.go(-1)">&#xe605;</i>
             <div class="menu-title">{{title}}</div>
@@ -22,9 +22,9 @@ export default {
 
 <style scoped>
 .mp {
-    height: 520px;
-    width: 230px;
-    padding: 40px 30px;
+    height: 560px;
+    width: 260px;
+    padding: 20px;
     position: absolute;
     top: 0;
     left: 0;

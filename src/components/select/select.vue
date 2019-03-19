@@ -244,7 +244,7 @@
      * required to override bootstrap 3's
      * .dropdown-menu > li > a:hover {} styles
      */
-    background: #1bc1b0;
+    background: #035BD4;
     color: #fff;
     border-radius: 8px;
   }

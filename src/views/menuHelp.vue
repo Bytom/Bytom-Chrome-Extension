@@ -1,20 +1,47 @@
 <style scoped>
+  .row {
+    margin: 25px 0;
+    display: flex;
+    align-items: center;
+    word-wrap: break-word;
+  }
+  .row .label{
+    flex-grow: 1;
+    width: 150px;
+  }
+  .link{
+    word-break: break-word;
+    color: #035BD4;
+  }
 </style>
 
 <template>
     <MenuPage :title="$t('help.title')">
-        <p>{{ $t("help.page") }}</p>
-        <a href="http://github.com/bytom/bytom/wiki" target="_blank">http://github.com/bytom/bytom/wiki</a>
+      <div class="row">
+        <div class="label">
+          <p>{{ $t("setting.version") }}</p>
+        </div>
+        <p class="value">[AIV]{version}[/AIV]-{{hashVersion}}</p>
+      </div>
+      <div class="row">
+        <div class="label">
+          <p>{{ $t("help.page") }}</p>
+        </div>
+        <a class="link" href="http://github.com/bytom/bytom/wiki" target="_blank">http://github.com/bytom/bytom/wiki</a>
+      </div>
     </MenuPage>
 </template>
 
 <script>
 export default {
-    name: "",
-    data() {
-        return {};
-    },
-    methods: {
-    }
+  name: "",
+  data() {
+    return {
+      hashVersion: ""
+    };
+  },
+  mounted: function () {
+    this.hashVersion = version.hash;
+  }
 };
 </script>

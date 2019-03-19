@@ -210,7 +210,7 @@
                 <h3 class="bg-gray color-grey">{{ $t('main.record') }}</h3>
             </section>
             <section class="transactions">
-                 <!--<div v-if="currentAccount.address!=undefined">-->
+                 <div v-if="currentAccount.address!=undefined">
                   <div v-if="transactions.length != 0">
                       <vue-scroll @handle-scroll="handleScroll">
                       <ul class="list">
@@ -239,24 +239,22 @@
                       </ul>
                   </vue-scroll>
                   </div>
-                  <div v-else>
-                      <div class="bg-emptytx"></div>
-                      <div>
-                          <span class="color-lightgrey center-text no-record">{{$t('main.noRecord')}}</span>
+                      <div v-else>
+                          <div class="bg-emptytx"></div>
+                          <div>
+                              <span class="color-lightgrey center-text no-record">{{$t('main.noRecord')}}</span>
+                          </div>
                       </div>
-                      <div v-if="currentAccount.address == undefined">
-                          <router-link :to="{name: 'menu-account-creation'}">
-                              <a class="btn btn-primary btn-creation">{{ $t('main.create') }}</a>
-                          </router-link>
-                      </div>
-
                   </div>
-                  <!--</div>-->
-                  <!--<div v-else>-->
-                      <!--<router-link :to="{name: 'menu-account-creation'}">-->
-                          <!--<a class="btn btn-primary btn-creation bg-green">{{ $t('main.create') }}</a>-->
-                      <!--</router-link>-->
-                  <!--</div>-->
+                  <div v-else>
+                      <router-link :to="{name: 'menu-account-creation'}">
+                          <div class="bg-emptytx"></div>
+                          <div>
+                            <span class="color-lightgrey center-text no-record">{{$t('main.noRecord')}}</span>
+                          </div>
+                          <a class="btn btn-primary btn-creation">{{ $t('main.create') }}</a>
+                      </router-link>
+                  </div>
             </section>
 
         <!-- child page -->

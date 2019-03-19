@@ -84,7 +84,7 @@ const cn = {
   },
   help: {
     title: '帮助',
-    page: '帮助与信息页'
+    page: '帮助与信息'
   },
   setting: {
     title: '设置',

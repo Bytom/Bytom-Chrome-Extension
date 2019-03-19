@@ -1,10 +1,22 @@
 <style scoped>
 .accounts {
     width: 100%;
-    height: 200px;
+    height: 250px;
     overflow-x: hidden;
     overflow-y: scroll;
     margin-bottom: 25px;
+}
+.accounts .list-item{
+    background: #3C3C3C;
+    padding: 10px;
+    border-radius:4px;
+    margin-bottom: 16px;
+}
+.accounts .list-item:hover,
+.accounts .list-item:active,
+.accounts .list-item:focus
+{
+  background: #035BD4;
 }
 .accounts::-webkit-scrollbar {
     display: none;
@@ -14,33 +26,40 @@
 }
 
 .menu-panel {
-    height: 520px;
-    width: 230px;
-    padding: 40px 30px;
+    height: 560px;
+    width: 260px;
+    padding: 20px;
 }
-.menu-list {
-    border-top: 1px solid #c9c9c9;
-    padding-top: 15px;
+.menu-list .list-item {
+    color: white;
+}
+.menu-list .list-item:hover,
+.menu-list .list-item:active,
+.menu-list .list-item:focus
+{
+    background: #3C3C3C;
 }
 .account {
-    width: 150px;
+    width: 200px;
     display: inline-block;
     vertical-align: middle;
 }
 .account-alias {
-    width: 150px;
-    font-size: 19px;
+    width: 200px;
+    font-size: 18px;
+    color: white;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
 .account-asset {
-    font-size: 15px;
+    font-size: 12px;
+    color: #9E9E9E;
 }
 </style>
 
 <template>
-    <div class="bg-gray menu-panel warp-chlid">
+    <div class="bg-sideBar menu-panel warp-chlid">
         <div>
             <i class="iconfont btn-close" @click="$router.go(-1)">&#xe605;</i>
             <div class="menu-title">{{$t('menu.title')}}</div>
@@ -56,6 +75,9 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div>
+              <div class="menu-title">{{ $t('menu.setting') }}</div>
             </div>
             <div class="list menu-list">
                 <router-link :to="{name: 'menu-account-creation'}">
