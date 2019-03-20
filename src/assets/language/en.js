@@ -35,6 +35,10 @@ const en = {
     from:'From',
     to:'To'
   },
+  receive:{
+    address: 'Address',
+    tips:'Tips: Click address to copy directly.'
+  },
   main: {
     mainNet: 'BYTOM MainNet',
     testNet: 'BYTOM TestNet',

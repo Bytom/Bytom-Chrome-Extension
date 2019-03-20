@@ -107,14 +107,12 @@ export default {
             "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
         return {
             selectAsset: {
-                assets:
-                    "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+                assets: ASSET_BTM,
                 name: "BTM"
             },
             assetOptions: [
                 {
-                    assets:
-                        "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+                    assets: ASSET_BTM,
                     name: "BTM"
                 }
             ],

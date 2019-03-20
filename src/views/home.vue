@@ -269,11 +269,6 @@
 </template>
 
 <script>
-import ClipboardJS from "clipboard";
-import Menu from "@/views/sideMenu/homeMenu";
-import Qrcode from "@/views/qrcode";
-import Transfer from "@/views/sendTransaction/transfer";
-import TxInfo from "@/views/transferDetail";
 import address from "@/utils/address";
 import account from "@/models/account";
 import transaction from "@/models/transaction";
@@ -283,14 +278,9 @@ const EnterActive = 'animated faster fadeInLeft';
 const LeaveActive = 'animated faster fadeOutLeft';
 export default {
     name: "",
-    components: {
-        Qrcode,
-    },
     data() {
         return {
             network: "mainnet",
-            clipboard: new ClipboardJS(".address-text"),
-            addressTitle: this.$t("main.copy"),
             accounts: [],
             currentAccount: {},
             transactions: [],
@@ -349,20 +339,6 @@ export default {
         }
     },
     methods: {
-        setupClipboard() {
-            this.clipboard.on("success", e => {
-                this.$dialog.show({
-                    header: this.$t("dialog.header"),
-                    body: this.$t("dialog.copy.success")
-                });
-            });
-            this.clipboard.on("error", e => {
-                this.$dialog.show({
-                    header: this.$t("dialog.header"),
-                    body: this.$t("dialog.copy.fail")
-                });
-            });
-        },
         setupRefreshTimer() {
             // todo refresh all accounts
 
@@ -381,7 +357,7 @@ export default {
             this.refreshAccounts();
         },
         showQrcode: function () {
-            this.$refs.qrcode.open(this.currentAccount.address);
+          this.$router.push({ name: 'received', params: { address: this.currentAccount.address } })
         },
         openMenu: function () {
             this.$router.push({ name: 'menu', params: { accounts: this.accounts, selected: this.currentAccount } })
@@ -485,12 +461,8 @@ export default {
     mounted() {
         this.currentAccount = JSON.parse(localStorage.currentAccount);
         this.setupNetwork();
-        this.setupClipboard();
         this.setupRefreshTimer();
         this.refreshAccounts();
-    },
-    beforeDestroy() {
-        this.clipboard.destroy();
     }
 };
 </script>

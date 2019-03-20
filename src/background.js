@@ -54,7 +54,7 @@ export default class Background {
       {
         url: `${promptURL}#transfer?${queryString}`,
         type: 'popup',
-        width: 350,
+        width: 360,
         height: 623,
         top: 0,
         left: 0
@@ -73,7 +73,7 @@ export default class Background {
       {
         url: `${promptURL}#advancedTransfer?${queryString}`,
         type: 'popup',
-        width: 350,
+        width: 360,
         height: 623,
         top: 0,
         left: 0

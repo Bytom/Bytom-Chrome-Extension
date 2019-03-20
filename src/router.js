@@ -18,6 +18,14 @@ const routers = [
         }
       },
       {
+        path: '/received',
+        name: 'received',
+        meta: { title: '接收' },
+        component: resolve => {
+          require(['@/views/received.vue'], resolve)
+        }
+      },
+      {
         path: '/advancedTransfer',
         name: 'advanced-transfer',
         meta: { title: '高级转账' },

@@ -1,7 +1,12 @@
 <style lang="" scoped>
-.header {
-    height: 150px;
-}
+  .header {
+    display: flex;
+  }
+  .header p{
+    text-align: center;
+    width: 260px;
+    padding-top: 17px;
+  }
 
 .preview i {
     width: 100px;
@@ -32,8 +37,8 @@
     padding: 0 30px;
     font-size: 15px;
     word-break: break-all;
-    height: 415px;
-    width: 300px;
+    height: 440px;
+    width: 260px;
     margin-top: 20px;
 }
 .transcation .time {
@@ -61,17 +66,19 @@
     margin-top: 10px;
     margin-bottom: 30px;
 }
+  .panel{
+    margin: 20px;
+  }
 </style>
 
 <template>
-    <div class="bg-black warp-chlid">
+    <div class="bg-gray warp-chlid">
         <section class="header bg-header">
             <i class="iconfont icon-back" @click="$router.go(-1)"></i>
-
+            <p >{{ $t('transcationDetail.title') }}</p>
         </section>
 
-        <h3 class="title bg-gray">{{ $t('transcationDetail.title') }}</h3>
-        <section>
+        <section class="panel bg-white">
             <vue-scroll>
                 <div class="transcation">
                   <div v-if="transcation.is_confirmed" class="time">

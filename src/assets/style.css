@@ -74,6 +74,16 @@ a {
   z-index: 995;
 }
 
+.panel{
+  font-size: 14px;
+  padding: 20px;
+  word-wrap: break-word;
+  margin: 20px;
+  color: #7B7B7B;
+  background: white;
+  border-radius:4px;
+}
+
 .float-right {
   float: right;
 }
@@ -233,6 +243,10 @@ hr {
   background-position: bottom;
   width: 100%;
   height: 150px;
+}
+
+.font-medium{
+  font-weight: 500;
 }
 
 .mask {
@@ -427,4 +441,8 @@ select {
 
 label{
   color:#7B7B7B;
+}
+
+.footer{
+
 }

@@ -35,6 +35,10 @@ const cn = {
     from:'发送账户',
     to:'接收地址'
   },
+  receive:{
+    address: '地址',
+    tips:'提示：点击地址进行拷贝。'
+  },
   main: {
     mainNet: 'BYTOM主网络',
     testNet: 'BYTOM测试网络',
