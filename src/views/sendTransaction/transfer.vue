@@ -8,8 +8,9 @@
   padding-top: 17px;
 }
 .balance {
+  width: 280px;
+  height: 40px;
     margin: 20px;
-    background: #2a2a2a;
     padding: 20px;
 }
 .balance .token-icon {
@@ -42,6 +43,10 @@
   .small{
     font-size: 12px;
   }
+.transfer-header{
+  background-image: url("../../assets/img/backgroundHead/transfer.svg");
+  background-size: 320px 80px;
+}
 </style>
 
 <template>
@@ -51,7 +56,7 @@
             <p>{{ $t('main.send') }}</p>
         </section>
 
-        <section class="balance">
+        <section class="balance transfer-header">
             <div class="token-amount">
                 {{accountBalance}}
                 <span class="asset">BTM</span>

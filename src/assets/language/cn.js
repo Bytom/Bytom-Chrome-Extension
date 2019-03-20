@@ -55,15 +55,20 @@ const cn = {
     unconfirmed :'未确认交易',
     noRecord:"没有交易记录"
   },
-  transcationDetail: {
+  transactionDetail: {
     title: '交易详情',
     fee: '矿工费用',
+    time:'交易时间',
     blockHeight: '区块高度',
     blockSize: '区块大小',
-    transcationID: '交易ID',
+    transactionID: '交易ID',
     sendAddress: '发送地址',
     receiveAddress: '接收地址',
-    myAddress: '（我的地址）'
+    myAddress: '（我的地址）',
+    success:'交易成功',
+    fail:'交易失败',
+    pending:'未确认交易',
+    tips:'提示：访问blockmeta.com来获取交易的相关信息。'
   },
   menu: {
     title: '切换账户',
@@ -79,7 +84,6 @@ const cn = {
     keyPassword: '秘钥密码',
     confirmPassword: '重复密码',
     create: '创建',
-    import: '从备份导入',
     select: '选择网络',
     file: '备份文件',
     import: '导入',

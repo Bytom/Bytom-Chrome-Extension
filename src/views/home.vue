@@ -114,9 +114,9 @@
     padding: 10px 0 10px 20px;
 }
 .transactions {
-    font-size: 15px;
-    height: 273px;
-    overflow: hidden;
+  font-size: 15px;
+  height: 340px;
+  overflow: scroll;
 }
 .list-item {
     position: relative;
@@ -214,26 +214,16 @@
                   <div v-if="transactions.length != 0">
                       <vue-scroll @handle-scroll="handleScroll">
                       <ul class="list">
-                          <li class="list-item" v-for="(transcation, index) in transactions" :key="index" @click="$router.push({name: 'transfer-info', params: {transcation: transcation, address: currentAccount.address}})">
-                              <div class="value">{{transcation.direct}} {{transcation.val.toFixed(2)}} BTM</div>
+                          <li class="list-item" v-for="(transaction, index) in transactions" :key="index" @click="$router.push({name: 'transfer-info', params: {transaction: transaction, address: currentAccount.address}})">
+                              <div class="value">{{transaction.direct}} {{transaction.val.toFixed(2)}} BTM</div>
                               <div>
-                                  <div v-if="transcation.is_confirmed" class="time">
-                                      <div v-if="transcation.block_timestamp === 0">
-                                          {{ $t('main.unconfirmed') }}
-                                      </div>
-                                      <div v-else>
-                                          {{transcation.block_timestamp | moment}}
-                                      </div>
+                                  <div v-if="transaction.hasOwnProperty('block_timestamp')">
+                                    {{transaction.submission_timestamp | moment}}
                                   </div>
-                                  <div v-else class="time">
-                                      <div v-if="transcation.submission_timestamp === 0">
-                                        {{ $t('main.unconfirmed') }}
-                                      </div>
-                                      <div v-else>
-                                        {{transcation.submission_timestamp | moment}}
-                                      </div>
+                                  <div v-else>
+                                    {{ $t('main.unconfirmed') }}
                                   </div>
-                                  <div class="addr color-grey">{{transcation.address}}</div>
+                                  <div class="addr color-grey">{{transaction.address}}</div>
                               </div>
                           </li>
                       </ul>
@@ -263,8 +253,6 @@
             <router-view></router-view>
         </transition>
 
-        <!-- modal -->
-        <Qrcode ref="qrcode"></Qrcode>
     </div>
 </template>
 

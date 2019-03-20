@@ -33,41 +33,66 @@
     text-align: center;
     padding: 5px 0;
 }
-.transcation {
-    padding: 0 30px;
-    font-size: 15px;
+.transaction {
+    padding: 0 20px;
+    font-size: 14px;
     word-break: break-all;
-    height: 440px;
-    width: 260px;
+    height: 380px;
+    width: 275px;
     margin-top: 20px;
 }
-.transcation .time {
-    margin: 10px 0;
-    font-size: 15px;
+.transaction .label {
+    width: 35%;
+    vertical-align: top;
+    word-break: break-word;
 }
-.transcation .label {
-    font-size: 12px;
-}
-.transcation .info {
-    font-size: 18px;
-    display: inline-flex;
-}
-.transcation .info section {
-    margin-right: 30px;
-    width: 80px;
-}
-.transcation .txid {
-    margin-top: 20px;
-}
-.transcation .inputs {
-    margin-top: 10px;
-}
-.transcation .outputs {
-    margin-top: 10px;
-    margin-bottom: 30px;
+.transaction .value{
+  width: 65%;
+  color: #282828;
+  font-weight: 500;
+  word-break: break-word;
 }
   .panel{
-    margin: 20px;
+    padding: 0;
+  }
+  .tx-header{
+    height: 40px;
+    width: 280px;
+    text-align: center;
+    padding: 20px;
+  }
+  .tx-header .value{
+    color: white;
+    font-size: 18px;
+    font-weight: 500;
+  }
+  .success-header{
+    background-image: url("../assets/img/backgroundHead/succeed.svg");
+    background-size: 320px 80px;
+  }
+  .pending-header{
+    background-image: url("../assets/img/backgroundHead/pending.svg");
+    background-size: 320px 80px;
+  }
+  .fail-header{
+    background-image: url("../assets/img/backgroundHead/fail.svg");
+    background-size: 320px 80px;
+  }
+  .header-text{
+    color:rgba(255,255,255,0.50);
+  }
+  .asset{
+    margin-left: 3px;
+  }
+  .divider{
+    margin: 10px 0;
+  }
+  .footer{
+    text-align: center;
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    font-size: 12px
   }
 </style>
 
@@ -75,62 +100,95 @@
     <div class="bg-gray warp-chlid">
         <section class="header bg-header">
             <i class="iconfont icon-back" @click="$router.go(-1)"></i>
-            <p >{{ $t('transcationDetail.title') }}</p>
+            <p >{{ $t('transactionDetail.title') }}</p>
         </section>
 
-        <section class="panel bg-white">
+        <section class="panel">
+            <div class="tx-header"
+                 v-bind:class="classObject">
+              <p class="value">{{transaction.direct}}{{transaction.val}}<span class="asset">BTM</span></p>
+              <small class="header-text" v-if="transaction.status_fail">
+                {{ $t('transactionDetail.fail') }}
+              </small>
+              <small class="header-text" v-else-if="transaction.hasOwnProperty('block_timestamp')">
+                {{ $t('transactionDetail.success') }}
+              </small>
+              <small class="header-text" v-else>
+                {{ $t('transactionDetail.pending') }}
+              </small>
+            </div>
             <vue-scroll>
-                <div class="transcation">
-                  <div v-if="transcation.is_confirmed" class="time">
-                    <div v-if="transcation.block_timestamp === 0">
-                      {{ $t('main.unconfirmed') }}
-                    </div>
-                    <div v-else>
-                      {{transcation.block_timestamp | moment}}
-                    </div>
-                  </div>
-                  <div v-else class="time">
-                    <div v-if="transcation.submission_timestamp === 0">
-                      {{ $t('main.unconfirmed') }}
-                    </div>
-                    <div v-else>
-                      {{transcation.submission_timestamp | moment}}
-                    </div>
-                  </div>
-                    <div class="info">
-                        <section>
-                            <p class="label">{{ $t('transcationDetail.fee') }}(BTM)</p>
-                            <p>{{transcation.fee}}</p>
-                        </section>
-                        <section>
-                            <p class="label">{{ $t('transcationDetail.blockHeight') }}</p>
-                            <p v-if="transcation.block_height != undefined">{{transcation.block_height}}</p>
-                            <p v-else>-</p>
-                        </section>
-                        <section>
-                            <p class="label">{{ $t('transcationDetail.blockSize') }}</p>
-                            <p>{{transcation.size}}</p>
-                        </section>
-                    </div>
-                    <div class="txid">
-                        <p class="label">{{ $t('transcationDetail.transcationID') }}</p>
-                        <p>{{transcation.hash}}</p>
-                    </div>
-                    <div class="inputs">
-                        <section :key="index" v-for="(input, index) in transcation.inputs">
-                            <p class="label">{{ $t('transcationDetail.sendAddress') }}{{transcation.inputs.length > 1 ? index+1 : ''}}</p>
-                            <p>{{input.address}}<span v-if="input.address == selfAddress"> {{ $t('transcationDetail.myAddress') }}</span></p>
-                        </section>
-                    </div>
-                    <div class="outputs">
-                        <section :key="index" v-for="(output, index) in transcation.outputs">
-                            <p class="label">{{ $t('transcationDetail.receiveAddress') }}{{transcation.outputs.length > 1 ? index+1 : ''}}</p>
-                            <p>{{output.address}}<span v-if="output.address == selfAddress"> {{ $t('transcationDetail.myAddress') }}</span></p>
-                        </section>
-                    </div>
+                <div class="transaction">
+                    <table>
+                      <tbody>
+                      <tr>
+                        <td class="label">
+                          {{ $t('transactionDetail.transactionID') }}
+                        </td>
+                        <td class="value">
+                          <p>{{transaction.hash}}</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="2"><div class="divider"></div></td>
+                      </tr>
+
+                      <tr>
+                        <td class="label">
+                          {{ $t('transactionDetail.time') }}
+                        </td>
+                        <td class="value">
+                            <div v-if="transaction.hasOwnProperty('block_timestamp')">
+                              {{transaction.submission_timestamp | moment}}
+                            </div>
+                            <div v-else>
+                              -
+                            </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="label">
+                            {{ $t('transactionDetail.blockHeight') }}
+                        </td>
+                        <td class="value">
+                          <p v-if="transaction.block_height != undefined">{{transaction.block_height}}</p>
+                          <p v-else>-</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="label">
+                          {{ $t('transactionDetail.blockSize') }}
+                        </td>
+                        <td class="value">
+                          <p>{{transaction.size}}</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="label">
+                          {{ $t('transactionDetail.fee') }}(BTM)
+                        </td>
+                        <td class="value">
+                          <p>{{transaction.fee}}</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="2"><div class="divider"></div></td>
+                      </tr>
+                      <tr :key="index" v-for="(input, index) in transaction.inputs">
+                        <td class="label">{{ $t('transactionDetail.sendAddress') }}{{transaction.inputs.length > 1 ? index+1 : ''}}</td>
+                        <td class="value">{{input.address}}<span v-if="input.address == selfAddress"> {{ $t('transactionDetail.myAddress') }}</span></td>
+                      </tr>
+                      <tr :key="index" v-for="(output, index) in transaction.outputs">
+                        <td class="label">{{ $t('transactionDetail.receiveAddress') }}{{transaction.outputs.length > 1 ? index+1 : ''}}</td>
+                        <td class="value">{{output.address}}<span v-if="output.address == selfAddress"> {{ $t('transactionDetail.myAddress') }}</span></td>
+                      </tr>
+
+                      </tbody>
+                    </table>
                 </div>
             </vue-scroll>
         </section>
+        <small class="footer color-grey">{{ $t('transactionDetail.tips') }}</small>
     </div>
 </template>
 
@@ -140,7 +198,7 @@ export default {
     data() {
         return {
             selfAddress: "",
-            transcation: {
+            transaction: {
                 guid: "",
                 to: "",
                 amount: 0,
@@ -150,11 +208,21 @@ export default {
     },
     methods: {
     },
+    computed: {
+      classObject: function () {
+        return {
+          'success-header': !this.transaction.status_fail && this.transaction.hasOwnProperty('block_timestamp'),
+          'pending-header': !this.transaction.status_fail  && !this.transaction.hasOwnProperty('block_timestamp') ,
+          'fail-header': this.transaction.status_fail
+        }
+      }
+    },
     mounted() {
         let params = this.$route.params;
 
-        this.transcation = params.transcation;
+        this.transaction = params.transaction;
         this.selfAddress = params.address;
+        console.log(params.transaction)
     }
 };
 </script>

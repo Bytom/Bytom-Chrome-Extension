@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="320" height="80" viewBox="0 0 320 80">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: url(#linear-gradient);
+      }
+
+      .cls-2 {
+        fill: #e60000;
+      }
+
+      .cls-3 {
+        opacity: 0.372;
+        clip-path: url(#clip-path);
+      }
+
+      .cls-4 {
+        fill: #ff4040;
+      }
+    </style>
+    <linearGradient id="linear-gradient" y1="1" x2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#035bd4"/>
+      <stop offset="1" stop-color="#3cffda"/>
+    </linearGradient>
+    <clipPath id="clip-path">
+      <path id="Rectangle_5307" data-name="Rectangle 5307" class="cls-1" d="M4,0H316a4,4,0,0,1,4,4V80a0,0,0,0,1,0,0H0a0,0,0,0,1,0,0V4A4,4,0,0,1,4,0Z" transform="translate(20 20)"/>
+    </clipPath>
+  </defs>
+  <g id="background-head-pending" transform="translate(-20 -20)">
+    <path id="Rectangle_5308" data-name="Rectangle 5308" class="cls-2" d="M4,0H316a4,4,0,0,1,4,4V80a0,0,0,0,1,0,0H0a0,0,0,0,1,0,0V4A4,4,0,0,1,4,0Z" transform="translate(20 20)"/>
+    <g id="Mask_Group_107" data-name="Mask Group 107" class="cls-3">
+      <ellipse id="Ellipse_130" data-name="Ellipse 130" class="cls-4" cx="204.5" cy="151.481" rx="204.5" ry="151.481" transform="translate(-84 -168.466)"/>
+    </g>
+  </g>
+</svg>
