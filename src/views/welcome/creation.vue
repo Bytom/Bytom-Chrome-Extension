@@ -1,33 +1,104 @@
-creation
 <style scoped>
-.content {
-    margin-left: 135px;
+/*.content {*/
+    /*margin-left: 135px;*/
+/*}*/
+/*.content-cn {*/
+    /*margin-left: 85px;*/
+/*}*/
+/*.form-item-label {*/
+    /*width: 135px;*/
+/*}*/
+/*.form-item-label-cn {*/
+    /*width: 85px;*/
+/*}*/
+  .bg-image{
+    height: 420px;
+    width: 360px;
+    background-size: contain;
+    -webkit-clip-path: polygon(0 0, 100% 0, 100% 75%, 0% 100%);
+    clip-path: polygon(0 0, 100% 0, 100% 75%, 0% 100%);
+    position: absolute;
+  }
+  .header {
+    position: relative;
+    text-align: center;
+    margin:20px 20px 30px;
+  }
+  .panel{
+    position: relative;
+    padding: 10px;
+  }
+  .container{
+    position: relative;
+  }
+  .form-item{
+    margin: 10px 0;
+  }
+  .btn-group{
+    padding: 0 20px;
+  }
+  .topbar{
+    height: 45px;
+    padding-top: 10px;
+  }
+.topbar .topbar-middle {
+  text-align: center;
 }
-.content-cn {
-    margin-left: 85px;
+
+.topbar img{
+  position: relative;
+  bottom: 23px;
+  right: 65px
 }
-.form-item-label {
-    width: 135px;
-}
-.form-item-label-cn {
-    width: 85px;
-}
+
+  .v-select{
+    height: 28px;
+    width: 160px;
+    background: white;
+    border-radius: 15px;
+    font-size: 14px;
+    margin: auto;
+    padding-left: 17px;
+  }
+
+  .tabs{
+    color: rgba(255,255,255, 0.4);
+    text-align: center;
+  }
+  .tabs a{
+    margin: 0px 20px;
+  }
+  .tabs .active{
+    color: rgba(255,255,255, 1);
+  }
+  .form-checkbox{
+    font-size: 14px;
+    padding: 5px;
+  }
+
 </style>
 
 <template>
     <div class="warp bg-gray">
-        <section class="login-header bg-green">
-            <img src="../../assets/logo.png">
-        </section>
-        <section class="login-content">
-            <div class="title">{{ $t('createAccount.title') }}</div>
-            <div class="form">
-                <div class="form-item">
-                    <label :class="formItemLabel">{{ $t('createAccount.select') }}</label>
-                    <div :class="formItemContent">
-                        <v-select :clearable="false" v-model="selected" style="height: 32px;font: 15;" :options="nets"></v-select>
-                    </div>
-                </div>
+      <div class="bg-image">
+      </div>
+      <div class="topbar">
+        <div v-if="activeTab === 'register'" class="topbar-middle">
+          <v-select  class="v-select" v-bind:colorBlack="true" :clearable="false" v-model="selected" :options="nets"></v-select>
+          <img src="@/assets/img/icon/neticon.svg" alt="">
+        </div>
+      </div>
+      <div class="header">
+        <h1>{{ $t('home.title')}}</h1>
+      </div>
+
+        <section class="container">
+          <div class="tabs">
+            <a v-on:click="activeTab='register'" v-bind:class="[ activeTab === 'register' ? 'active' : '' ]">{{ $t('welcome.register') }}</a>
+            <a v-on:click="activeTab='restore'" v-bind:class="[ activeTab === 'restore' ? 'active' : '' ]">{{ $t('welcome.restore') }}</a>
+          </div>
+          <div  v-if="activeTab === 'register'" >
+            <div class="form panel">
                 <div class="form-item">
                     <label :class="formItemLabel">{{ $t('createAccount.accountAlias') }}</label>
                     <div :class="formItemContent">
@@ -52,11 +123,36 @@ creation
                         <input type="password" v-model="formItem.passwd2">
                     </div>
                 </div>
-                <div class="btn-group">
-                    <div class="btn bg-green" @click="create">{{ $t('createAccount.create') }}</div>
-                    <div class="btn bg-green" @click="$router.push({ name: 'welcome-recovery' })">{{ $t('createAccount.import') }}</div>
-                </div>
+              <div class="form-checkbox">
+                <input type="checkbox" id="checkbox1" v-model="formItem.checked">
+                <label for="checkbox1">
+                  {{ $t('welcome.term1') }}<a class="color-green" @click="$router.push({ name: 'welcome-protocol' })">{{  $t('welcome.term2')}}</a>
+                </label>
+              </div>
             </div>
+            <div class="btn-group">
+                <div class="btn btn-primary" @click="create">{{ $t('createAccount.create') }}</div>
+            </div>
+          </div>
+          <div v-if="activeTab === 'restore'">
+            <div class="form panel">
+              <div class="form-item">
+                <label class="form-item-label">{{ $t('createAccount.file') }}</label>
+                <div >
+                  <input type="file" @change="tirggerFile($event)">
+                </div>
+              </div>
+              <div class="form-checkbox">
+                <input type="checkbox" id="checkbox2" v-model="restore.checked">
+                <label for="checkbox2">
+                  {{ $t('welcome.term1') }}<a class="color-green" @click="$router.push({ name: 'welcome-protocol' })">{{  $t('welcome.term2')}}</a>
+                </label>
+              </div>
+            </div>
+            <div class="btn-group">
+              <div class="btn btn-primary" @click="recovery">{{ $t('createAccount.import') }}</div>
+            </div>
+          </div>
         </section>
     </div>
 </template>
@@ -64,6 +160,7 @@ creation
 <script>
 import account from "../../models/account";
 import { getLanguage } from '@/assets/language'
+import getLang from "../../assets/language/sdk";
 let mainNet = null;
 let testNet = null;
 let soloNet = null;
@@ -77,8 +174,14 @@ export default {
                 accAlias: "",
                 keyAlias: "",
                 passwd1: "",
-                passwd2: ""
-            }
+                passwd2: "",
+                checked: false
+            },
+            restore:{
+                fileTxt:"",
+                checked: false
+            },
+            activeTab: 'register'
         };
     },
     computed: {
@@ -131,6 +234,12 @@ export default {
                 });
                 return;
             }
+            if (!this.formItem.checked) {
+                this.$dialog.show({
+                    body: this.$t('createAccount.agreeService'),
+                });
+                return;
+            }
             let loader = this.$loading.show({
                 container: null,
                 canCancel: true,
@@ -148,6 +257,31 @@ export default {
                 });
             });
         },
+        tirggerFile: function (event) {
+          var reader = new FileReader();
+          reader.onload = e => {
+            this.restore.fileTxt = e.target.result;
+          };
+
+          var file = event.target.files[0];
+          reader.readAsText(file);
+        },
+        recovery: function () {
+          if (!this.restore.checked) {
+            this.$dialog.show({
+              body: this.$t('createAccount.agreeService'),
+            });
+            return;
+          }
+          account.restore(this.restore.fileTxt).then(res => {
+            localStorage.login = true;
+            this.$router.push('/');
+          }).catch(error => {
+            this.$dialog.show({
+              body: getLang(error.message)
+            });
+          });
+        }
     },
     watch: {
         selected: function (value) {

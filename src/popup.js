@@ -49,7 +49,7 @@ const router = new VueRouter(RouterConfig)
 router.beforeEach((to, from, next) => {
   // wallet init
   if (localStorage.login == undefined && to.name == 'home') {
-    next({ name: 'welcome' })
+    next({ name: 'welcome-creation' })
     return
   }
 

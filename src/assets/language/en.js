@@ -1,10 +1,17 @@
 const en = {
+  home:{
+    title:"Bytom Wallet"
+  },
   welcome: {
     title: 'Welcome to the BYTOM Chrome Wallet',
     use: 'Start',
     terms: 'Terms of Use',
-    confirm: 'Confirm',
-    cancel: 'Cancel'
+    confirm: 'I agree',
+    cancel: 'Cancel',
+    register: 'Register',
+    restore: 'Restore',
+    term1:'I agree with ',
+    term2:'Service Agreement'
   },
   dialog: {
     header: 'Warning',
@@ -40,12 +47,12 @@ const en = {
     tips:'Tips: Click address to copy directly.'
   },
   main: {
-    mainNet: 'BYTOM MainNet',
-    testNet: 'BYTOM TestNet',
-    soloNet: 'BYTOM SoloNet',
-    mainNetShort: 'MainNet',
-    testNetShort: 'TestNet',
-    soloNetShort: 'SoloNet',
+    mainNet: 'Bytom Mainnet',
+    testNet: 'Bytom Testnet',
+    soloNet: 'Bytom Solonet',
+    mainNetShort: 'Mainnet',
+    testNetShort: 'Testnet',
+    soloNetShort: 'Solonet',
     copy: 'Click to copy',
     send: 'Send',
     receive: 'Receive',
@@ -79,20 +86,21 @@ const en = {
   },
   createAccount: {
     title: 'Create Account',
-    accountAlias: 'AccountAlias',
-    keyAlias: 'KeyAlias',
-    keyPassword: 'KeyPassword',
-    confirmPassword: 'ConfirmPassword',
-    create: 'Create',
+    accountAlias: 'Account Alias',
+    keyAlias: 'Key Alias',
+    keyPassword: 'Key Password',
+    confirmPassword: 'Confirm Password',
+    create: 'Create an account',
     select: 'Select network',
     file: 'Backup file',
-    import: 'Import',
+    import: 'Import from backup',
     back: 'Back',
     passwordAgain:
       'The passwords are inconsistent twice. Please check and try again.',
     inputAlias: 'Please enter the account alias.',
     inputKey: 'Please enter the key alias.',
-    inputPass: 'Please enter your password.'
+    inputPass: 'Please enter your password.',
+    agreeService:'Please read and agree the service term.'
   },
   help: {
     title: 'Help',

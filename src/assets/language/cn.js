@@ -1,10 +1,17 @@
 const cn = {
+  home:{
+    title:"比原钱包"
+  },
   welcome: {
     title: '欢迎使用BYTOM精简Chrome钱包',
     use: '开始',
     terms: '使用条款',
     confirm: '确认',
-    cancel: '取消'
+    cancel: '取消',
+    register: '注册',
+    restore: '恢复',
+    term1:'我同意',
+    term2:'使用条款'
   },
   dialog: {
     header: '提示',
@@ -40,12 +47,12 @@ const cn = {
     tips:'提示：点击地址进行拷贝。'
   },
   main: {
-    mainNet: 'BYTOM主网络',
-    testNet: 'BYTOM测试网络',
-    soloNet: 'BYTOM单机网络',
-    mainNetShort: 'BYTOM主网络',
-    testNetShort: 'BYTOM测试网络',
-    soloNetShort: 'BYTOM单机网络',
+    mainNet: 'Bytom主网络',
+    testNet: 'Bytom测试网络',
+    soloNet: 'Bytom单机网络',
+    mainNetShort: 'Bytom主网络',
+    testNetShort: 'Bytom测试网络',
+    soloNetShort: 'Bytom单机网络',
     copy: '点击复制',
     send: '发送',
     receive: '接收',
@@ -91,7 +98,8 @@ const cn = {
     passwordAgain: '两次密码不一致，请检查后再试。',
     inputAlias: '请输入账户别名',
     inputKey: '请输入秘钥别名',
-    inputPass: '请输入密码'
+    inputPass: '请输入密码',
+    agreeService:'请阅读并同意使用条款。'
   },
   help: {
     title: '帮助',

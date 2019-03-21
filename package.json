@@ -2,7 +2,7 @@
     "name": "chrome-extension-wallet",
     "description": "Bytom Chrome Extension Wallet",
     "version": "0.6.0",
-    "author": "yanbo@it709.com",
+    "author": "zhiting.fly@8btc.com",
     "license": "MIT",
     "private": true,
     "scripts": {

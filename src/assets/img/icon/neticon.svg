@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18" height="18" viewBox="0 0 18 18">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #035bd4;
+      }
+
+      .cls-2 {
+        fill: none;
+      }
+
+      .cls-3 {
+        clip-path: url(#clip-path);
+      }
+
+      .cls-4 {
+        fill: url(#radial-gradient);
+      }
+
+      .cls-5 {
+        fill: url(#radial-gradient-2);
+      }
+    </style>
+    <clipPath id="clip-path">
+      <path id="Path_4940" data-name="Path 4940" class="cls-1" d="M13.047,5.751A4.5,4.5,0,1,1,4.5,7.72a4.481,4.481,0,0,1,.418-1.9,2.283,2.283,0,0,0-.414-2.6h0a2.246,2.246,0,0,0-3.6.56,9.089,9.089,0,0,0-.677,6A9,9,0,0,0,18,7.72a8.955,8.955,0,0,0-.879-3.884,2.257,2.257,0,0,0-3.628-.609h0A2.211,2.211,0,0,0,13.047,5.751Z" transform="translate(0 -2.559)"/>
+    </clipPath>
+    <radialGradient id="radial-gradient" cx="0.5" cy="0.5" r="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0"/>
+      <stop offset="0.259" stop-color="#101010"/>
+      <stop offset="1" stop-color="#035bd4"/>
+    </radialGradient>
+    <radialGradient id="radial-gradient-2" cx="0.5" cy="0.5" r="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#0f76ff"/>
+      <stop offset="1" stop-color="#035bd4"/>
+    </radialGradient>
+  </defs>
+  <g id="icon-18-mainnet" transform="translate(6021 -335)">
+    <path id="Path_4938" data-name="Path 4938" d="M9,0a9,9,0,1,0,9,9A9,9,0,0,0,9,0ZM9,13.5A4.5,4.5,0,1,1,13.5,9,4.5,4.5,0,0,1,9,13.5Z" transform="translate(-6021 335)"/>
+    <g id="icon-12-loading" transform="translate(-6003 335) rotate(90)">
+      <path id="Path_4936" data-name="Path 4936" class="cls-2" d="M9,0a9,9,0,1,0,9,9A9,9,0,0,0,9,0ZM9,13.5A4.5,4.5,0,1,1,13.5,9,4.5,4.5,0,0,1,9,13.5Z" transform="translate(0)"/>
+      <path id="Path_4937" data-name="Path 4937" class="cls-1" d="M13.047,5.751A4.5,4.5,0,1,1,4.5,7.72a4.481,4.481,0,0,1,.418-1.9,2.283,2.283,0,0,0-.414-2.6h0a2.246,2.246,0,0,0-3.6.56,9.089,9.089,0,0,0-.677,6A9,9,0,0,0,18,7.72a8.955,8.955,0,0,0-.879-3.884,2.257,2.257,0,0,0-3.628-.609h0A2.211,2.211,0,0,0,13.047,5.751Z" transform="translate(0 1.28)"/>
+      <g id="Mask_Group_2" data-name="Mask Group 2" class="cls-3" transform="translate(0 3.839)">
+        <path id="Path_4941" data-name="Path 4941" class="cls-4" d="M8.688-.353A10.277,10.277,0,1,1-1.589,9.924,10.277,10.277,0,0,1,8.688-.353Z" transform="translate(6.738 -8.483)"/>
+      </g>
+      <g id="Mask_Group_1" data-name="Mask Group 1" class="cls-3" transform="translate(0 3.839)">
+        <path id="Path_4942" data-name="Path 4942" class="cls-5" d="M9.1-.628A9.738,9.738,0,1,1-.641,9.11,9.738,9.738,0,0,1,9.1-.628Z" transform="translate(-6.296 -7.129)"/>
+      </g>
+    </g>
+  </g>
+</svg>

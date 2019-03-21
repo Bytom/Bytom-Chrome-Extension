@@ -153,6 +153,9 @@
     padding: 0 0.25em;
     transition: opacity .25s;
   }
+  .selected-color-black{
+    color: #000 !important;
+  }
   .v-select.single .selected-tag {
     background-color: transparent;
     border-color: transparent;
@@ -320,7 +323,7 @@
       <div class="vs__selected-options" ref="selectedOptions">
         <slot v-for="option in valueAsArray" name="selected-option-container"
               :option="(typeof option === 'object')?option:{[label]: option}" :deselect="deselect" :multiple="multiple" :disabled="disabled">
-          <span class="selected-tag" v-bind:key="option.index">
+          <span :class="selectTag" v-bind:key="option.index">
             <slot name="selected-option" v-bind="(typeof option === 'object')?option:{[label]: option}">
               {{ getOptionLabel(option) }}
             </slot>
@@ -697,6 +700,10 @@
        * @type {Boolean}
        */
       selectOnTab: {
+        type: Boolean,
+        default: false
+      },
+      colorBlack: {
         type: Boolean,
         default: false
       }
@@ -1095,6 +1102,13 @@
        */
       showClearButton() {
         return !this.multiple && this.clearable && !this.open && this.mutableValue != null
+      },
+
+      selectTag() {
+        return{
+          'selected-tag ': true,
+          'selected-color-black': this.colorBlack
+        }
       }
     },
   }
