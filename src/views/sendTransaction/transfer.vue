@@ -12,6 +12,7 @@
   height: 40px;
     margin: 20px;
     padding: 20px;
+  display: flex;
 }
 .balance .token-icon {
     height: 38px;
@@ -47,6 +48,16 @@
   background-image: url("../../assets/img/backgroundHead/transfer.svg");
   background-size: 320px 80px;
 }
+.wallet{
+  width: 40px;
+  height: 40px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 50%;
+  color: white;
+  margin-right: 20px;
+  line-height: 40px;
+  text-align: center;
+}
 </style>
 
 <template>
@@ -57,6 +68,10 @@
         </section>
 
         <section class="balance transfer-header">
+          <div class="wallet">
+            <i class="iconfont icon-wallet"></i>
+          </div>
+          <div>
             <div class="token-amount">
                 {{accountBalance}}
                 <span class="asset">BTM</span>
@@ -64,6 +79,7 @@
             <div class="small color-grey">
               {{account.alias}}
             </div>
+          </div>
         </section>
 
         <section class="form-container">
@@ -82,7 +98,7 @@
                   </label>
                   <div class="form-item-content" style=" display: flex;">
                       <input type="number" v-model="transaction.amount" placeholder="0">
-                      <span class="color-grey" style="width: 40px; font-size: 15px;">{{unit}}</span>
+                      <span class="color-grey" style="width: 40px; font-size: 15px;position: absolute;right: 0;">{{unit}}</span>
                   </div>
               </div>
               <div class="form-item">

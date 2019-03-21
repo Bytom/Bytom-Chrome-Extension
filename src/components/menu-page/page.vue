@@ -1,7 +1,7 @@
 <template>
     <div class="mp bg-sideBar">
         <div>
-            <i class="iconfont btn-close" @click="$router.go(-1)">&#xe605;</i>
+            <i class="iconfont btn-close" @click="$router.go(-1)">&#xe614;</i>
             <div class="menu-title">{{title}}</div>
         </div>
         <div class="menu-content">

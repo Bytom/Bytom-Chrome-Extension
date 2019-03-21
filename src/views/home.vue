@@ -167,6 +167,10 @@
   display: block;
 }
 
+  .btn-send-transfer .iconfont{
+    margin-right: 4px;
+  }
+
 </style>
 
 <template>
@@ -201,8 +205,14 @@
                 </div>
             </div>
             <div class="btn-send-transfer">
-                <a v-if="currentAccount.address!=undefined" class="btn btn-primary btn-received" @click="showQrcode">{{ $t('main.receive') }}</a>
-                <a v-if="currentAccount.address!=undefined" class="btn btn-primary btn-transfer" @click="transferOpen">{{ $t('main.send') }}</a>
+                <a v-if="currentAccount.address!=undefined" class="btn btn-primary btn-received" @click="showQrcode">
+                  <i class="iconfont icon-receive"></i>
+                  {{ $t('main.receive') }}
+                </a>
+                <a v-if="currentAccount.address!=undefined" class="btn btn-primary btn-transfer" @click="transferOpen">
+                  <i class="iconfont icon-send"></i>
+                  {{ $t('main.send') }}
+                </a>
             </div>
         </section>
 

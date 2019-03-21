@@ -30,8 +30,12 @@
     width: 260px;
     padding: 20px;
 }
+.menu-list{
+  margin: 0px -20px;
+}
 .menu-list .list-item {
     color: white;
+  padding: 10px 20px;
 }
 .menu-list .list-item:hover,
 .menu-list .list-item:active,
@@ -56,6 +60,18 @@
     font-size: 12px;
     color: #9E9E9E;
 }
+  .wallet{
+    width: 25px;
+    height: 25px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    color: white;
+    padding: 8px;
+    margin-right: 15px;
+  }
+  .list-item{
+    display: flex;
+  }
 </style>
 
 <template>
@@ -68,7 +84,9 @@
             <div class="list accounts">
                 <div v-for="(account, index) in accounts" :key="index" @click="accountSelected(account)">
                     <div :class="(selectedAccount != undefined && account.address == selectedAccount.address) ? 'list-item active': 'list-item'">
-                        <i class="iconfont icon-user"></i>
+                      <div class="wallet">
+                        <i class="iconfont icon-wallet"></i>
+                      </div>
                         <div class="account">
                             <div class="account-alias">{{account.alias}}</div>
                             <div class="account-asset">{{account.balance}} BTM</div>
@@ -82,7 +100,7 @@
             <div class="list menu-list">
                 <router-link :to="{name: 'menu-account-creation'}">
                     <div class="list-item">
-                        <i class="iconfont icon-plusbox"></i>{{ $t('menu.createAccount') }}
+                        <i class="iconfont icon-create"></i>{{ $t('menu.createAccount') }}
                     </div>
                 </router-link>
                 <router-link :to="{name: 'menu-backup'}">
@@ -92,12 +110,12 @@
                 </router-link>
                 <router-link :to="{name: 'menu-help'}">
                     <div class="list-item">
-                        <i class="iconfont icon-help"></i>{{ $t('menu.help') }}
+                        <i class="iconfont icon-support"></i>{{ $t('menu.help') }}
                     </div>
                 </router-link>
                 <router-link :to="{name: 'menu-settings'}">
                     <div class="list-item">
-                        <i class="iconfont icon-settings"></i>{{ $t('menu.setting') }}
+                        <i class="iconfont icon-setting"></i>{{ $t('menu.setting') }}
                     </div>
                 </router-link>
             </div>
