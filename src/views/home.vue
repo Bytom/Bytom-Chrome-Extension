@@ -36,17 +36,8 @@
     padding: 0 10px;
     font: 12px system-ui;
     text-align: center;
-}
-
-.topbar-middle .lamp {
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background-color: #02f823;
-    margin-right: 2px;
-    position: relative;
-    top: -2px;
+    display: flex;
+    align-items: center;
 }
 
 .content {
@@ -183,7 +174,7 @@
                     </a>
                 </div>
                 <div class="topbar-middle bg-secondary">
-                    <i class="lamp"></i>
+                    <img src="@/assets/img/icon/neticon.svg" alt="" style="margin-right: 5px;">
                     <select v-model="network" @change="networkToggle">
                         <option value="mainnet">{{ $t('main.mainNet') }}</option>
                         <option value="testnet">{{ $t('main.testNet') }}</option>

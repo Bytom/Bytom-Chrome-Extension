@@ -75,6 +75,15 @@
     font-size: 14px;
     padding: 5px;
   }
+  .topbar a{
+    position: fixed;
+    top: 10px;
+    right: 20px;
+  }
+  .topbar a i{
+    font-size: 25px;
+    color: white;
+  }
 
 </style>
 
@@ -87,6 +96,7 @@
           <v-select  class="v-select" v-bind:colorBlack="true" :clearable="false" v-model="selected" :options="nets"></v-select>
           <img src="@/assets/img/icon/neticon.svg" alt="">
         </div>
+        <a href="http://github.com/bytom/bystore" target="_blank"><i class="iconfont icon-github"></i></a>
       </div>
       <div class="header">
         <h1>{{ $t('home.title')}}</h1>
