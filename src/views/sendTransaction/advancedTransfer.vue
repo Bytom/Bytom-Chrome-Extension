@@ -1,151 +1,186 @@
 <style lang="" scoped>
-.header {
-    height: 150px;
-}
-.balance {
+  .warp {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 600px;
+    z-index: 2;
+    overflow: scroll;
+  }
+  .header {
+    display: flex;
+  }
+  .header p{
     text-align: center;
-    margin-top: 15px;
-}
-.balance .token-icon {
-    height: 38px;
-    width: 38px;
-    margin-right: 5px;
-}
-.balance .token-amount {
-    display: inline-block;
-    font-size: 45px;
-    line-height: 45px;
-}
-.balance .token-amount .asset {
-    font-size: 18px;
-    margin-left: 2px;
-}
-.form {
-    padding: 10px 22px;
-}
-.form-item-group {
-    display: flex;
-}
-.form-item-group .form-item {
-    width: 40%;
-}
+    width: 270px;
+    padding-top: 17px;
+  }
 
-.btn-inline {
-    display: flex;
-    padding: 0;
-}
-.btn-inline .btn {
+  .content {
+    margin: 20px;
+    padding: 20px;
+    overflow: hidden;
+    border-radius:4px;
+    width: 280px;
+  }
+  .divider {
+    margin: 12px 0;
+  }
+
+  .value .uint {
+    font-size: 12px;
+    margin-left: 3px;
+  }
+  .btn-inline .btn {
     margin: 10px 15px;
-}
+  }
+  .row{
+    word-break: break-all;
+  }
+  .col{
+    font-size: 14px;
+    width: 35%;
+  }
+  .label{
+    color: #7B7B7B;
+  }
+  .value{
+    color: #282828;
+    width: 60%;
+  }
+  table{
+    width: 100%;
+  }
+  .form-item{
+    padding:0;
+    margin:0;
+    margin-bottom: 10px;
+  }
+  .hide{
+    width: 175px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .view-link{
+    font-size: 14px;
+    color: #035BD4;
+    width: 275px;
+    display: block;
+  }
 </style>
 
 <template>
-    <div class="warp-chlid bg-gray">
-        <section class="header bg-green">
-            <i class="iconfont icon-back" @click="close"></i>
-            <div class="balance">
-                <img src="@/assets/logo.png" class="token-icon">
-                <div class="token-amount">
-                    {{accountBalance}}
-                    <span class="asset">BTM</span>
-                </div>
-            </div>
-        </section>
+  <div class="warp bg-gray">
+    <section class="header bg-header">
+      <i class="iconfont icon-back" @click="$router.go(-1)"></i>
+      <p>{{ $t('transfer.confirmTransaction') }}</p>
+    </section>
 
-        <section class="form">
-            <div class="form-item-group">
-                <div class="form-item">
-                    <!--<label label class="form-item-label">账户</label>-->
-                    <span>{{account.alias}}</span>
-                </div>
-            </div>
-            <br>
-            <div class="btn-inline" style="width: 200px;">
-              <div class="btn bg-gray" @click="close">{{ $t('transfer.cancel') }}</div>
-              <div class="btn bg-green" @click="$refs.modalPasswd.open()">{{ $t('transfer.confirm') }}</div>
-            </div>
-        </section>
+    <section class="content bg-white">
+      <table>
+        <tbody>
+          <tr class="row">
+            <td class="col label">{{ $t('transfer.from') }}</td>
+            <td class="col value">{{account.alias}}</td>
+          </tr>
+          <div class="divider"></div>
+          <tr class="row">
+            <td class="col label">Input</td>
+            <td class="col value" v-bind:class="{ hide: !full }" >{{transaction.input}}</td>
+          </tr>
+          <tr class="row">
+            <td class="col label">Output</td>
+            <td class="col value" v-bind:class="{ hide: !full }" >{{transaction.output}}</td>
+          </tr>
+          <tr class="row">
+            <td class="col label">Args</td>
+            <td class="col value" v-bind:class="{ hide: !full }" >{{transaction.args}}</td>
+          </tr>
+          <tr class="row">
+            <td colspan="2" class="center-text">
+              <a v-on:click="full = !full"  class="view-link">
+                {{ full? $t('transfer.hide'): $t('transfer.view') }} >>
+              </a>
+            </td>
+          </tr>
 
-        <!-- modal -->
-        <modalPasswd ref="modalPasswd" @confirm="send"></modalPasswd>
+          <div class="divider"></div>
+
+          <tr class="row">
+            <td class="col label">{{ $t('transfer.fee') }}</td>
+            <td class="col value">{{transaction.fee}}<span class="uint">BTM</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    <section class="content bg-white">
+      <div class="form">
+        <div class="form-item">
+          <label class="form-item-label">{{ $t('transfer.confirmPassword') }}</label>
+          <div class="form-item-content">
+            <input type="password"  v-model="password" autofocus>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="row" style="margin: 20px;">
+      <div class="btn bg-green" @click="transfer">{{ $t('transfer.confirm') }}</div>
     </div>
+
+  </div>
 </template>
 
 <script>
-import account from "@/models/account";
 import transaction from "@/models/transaction";
 import getLang from "@/assets/language/sdk";
-import modalPasswd from "@/components/modal-passwd";
-import { LocalStream } from 'extension-streams'
+import { LocalStream } from 'extension-streams';
 
 export default {
-    components: {
-        modalPasswd
-    },
     data() {
-        const ASSET_BTM =
-            "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
         return {
-            show: false,
-            accounts: [],
-            guid: null,
+            full: false,
+            // full2: false,
             account: {},
-            accountBalance: 0.00,
             transaction: {
-                to: "",
-                asset: ASSET_BTM,
-                amount: "",
+                input: "",
+                output: "",
+                args: "",
                 fee: "",
-                cost: ""
-            }
+                confirmations:"",
+                amounts: []
+            },
+            password:''
         };
     },
     computed: {
-        unit() {
-            return this.assets[this.transaction.asset];
-        }
     },
     watch: {
-        account: function (newAccount) {
-            this.guid = newAccount.guid;
-        },
-        guid: function (newGuid) {
-            this.accounts.forEach(account => {
-                if (account.guid == newGuid.guid) {
-                    this.account = account;
-                    return;
-                }
-            });
-
-            account.balance(newGuid).then(balance => {
-                this.accountBalance = balance;
-            }).catch(error => {
-                console.log(error);
-            });
-        }
     },
     methods: {
         close: function () {
             LocalStream.send({method:'advanced-transfer',action:'reject'});
             window.close();
         },
-        send: function (passwd) {
+        transfer: function () {
             let loader = this.$loading.show({
                 // Optional parameters
                 container: null,
                 canCancel: true,
                 onCancel: this.onCancel
             });
-            const inout = JSON.parse(this.$route.query.object)
 
-            transaction.buildTransaction(this.account.guid,  inout.input, inout.output, inout.gas, inout.confirmations).then(ret => {
-                return transaction.convertArgument(inout.args)
+            transaction.buildTransaction(this.account.guid,  this.transaction.input, this.transaction.output, this.transaction.gas, this.transaction.confirmations).then(ret => {
+                return transaction.convertArgument(this.transaction.args)
                     .then((arrayData) =>{
-                        return transaction.advancedTransfer(this.account.guid, ret.result.data, passwd, arrayData)
+                        return transaction.advancedTransfer(this.account.guid, ret.result.data, this.password, arrayData)
                             .then((resp) => {
                                 loader.hide();
                                 LocalStream.send({method:'advanced-transfer',action:'success', message:resp});
                                 this.$dialog.show({
+                                    type: 'success',
                                     body: this.$t("transfer.success")
                                 });
                               window.close();
@@ -168,18 +203,27 @@ export default {
     }, mounted() {
           this.account = JSON.parse(localStorage.currentAccount);
 
-          account.setupNet(localStorage.bytomNet);
-          account.list().then(accounts => {
-              this.accounts = accounts;
-              this.accounts.forEach(function (ele) {
-                  ele.label = ele.alias
-                  ele.value = ele.guid
-              });
-
-              if (Object.keys(this.account).length == 0) {
-                  this.account = accounts[0]
+          if(this.$route.query.object !== undefined){
+              const inout = JSON.parse(this.$route.query.object)
+              if(inout.input !== undefined){
+                 this.transaction.input = inout.input
               }
-          });
+              if(inout.output !== undefined){
+                  this.transaction.output = inout.output
+              }
+              if(inout.args !== undefined){
+                 this.transaction.args = inout.args
+              }
+              if(inout.gas !== undefined){
+                 this.transaction.fee = inout.gas/1000000000
+              }
+              if(inout.confirmations !== undefined){
+                 this.transaction.confirmations = inout.confirmations
+              }
+
+              const array = inout.input.filter(action => action.type ==='spend_wallet')
+              this.transaction.amounts = array
+          }
       }
 };
 </script>
