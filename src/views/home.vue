@@ -448,10 +448,12 @@ export default {
         },
     },
     mounted() {
-        this.currentAccount = JSON.parse(localStorage.currentAccount);
+        if(localStorage.currentAccount !== undefined){
+          this.currentAccount = JSON.parse(localStorage.currentAccount);
+        }
         this.setupNetwork();
-        this.setupRefreshTimer();
         this.refreshAccounts();
+        this.setupRefreshTimer();
     }
 };
 </script>

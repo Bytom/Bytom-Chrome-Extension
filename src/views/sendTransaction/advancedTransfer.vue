@@ -172,7 +172,7 @@ export default {
                 onCancel: this.onCancel
             });
 
-            transaction.buildTransaction(this.account.guid,  this.transaction.input, this.transaction.output, this.transaction.gas, this.transaction.confirmations).then(ret => {
+            transaction.buildTransaction(this.account.guid,  this.transaction.input, this.transaction.output, this.transaction.fee * 1000000000, this.transaction.confirmations).then(ret => {
                 return transaction.convertArgument(this.transaction.args)
                     .then((arrayData) =>{
                         return transaction.advancedTransfer(this.account.guid, ret.result.data, this.password, arrayData)
