@@ -15,7 +15,11 @@
 
       var bytom
       getById('transferButton').addEventListener('click', () => {
-        bytom.transfer(getById('to').value, getById('amount').value)
+        bytom.transfer(getById('to').value, getById('amount').value).then(
+          resp =>{
+            console.log(resp)
+          }
+        )
       })
 
       // 监听Bytom插件加载成功事件

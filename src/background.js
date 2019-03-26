@@ -48,7 +48,9 @@ export default class Background {
 
   transfer(sendResponse, payload) {
     var promptURL = chrome.extension.getURL('pages/prompt.html')
-    var queryString = new URLSearchParams(payload).toString()
+    var requestBody = payload
+    requestBody.type = "popup"
+    var queryString = new URLSearchParams(requestBody).toString()
     console.log(promptURL, queryString)
     chrome.windows.create(
       {
@@ -59,8 +61,17 @@ export default class Background {
         top: 0,
         left: 0
       },
-      () => {
-        sendResponse(true)
+      (window) => {
+        chrome.runtime.onMessage.addListener(function(request, sender) {
+          if(sender.tab.windowId === window.id){
+            switch (request.method){
+              case 'transfer':
+                sendResponse(request);
+                break
+            }
+          }
+        });
+        console.log(window)
       }
     )
   }

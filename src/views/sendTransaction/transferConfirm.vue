@@ -154,10 +154,10 @@
 </template>
 
 <script>
-import address from "@/utils/address";
 import transaction from "@/models/transaction";
 import modalPasswd from "@/components/modal-passwd";
 import getLang from "@/assets/language/sdk";
+import { LocalStream } from 'extension-streams';
 export default {
     components: {
         modalPasswd
@@ -194,6 +194,9 @@ export default {
             transaction.transfer(this.account.guid, this.rawData, this.password)
                 .then(ret => {
                     loader.hide();
+                    if(this.$route.params.type == 'popup'){
+                      LocalStream.send({method:'transfer',action:'success', message:ret});
+                    }
                     this.$dialog.show({
                       type: 'success',
                       body: this.$t("transfer.success")

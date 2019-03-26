@@ -119,6 +119,8 @@ import account from "@/models/account";
 import transaction from "@/models/transaction";
 import getLang from "@/assets/language/sdk";
 import Confirm from "./transferConfirm";
+import { LocalStream } from 'extension-streams';
+
 export default {
     components: {
         Confirm
@@ -193,6 +195,10 @@ export default {
             this.$router.go(-1)
             this.transaction.to = "";
             this.transaction.amount = "";
+            if(this.$route.query.type == 'popup'){
+               LocalStream.send({method:'transfer',action:'reject'});
+               window.close();
+            }
         },
         send: function () {
             if (this.transaction.to == "") {
@@ -218,7 +224,7 @@ export default {
             transaction.build(this.account.guid, this.transaction.to, this.transaction.asset, this.transaction.amount, this.transaction.fee).then(ret => {
                 loader.hide();
                 this.transaction.fee = Number(ret.result.data.fee / 100000000);
-                this.$router.push({ name: 'transfer-confirm', params: { account: this.account, transaction: this.transaction, rawData: ret.result.data } })
+                this.$router.push({ name: 'transfer-confirm', params: { account: this.account, transaction: this.transaction, rawData: ret.result.data, type: this.$route.query.type } })
             }).catch(error => {
                 loader.hide();
                 this.$dialog.show({
