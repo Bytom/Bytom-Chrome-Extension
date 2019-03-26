@@ -195,7 +195,8 @@ export default {
                 .then(ret => {
                     loader.hide();
                     this.$dialog.show({
-                        body: this.$t("transfer.success")
+                      type: 'success',
+                      body: this.$t("transfer.success")
                     });
                     this.$router.push('/')
                 })

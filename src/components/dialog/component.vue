@@ -49,6 +49,18 @@
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
 }
+
+.icon{
+  width: 48px;
+  height: 48px;
+  margin: 10px auto 20px;
+}
+.icon-success{
+  background-image: url('../../assets/img/icon/success.svg');
+}
+  .icon-error{
+    background-image: url('../../assets/img/icon/error.svg');
+  }
 </style>
 
 <template>
@@ -56,6 +68,8 @@
     <div class="modal-mask" v-if="show">
       <div class="modal-wrapper">
         <div class="modal-container">
+          <div :class="icon">
+          </div>
 
           <div class="modal-header color-black">
             <slot name="header">
@@ -71,7 +85,7 @@
 
           <div class="modal-footer">
             <slot name="footer">
-              <a class="btn btn-warning" @click="closeDialog()">
+              <a :class="btn" @click="closeDialog()">
                 {{ confirm }}
               </a>
             </slot>
@@ -100,7 +114,30 @@ export default {
     confirm: {
       type: String,
       default: "OK"
+    },
+    type:{
+      type: String,
+      default: 'error'
     }
+  },
+  computed: {
+    icon: function () {
+      switch(this.type){
+        case "error":
+          return "icon icon-error"
+        default:
+          return "icon icon-success"
+      }
+    },
+    btn: function () {
+      switch(this.type){
+        case "error":
+          return "btn btn-warning"
+        default:
+          return "btn btn-primary"
+      }
+    },
+
   },
   methods: {
     showDialog: function() {

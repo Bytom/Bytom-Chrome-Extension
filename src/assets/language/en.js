@@ -31,6 +31,7 @@ const en = {
     cancel: 'Cancel',
     emptyPassword: 'Password can not be empty.',
     unit: 'unit',
+    assetId: 'Asset Id',
     emptyTo: 'Empty address',
     noneBTM: 'Error BTM quantity',
     transferAmount: 'Amount',
@@ -40,7 +41,9 @@ const en = {
     success: 'Transaction sent successfully',
     confirmTransaction:'Confirm Transaction',
     from:'From',
-    to:'To'
+    to:'To',
+    view:'View All',
+    hide:'Hide All'
   },
   receive:{
     address: 'Address',

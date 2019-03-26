@@ -31,6 +31,7 @@ const cn = {
     cancel: '取消发送',
     emptyPassword: '密码不能为空',
     unit: '单位',
+    assetId:'资产ID',
     emptyTo: '地址不能为空',
     noneBTM: '错误的BTM数量',
     transferAmount: '转账金额',
@@ -40,7 +41,9 @@ const cn = {
     totalTip: '转账金额+矿工费用',
     success: '交易发送成功',
     from:'发送账户',
-    to:'接收地址'
+    to:'接收地址',
+    view:'展示全部',
+    hide:'隐藏全部'
   },
   receive:{
     address: '地址',

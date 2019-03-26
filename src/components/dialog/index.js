@@ -29,6 +29,9 @@ const dialogInstance = {
     if (op.confirm) {
       data.confirm = op.confirm;
     }
+    if (op.type) {
+      data.type = op.type;
+    }
     instance = new Vue({
       data: data,
       methods: {
@@ -43,6 +46,7 @@ const dialogInstance = {
             header: this.header,
             body: this.body,
             confirm: this.confirm,
+            type: this.type,
           },
           on: {
             onClose: this.onClose,

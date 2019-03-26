@@ -65,6 +65,7 @@
     setupClipboard() {
       this.clipboard.on("success", e => {
         this.$dialog.show({
+          type: 'success',
           header: this.$t("dialog.header"),
           body: this.$t("dialog.copy.success")
         });

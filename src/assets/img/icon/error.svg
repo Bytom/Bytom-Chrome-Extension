@@ -1,0 +1,18 @@
+<svg id="Group_7714" data-name="Group 7714" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: rgba(230,0,0,0.08);
+      }
+
+      .cls-2 {
+        fill: #e60000;
+      }
+    </style>
+  </defs>
+  <circle id="Ellipse_126" data-name="Ellipse 126" class="cls-1" cx="24" cy="24" r="24"/>
+  <g id="错误" transform="translate(-438.6 -241)">
+    <path id="Path_20349" data-name="Path 20349" class="cls-2" d="M462.6,667.4m-1.8,0a1.8,1.8,0,1,0,1.8-1.8A1.8,1.8,0,0,0,460.8,667.4Z" transform="translate(0 -395.2)"/>
+    <path id="Path_20350" data-name="Path 20350" class="cls-2" d="M463.809,268.6,464.4,256h-3.6l.591,12.6Z"/>
+  </g>
+</svg>

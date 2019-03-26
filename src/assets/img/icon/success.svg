@@ -1,0 +1,15 @@
+<svg id="Group_7714" data-name="Group 7714" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: rgba(3,91,212,0.08);
+      }
+
+      .cls-2 {
+        fill: #035bd4;
+      }
+    </style>
+  </defs>
+  <circle id="Ellipse_126" data-name="Ellipse 126" class="cls-1" cx="24" cy="24" r="24"/>
+  <path id="Union_332" data-name="Union 332" class="cls-2" d="M3412.192-6191.617h0l-2.121-2.121-5.657-5.657,2.122-2.122,5.656,5.658,12.021-12.022,2.122,2.122-14.142,14.142Z" transform="translate(-3391.692 6223.308)"/>
+</svg>
