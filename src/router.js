@@ -94,14 +94,6 @@ const routers = [
     ]
   },
   {
-    path: '/welcome',
-    name: 'welcome',
-    meta: { title: '欢迎页' },
-    component: resolve => {
-      require(['@/views/welcome/welcome.vue'], resolve)
-    }
-  },
-  {
     path: '/protocol',
     name: 'welcome-protocol',
     meta: { title: '用户协议' },
@@ -115,14 +107,6 @@ const routers = [
     meta: { title: '创建账户' },
     component: resolve => {
       require(['@/views/welcome/creation.vue'], resolve)
-    }
-  },
-  {
-    path: '/recovery',
-    name: 'welcome-recovery',
-    meta: { title: '恢复账户' },
-    component: resolve => {
-      require(['@/views/welcome/recovery.vue'], resolve)
     }
   }
 ]
