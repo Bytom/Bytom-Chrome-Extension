@@ -161,7 +161,6 @@ export default {
     },
     methods: {
         close: function () {
-            LocalStream.send({method:'advanced-transfer',action:'reject'});
             window.close();
         },
         transfer: function () {

@@ -196,7 +196,6 @@ export default {
             this.transaction.to = "";
             this.transaction.amount = "";
             if(this.$route.query.type == 'popup'){
-               LocalStream.send({method:'transfer',action:'reject'});
                window.close();
             }
         },

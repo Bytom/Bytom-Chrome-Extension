@@ -71,7 +71,12 @@ export default class Background {
             }
           }
         });
-        console.log(window)
+
+        chrome.windows.onRemoved.addListener(function(windowId){
+          if(windowId === window.id) {
+            sendResponse({method:'transfer',action:'reject'})
+          }
+        });
       }
     )
   }
@@ -97,6 +102,11 @@ export default class Background {
                 sendResponse(request);
                 break
             }
+          }
+        });
+        chrome.windows.onRemoved.addListener(function(windowId){
+          if(windowId === window.id) {
+            sendResponse({method:'advanced-transfer',action:'reject'})
           }
         });
       }
