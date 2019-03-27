@@ -196,6 +196,7 @@ export default {
                     loader.hide();
                     if(this.$route.params.type == 'popup'){
                       LocalStream.send({method:'transfer',action:'success', message:ret});
+                      window.close();
                     }
                     this.$dialog.show({
                       type: 'success',

@@ -107,7 +107,7 @@
 .transactions {
   font-size: 15px;
   height: 340px;
-  overflow: scroll;
+  overflow: auto;
 }
 .list-item {
     position: relative;

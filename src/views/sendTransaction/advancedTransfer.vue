@@ -74,7 +74,7 @@
 <template>
   <div class="warp bg-gray">
     <section class="header bg-header">
-      <i class="iconfont icon-back" @click="$router.go(-1)"></i>
+      <i class="iconfont icon-back" @click="close"></i>
       <p>{{ $t('transfer.confirmTransaction') }}</p>
     </section>
 
