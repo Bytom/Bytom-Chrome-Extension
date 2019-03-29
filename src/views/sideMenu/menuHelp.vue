@@ -27,7 +27,7 @@
         <div class="label">
           <p>{{ $t("help.page") }}</p>
         </div>
-        <a class="link" href="http://github.com/bytom/bystore" target="_blank">http://github.com/bytom/bystore</a>
+        <a class="link" href="http://github.com/bycoinio/Bystore" target="_blank">http://github.com/bycoinio/Bystore</a>
       </div>
     </MenuPage>
 </template>

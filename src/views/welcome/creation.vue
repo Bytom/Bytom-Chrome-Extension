@@ -115,7 +115,7 @@
         <div v-if="activeTab === 'register'" class="topbar-middle">
           <v-select  class="v-select" v-bind:colorBlack="true" :clearable="false" v-model="selected" :options="nets"></v-select>
         </div>
-        <a href="http://github.com/bytom/bystore" target="_blank"><i class="iconfont icon-github"></i></a>
+        <a href="http://github.com/bycoinio/Bystore" target="_blank"><i class="iconfont icon-github"></i></a>
       </div>
       <div class="header">
         <h1>Bystore</h1>
@@ -323,7 +323,7 @@ export default {
     mounted() {
         mainNet = { label: this.$t('main.mainNet'), value: "mainnet" };
         testNet = { label: this.$t('main.testNet'), value: "testnet" };
-        this.nets = [mainNet, testNet, soloNet];
+        this.nets = [mainNet, testNet];
         if (localStorage.bytomNet != undefined) {
             if (localStorage.bytomNet == "mainnet") {
                 this.selected = mainNet;

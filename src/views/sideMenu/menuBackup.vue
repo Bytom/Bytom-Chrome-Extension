@@ -4,7 +4,7 @@
 <template>
     <MenuPage :title="$t('backup.title')">
         <div style="text-align: center">
-            <div style="width: 200px;" class="btn btn-primary" @click="backup">{{ $t('backup.button') }}</div>
+            <div class="btn btn-primary" @click="backup">{{ $t('backup.button') }}</div>
         </div>
     </MenuPage>
 </template>
