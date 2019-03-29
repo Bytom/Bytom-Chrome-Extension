@@ -8,7 +8,7 @@
     display:flex;
 }
 .topbar .topbar-left {
-    width: 85px;
+    width: 87px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -33,7 +33,7 @@
     margin-right: 20px;
     border: 2px solid #fff;
     border-radius: 18px;
-    padding: 0 10px;
+    padding: 0 20px;
     font: 12px system-ui;
     text-align: center;
     display: flex;
@@ -77,7 +77,7 @@
 .btn-send-transfer .btn {
     width: 160px;
     height: 48px;
-    line-height: 27px;
+    line-height: 23px;
     font-size: 16px;
 }
 
@@ -174,11 +174,9 @@
                     </a>
                 </div>
                 <div class="topbar-middle bg-secondary">
-                    <img src="@/assets/img/icon/neticon.svg" alt="" style="margin-right: 5px;">
                     <select v-model="network" @change="networkToggle">
                         <option value="mainnet">{{ $t('main.mainNet') }}</option>
                         <option value="testnet">{{ $t('main.testNet') }}</option>
-                        <option value="solonet">{{ $t('main.soloNet') }}</option>
                     </select>
                 </div>
             </div>

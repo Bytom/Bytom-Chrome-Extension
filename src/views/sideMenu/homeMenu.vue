@@ -22,7 +22,7 @@
     display: none;
 }
 .accounts i {
-    font-size: 24px;
+    margin-left: 2px;
 }
 
 .menu-panel {

@@ -1,9 +1,9 @@
 module.exports = {
   manifest_version: 2,
-  name: 'Bytom Wallet',
-  description: 'Bytom Chrome Extension Wallet',
+  name: 'Bystore',
+  description: 'Bytom Wallet for Chrome.',
   version: '1.0.0',
-  author: 'yanbo,xuhongxing',
+  author: 'Bytom frontend, zhitinglin',
   web_accessible_resources: ['js/inject.js', 'wasm/main.wasm'],
   browser_action: {
     default_popup: 'pages/popup.html',

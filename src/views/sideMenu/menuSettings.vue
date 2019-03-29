@@ -13,7 +13,7 @@
 }
 .setting {
     margin: 5px 0 0 0;
-    width: 120px;
+    width: 110px;
     height: 32px;
     position: relative;
 }

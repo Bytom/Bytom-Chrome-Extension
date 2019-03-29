@@ -1,6 +1,6 @@
 const cn = {
   home:{
-    title:"比原钱包"
+    title:"比原链插件钱包"
   },
   welcome: {
     title: '欢迎使用BYTOM精简Chrome钱包',

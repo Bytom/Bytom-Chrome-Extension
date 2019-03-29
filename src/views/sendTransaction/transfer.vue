@@ -36,7 +36,6 @@
 }
 .form-container .btn{
     height: 48px;
-    padding-top: 15px;
     bottom: 20px;
     position: absolute;
     width: 320px;
@@ -94,7 +93,7 @@
                   <label class="form-item-label">
                     {{ $t('transfer.quantity') }}
 
-                    <small class="float-right" >{{ transaction.cost||0 }} CNY</small>
+                    <small class="float-right" style="margin-right: 8px;">{{ transaction.cost||0 }} CNY</small>
                   </label>
                   <div class="form-item-content" style=" display: flex;">
                       <input type="number" v-model="transaction.amount" placeholder="0">

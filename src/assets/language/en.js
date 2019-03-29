@@ -1,6 +1,6 @@
 const en = {
   home:{
-    title:"Bytom Wallet"
+    title:"Bytom Wallet for Chrome"
   },
   welcome: {
     title: 'Welcome to the BYTOM Chrome Wallet',
@@ -33,7 +33,7 @@ const en = {
     unit: 'unit',
     assetId: 'Asset Id',
     emptyTo: 'Empty address',
-    noneBTM: 'Error BTM quantity',
+    noneBTM: 'Error BTM Amount',
     transferAmount: 'Amount',
     transferCost: 'Transfer Cost',
     total: 'Total',
@@ -113,7 +113,7 @@ const en = {
     title: 'Setting',
     version: 'Version',
     lang: 'Language',
-    unit: 'BTM Quantity Unit'
+    unit: 'Btm Amount Unit'
   },
   backup: {
     title: 'Backup',

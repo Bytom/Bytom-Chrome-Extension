@@ -123,7 +123,7 @@ hr {
 
 .iconfont {
   font-family: 'iconfont' !important;
-  font-size: 16px;
+  font-size: 20px;
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -139,7 +139,6 @@ hr {
 
 .icon-back:before {
   content: "\e613";
-  font-size: 25px;
   line-height: 55px;
   margin-left: 20px;
   cursor: pointer;
@@ -167,6 +166,7 @@ hr {
 
 .icon-send:before {
   content: "\e60a";
+  font-size: 18px;
 }
 
 .icon-refresh:before {
@@ -199,6 +199,7 @@ hr {
 
 .icon-receive:before {
   content: "\e616";
+  font-size: 18px;
 }
 /*.icon-succeed:before {*/
   /*content: "\e617";*/

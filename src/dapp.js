@@ -81,7 +81,7 @@ export default class Bytomdapp {
     _subscribe()
   }
 
-  transfer(to, amount, fee) {
+  transfer(to, amount) {
     return _send(MsgTypes.TRANSFER, {
       to: to,
       amount: amount

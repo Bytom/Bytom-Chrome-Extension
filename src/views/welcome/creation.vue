@@ -22,11 +22,17 @@
   .header {
     position: relative;
     text-align: center;
-    margin:20px 20px 30px;
+    margin:15px 20px 25px;
+  }
+  .header p{
+    font-size: 16px;
+    color: rgba(255,255,255,0.5);
+    padding-top: 5px;
   }
   .panel{
     position: relative;
     padding: 10px;
+    margin-bottom : 15px;
   }
   .container{
     position: relative;
@@ -45,11 +51,11 @@
   text-align: center;
 }
 
-.topbar img{
-  position: relative;
-  bottom: 23px;
-  right: 65px
-}
+/*.topbar img{*/
+  /*position: relative;*/
+  /*bottom: 23px;*/
+  /*right: 65px*/
+/*}*/
 
   .v-select{
     height: 28px;
@@ -58,7 +64,7 @@
     border-radius: 15px;
     font-size: 14px;
     margin: auto;
-    padding-left: 17px;
+    padding-left: 20px;
   }
 
   .tabs{
@@ -84,7 +90,21 @@
     font-size: 25px;
     color: white;
   }
-
+  .file-selection{
+    height: 50px;
+    vertical-align: middle;
+    display: flex;
+    align-items: center;
+    border: 1px dashed #E0E0E0;
+    margin-top: 10px;
+    padding: 20px;
+    background: #F7F7F7;
+  }
+  .recovery-btn{
+    position: fixed;
+    bottom: 20px;
+    width: 320px;
+  }
 </style>
 
 <template>
@@ -94,12 +114,13 @@
       <div class="topbar">
         <div v-if="activeTab === 'register'" class="topbar-middle">
           <v-select  class="v-select" v-bind:colorBlack="true" :clearable="false" v-model="selected" :options="nets"></v-select>
-          <img src="@/assets/img/icon/neticon.svg" alt="">
         </div>
         <a href="http://github.com/bytom/bystore" target="_blank"><i class="iconfont icon-github"></i></a>
       </div>
       <div class="header">
-        <h1>{{ $t('home.title')}}</h1>
+        <h1>Bystore</h1>
+        <p>{{ $t('home.title')}}</p>
+
       </div>
 
         <section class="container">
@@ -148,7 +169,7 @@
             <div class="form panel">
               <div class="form-item">
                 <label class="form-item-label">{{ $t('createAccount.file') }}</label>
-                <div >
+                <div class="file-selection">
                   <input type="file" @change="tirggerFile($event)">
                 </div>
               </div>
@@ -160,7 +181,7 @@
               </div>
             </div>
             <div class="btn-group">
-              <div class="btn btn-primary" @click="recovery">{{ $t('createAccount.import') }}</div>
+              <div class="btn btn-primary recovery-btn" @click="recovery">{{ $t('createAccount.import') }}</div>
             </div>
           </div>
         </section>
@@ -300,17 +321,14 @@ export default {
         }
     },
     mounted() {
-        mainNet = { label: this.$t('main.mainNetShort'), value: "mainnet" };
-        testNet = { label: this.$t('main.testNetShort'), value: "testnet" };
-        soloNet = { label: this.$t('main.soloNetShort'), value: "solonet" };
+        mainNet = { label: this.$t('main.mainNet'), value: "mainnet" };
+        testNet = { label: this.$t('main.testNet'), value: "testnet" };
         this.nets = [mainNet, testNet, soloNet];
         if (localStorage.bytomNet != undefined) {
             if (localStorage.bytomNet == "mainnet") {
                 this.selected = mainNet;
             } else if (localStorage.bytomNet == "testnet") {
                 this.selected = testNet;
-            } else if (localStorage.bytomNet == "solonet") {
-                this.selected = soloNet;
             }
         } else {
             this.selected = mainNet;

@@ -4,7 +4,7 @@
   }
   .header p{
     text-align: center;
-    width: 270px;
+    width: 280px;
     padding-top: 17px;
   }
 
@@ -119,7 +119,7 @@
             </div>
             <vue-scroll>
                 <div class="transaction">
-                    <table>
+                    <table style="margin-bottom: 20px">
                       <tbody>
                       <tr>
                         <td class="label">

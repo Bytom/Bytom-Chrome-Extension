@@ -13,7 +13,7 @@
   }
   .header p{
     text-align: center;
-    width: 270px;
+    width: 280px;
     padding-top: 17px;
   }
 
