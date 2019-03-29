@@ -35,3 +35,8 @@ npm run build
 - [How to live reload on local dependency changes](./doc/en/developing-on-deps.md)
 - [How to use Bytom-JS-SDK and WebAssembly](./doc/en/bytom-js-sdk-webassembly.md)
 - [中文文档](./doc/cn/README.md)
+
+## Thanks to
+Many thanks to the early contributors in Bytom-Community.
+- [boboyan](https://github.com/boboyan)
+- [shijianzhiwai](https://github.com/shijianzhiwai) 
