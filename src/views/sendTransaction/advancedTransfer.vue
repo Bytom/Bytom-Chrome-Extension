@@ -171,7 +171,7 @@ export default {
                 onCancel: this.onCancel
             });
 
-            transaction.buildTransaction(this.account.guid,  this.transaction.input, this.transaction.output, this.transaction.fee * 1000000000, this.transaction.confirmations).then(ret => {
+            transaction.buildTransaction(this.account.guid,  this.transaction.input, this.transaction.output, this.transaction.fee * 100000000, this.transaction.confirmations).then(ret => {
                 return transaction.convertArgument(this.transaction.args)
                     .then((arrayData) =>{
                         return transaction.advancedTransfer(this.account.guid, ret.result.data, this.password, arrayData)
@@ -214,7 +214,7 @@ export default {
                  this.transaction.args = inout.args
               }
               if(inout.gas !== undefined){
-                 this.transaction.fee = inout.gas/1000000000
+                 this.transaction.fee = inout.gas/100000000
               }
               if(inout.confirmations !== undefined){
                  this.transaction.confirmations = inout.confirmations
