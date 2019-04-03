@@ -2,7 +2,7 @@ module.exports = {
   manifest_version: 2,
   name: 'Bystore',
   description: 'Bytom Wallet for Chrome.',
-  version: '1.0.0',
+  version: '1.0.0.1',
   author: 'Bytom frontend, zhitinglin',
   web_accessible_resources: ['js/inject.js', 'wasm/main.wasm'],
   browser_action: {
