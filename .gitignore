@@ -5,6 +5,7 @@ npm-debug.log
 yarn-error.log
 key.pem
 *.crx
+*.zip
 
 # Editor directories and files
 .idea
