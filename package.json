@@ -1,5 +1,5 @@
 {
-    "name": "Bystore",
+    "name": "Byone",
     "description": "Bytom Chrome Extension Wallet",
     "version": "0.7.0",
     "author": "zhiting.fly@8btc.com",
@@ -36,6 +36,7 @@
     "devDependencies": {
         "babel-core": "^6.26.0",
         "babel-loader": "^7.1.2",
+        "babel-plugin-transform-runtime": "^6.23.0",
         "babel-preset-env": "^1.6.0",
         "babel-preset-stage-3": "^6.24.1",
         "chalk": "^2.4.1",
