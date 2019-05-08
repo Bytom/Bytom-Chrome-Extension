@@ -62,12 +62,12 @@ account.list = function() {
     bytom.accounts
       .listAccountUseServer()
       .then(accounts => {
-        accounts.forEach(account => {
-          this.balance(account.guid).then(balance => {
-            account.balance = balance
-          })
+        Promise.all(accounts.map(async (account) => {
+          const balance = await this.balance(account.guid)
+          account.balance = balance
+        })).then(()=>{
+          resolve(accounts)
         })
-        resolve(accounts)
       })
       .catch(error => {
         reject(error)

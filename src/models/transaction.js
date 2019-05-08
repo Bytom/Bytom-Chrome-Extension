@@ -27,10 +27,10 @@ transaction.asset = function(asset_id) {
   return bytom.query.asset(asset_id);
 };
 
-transaction.build = function(guid, to, asset, amount, fee) {
+transaction.build = function(guid, to, asset, amount, fee, confirmations) {
   let retPromise = new Promise((resolve, reject) => {
     bytom.transaction
-      .buildPayment(guid, to, asset, Number(amount * 100000000))
+      .buildPayment(guid, to, asset, Number(amount), Number(fee*100000000), confirmations)
       .then(res => {
         resolve(res);
       })

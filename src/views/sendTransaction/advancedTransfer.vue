@@ -149,7 +149,7 @@ export default {
                 output: "",
                 args: "",
                 fee: "",
-                confirmations:"",
+                confirmations:1,
                 amounts: []
             },
             password:''

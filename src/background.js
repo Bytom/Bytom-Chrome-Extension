@@ -2,6 +2,7 @@ import { LocalStream } from 'extension-streams'
 import InternalMessage from '@/messages/internal'
 import * as MsgTypes from './messages/types'
 
+import Error from './utils/errors/Error'
 import accountAction from "@/models/account";
 import bytom from "@/models/bytom";
 
@@ -9,7 +10,6 @@ export default class Background {
   constructor() {
     this.setupInternalMessaging()
     this.setupBytom()
-    window.bytomAPI = bytom
   }
 
   setupBytom(){
@@ -43,6 +43,15 @@ export default class Background {
       case MsgTypes.SEND:
         this.send(sendResponse, message.payload)
         break
+      case MsgTypes.REQUEST_CURRENT_ACCOUNT:
+        this.requestCurrentAccount(sendResponse)
+        break
+      case MsgTypes.REQUEST_CURRENT_NETWORK:
+        this.requestCurrentNetwork(sendResponse)
+        break
+      case MsgTypes.REQUEST_ACCOUNT_LIST:
+        this.requestAccountList(sendResponse)
+        break
     }
   }
 
@@ -52,7 +61,27 @@ export default class Background {
     requestBody.type = "popup"
     var queryString = new URLSearchParams(requestBody).toString()
     console.log(promptURL, queryString)
-    chrome.windows.create(
+    payload.asset
+
+    if(requestBody.from === undefined){
+      sendResponse(Error.typeMissed('from'));
+      return false;
+    }
+    if(requestBody.to === undefined){
+      sendResponse(Error.typeMissed('to'));
+      return false;
+    }
+    if(requestBody.asset === undefined){
+      sendResponse(Error.typeMissed('asset'));
+      return false;
+    }
+    if(requestBody.amount === undefined){
+      sendResponse(Error.typeMissed('amount'));
+      return false;
+    }
+
+
+      chrome.windows.create(
       {
         url: `${promptURL}#transfer?${queryString}`,
         type: 'popup',
@@ -66,15 +95,21 @@ export default class Background {
           if(sender.tab.windowId === window.id){
             switch (request.method){
               case 'transfer':
-                sendResponse(request);
-                break
+                if (request.action === 'success'){
+                  sendResponse(request.message.result.data);
+                  return true;
+                } else if (request.action === 'reject'){
+                  sendResponse(request.message);
+                  return false;
+                }
             }
           }
         });
 
         chrome.windows.onRemoved.addListener(function(windowId){
           if(windowId === window.id) {
-            sendResponse({method:'transfer',action:'reject'})
+            sendResponse(Error.promptClosedWithoutAction());
+            return false;
           }
         });
       }
@@ -85,6 +120,23 @@ export default class Background {
     var promptURL = chrome.extension.getURL('pages/prompt.html')
     var queryString = 'object='+JSON.stringify(payload)
     console.log(promptURL, queryString)
+
+    if(payload.input === undefined){
+      sendResponse(Error.typeMissed('input'));
+      return false;
+    }
+    if(payload.output === undefined){
+      sendResponse(Error.typeMissed('output'));
+      return false;
+    }
+    if(payload.gas === undefined){
+      sendResponse(Error.typeMissed('gas'));
+      return false;
+    }
+    if(payload.args === undefined){
+      sendResponse(Error.typeMissed('args'));
+      return false;
+    }
     chrome.windows.create(
       {
         url: `${promptURL}#advancedTransfer?${queryString}`,
@@ -99,39 +151,68 @@ export default class Background {
           if(sender.tab.windowId === window.id){
             switch (request.method){
               case 'advanced-transfer':
-                sendResponse(request);
-                break
+                if (request.action === 'success'){
+                  sendResponse(request.message.result.data);
+                  return true;
+                } else if (request.action === 'reject'){
+                  sendResponse(request.message);
+                  return false;
+                }
             }
           }
         });
         chrome.windows.onRemoved.addListener(function(windowId){
           if(windowId === window.id) {
-            sendResponse({method:'advanced-transfer',action:'reject'})
+            sendResponse(Error.promptClosedWithoutAction());
+            return false;
           }
         });
       }
     )
   }
 
+  requestCurrentAccount(sendResponse){
+    const currentAccount = JSON.parse(localStorage.currentAccount)
+    delete(currentAccount['label'])
+    delete(currentAccount['net'])
+    currentAccount['accountId'] = currentAccount['guid']
+    delete(currentAccount['guid'])
+    currentAccount['balance'] = {
+      'ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff' : {
+        amount: currentAccount['balance']
+      }
+    }
+
+    sendResponse(currentAccount)
+  }
+
+  requestCurrentNetwork(sendResponse){
+    sendResponse(localStorage.bytomNet)
+  }
+
+  requestAccountList(sendResponse){
+    accountAction.list().then(resp=>{
+      const accountList = resp
+      accountList.forEach(function(account) {
+        delete(account['label'])
+        delete(account['net'])
+        account['accountId'] = account['guid']
+        delete(account['guid'])
+        account['balance'] = {
+          'ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff': {
+            amount: account['balance']
+          }
+        }
+      })
+      sendResponse(accountList)
+    })
+  }
+
   send(sendResponse, payload) {
     const action = payload.action
-    const body = payload.body
     if(action){
       let promise
       switch (action){
-        case 'balance':
-          const id = body.id
-          const guid = body.guid
-          promise = accountAction.balance(guid, id)
-          break
-        case 'currentAccount':
-          const account = JSON.parse(localStorage.currentAccount)
-          sendResponse(account)
-          break
-        case 'currentNetwork':
-          const network = JSON.parse(localStorage.bytomNet)
-          sendResponse(network)
-          break
         case 'listAllAccount':
           promise = accountAction.list()
           break

@@ -28,14 +28,14 @@ class Content {
     stream = new EncryptedStream(EventNames.BYTOM, IdGenerator.text(256))
     stream.listenWith(msg => this.contentListener(msg))
 
-    stream.onSync(() => {
-      const version = this.getVersion()
-      // const version = await this.getVersion();
-      // const identity = await this.identityFromPermissions();
+    stream.onSync(async () => {
+      const defaultAccount = await this.getDefaultAccount();
+      const net = await this.getDefaultNetwork();
+      const accountList = await this.getAccountList();
 
-      // Pushing an instance of Scatterdapp to the web application
+      // Pushing an instance of Bytomdapp to the web application
       stream.send(
-        NetworkMessage.payload(MsgTypes.PUSH_BYTOM, {}),
+        NetworkMessage.payload(MsgTypes.PUSH_BYTOM, {defaultAccount, net, accountList}),
         EventNames.INJECT
       )
 
@@ -69,6 +69,21 @@ class Content {
   }
 
   getVersion() {}
+
+  getDefaultAccount(){
+    return InternalMessage.signal(MsgTypes.REQUEST_CURRENT_ACCOUNT)
+      .send()
+  }
+
+  getDefaultNetwork(){
+    return InternalMessage.signal(MsgTypes.REQUEST_CURRENT_NETWORK)
+      .send()
+  }
+
+  getAccountList(){
+    return InternalMessage.signal(MsgTypes.REQUEST_ACCOUNT_LIST)
+      .send()
+  }
 
   respond(message, payload) {
     if (!isReady) return

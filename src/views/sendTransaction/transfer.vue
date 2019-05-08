@@ -152,8 +152,9 @@ export default {
                 to: "",
                 asset: ASSET_BTM,
                 amount: "",
-                fee: "",
-                cost: ""
+                fee: null,
+                cost: "",
+                confirmations: 1
             }
         };
     },
@@ -219,9 +220,11 @@ export default {
                 canCancel: true,
                 onCancel: this.onCancel
             });
-            transaction.build(this.account.guid, this.transaction.to, this.transaction.asset, this.transaction.amount, this.transaction.fee).then(ret => {
+            transaction.build(this.account.guid, this.transaction.to, this.transaction.asset, this.transaction.amount*100000000, this.transaction.fee, this.transaction.confirmations).then(ret => {
                 loader.hide();
-                this.transaction.fee = Number(ret.result.data.fee / 100000000);
+                if(!this.transaction.fee){
+                    this.transaction.fee = Number(ret.result.data.fee / 100000000);
+                }
                 this.$router.push({ name: 'transfer-confirm', params: { account: this.account, transaction: this.transaction, rawData: ret.result.data, type: this.$route.query.type } })
             }).catch(error => {
                 loader.hide();
@@ -235,12 +238,31 @@ export default {
             this.account = this.$route.params.account;
         }
 
-        if (this.$route.query.to != undefined) {
-            this.transaction.to = this.$route.query.to
+        //detect injection
+        if(this.$route.query.type === 'popup'){
+          if (this.$route.query.from != undefined) {
+              this.guid = this.$route.query.from
+          }else{
+              this.account = JSON.parse(localStorage.currentAccount);
+          }
+
+          if (this.$route.query.asset != undefined) {
+              this.transaction.asset= this.$route.query.asset
+          }
+          if (this.$route.query.to != undefined) {
+              this.transaction.to = this.$route.query.to
+          }
+          if (this.$route.query.amount != undefined) {
+              this.transaction.amount = this.$route.query.amount /100000000
+          }
+          if (this.$route.query.gas != undefined) {
+              this.transaction.fee = this.$route.query.gas /100000000
+          }
+          if(this.$route.query.confirmations != undefined) {
+              this.transaction.confirmations = this.$route.query.confirmations
+          }
         }
-        if (this.$route.query.amount != undefined) {
-            this.transaction.amount = this.$route.query.amount
-        }
+
 
         account.setupNet(localStorage.bytomNet);
         account.list().then(accounts => {
