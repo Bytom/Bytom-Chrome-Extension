@@ -44,7 +44,35 @@ class Content {
 
       document.dispatchEvent(new CustomEvent('chromeBytomLoaded'))
     })
+
+    chrome.runtime.onMessage.addListener(async (obj) => {
+      switch (obj.action) {
+        case 'updateAccount':
+          const defaultAccount = await this.getDefaultAccount();
+          if(defaultAccount){
+            stream.send(
+              NetworkMessage.payload(MsgTypes.UPDATE_BYTOM, {type:'default_account', value: defaultAccount}),
+              EventNames.INJECT
+            )
+          }
+          break
+        case 'updateNetAndAccounts':
+          const net = await this.getDefaultNetwork();
+          const accountList = await this.getAccountList();
+          stream.send(
+            NetworkMessage.payload(MsgTypes.UPDATE_BYTOM, {type:'net', value: net}),
+            EventNames.INJECT
+          )
+          stream.send(
+            NetworkMessage.payload(MsgTypes.UPDATE_BYTOM, {type:'accounts', value: accountList}),
+            EventNames.INJECT
+          )
+          break
+      }
+      return true;
+    })
   }
+
 
   contentListener(msg) {
     console.log('content.stream.listen:', msg, stream.key)

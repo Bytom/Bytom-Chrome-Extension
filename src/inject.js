@@ -24,6 +24,14 @@ class Inject {
       ) {
         window.bytom = new Bytomdapp(stream, msg.payload)
       }
+
+      if (
+        msg &&
+        msg.hasOwnProperty('type') &&
+        msg.type === MsgTypes.UPDATE_BYTOM
+      ) {
+        window.bytom[msg.payload.type] = msg.payload.value
+      }
     })
 
     // Syncing the streams between the extension and the web application

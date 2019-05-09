@@ -20,6 +20,13 @@ export default class Background {
     function storageEventHandler(evt){
       if(evt.key === 'bytomNet'){
         bytom.setupNet( evt.newValue )
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+          chrome.tabs.sendMessage(tabs[0].id, {action: "updateNetAndAccounts"}, function(response) {});
+        });
+      }else if(evt.key === 'currentAccount'){
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+          chrome.tabs.sendMessage(tabs[0].id, {action: "updateAccount"}, function(response) {});
+        });
       }
     }
   }
