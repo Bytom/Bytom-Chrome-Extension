@@ -83,7 +83,9 @@ transaction.advancedTransfer = function(guid, transaction, password, arrayData) 
       .signTransaction(guid, JSON.stringify(transaction), password)
       .then(ret => {
         let signatures = ret.signatures
-        signatures[0] = arrayData
+        if (arrayData && arrayData.length > 0) {
+          signatures[0] = arrayData
+        }
         bytom.transaction
           .submitPayment(guid, ret.raw_transaction, signatures)
           .then(res3 => {
