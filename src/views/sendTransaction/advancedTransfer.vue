@@ -171,9 +171,15 @@ export default {
                 onCancel: this.onCancel
             });
 
-            transaction.buildTransaction(this.account.guid,  this.transaction.input, this.transaction.output, this.transaction.fee * 100000000, this.transaction.confirmations).then(ret => {
-                return transaction.convertArgument(this.transaction.args)
-                    .then((arrayData) =>{
+            transaction.buildTransaction(this.account.guid,  this.transaction.input, this.transaction.output, this.transaction.fee * 100000000, this.transaction.confirmations).then(async (ret) => {
+
+              let arrayData
+              if(this.transaction.args){
+                arrayData =  await transaction.convertArgument(this.transaction.args)
+              }
+
+              // return transaction.convertArgument(this.transaction.args)
+              //       .then((arrayData) =>{
                         return transaction.advancedTransfer(this.account.guid, ret.result.data, this.password, arrayData)
                             .then((resp) => {
                                 loader.hide();
@@ -187,10 +193,10 @@ export default {
                             .catch(error => {
                                  throw error
                             });
-                     })
-                  .catch(error => {
-                    throw error
-                  });
+                  //    })
+                  // .catch(error => {
+                  //   throw error
+                  // });
             }).catch(error => {
                 loader.hide();
 
