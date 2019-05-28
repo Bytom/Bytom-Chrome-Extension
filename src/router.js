@@ -18,6 +18,14 @@ const routers = [
         }
       },
       {
+        path: '/signMessage',
+        name: 'sign-message',
+        meta: { title: '请求签名' },
+        component: resolve => {
+          require(['@/views/sendTransaction/signMessage.vue'], resolve)
+        }
+      },
+      {
         path: '/received',
         name: 'received',
         meta: { title: '接收' },

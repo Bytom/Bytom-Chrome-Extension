@@ -50,6 +50,9 @@ export default class Background {
       case MsgTypes.SEND:
         this.send(sendResponse, message.payload)
         break
+      case MsgTypes.SIGNMESSAGE:
+        this.signMessage(sendResponse, message.payload)
+        break
       case MsgTypes.REQUEST_CURRENT_ACCOUNT:
         this.requestCurrentAccount(sendResponse)
         break
@@ -62,13 +65,62 @@ export default class Background {
     }
   }
 
+  signMessage(sendResponse, payload) {
+    var promptURL = chrome.extension.getURL('pages/prompt.html')
+    var requestBody = payload
+    var queryString = new URLSearchParams(requestBody).toString()
+    console.log(promptURL, queryString)
+
+    if(requestBody.address === undefined){
+      sendResponse(Error.typeMissed('address'));
+      return false;
+    }
+    if(requestBody.message === undefined){
+      sendResponse(Error.typeMissed('message'));
+      return false;
+    }
+
+    chrome.windows.create(
+      {
+        url: `${promptURL}#signMessage?${queryString}`,
+        type: 'popup',
+        width: 360,
+        height: 623,
+        top: 0,
+        left: 0
+      },
+      (window) => {
+        chrome.runtime.onMessage.addListener(function(request, sender) {
+          if(sender.tab.windowId === window.id){
+            switch (request.method){
+              case 'sign-message':
+                if (request.action === 'success'){
+                  sendResponse(request.message);
+                  return true;
+                } else if (request.action === 'reject'){
+                  sendResponse(request.message);
+                  return false;
+                }
+            }
+          }
+        });
+
+        chrome.windows.onRemoved.addListener(function(windowId){
+          if(windowId === window.id) {
+            sendResponse(Error.promptClosedWithoutAction());
+            return false;
+          }
+        });
+      }
+    )
+  }
+
   transfer(sendResponse, payload) {
     var promptURL = chrome.extension.getURL('pages/prompt.html')
     var requestBody = payload
     requestBody.type = "popup"
     var queryString = new URLSearchParams(requestBody).toString()
     console.log(promptURL, queryString)
-    payload.asset
 
     if(requestBody.from === undefined){
       sendResponse(Error.typeMissed('from'));
@@ -140,10 +192,7 @@ export default class Background {
       sendResponse(Error.typeMissed('gas'));
       return false;
     }
-    if(payload.args === undefined){
-      sendResponse(Error.typeMissed('args'));
-      return false;
-    }
+
     chrome.windows.create(
       {
         url: `${promptURL}#advancedTransfer?${queryString}`,

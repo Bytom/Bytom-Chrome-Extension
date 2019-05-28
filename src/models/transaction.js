@@ -77,6 +77,11 @@ transaction.transfer = function(guid, transaction, password) {
   return retPromise;
 };
 
+
+transaction.signMessage = function(message, password, address) {
+  return bytom.keys.signMessage(message, password,address);
+};
+
 transaction.advancedTransfer = function(guid, transaction, password, arrayData) {
   let retPromise = new Promise((resolve, reject) => {
     bytom.transaction

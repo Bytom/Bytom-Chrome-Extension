@@ -5,6 +5,7 @@ export const UPDATE_BYTOM = 'updateBytom'
 export const AUTHENTICATE = 'authenticate'
 export const TRANSFER = 'transfer'
 export const ADVTRANSFER = 'advTransfer'
+export const SIGNMESSAGE = 'signMessage'
 export const SEND = 'send'
 
 

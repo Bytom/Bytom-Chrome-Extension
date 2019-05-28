@@ -104,7 +104,7 @@ module.exports = {
       chunks: ['options']
     }),
     page({
-      title: '转账',
+      title: 'Byone notification',
       name: 'prompt',
       chunks: ['prompt']
     }),

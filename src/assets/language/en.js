@@ -45,6 +45,12 @@ const en = {
     view:'View All',
     hide:'Hide All'
   },
+  signMessage:{
+    title:'Request Signature',
+    address: 'Sign Address',
+    message:'Sign Message',
+    confirmSignature:'Sign'
+  },
   receive:{
     address: 'Address',
     tips:'Tips: Click address to copy directly.'

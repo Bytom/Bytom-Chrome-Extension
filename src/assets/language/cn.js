@@ -45,6 +45,12 @@ const cn = {
     view:'展示全部',
     hide:'隐藏全部'
   },
+  signMessage:{
+    title:'请求签名',
+    address: '签名地址',
+    message:'签名消息',
+    confirmSignature:'确认签名'
+  },
   receive:{
     address: '地址',
     tips:'提示：点击地址进行拷贝。'

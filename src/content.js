@@ -79,6 +79,10 @@ class Content {
 
     if (!isReady) return
     if (!msg) return
+    if(!stream.synced && (!msg.hasOwnProperty('type') || msg.type !== 'sync')) {
+      stream.send(new Error('inject Error'), PairingTags.INJECTED);
+      return;
+    }
 
     let networkMessage = NetworkMessage.fromJson(msg)
     switch (msg.type) {
@@ -87,6 +91,7 @@ class Content {
         break
       case MsgTypes.TRANSFER:
       case MsgTypes.ADVTRANSFER:
+      case MsgTypes.SIGNMESSAGE:
       case MsgTypes.SEND:
         this.transfer(msg.type, networkMessage)
         break

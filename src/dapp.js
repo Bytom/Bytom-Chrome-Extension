@@ -57,8 +57,7 @@ const _send = (_type, _payload) => {
 
 export default class Bytomdapp {
   constructor(_stream, _options) {
-    currentVersion = parseFloat(_options.version)
-    // this.useIdentity(_options.identity)
+    // currentVersion = parseFloat(_options.version)
     stream = _stream
     resolvers = []
     this.default_account = _options.defaultAccount
@@ -74,5 +73,9 @@ export default class Bytomdapp {
 
   send_advanced_transaction(params) {
     return _send(MsgTypes.ADVTRANSFER, params)
+  }
+
+  sign_message(params) {
+    return _send(MsgTypes.SIGNMESSAGE, params)
   }
 }
