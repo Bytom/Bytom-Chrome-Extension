@@ -25,30 +25,41 @@ account.create = function(accountAlias, keyAlias, passwd, success, error) {
   return retPromise
 }
 
-const ASSET_BTM =
-  'ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
-
-account.balance = function(guid, dstAsset) {
-  if (dstAsset == undefined) {
-    dstAsset = ASSET_BTM
-  }
-
+account.balance = function(guid) {
   let retPromise = new Promise((resolve, reject) => {
     bytom.accounts
       .listAddressUseServer(guid)
       .then(addresses => {
-        let balance = 0
-        addresses.forEach(item => {
-          if (item.balances != null) {
-            item.balances.forEach(asset => {
-              if (asset.asset == dstAsset) {
-                balance += Number(asset.balance)
-              }
-            })
+        let balances = []
+        addresses.forEach(address => {
+          if (address.balances != null) {
+            balances = balances.concat(address.balances)
           }
         })
-        balance = dstAsset === ASSET_BTM? (balance / 100000000): balance
-        resolve(balance)
+        let obj = {};
+
+        balances.forEach(function (balance) {
+          if(obj.hasOwnProperty(balance.asset)) {
+            obj[balance.asset].balance = Number(obj[balance.asset].balance) + Number(balance.balance);
+          } else {
+            balance.balance =  Number(balance.balance)
+            obj[balance.asset] = balance;
+            delete obj[balance.asset]['total_received']
+            delete obj[balance.asset]['total_sent']
+            delete obj[balance.asset]['in_btc']
+            delete obj[balance.asset]['in_cny']
+            delete obj[balance.asset]['in_usd']
+          }
+        });
+
+
+        let res = [];
+
+        for(let prop in obj) {
+          res.push(obj[prop]);
+        }
+
+        resolve(res)
       })
       .catch(error => {
         reject(error)
@@ -63,8 +74,8 @@ account.list = function() {
       .listAccountUseServer()
       .then(accounts => {
         Promise.all(accounts.map(async (account) => {
-          const balance = await this.balance(account.guid)
-          account.balance = balance
+          const balances = await this.balance(account.guid)
+          account.balances = balances
         })).then(()=>{
           resolve(accounts)
         })

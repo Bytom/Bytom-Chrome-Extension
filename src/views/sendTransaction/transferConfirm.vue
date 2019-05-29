@@ -158,6 +158,7 @@ import transaction from "@/models/transaction";
 import modalPasswd from "@/components/modal-passwd";
 import getLang from "@/assets/language/sdk";
 import { LocalStream } from 'extension-streams';
+
 export default {
     components: {
         modalPasswd

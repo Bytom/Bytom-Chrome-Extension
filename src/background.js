@@ -233,11 +233,7 @@ export default class Background {
     delete(currentAccount['net'])
     currentAccount['accountId'] = currentAccount['guid']
     delete(currentAccount['guid'])
-    currentAccount['balance'] = {
-      'ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff' : {
-        amount: currentAccount['balance']
-      }
-    }
+    delete(currentAccount['balance'])
 
     sendResponse(currentAccount)
   }
@@ -254,11 +250,7 @@ export default class Background {
         delete(account['net'])
         account['accountId'] = account['guid']
         delete(account['guid'])
-        account['balance'] = {
-          'ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff': {
-            amount: account['balance']
-          }
-        }
+        delete(account['balance'])
       })
       sendResponse(accountList)
     })

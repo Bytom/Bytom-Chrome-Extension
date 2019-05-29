@@ -383,7 +383,9 @@ export default {
             })
         },
         refreshBalance: function (guid) {
-            account.balance(guid).then(balance => {
+            account.balance(guid).then(balances => {
+                const balanceObject = balances.filter(b => b.asset === BTM)[0]
+                const balance = balanceObject.balance/Math.pow(10,balanceObject.decimals)
                 this.currentAccount.balance = balance;
                 this.currentAccount = Object.assign({}, this.currentAccount);
             }).catch(error => {
@@ -399,7 +401,6 @@ export default {
                     }
 
                     const formattedTx = this.transactionsFormat(transactions);
-                    console.log("formatTx", formattedTx);
                     resolve(formattedTx)
                 }).catch(error => {
                     console.log(error);

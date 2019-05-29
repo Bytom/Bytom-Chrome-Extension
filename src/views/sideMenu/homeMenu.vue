@@ -89,7 +89,7 @@
                       </div>
                         <div class="account">
                             <div class="account-alias">{{account.alias}}</div>
-                            <div class="account-asset">{{account.balance}} BTM</div>
+                            <div class="account-asset">{{calculateBalance(account.balances)}} BTM</div>
                         </div>
                     </div>
                 </div>
@@ -127,7 +127,9 @@
 </template>
 
 <script>
-export default {
+  import { BTM } from "@/utils/constants";
+
+  export default {
     name: "",
     data() {
         return {
@@ -140,6 +142,11 @@ export default {
             this.selectedAccount = Object.assign({}, accountInfo);
             this.$router.push({ name: 'home', params: { selectedAccount: this.selectedAccount } })
         },
+        calculateBalance: function (balances) {
+          const balanceObject = balances.filter(b => b.asset === BTM)[0]
+          const balance = balanceObject.balance/Math.pow(10,balanceObject.decimals)
+          return balance
+        }
     }, mounted() {
         let params = this.$route.params;
 

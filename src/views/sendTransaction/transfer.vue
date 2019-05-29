@@ -118,7 +118,7 @@ import account from "@/models/account";
 import transaction from "@/models/transaction";
 import getLang from "@/assets/language/sdk";
 import Confirm from "./transferConfirm";
-import { LocalStream } from 'extension-streams';
+import { BTM } from "@/utils/constants";
 
 export default {
     components: {
@@ -183,7 +183,9 @@ export default {
                 }
             });
 
-            account.balance(newGuid).then(balance => {
+            account.balance(newGuid).then(balances => {
+              const balanceObject = balances.filter(b => b.asset === BTM)[0]
+              const balance = balanceObject.balance/Math.pow(10,balanceObject.decimals)
                 this.accountBalance = balance;
             }).catch(error => {
                 console.log(error);

@@ -108,7 +108,7 @@
       </div>
       <div>
         <div class="token-amount">
-          {{account.balance}}
+          {{accountBalance}}
           <span class="asset">BTM</span>
         </div>
         <div class="small color-grey">
@@ -157,6 +157,8 @@ import transaction from "@/models/transaction";
 import account from "@/models/account";
 import getLang from "@/assets/language/sdk";
 import { LocalStream } from 'extension-streams';
+import { BTM } from "@/utils/constants";
+
 
 export default {
     data() {
@@ -164,6 +166,7 @@ export default {
             full: false,
             accounts:{},
             account: {},
+            accountBalance: 0.00,
             address: '',
             message: '',
             password:''
@@ -212,6 +215,12 @@ export default {
         account.setupNet(localStorage.bytomNet);
         account.list().then(accounts => {
           const account = accounts.filter(a => a.address === this.address)[0]
+
+          const balances = account.balances
+          const balanceObject = balances.filter(b => b.asset === BTM)[0]
+          const balance = balanceObject.balance/Math.pow(10,balanceObject.decimals)
+          this.accountBalance = balance
+
           this.account = account
         });
       }
