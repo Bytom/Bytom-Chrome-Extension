@@ -217,8 +217,11 @@ export default {
           const account = accounts.filter(a => a.address === this.address)[0]
 
           const balances = account.balances
-          const balanceObject = balances.filter(b => b.asset === BTM)[0]
-          const balance = balanceObject.balance/Math.pow(10,balanceObject.decimals)
+          let balance = 0
+          if(balances.length > 0){
+            const balanceObject = balances.filter(b => b.asset === BTM)[0]
+            balance = balanceObject.balance/Math.pow(10,balanceObject.decimals)
+          }
           this.accountBalance = balance
 
           this.account = account

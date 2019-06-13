@@ -143,9 +143,12 @@
             this.$router.push({ name: 'home', params: { selectedAccount: this.selectedAccount } })
         },
         calculateBalance: function (balances) {
-          const balanceObject = balances.filter(b => b.asset === BTM)[0]
-          const balance = balanceObject.balance/Math.pow(10,balanceObject.decimals)
-          return balance
+          if( balances.length>0 ){
+            const balanceObject = balances.filter(b => b.asset === BTM)[0]
+            const balance = balanceObject.balance/Math.pow(10,balanceObject.decimals)
+            return balance
+          }
+          return 0.00;
         }
     }, mounted() {
         let params = this.$route.params;

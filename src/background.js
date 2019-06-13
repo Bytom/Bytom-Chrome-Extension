@@ -155,7 +155,7 @@ export default class Background {
             switch (request.method){
               case 'transfer':
                 if (request.action === 'success'){
-                  sendResponse(request.message.result.data);
+                  sendResponse(request.message);
                   return true;
                 } else if (request.action === 'reject'){
                   sendResponse(request.message);
@@ -208,7 +208,7 @@ export default class Background {
             switch (request.method){
               case 'advanced-transfer':
                 if (request.action === 'success'){
-                  sendResponse(request.message.result.data);
+                  sendResponse(request.message);
                   return true;
                 } else if (request.action === 'reject'){
                   sendResponse(request.message);

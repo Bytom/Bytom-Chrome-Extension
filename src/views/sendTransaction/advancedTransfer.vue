@@ -171,32 +171,26 @@ export default {
                 onCancel: this.onCancel
             });
 
-            transaction.buildTransaction(this.account.guid,  this.transaction.input, this.transaction.output, this.transaction.fee * 100000000, this.transaction.confirmations).then(async (ret) => {
+            transaction.buildTransaction(this.account.guid,  this.transaction.input, this.transaction.output, this.transaction.fee * 100000000, this.transaction.confirmations).then(async (result) => {
 
               let arrayData
               if(this.transaction.args){
                 arrayData =  await transaction.convertArgument(this.transaction.args)
               }
 
-              // return transaction.convertArgument(this.transaction.args)
-              //       .then((arrayData) =>{
-                        return transaction.advancedTransfer(this.account.guid, ret.result.data, this.password, arrayData)
-                            .then((resp) => {
-                                loader.hide();
-                                LocalStream.send({method:'advanced-transfer',action:'success', message:resp});
-                                this.$dialog.show({
-                                    type: 'success',
-                                    body: this.$t("transfer.success")
-                                });
-                              window.close();
-                            })
-                            .catch(error => {
-                                 throw error
-                            });
-                  //    })
-                  // .catch(error => {
-                  //   throw error
-                  // });
+              return transaction.advancedTransfer(this.account.guid, result, this.password, arrayData)
+                  .then((resp) => {
+                      loader.hide();
+                      LocalStream.send({method:'advanced-transfer',action:'success', message:resp});
+                      this.$dialog.show({
+                          type: 'success',
+                          body: this.$t("transfer.success")
+                      });
+                    window.close();
+                  })
+                  .catch(error => {
+                       throw error
+                  });
             }).catch(error => {
                 loader.hide();
 

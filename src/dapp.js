@@ -62,7 +62,6 @@ export default class Bytomdapp {
     resolvers = []
     this.default_account = _options.defaultAccount
     this.net = _options.net
-    this.accounts = _options.accountList
 
     _subscribe()
   }

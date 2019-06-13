@@ -322,13 +322,11 @@ export default {
             return address.short(this.currentAccount.address)
         },
         accountBalance: function () {
-            return this.currentAccount.balance != 0 ? this.currentAccount.balance : '0.00'
+            return (this.currentAccount.balance != null && this.currentAccount.balance != 0) ? this.currentAccount.balance : '0.00'
         }
     },
     methods: {
         setupRefreshTimer() {
-            // todo refresh all accounts
-
             setInterval(() => {
                 this.refreshBalance(this.currentAccount.guid)
             }, 10000)
@@ -371,7 +369,7 @@ export default {
             }
         },
         refreshAccounts: function () {
-            account.list().then(accounts => {
+          account.list().then(accounts => {
                 this.accounts = accounts;
                 if (accounts.length == 0) {
                     return;
@@ -384,8 +382,11 @@ export default {
         },
         refreshBalance: function (guid) {
             account.balance(guid).then(balances => {
-                const balanceObject = balances.filter(b => b.asset === BTM)[0]
-                const balance = balanceObject.balance/Math.pow(10,balanceObject.decimals)
+                let balance = 0
+                if(balances.length >0 ){
+                  const balanceObject = balances.filter(b => b.asset === BTM)[0]
+                  balance = balanceObject.balance/Math.pow(10,balanceObject.decimals)
+                }
                 this.currentAccount.balance = balance;
                 this.currentAccount = Object.assign({}, this.currentAccount);
             }).catch(error => {
@@ -394,8 +395,7 @@ export default {
         },
         refreshTransactions: function (guid, address, start, limit) {
             return new Promise((resolve, reject) => {
-                transaction.list(guid, address, start, limit).then(ret => {
-                    let transactions = ret.result.data;
+                transaction.list(guid, address, start, limit).then(transactions => {
                     if (transactions == null) {
                         return;
                     }

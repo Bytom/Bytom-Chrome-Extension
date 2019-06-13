@@ -184,8 +184,11 @@ export default {
             });
 
             account.balance(newGuid).then(balances => {
-              const balanceObject = balances.filter(b => b.asset === BTM)[0]
-              const balance = balanceObject.balance/Math.pow(10,balanceObject.decimals)
+              let balance = 0.00
+              if(balances.length >0 ) {
+                const balanceObject = balances.filter(b => b.asset === BTM)[0]
+                balance = balanceObject.balance / Math.pow(10, balanceObject.decimals)
+              }
                 this.accountBalance = balance;
             }).catch(error => {
                 console.log(error);
@@ -222,12 +225,12 @@ export default {
                 canCancel: true,
                 onCancel: this.onCancel
             });
-            transaction.build(this.account.guid, this.transaction.to, this.transaction.asset, this.transaction.amount*100000000, this.transaction.fee, this.transaction.confirmations).then(ret => {
+            transaction.build(this.account.guid, this.transaction.to, this.transaction.asset, this.transaction.amount*100000000, this.transaction.fee, this.transaction.confirmations).then(result => {
                 loader.hide();
                 if(!this.transaction.fee){
-                    this.transaction.fee = Number(ret.result.data.fee / 100000000);
+                    this.transaction.fee = Number(result.fee / 100000000);
                 }
-                this.$router.push({ name: 'transfer-confirm', params: { account: this.account, transaction: this.transaction, rawData: ret.result.data, type: this.$route.query.type } })
+                this.$router.push({ name: 'transfer-confirm', params: { account: this.account, transaction: this.transaction, rawData: result, type: this.$route.query.type } })
             }).catch(error => {
                 loader.hide();
                 this.$dialog.show({
