@@ -169,7 +169,7 @@ export default {
         },
         "transaction.amount": function (newAmount) {
             transaction.asset(this.transaction.asset).then(ret => {
-                this.transaction.cost = Number(ret.result.data.cny_price * newAmount).toFixed(2);
+                this.transaction.cost = Number(ret.cny_price * newAmount).toFixed(2);
             });
         },
         account: function (newAccount) {

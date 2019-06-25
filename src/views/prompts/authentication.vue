@@ -118,7 +118,6 @@ export default {
       }
     }, mounted() {
         this.prompt = window.data || apis.extension.getBackgroundPage().notification || null;
-        console.log(this.prompt)
       }
 };
 </script>

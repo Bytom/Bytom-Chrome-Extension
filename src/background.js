@@ -87,53 +87,18 @@ export default class Background {
   }
 
   signMessage(sendResponse, payload) {
-    var promptURL = chrome.extension.getURL('pages/prompt.html')
-    var requestBody = payload
-    var queryString = new URLSearchParams(requestBody).toString()
-    console.log(promptURL, queryString)
-
-    if(requestBody.address === undefined){
+    if(payload.address === undefined){
       sendResponse(Error.typeMissed('address'));
       return false;
     }
-    if(requestBody.message === undefined){
+    if(payload.message === undefined){
       sendResponse(Error.typeMissed('message'));
       return false;
     }
 
-    chrome.windows.create(
-      {
-        url: `${promptURL}#signMessage?${queryString}`,
-        type: 'popup',
-        width: 360,
-        height: 623,
-        top: 0,
-        left: 0
-      },
-      (window) => {
-        chrome.runtime.onMessage.addListener(function(request, sender) {
-          if(sender.tab.windowId === window.id){
-            switch (request.method){
-              case 'sign-message':
-                if (request.action === 'success'){
-                  sendResponse(request.message);
-                  return true;
-                } else if (request.action === 'reject'){
-                  sendResponse(request.message);
-                  return false;
-                }
-            }
-          }
-        });
-
-        // chrome.windows.onRemoved.addListener(function(windowId){
-        //   if(windowId === window.id) {
-        //     sendResponse(Error.promptClosedWithoutAction());
-        //     return false;
-        //   }
-        // });
-      }
-    )
+    NotificationService.open(new Prompt(PromptTypes.REQUEST_SIGN, '', payload ,approved => {
+     sendResponse(approved);
+    }));
   }
 
   transfer(sendResponse, payload) {
@@ -197,9 +162,6 @@ export default class Background {
   }
 
   advancedTransfer(sendResponse, payload) {
-    var promptURL = chrome.extension.getURL('pages/prompt.html')
-    var queryString = 'object='+JSON.stringify(payload)
-    console.log(promptURL, queryString)
 
     if(payload.input === undefined){
       sendResponse(Error.typeMissed('input'));
@@ -214,38 +176,10 @@ export default class Background {
       return false;
     }
 
-    chrome.windows.create(
-      {
-        url: `${promptURL}#advancedTransfer?${queryString}`,
-        type: 'popup',
-        width: 360,
-        height: 623,
-        top: 0,
-        left: 0
-      },
-      (window) => {
-        chrome.runtime.onMessage.addListener(function(request, sender) {
-          if(sender.tab.windowId === window.id){
-            switch (request.method){
-              case 'advanced-transfer':
-                if (request.action === 'success'){
-                  sendResponse(request.message);
-                  return true;
-                } else if (request.action === 'reject'){
-                  sendResponse(request.message);
-                  return false;
-                }
-            }
-          }
-        });
-        chrome.windows.onRemoved.addListener(function(windowId){
-          if(windowId === window.id) {
-            sendResponse(Error.promptClosedWithoutAction());
-            return false;
-          }
-        });
-      }
-    )
+    NotificationService.open(new Prompt(PromptTypes.REQUEST_ADVANCED_TRANSFER, '', payload ,approved => {
+      sendResponse(approved);
+    }));
+
   }
 
   requestCurrentAccount(sendResponse, payload){
@@ -326,7 +260,7 @@ export default class Background {
       if(bytom.settings.domains.find(_domain => _domain === domain)) {
         sendResponse(currentAccount);
       } else{
-        NotificationService.open(new Prompt(PromptTypes.REQUEST_AUTH, payload.domain, approved => {
+        NotificationService.open(new Prompt(PromptTypes.REQUEST_AUTH, payload.domain, {}, approved => {
           if(approved === false || approved.hasOwnProperty('isError')) sendResponse(approved);
           else {
             bytom.settings.domains.unshift(domain);

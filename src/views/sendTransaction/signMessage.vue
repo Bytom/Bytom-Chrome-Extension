@@ -156,9 +156,9 @@
 import transaction from "@/models/transaction";
 import account from "@/models/account";
 import getLang from "@/assets/language/sdk";
-import { LocalStream } from 'extension-streams';
 import { BTM } from "@/utils/constants";
-
+import {apis} from '@/utils/BrowserApis';
+import NotificationService from '../../services/NotificationService'
 
 export default {
     data() {
@@ -169,7 +169,8 @@ export default {
             accountBalance: 0.00,
             address: '',
             message: '',
-            password:''
+            password:'',
+            prompt:''
         };
     },
     computed: {
@@ -178,7 +179,7 @@ export default {
     },
     methods: {
         close: function () {
-            window.close();
+          NotificationService.close();
         },
         sign: function () {
             let loader = this.$loading.show({
@@ -189,12 +190,12 @@ export default {
 
             transaction.signMessage(this.message, this.password, this.address).then((resp) => {
                 loader.hide();
-                LocalStream.send({method:'sign-message',action:'success', message:resp});
+                this.prompt.responder(resp);
                 this.$dialog.show({
                     type: 'success',
                     body: this.$t("transfer.success")
                 });
-                window.close();
+              NotificationService.close();
             }).catch(error => {
                 loader.hide();
 
@@ -204,7 +205,9 @@ export default {
             });
         }
     }, mounted() {
-        const object = this.$route.query
+        this.prompt = window.data || apis.extension.getBackgroundPage().notification || null;
+        const object = this.prompt.data
+
         if(object.address !== undefined){
            this.address = object.address
         }

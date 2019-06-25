@@ -137,6 +137,8 @@
 import transaction from "@/models/transaction";
 import getLang from "@/assets/language/sdk";
 import { LocalStream } from 'extension-streams';
+import {apis} from '@/utils/BrowserApis';
+import NotificationService from '../../services/NotificationService'
 
 export default {
     data() {
@@ -152,7 +154,8 @@ export default {
                 confirmations:1,
                 amounts: []
             },
-            password:''
+            password:'',
+            prompt:''
         };
     },
     computed: {
@@ -161,7 +164,7 @@ export default {
     },
     methods: {
         close: function () {
-            window.close();
+            NotificationService.close();
         },
         transfer: function () {
             let loader = this.$loading.show({
@@ -181,12 +184,12 @@ export default {
               return transaction.advancedTransfer(this.account.guid, result, this.password, arrayData)
                   .then((resp) => {
                       loader.hide();
-                      LocalStream.send({method:'advanced-transfer',action:'success', message:resp});
+                      this.prompt.responder(resp);
                       this.$dialog.show({
                           type: 'success',
                           body: this.$t("transfer.success")
                       });
-                    window.close();
+                    NotificationService.close();
                   })
                   .catch(error => {
                        throw error
@@ -202,8 +205,10 @@ export default {
     }, mounted() {
           this.account = JSON.parse(localStorage.currentAccount);
 
-          if(this.$route.query.object !== undefined){
-              const inout = JSON.parse(this.$route.query.object)
+          this.prompt = window.data || apis.extension.getBackgroundPage().notification || null;
+
+          if(this.prompt.data !== undefined){
+              const inout = this.prompt.data
               if(inout.input !== undefined){
                  this.transaction.input = inout.input
               }

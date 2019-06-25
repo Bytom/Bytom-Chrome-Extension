@@ -1,10 +1,9 @@
 export default class Prompt {
 
-    constructor(_type = '', _domain = '', _responder = null){
+    constructor(_type = '', _domain = '', _data={},  _responder = null){
         this.type = _type;
         this.domain = _domain;
-        // this.network = _network;
-        // this.data = _data;
+        this.data = _data;
         this.responder = _responder;
     }
 

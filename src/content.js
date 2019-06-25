@@ -59,13 +59,8 @@ class Content {
           break
         case 'updateNetAndAccounts':
           const net = await this.getDefaultNetwork();
-          const accountList = await this.getAccountList();
           stream.send(
             NetworkMessage.payload(MsgTypes.UPDATE_BYTOM, {type:'net', value: net}),
-            EventNames.INJECT
-          )
-          stream.send(
-            NetworkMessage.payload(MsgTypes.UPDATE_BYTOM, {type:'accounts', value: accountList}),
             EventNames.INJECT
           )
           break
