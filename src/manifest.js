@@ -1,8 +1,8 @@
 module.exports = {
   manifest_version: 2,
-  name: 'Bystore',
-  description: 'Bytom Wallet for Chrome.',
-  version: '1.0.0.1',
+  name: 'Byone',
+  description: 'Bytom Wallet Chrome extension, Bystore officially changed to Byone.',
+  version: '2.0.0.0',
   author: 'Bytom frontend, zhitinglin',
   web_accessible_resources: ['js/inject.js', 'wasm/main.wasm'],
   browser_action: {
@@ -17,6 +17,7 @@ module.exports = {
   permissions: [
     '*://*/',
     'storage',
+    "unlimitedStorage",
     'contextMenus',
     'clipboardWrite',
     'clipboardRead',
