@@ -1,10 +1,16 @@
 import { LocalStream } from 'extension-streams'
 import InternalMessage from '@/messages/internal'
 import * as MsgTypes from './messages/types'
+import NotificationService from './services/NotificationService'
+import StorageService from './services/StorageService'
+import Prompt from './prompts/Prompt';
+import * as PromptTypes from './prompts/PromptTypes'
 
 import Error from './utils/errors/Error'
 import accountAction from "@/models/account";
 import bytom from "@/models/bytom";
+
+let prompt = null;
 
 export default class Background {
   constructor() {
@@ -54,15 +60,30 @@ export default class Background {
         this.signMessage(sendResponse, message.payload)
         break
       case MsgTypes.REQUEST_CURRENT_ACCOUNT:
-        this.requestCurrentAccount(sendResponse)
+        this.requestCurrentAccount(sendResponse, message.payload)
         break
       case MsgTypes.REQUEST_CURRENT_NETWORK:
         this.requestCurrentNetwork(sendResponse)
         break
-      case MsgTypes.REQUEST_ACCOUNT_LIST:
-        this.requestAccountList(sendResponse)
+      case MsgTypes.ENABLE:
+        Background.authenticate(sendResponse, message.payload)
         break
+      case MsgTypes.SET_PROMPT:
+        Background.setPrompt(sendResponse, message.payload);
+        break;
+      case MsgTypes.GET_PROMPT:
+        Background.getPrompt(sendResponse);
+        break;
     }
+  }
+
+  static setPrompt(sendResponse, notification){
+    prompt = notification;
+    sendResponse(true);
+  }
+
+  static getPrompt(sendResponse){
+    sendResponse(prompt);
   }
 
   signMessage(sendResponse, payload) {
@@ -105,12 +126,12 @@ export default class Background {
           }
         });
 
-        chrome.windows.onRemoved.addListener(function(windowId){
-          if(windowId === window.id) {
-            sendResponse(Error.promptClosedWithoutAction());
-            return false;
-          }
-        });
+        // chrome.windows.onRemoved.addListener(function(windowId){
+        //   if(windowId === window.id) {
+        //     sendResponse(Error.promptClosedWithoutAction());
+        //     return false;
+        //   }
+        // });
       }
     )
   }
@@ -227,33 +248,28 @@ export default class Background {
     )
   }
 
-  requestCurrentAccount(sendResponse){
-    const currentAccount = JSON.parse(localStorage.currentAccount)
-    delete(currentAccount['label'])
-    delete(currentAccount['net'])
-    currentAccount['accountId'] = currentAccount['guid']
-    delete(currentAccount['guid'])
-    delete(currentAccount['balance'])
+  requestCurrentAccount(sendResponse, payload){
+    Background.load(bytom => {
+      const domain = payload.domain;
+      if(bytom.settings.domains.find(_domain => _domain === domain)) {
+        const currentAccount = JSON.parse(localStorage.currentAccount)
+        delete(currentAccount['label'])
+        delete(currentAccount['net'])
+        currentAccount['accountId'] = currentAccount['guid']
+        delete(currentAccount['guid'])
+        delete(currentAccount['balance'])
 
-    sendResponse(currentAccount)
+        sendResponse(currentAccount);
+      } else{
+        sendResponse(null);
+        return false;
+      }
+    })
+
   }
 
   requestCurrentNetwork(sendResponse){
     sendResponse(localStorage.bytomNet)
-  }
-
-  requestAccountList(sendResponse){
-    accountAction.list().then(resp=>{
-      const accountList = resp
-      accountList.forEach(function(account) {
-        delete(account['label'])
-        delete(account['net'])
-        account['accountId'] = account['guid']
-        delete(account['guid'])
-        delete(account['balance'])
-      })
-      sendResponse(accountList)
-    })
   }
 
   send(sendResponse, payload) {
@@ -273,6 +289,59 @@ export default class Background {
       }
     }
   }
+
+  /***
+   * Returns the saved instance of Bytom from the storage
+   * @param sendResponse - Delegating response handler
+   * @returns {Bytom}
+   */
+  static load(sendResponse){
+    StorageService.get().then(bytom => {
+      sendResponse(bytom)
+    })
+  }
+
+  /***
+   * Updates the Scatter instance inside persistent storage
+   * @param sendResponse - Delegating response handler
+   * @param bytom - The updated cleartext Scatter instance
+   * @returns {boolean}
+   */
+  static update(sendResponse, bytom){
+    StorageService.save(bytom).then(saved => {
+      sendResponse(bytom)
+    })
+  }
+
+  static authenticate(sendResponse, payload){
+    Background.load(bytom => {
+      const domain = payload.domain;
+      const currentAccount = JSON.parse(localStorage.currentAccount)
+      delete(currentAccount['label'])
+      delete(currentAccount['net'])
+      currentAccount['accountId'] = currentAccount['guid']
+      delete(currentAccount['guid'])
+      delete(currentAccount['balance'])
+
+      if(bytom.settings.domains.find(_domain => _domain === domain)) {
+        sendResponse(currentAccount);
+      } else{
+        NotificationService.open(new Prompt(PromptTypes.REQUEST_AUTH, payload.domain, approved => {
+          if(approved === false || approved.hasOwnProperty('isError')) sendResponse(approved);
+          else {
+            bytom.settings.domains.unshift(domain);
+            if(approved === true){
+              this.update(() => sendResponse(currentAccount), bytom);
+            }else{
+              this.update(() => sendResponse(approved), bytom);
+            }
+          }
+        }));
+      }
+    })
+  }
+
+
 }
 
 new Background()

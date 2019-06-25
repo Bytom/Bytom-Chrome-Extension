@@ -51,6 +51,13 @@ const cn = {
     message:'签名消息',
     confirmSignature:'确认签名'
   },
+  enable:{
+    title:'请求授权',
+    domain: '域名',
+    message: '请求获取你的钱包地址，是否同意？',
+    cancel:'取消',
+    confirm:'确认授权'
+  },
   receive:{
     address: '地址',
     tips:'提示：点击地址进行拷贝。'

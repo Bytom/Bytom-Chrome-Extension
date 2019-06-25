@@ -51,6 +51,13 @@ const en = {
     message:'Sign Message',
     confirmSignature:'Sign'
   },
+  enable:{
+    title:'Connect Request',
+    domain: 'Domain',
+    message: 'would like to connect your account',
+    cancel:'Cancel',
+    confirm:'Connect'
+  },
   receive:{
     address: 'Address',
     tips:'Tips: Click address to copy directly.'

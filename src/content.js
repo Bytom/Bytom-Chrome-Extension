@@ -4,6 +4,8 @@ import NetworkMessage from '@/messages/network'
 import InternalMessage from '@/messages/internal'
 import * as MsgTypes from './messages/types'
 import * as EventNames from '@/messages/event'
+import {strippedHost} from '@/utils/GenericTools'
+
 
 let stream = new WeakMap()
 let INJECTION_SCRIPT_FILENAME = 'js/inject.js'
@@ -31,11 +33,10 @@ class Content {
     stream.onSync(async () => {
       const defaultAccount = await this.getDefaultAccount();
       const net = await this.getDefaultNetwork();
-      const accountList = await this.getAccountList();
 
       // Pushing an instance of Bytomdapp to the web application
       stream.send(
-        NetworkMessage.payload(MsgTypes.PUSH_BYTOM, {defaultAccount, net, accountList}),
+        NetworkMessage.payload(MsgTypes.PUSH_BYTOM, {defaultAccount, net}),
         EventNames.INJECT
       )
 
@@ -95,6 +96,9 @@ class Content {
       case MsgTypes.SEND:
         this.transfer(msg.type, networkMessage)
         break
+      case MsgTypes.ENABLE:
+        this.enable(msg.type, networkMessage)
+        break
       default:
         stream.send(networkMessage.error('errtest'), EventNames.INJECT)
         break
@@ -104,17 +108,12 @@ class Content {
   getVersion() {}
 
   getDefaultAccount(){
-    return InternalMessage.signal(MsgTypes.REQUEST_CURRENT_ACCOUNT)
+    return InternalMessage.payload(MsgTypes.REQUEST_CURRENT_ACCOUNT,{domain:strippedHost()})
       .send()
   }
 
   getDefaultNetwork(){
     return InternalMessage.signal(MsgTypes.REQUEST_CURRENT_NETWORK)
-      .send()
-  }
-
-  getAccountList(){
-    return InternalMessage.signal(MsgTypes.REQUEST_ACCOUNT_LIST)
       .send()
   }
 
@@ -142,6 +141,15 @@ class Content {
       .send()
       .then(res => this.respond(message, res))
   }
+
+  enable(type, networkMessage) {
+    networkMessage.payload ={
+      domain: strippedHost()
+    }
+
+    this.transfer(type, networkMessage)
+  }
+
 }
 
 const content = new Content()

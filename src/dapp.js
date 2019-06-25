@@ -66,6 +66,14 @@ export default class Bytomdapp {
     _subscribe()
   }
 
+  enable(){
+    return _send(MsgTypes.ENABLE)
+      .then(async default_account =>{
+        this.default_account = default_account;
+        return default_account;
+      })
+  }
+
   send_transaction(params) {
     return _send(MsgTypes.TRANSFER, params)
   }

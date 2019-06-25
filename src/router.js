@@ -42,6 +42,14 @@ const routers = [
         }
       },
       {
+        path: '/enable',
+        name: 'enable',
+        meta: { title: '授权' },
+        component: resolve => {
+          require(['@/views/prompts/authentication.vue'], resolve)
+        }
+      },
+      {
         path: '/transfer/info',
         name: 'transfer-info',
         meta: { title: '交易详情' },
