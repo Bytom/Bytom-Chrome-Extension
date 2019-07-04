@@ -1,5 +1,5 @@
-# Bystore Chrome Extension
-Bystore Chrome Extension wallet is a UTXO base Wallet. The extension in charge of the all the Key and Account Management.
+# Byone Chrome Extension
+Byone Chrome Extension wallet is a UTXO base Wallet. The extension in charge of the all the Key and Account Management.
 
 ## Building locally
 

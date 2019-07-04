@@ -118,7 +118,7 @@
         <a href="http://github.com/bycoinio/Bystore" target="_blank"><i class="iconfont icon-github"></i></a>
       </div>
       <div class="header">
-        <h1>Bystore</h1>
+        <h1>Byone</h1>
         <p>{{ $t('home.title')}}</p>
 
       </div>

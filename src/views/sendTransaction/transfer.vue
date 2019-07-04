@@ -276,9 +276,10 @@ export default {
                 ele.label = ele.alias
                 ele.value = ele.guid
             });
-
-            if (Object.keys(this.account).length == 0) {
+            if (!this.guid) {
                 this.account = accounts[0]
+            }else{
+              this.account = this.accounts.filter(e => e.guid === this.guid)[0]
             }
         });
     }

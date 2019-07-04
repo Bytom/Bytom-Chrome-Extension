@@ -123,12 +123,7 @@ module.exports = {
     new WebpackAutoInject({
       PACKAGE_JSON_PATH: './package.json',
       components: {
-        AutoIncreaseVersion: true
-      },
-      componentsOptions: {
-        AutoIncreaseVersion: {
-          runInWatchMode: false // it will increase version with every single build!
-        }
+        AutoIncreaseVersion: false
       }
     })
   ],
