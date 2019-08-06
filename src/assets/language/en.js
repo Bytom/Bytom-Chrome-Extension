@@ -63,11 +63,13 @@ const en = {
     tips:'Tips: Click address to copy directly.'
   },
   main: {
-    mainNet: 'Bytom Mainnet',
-    testNet: 'Bytom Testnet',
-    soloNet: 'Bytom Solonet',
+    mainNet: 'Mainnet',
+    testNet: 'Testnet',
+    vaporTestnet: 'Vapor Testnet',
+    soloNet: 'Solonet',
     mainNetShort: 'Mainnet',
     testNetShort: 'Testnet',
+    vaporTestNetShort: 'Vapor Testnet',
     soloNetShort: 'Solonet',
     copy: 'Click to copy',
     send: 'Send',
@@ -77,6 +79,7 @@ const en = {
     create: 'Create account',
     noRecord:"No transaction records found.",
     unconfirmed :'Unconfirmed',
+    network:'Network'
   },
   transactionDetail: {
     title: 'Transaction Detail',

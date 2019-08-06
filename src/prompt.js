@@ -7,6 +7,8 @@ import vuescroll from 'vuescroll/dist/vuescroll-native'
 import 'vue-loading-overlay/dist/vue-loading.css'
 import 'vuescroll/dist/vuescroll.css'
 
+import {store} from './store/store'
+import * as Actions from './store/constants'
 import Routers from './router'
 import ViewBase from '@/views/viewBase'
 import Dialog from '@/components/dialog'
@@ -43,9 +45,13 @@ const RouterConfig = {
 }
 const router = new VueRouter(RouterConfig)
 
-new Vue({
-  el: '#app',
-  i18n: i18n,
-  router: router,
-  render: h => h(ViewBase)
-})
+store.dispatch(Actions.LOAD_BYTOM).then(() => {
+  new Vue({
+    el: '#app',
+    i18n: i18n,
+    router: router,
+    store,
+    render: h => h(ViewBase)
+  })
+});
+

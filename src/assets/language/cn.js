@@ -63,12 +63,14 @@ const cn = {
     tips:'提示：点击地址进行拷贝。'
   },
   main: {
-    mainNet: 'Bytom主网络',
-    testNet: 'Bytom测试网络',
-    soloNet: 'Bytom单机网络',
+    mainNet: '主网络',
+    testNet: '测试网络',
+    soloNet: '单机网络',
+    vaporTestnet: 'Vapor测试网络',
     mainNetShort: 'Bytom主网络',
     testNetShort: 'Bytom测试网络',
     soloNetShort: 'Bytom单机网络',
+    vaporTestnetShort: 'Vapor测试网络',
     copy: '点击复制',
     send: '发送',
     receive: '接收',
@@ -76,7 +78,8 @@ const cn = {
     noAccount: '当前网络无账户信息',
     create: '创建账户',
     unconfirmed :'未确认交易',
-    noRecord:"没有交易记录"
+    noRecord:"没有交易记录",
+    network:'网络'
   },
   transactionDetail: {
     title: '交易详情',

@@ -173,12 +173,14 @@
                         <i class="iconfont icon-menu"></i>
                     </a>
                 </div>
-                <div class="topbar-middle bg-secondary">
-                    <select v-model="network" @change="networkToggle">
-                        <option value="mainnet">{{ $t('main.mainNet') }}</option>
-                        <option value="testnet">{{ $t('main.testNet') }}</option>
-                    </select>
-                </div>
+                <!--<div class="topbar-middle bg-secondary">-->
+                    <!--<select v-model="network" @change="networkToggle">-->
+                        <!--<option value="mainnet">{{ $t('main.mainNet') }}</option>-->
+                        <!--<option value="testnet">{{ $t('main.testNet') }}</option>-->
+                        <!--<option value="solonet">{{ $t('main.soloNet') }}</option>-->
+                        <!--<option value="vaporTestnet">{{ $t('main.vaporTestnet') }}</option>-->
+                    <!--</select>-->
+                <!--</div>-->
             </div>
             <div class="content">
                 <div v-if="currentAccount.address!=undefined" class="amount color-white">
@@ -260,6 +262,7 @@ import address from "@/utils/address";
 import account from "@/models/account";
 import transaction from "@/models/transaction";
 import { BTM } from "@/utils/constants";
+import { mapGetters, mapState } from 'vuex'
 
 const EnterActive = 'animated faster fadeInLeft';
 const LeaveActive = 'animated faster fadeOutLeft';
@@ -267,9 +270,6 @@ export default {
     name: "",
     data() {
         return {
-            network: "mainnet",
-            accounts: [],
-            currentAccount: {},
             transactions: [],
             maskShow: false,
             start: 0,
@@ -302,28 +302,35 @@ export default {
         },
         currentAccount(newVal, oldVal) {
             if (newVal.guid == undefined){
-              localStorage.currentAccount = {}
               return;
             }
-            localStorage.currentAccount = JSON.stringify(newVal);
 
             this.refreshTransactions(newVal.guid, newVal.address).then(transactions => {
                 this.transactions = transactions
             });
         },
-        'currentAccount.guid'(guid) {
-            if (guid == undefined) return;
-
-            this.refreshBalance(guid);
-        }
     },
     computed: {
         shortAddress: function () {
             return address.short(this.currentAccount.address)
         },
         accountBalance: function () {
-            return (this.currentAccount.balance != null && this.currentAccount.balance != 0) ? this.currentAccount.balance : '0.00'
-        }
+            let balance
+            const balances = this.currentAccount.balances
+            if(balances.length >0 ){
+                const balanceObject = balances.filter(b => b.asset === BTM)[0]
+                balance = balanceObject.balance/Math.pow(10,balanceObject.decimals)
+            }
+            return (balance != null && balance != 0) ? balance : '0.00'
+        },
+        ...mapState([
+          'bytom'
+        ]),
+        ...mapGetters([
+          'currentAccount',
+          'accountList',
+          'net'
+        ])
     },
     methods: {
         setupRefreshTimer() {
@@ -332,8 +339,7 @@ export default {
             }, 10000)
         },
         setupNetwork() {
-            this.network = localStorage.bytomNet;
-            account.setupNet(this.network);
+            account.setupNet(this.net);
         },
         networkToggle: function (val) {
             localStorage.bytomNet = this.network;
@@ -342,13 +348,13 @@ export default {
             this.refreshAccounts();
         },
         showQrcode: function () {
-          this.$router.push({ name: 'received', params: { address: this.currentAccount.address } })
+          this.$router.push('received')
         },
         openMenu: function () {
-            this.$router.push({ name: 'menu', params: { accounts: this.accounts, selected: this.currentAccount } })
+            this.$router.push('menu')
         },
         transferOpen: function () {
-            this.$router.push({ name: 'transfer', params: { account: this.currentAccount } })
+            this.$router.push('transfer')
         },
         handleScroll(vertical, horizontal, nativeEvent) {
             if (vertical.process == 0) {
@@ -368,28 +374,9 @@ export default {
                 });
             }
         },
-        refreshAccounts: function () {
-          account.list().then(accounts => {
-                this.accounts = accounts;
-                if (accounts.length == 0) {
-                    return;
-                }
-
-                if (this.currentAccount.guid == undefined) {
-                    this.currentAccount = accounts[0];
-                }
-            })
-        },
         refreshBalance: function (guid) {
-            account.balance(guid).then(balances => {
-                let balance = 0
-                if(balances.length >0 ){
-                  const balanceObject = balances.filter(b => b.asset === BTM)[0]
-                  balance = balanceObject.balance/Math.pow(10,balanceObject.decimals)
-                }
-                this.currentAccount.balance = balance;
-                this.currentAccount = Object.assign({}, this.currentAccount);
-            }).catch(error => {
+            account.balance(guid)
+              .catch(error => {
                 console.log(error);
             });
         },
@@ -447,12 +434,11 @@ export default {
         },
     },
     mounted() {
-        if(localStorage.currentAccount !== undefined){
-          this.currentAccount = JSON.parse(localStorage.currentAccount);
-        }
         this.setupNetwork();
-        this.refreshAccounts();
         this.setupRefreshTimer();
-    }
-};
+        this.refreshTransactions(this.currentAccount.guid, this.currentAccount.address).then(transactions => {
+          this.transactions = transactions
+        });
+    },
+  };
 </script>

@@ -192,9 +192,12 @@
 import account from "../../models/account";
 import { getLanguage } from '@/assets/language'
 import getLang from "../../assets/language/sdk";
+import { mapActions, mapGetters, mapState } from 'vuex'
+
 let mainNet = null;
 let testNet = null;
 let soloNet = null;
+let vaporTestnet = null;
 export default {
     name: "",
     data() {
@@ -231,7 +234,14 @@ export default {
                 return "form-item-content content";
             }
             return "form-item-label form-item-label-cn";
-        }
+        },
+      ...mapState([
+        'bytom'
+      ]),
+      ...mapGetters([
+        'net',
+        'language'
+      ])
     },
     props: {
         i18n: {
@@ -323,19 +333,24 @@ export default {
     mounted() {
         mainNet = { label: this.$t('main.mainNet'), value: "mainnet" };
         testNet = { label: this.$t('main.testNet'), value: "testnet" };
-        this.nets = [mainNet, testNet];
-        if (localStorage.bytomNet != undefined) {
-            if (localStorage.bytomNet == "mainnet") {
+        soloNet = { label: this.$t('main.soloNet'), value: "solonet" };
+        vaporTestnet = { label: this.$t('main.vaporTestnet'), value: "vaporTestnet" };
+        this.nets = [mainNet, testNet,vaporTestnet];
+        if (this.net != undefined) {
+            if (this.net == "mainnet") {
                 this.selected = mainNet;
-            } else if (localStorage.bytomNet == "testnet") {
+            } else if (this.net == "testnet") {
                 this.selected = testNet;
+            } else if (this.net == "solonet") {
+                this.selected = soloNet;
+            } else if (this.net == "vaporTestnet") {
+                this.selected = vaporTestnet;
             }
         } else {
             this.selected = mainNet;
-            localStorage.bytomNet = "mainnet";
         }
         account.setupNet(this.selected);
-        this.i18n = getLanguage();
+        this.i18n = getLanguage(this.language);
     }
 };
 </script>

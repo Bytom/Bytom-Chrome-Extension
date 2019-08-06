@@ -21,10 +21,10 @@ export function have(lang) {
   return false;
 };
 
-export function getLanguage() {
-  if (have(localStorage.lang)) {
-    return localStorage.lang;
-  } 
+export function getLanguage(lang) {
+  if (have(lang)) {
+    return lang;
+  }
   return defaultLang;
 }
 

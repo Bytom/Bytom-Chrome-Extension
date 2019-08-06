@@ -14,6 +14,8 @@ import vSelect from '@/components/select'
 import MenuPage from '@/components/menu-page'
 import messages, { getLanguage } from '@/assets/language'
 import '@/assets/style.css'
+import {store} from "./store/store";
+import * as Actions from "./store/constants";
 
 Vue.use(VueI18n)
 const i18n = new VueI18n({
@@ -56,9 +58,12 @@ router.beforeEach((to, from, next) => {
   next()
 })
 
-new Vue({
-  el: '#app',
-  i18n: i18n,
-  router: router,
-  render: h => h(ViewBase)
-})
+store.dispatch(Actions.LOAD_BYTOM).then(() => {
+  new Vue({
+    el: '#app',
+    i18n: i18n,
+    router: router,
+    store,
+    render: h => h(ViewBase)
+  })
+});

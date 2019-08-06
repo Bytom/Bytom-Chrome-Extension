@@ -74,6 +74,12 @@ export default class Background {
       case MsgTypes.GET_PROMPT:
         Background.getPrompt(sendResponse);
         break;
+      case MsgTypes.LOAD:
+        Background.load(sendResponse);
+        break;
+      case MsgTypes.UPDATE:
+        Background.update(sendResponse, message.payload);
+        break;
     }
   }
 

@@ -15,7 +15,6 @@ transaction.convertArgument = function(argArray) {
   };
 
   let actionFunction = argArray.map(fn)
-  console.log(actionFunction)
   return Promise.all(actionFunction);
 };
 

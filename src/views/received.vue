@@ -49,6 +49,8 @@
 <script>
   import QRCode from "qrcodejs2";
   import ClipboardJS from "clipboard";
+  import {  mapGetters } from 'vuex'
+
   export default {
   data() {
     return {
@@ -58,6 +60,11 @@
       addressTitle: this.$t("main.copy")
     };
   },
+    computed: {
+      ...mapGetters([
+        'currentAccount',
+      ])
+    },
   methods: {
     close: function () {
       this.$router.go(-1)
@@ -79,8 +86,8 @@
     },
   },
   mounted() {
-    if (this.$route.params.address != undefined) {
-      this.addr = this.$route.params.address;
+    if (this.currentAccount.address != undefined) {
+      this.addr = this.currentAccount.address;
       this.qrcode = new QRCode( "qrcode", {
         text: this.addr,
         width: 150,

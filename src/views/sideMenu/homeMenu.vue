@@ -82,8 +82,8 @@
         </div>
         <div class="menu-content">
             <div class="list accounts">
-                <div v-for="(account, index) in accounts" :key="index" @click="accountSelected(account)">
-                    <div :class="(selectedAccount != undefined && account.address == selectedAccount.address) ? 'list-item active': 'list-item'">
+                <div v-for="(account, index) in accountList" :key="index" @click="accountSelected(account)">
+                    <div :class="(currentAccount != undefined && account.address == currentAccount.address) ? 'list-item active': 'list-item'">
                       <div class="wallet">
                         <i class="iconfont icon-wallet"></i>
                       </div>
@@ -128,19 +128,36 @@
 
 <script>
   import { BTM } from "@/utils/constants";
+  import { mapActions, mapGetters, mapState } from 'vuex'
+  import * as Actions from '@/store/constants';
 
   export default {
     name: "",
     data() {
-        return {
-            accounts: [],
-            selectedAccount: {},
-        };
+      return {};
+    },
+    computed: {
+      ...mapState([
+        'bytom'
+      ]),
+      ...mapGetters([
+        'currentAccount',
+        'accountList'
+      ])
+    },
+    watch: {
+
     },
     methods: {
         accountSelected: function (accountInfo) {
-            this.selectedAccount = Object.assign({}, accountInfo);
-            this.$router.push({ name: 'home', params: { selectedAccount: this.selectedAccount } })
+          const bytom = this.bytom.clone();
+
+          if (bytom.currentAccount != accountInfo) {
+            bytom.currentAccount = accountInfo;
+            this[Actions.UPDATE_STORED_BYTOM](bytom).then(()=>{
+              this.$router.push('/')
+            })
+          }
         },
         calculateBalance: function (balances) {
           if( balances.length>0 ){
@@ -149,12 +166,12 @@
             return balance
           }
           return 0.00;
-        }
-    }, mounted() {
-        let params = this.$route.params;
-
-        this.accounts = params.accounts
-        this.selectedAccount = params.selected
+        },
+      ...mapActions([
+        Actions.UPDATE_STORED_BYTOM,
+      ])
+    },
+    mounted() {
     }
 };
 </script>
