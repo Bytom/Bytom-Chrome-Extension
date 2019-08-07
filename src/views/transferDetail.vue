@@ -174,11 +174,11 @@
                       <tr>
                         <td colspan="2"><div class="divider"></div></td>
                       </tr>
-                      <tr :key="index" v-for="(input, index) in transaction.inputs">
+                      <tr :key="'input'+index" v-for="(input, index) in transaction.inputs">
                         <td class="label">{{ $t('transactionDetail.sendAddress') }}{{transaction.inputs.length > 1 ? index+1 : ''}}</td>
                         <td class="value">{{input.address}}<span v-if="input.address == selfAddress"> {{ $t('transactionDetail.myAddress') }}</span></td>
                       </tr>
-                      <tr :key="index" v-for="(output, index) in transaction.outputs">
+                      <tr :key="'output'+ index" v-for="(output, index) in transaction.outputs">
                         <td class="label">{{ $t('transactionDetail.receiveAddress') }}{{transaction.outputs.length > 1 ? index+1 : ''}}</td>
                         <td class="value">{{output.address}}<span v-if="output.address == selfAddress"> {{ $t('transactionDetail.myAddress') }}</span></td>
                       </tr>

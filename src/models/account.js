@@ -1,4 +1,6 @@
 import bytom from './bytom'
+import uuid from 'uuid'
+
 
 let account = {
   setupNet: bytom.setupNet
@@ -6,6 +8,9 @@ let account = {
 
 account.create = function(accountAlias, keyAlias, passwd, success, error) {
   let retPromise = new Promise((resolve, reject) => {
+    if(!keyAlias){
+      keyAlias = `${accountAlias}-key-${uuid.v4()}`
+    }
     bytom.keys
       .create(keyAlias, passwd)
       .then(res => {
@@ -74,10 +79,16 @@ account.list = function() {
       .listAccountUseServer()
       .then(accounts => {
         Promise.all(accounts.map(async (account) => {
-          const balances = await this.balance(account.guid)
-          account.balances = balances
+          try{
+            const balances = await this.balance(account.guid)
+            account.balances = balances
+          }catch (e) {
+            return e
+          }
         })).then(()=>{
           resolve(accounts)
+        }).catch(error=>{
+          throw error
         })
       })
       .catch(error => {

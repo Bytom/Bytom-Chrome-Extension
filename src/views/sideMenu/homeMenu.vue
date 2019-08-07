@@ -160,7 +160,7 @@
           }
         },
         calculateBalance: function (balances) {
-          if( balances.length>0 ){
+          if(balances && balances.length>0 ){
             const balanceObject = balances.filter(b => b.asset === BTM)[0]
             const balance = balanceObject.balance/Math.pow(10,balanceObject.decimals)
             return balance

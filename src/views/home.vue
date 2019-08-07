@@ -317,7 +317,7 @@ export default {
         accountBalance: function () {
             let balance
             const balances = this.currentAccount.balances
-            if(balances.length >0 ){
+            if(balances && balances.length >0 ){
                 const balanceObject = balances.filter(b => b.asset === BTM)[0]
                 balance = balanceObject.balance/Math.pow(10,balanceObject.decimals)
             }

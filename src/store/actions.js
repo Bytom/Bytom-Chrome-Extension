@@ -2,6 +2,7 @@ import * as Actions from './constants'
 import Bytom from '../utils/Bytom'
 import InternalMessage from '../messages/internal'
 import * as InternalMessageTypes from '../messages/types'
+import account from "../models/account";
 
 export const actions = {
     [Actions.SET_BYTOM]:({commit}, bytom) => commit(Actions.SET_BYTOM, bytom),
@@ -24,38 +25,62 @@ export const actions = {
         })
     },
 
-    // [Actions.IMPORT_BYTOM]:({dispatch}, {imported, seed}) => {
-    //     return new Promise(async (resolve, reject) => {
-    //
-    //         const bytom = Bytom.fromJson(imported);
-    //
-    //         await Promise.all(PluginRepository.signatureProviders().map(async plugin => {
-    //             const network = await plugin.getEndorsedNetwork();
-    //
-    //             bytom.settings.networks = bytom.settings.networks.filter(_network => _network.unique() !== network.unique());
-    //             bytom.settings.networks.push(network);
-    //         }));
-    //
-    //         bytom.meta = new Meta();
-    //
-    //         InternalMessage.payload(InternalMessageTypes.SET_SEED, seed).send().then(() => {
-    //             dispatch(Actions.UPDATE_STORED_BYTOM, bytom).then(_bytom => {
-    //                 resolve();
-    //             })
-    //         });
-    //     })
-    // },
+    [Actions.IMPORT_BYTOM]:({state, commit, dispatch}) => {
+        return new Promise(async (resolve, reject) => {
+            const bytom = Bytom.fromJson(state.bytom);
+            bytom.settings.network = 'mainnet';
+            account.setupNet('mainnet')
+            account.list().then(accounts => {
+                bytom.accountList = accounts;
+                if (accounts.length > 0) {
+                    bytom.currentAccount = accounts[0];
+                }
 
-    [Actions.CREATE_NEW_BYTOM]:({state, commit, dispatch}, network, currentAccount) => {
+                bytom.settings.login = true
+                dispatch(Actions.UPDATE_STORED_BYTOM, bytom).then(_bytom => {
+                    dispatch(Actions.SET_BYTOM, Bytom.fromJson(_bytom));
+                    resolve();
+                })
+            })
+
+        })
+    },
+
+    [Actions.CREATE_NEW_BYTOM]:({state, commit, dispatch}, network) => {
         return new Promise(async (resolve, reject) => {
             const bytom = Bytom.fromJson(state.bytom);
             bytom.settings.network = network;
-            bytom.currentAccount = currentAccount
+            account.setupNet(network)
+            account.list().then(accounts => {
+              bytom.accountList = accounts;
+              if (accounts.length > 0) {
+                bytom.currentAccount = accounts[0];
+              }
 
-            dispatch(Actions.UPDATE_STORED_BYTOM, bytom).then(_bytom => {
-                dispatch(Actions.SET_BYTOM, Bytom.fromJson(_bytom));
-                resolve();
+              bytom.settings.login = true
+              dispatch(Actions.UPDATE_STORED_BYTOM, bytom).then(_bytom => {
+                  dispatch(Actions.SET_BYTOM, Bytom.fromJson(_bytom));
+                  resolve();
+              })
             })
+
+        })
+    },
+
+  [Actions.CREATE_NEW_BYTOM_ACCOUNT]:({state, commit, dispatch}, currentAccount) => {
+        return new Promise(async (resolve, reject) => {
+            const bytom = Bytom.fromJson(state.bytom);
+            account.setupNet(bytom.settings.network)
+            account.list().then(accounts => {
+              bytom.accountList = accounts;
+              bytom.currentAccount = currentAccount;
+
+              dispatch(Actions.UPDATE_STORED_BYTOM, bytom).then(_bytom => {
+                  dispatch(Actions.SET_BYTOM, Bytom.fromJson(_bytom));
+                  resolve();
+              })
+            })
+
         })
     },
 

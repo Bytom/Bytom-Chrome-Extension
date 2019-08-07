@@ -4,6 +4,7 @@ export const SET_BYTOM = 'setBytom';
 export const IS_UNLOCKED = 'isUnlocked';
 export const UPDATE_STORED_BYTOM = 'updateStoredBytom';
 export const CREATE_NEW_BYTOM = 'createNewBytom';
+export const CREATE_NEW_BYTOM_ACCOUNT = 'createNewAccount';
 export const IMPORT_BYTOM = 'importBytom';
 export const SET_AUTO_LOCK = 'setAutoLock';
 export const LOCK = 'lock';

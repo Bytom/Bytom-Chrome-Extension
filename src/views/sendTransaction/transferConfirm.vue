@@ -158,6 +158,7 @@ import transaction from "@/models/transaction";
 import modalPasswd from "@/components/modal-passwd";
 import getLang from "@/assets/language/sdk";
 import { LocalStream } from 'extension-streams';
+import { mapGetters } from 'vuex'
 
 export default {
     components: {
@@ -175,6 +176,11 @@ export default {
             },
             password:''
         };
+    },
+    computed: {
+      ...mapGetters([
+        'language'
+      ])
     },
     methods: {
         transfer: function () {
@@ -208,7 +214,7 @@ export default {
                 .catch(error => {
                     loader.hide();
                     this.$dialog.show({
-                        body: getLang(error.message)
+                        body: getLang(error.message, this.language)
                     });
                 });
         }

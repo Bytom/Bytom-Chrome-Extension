@@ -20,6 +20,7 @@ const getters = {
     accountList:state => state.bytom.accountList,
     net:state => state.bytom.settings.network,
     language:state => state.bytom.settings.language,
+    login:state => state.bytom.settings.login,
 
     // FOR PROMPTS ONLY
     messages:state => state.prompt.data.messages || [],

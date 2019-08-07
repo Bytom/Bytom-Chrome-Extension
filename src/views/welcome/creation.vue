@@ -58,13 +58,13 @@
 /*}*/
 
   .v-select{
-    height: 28px;
-    width: 160px;
-    background: white;
-    border-radius: 15px;
+    height: 32px;
+    width: 100%;
+    background: rgba(247,247,247,1);
     font-size: 14px;
     margin: auto;
-    padding-left: 20px;
+    border-bottom: 1px solid #E0E0E0;
+    /*padding-left: 20px;*/
   }
 
   .tabs{
@@ -112,9 +112,9 @@
       <div class="bg-image">
       </div>
       <div class="topbar">
-        <div v-if="activeTab === 'register'" class="topbar-middle">
-          <v-select  class="v-select" v-bind:colorBlack="true" :clearable="false" v-model="selected" :options="nets"></v-select>
-        </div>
+        <!--<div v-if="activeTab === 'register'" class="topbar-middle">-->
+          <!--<v-select  class="v-select" v-bind:colorBlack="true" :clearable="false" v-model="selected" :options="nets"></v-select>-->
+        <!--</div>-->
         <a href="http://github.com/bycoinio/Bystore" target="_blank"><i class="iconfont icon-github"></i></a>
       </div>
       <div class="header">
@@ -131,17 +131,23 @@
           <div  v-if="activeTab === 'register'" >
             <div class="form panel">
                 <div class="form-item">
+                    <label :class="formItemLabel">network</label>
+                    <div :class="formItemContent">
+                      <v-select  class="v-select" v-bind:colorBlack="true" :clearable="false" v-model="selected" :options="nets"></v-select>
+                    </div>
+                </div>
+              <div class="form-item">
                     <label :class="formItemLabel">{{ $t('createAccount.accountAlias') }}</label>
                     <div :class="formItemContent">
                         <input type="text" v-model="formItem.accAlias" autofocus>
                     </div>
                 </div>
-                <div class="form-item">
-                    <label :class="formItemLabel">{{ $t('createAccount.keyAlias') }}</label>
-                    <div :class="formItemContent">
-                        <input type="text" v-model="formItem.keyAlias">
-                    </div>
-                </div>
+                <!--<div class="form-item">-->
+                    <!--<label :class="formItemLabel">{{ $t('createAccount.keyAlias') }}</label>-->
+                    <!--<div :class="formItemContent">-->
+                        <!--<input type="text" v-model="formItem.keyAlias">-->
+                    <!--</div>-->
+                <!--</div>-->
                 <div class="form-item">
                     <label :class="formItemLabel">{{ $t('createAccount.keyPassword') }}</label>
                     <div :class="formItemContent">
@@ -193,6 +199,7 @@ import account from "../../models/account";
 import { getLanguage } from '@/assets/language'
 import getLang from "../../assets/language/sdk";
 import { mapActions, mapGetters, mapState } from 'vuex'
+import * as Actions from '@/store/constants';
 
 let mainNet = null;
 let testNet = null;
@@ -206,7 +213,7 @@ export default {
             selected: mainNet,
             formItem: {
                 accAlias: "",
-                keyAlias: "",
+                // keyAlias: "",
                 passwd1: "",
                 passwd2: "",
                 checked: false
@@ -257,12 +264,6 @@ export default {
                 });
                 return;
             }
-            if (this.formItem.keyAlias == "") {
-                this.$dialog.show({
-                    body: this.$t("createAccount.inputKey")
-                });
-                return;
-            }
             if (this.formItem.passwd1 == "") {
                 this.$dialog.show({
                     body: this.$t("createAccount.inputPass")
@@ -286,11 +287,13 @@ export default {
                 canCancel: true,
                 onCancel: this.onCancel
             });
-            account.create(this.formItem.accAlias, this.formItem.keyAlias, this.formItem.passwd1).then(res => {
-                localStorage.login = true;
+            account.create(this.formItem.accAlias, null, this.formItem.passwd1).then(currentAccount => {
+                // localStorage.login = true;
+              this[Actions.CREATE_NEW_BYTOM](this.selected.value).then(() =>{
                 loader.hide();
                 this.formItem = {};
                 this.$router.push('/');
+              });
             }).catch(err => {
                 loader.hide();
                 this.$dialog.show({
@@ -315,18 +318,23 @@ export default {
             return;
           }
           account.restore(this.restore.fileTxt).then(res => {
-            localStorage.login = true;
-            this.$router.push('/');
+            // localStorage.login = true;
+            this[Actions.IMPORT_BYTOM]().then(() =>{
+              this.$router.push('/');
+            });
           }).catch(error => {
             this.$dialog.show({
-              body: getLang(error.message)
+              body: getLang(error.message, this.language)
             });
           });
-        }
+        },
+        ...mapActions([
+          Actions.CREATE_NEW_BYTOM,
+          Actions.IMPORT_BYTOM,
+        ])
     },
     watch: {
         selected: function (value) {
-            localStorage.bytomNet = value.value;
             account.setupNet(value.value);
         }
     },
@@ -334,8 +342,8 @@ export default {
         mainNet = { label: this.$t('main.mainNet'), value: "mainnet" };
         testNet = { label: this.$t('main.testNet'), value: "testnet" };
         soloNet = { label: this.$t('main.soloNet'), value: "solonet" };
-        vaporTestnet = { label: this.$t('main.vaporTestnet'), value: "vaporTestnet" };
-        this.nets = [mainNet, testNet,vaporTestnet];
+        // vaporTestnet = { label: this.$t('main.vaporTestnet'), value: "vaporTestnet" };
+        this.nets = [mainNet, testNet,soloNet];
         if (this.net != undefined) {
             if (this.net == "mainnet") {
                 this.selected = mainNet;
@@ -343,9 +351,11 @@ export default {
                 this.selected = testNet;
             } else if (this.net == "solonet") {
                 this.selected = soloNet;
-            } else if (this.net == "vaporTestnet") {
-                this.selected = vaporTestnet;
             }
+
+            // else if (this.net == "vaporTestnet") {
+            //     this.selected = vaporTestnet;
+            // }
         } else {
             this.selected = mainNet;
         }

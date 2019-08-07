@@ -106,14 +106,17 @@ export default {
             account.setupNet(val.value);
 
             bytom.currentAccount = {}
-            account.list().then(accounts => {
-              bytom.accountList = accounts;
-              if (accounts.length > 0) {
-                bytom.currentAccount = accounts[0];
-              }
+            account.list()
+              .then(accounts => {
 
-              this[Actions.UPDATE_STORED_BYTOM](bytom)
-            }).catch(errors=>{
+                bytom.accountList = accounts;
+                if (accounts.length > 0) {
+                  bytom.currentAccount = accounts[0];
+                }
+
+                this[Actions.UPDATE_STORED_BYTOM](bytom)
+              })
+              .catch((errors) =>{
               bytom.accountList =[]
               this[Actions.UPDATE_STORED_BYTOM](bytom)
             })

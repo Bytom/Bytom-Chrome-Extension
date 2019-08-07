@@ -4,8 +4,7 @@ const sdkLang = {
     cn: cn
 };
 
-function getLang(str) {
-    let lang = localStorage.lang;
+function getLang(str, lang) {
     if (sdkLang[lang] && sdkLang[lang][str]) {
         return sdkLang[lang][str];
     }
