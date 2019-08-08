@@ -119,6 +119,8 @@ import transaction from "@/models/transaction";
 import getLang from "@/assets/language/sdk";
 import Confirm from "./transferConfirm";
 import { BTM } from "@/utils/constants";
+import { mapActions, mapGetters, mapState } from 'vuex'
+import * as Actions from '@/store/constants';
 
 export default {
     components: {
@@ -139,7 +141,6 @@ export default {
                 }
             ],
             show: false,
-            accounts: [],
             assets: {
                 ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff: "BTM"
             },
@@ -161,7 +162,14 @@ export default {
     computed: {
         unit() {
             return this.assets[this.transaction.asset];
-        }
+        },
+      ...mapState([
+        'bytom'
+      ]),
+      ...mapGetters([
+        'currentAccount',
+        'accountList'
+      ])
     },
     watch: {
         selectAsset: function (val) {
@@ -176,7 +184,7 @@ export default {
             this.guid = newAccount.guid;
         },
         guid: function (newGuid) {
-            this.accounts.forEach(account => {
+            this.accountList.forEach(account => {
                 if (account.guid == newGuid.guid) {
                     this.account = account;
                     return;
@@ -239,16 +247,11 @@ export default {
             });
         }
     }, mounted() {
-        if (this.$route.params.account != undefined) {
-            this.account = this.$route.params.account;
-        }
-
         //detect injection
         if(this.$route.query.type === 'popup'){
           if (this.$route.query.from != undefined) {
               this.guid = this.$route.query.from
-          }else{
-              this.account = JSON.parse(localStorage.currentAccount);
+              this.account = this.accountList.filter(e => e.guid === this.guid)[0]
           }
 
           if (this.$route.query.asset != undefined) {
@@ -266,22 +269,9 @@ export default {
           if(this.$route.query.confirmations != undefined) {
               this.transaction.confirmations = this.$route.query.confirmations
           }
+        }else{
+          this.account = this.currentAccount
         }
-
-
-        account.setupNet(localStorage.bytomNet);
-        account.list().then(accounts => {
-            this.accounts = accounts;
-            this.accounts.forEach(function (ele) {
-                ele.label = ele.alias
-                ele.value = ele.guid
-            });
-            if (!this.guid) {
-                this.account = accounts[0]
-            }else{
-              this.account = this.accounts.filter(e => e.guid === this.guid)[0]
-            }
-        });
     }
 };
 </script>

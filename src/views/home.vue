@@ -262,7 +262,10 @@ import address from "@/utils/address";
 import account from "@/models/account";
 import transaction from "@/models/transaction";
 import { BTM } from "@/utils/constants";
-import { mapGetters, mapState } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
+import * as Actions from '@/store/constants';
+import _ from 'lodash';
+
 
 const EnterActive = 'animated faster fadeInLeft';
 const LeaveActive = 'animated faster fadeOutLeft';
@@ -286,18 +289,17 @@ export default {
                 this.maskShow = false
             }
 
-            //account toggle by the list from menu
-            if (to.name == 'home' && to.params.selectedAccount != undefined) {
-                this.currentAccount = to.params.selectedAccount
-                this.refreshAccounts();
-            }
-
             // remove transition for some page
             this.enterActive = EnterActive
             this.leaveActive = LeaveActive
             if (to.name == 'transfer-confirm' || from.name == 'transfer-confirm') {
                 this.enterActive = ''
                 this.leaveActive = ''
+            }
+            if (from.name == 'transfer-confirm') {
+              this.refreshTransactions(this.currentAccount.guid, this.currentAccount.address).then(transactions => {
+                this.transactions = transactions
+              });
             }
         },
         currentAccount(newVal, oldVal) {
@@ -342,10 +344,10 @@ export default {
             account.setupNet(this.net);
         },
         networkToggle: function (val) {
-            localStorage.bytomNet = this.network;
-            account.setupNet(this.network);
-            this.currentAccount = {}
-            this.refreshAccounts();
+            // localStorage.bytomNet = this.network;
+            // account.setupNet(this.network);
+            // this.currentAccount = {}
+            // this.refreshAccounts();
         },
         showQrcode: function () {
           this.$router.push('received')
@@ -376,6 +378,19 @@ export default {
         },
         refreshBalance: function (guid) {
             account.balance(guid)
+              .then((balances)=>{
+                if(!_.isEqual(this.currentAccount.balances, balances)){
+                    const bytom = this.bytom.clone();
+
+                    bytom.currentAccount.balances = balances;
+
+                    account.setupNet(this.net)
+                    account.list().then(accounts => {
+                      bytom.accountList = accounts;
+                      this[Actions.UPDATE_STORED_BYTOM](bytom)
+                    })
+                }
+              })
               .catch(error => {
                 console.log(error);
             });
@@ -432,6 +447,9 @@ export default {
             });
           return formattedTransactions;
         },
+      ...mapActions([
+        Actions.UPDATE_STORED_BYTOM,
+      ])
     },
     mounted() {
         this.setupNetwork();

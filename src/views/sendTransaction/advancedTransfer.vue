@@ -83,7 +83,7 @@
         <tbody>
           <tr class="row">
             <td class="col label">{{ $t('transfer.from') }}</td>
-            <td class="col value">{{account.alias}}</td>
+            <td class="col value">{{currentAccount.alias}}</td>
           </tr>
           <div class="divider"></div>
           <tr class="row">
@@ -94,7 +94,7 @@
             <td class="col label">Output</td>
             <td class="col value" v-bind:class="{ hide: !full }" >{{transaction.output}}</td>
           </tr>
-          <tr class="row">
+          <tr v-if="transaction.args" class="row">
             <td class="col label">Args</td>
             <td class="col value" v-bind:class="{ hide: !full }" >{{transaction.args}}</td>
           </tr>
@@ -139,13 +139,14 @@ import getLang from "@/assets/language/sdk";
 import { LocalStream } from 'extension-streams';
 import {apis} from '@/utils/BrowserApis';
 import NotificationService from '../../services/NotificationService'
+import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
     data() {
         return {
             full: false,
             // full2: false,
-            account: {},
+            // account: {},
             transaction: {
                 input: "",
                 output: "",
@@ -159,6 +160,9 @@ export default {
         };
     },
     computed: {
+      ...mapGetters([
+        'currentAccount',
+      ])
     },
     watch: {
     },
@@ -174,14 +178,14 @@ export default {
                 onCancel: this.onCancel
             });
 
-            transaction.buildTransaction(this.account.guid,  this.transaction.input, this.transaction.output, this.transaction.fee * 100000000, this.transaction.confirmations).then(async (result) => {
+            transaction.buildTransaction(this.currentAccount.guid,  this.transaction.input, this.transaction.output, this.transaction.fee * 100000000, this.transaction.confirmations).then(async (result) => {
 
               let arrayData
               if(this.transaction.args){
                 arrayData =  await transaction.convertArgument(this.transaction.args)
               }
 
-              return transaction.advancedTransfer(this.account.guid, result, this.password, arrayData)
+              return transaction.advancedTransfer(this.currentAccount.guid, result, this.password, arrayData)
                   .then((resp) => {
                       loader.hide();
                       this.prompt.responder(resp);
@@ -203,8 +207,6 @@ export default {
             });
         }
     }, mounted() {
-          this.account = JSON.parse(localStorage.currentAccount);
-
           this.prompt = window.data || apis.extension.getBackgroundPage().notification || null;
 
           if(this.prompt.data !== undefined){

@@ -288,7 +288,6 @@ export default {
                 onCancel: this.onCancel
             });
             account.create(this.formItem.accAlias, null, this.formItem.passwd1).then(currentAccount => {
-                // localStorage.login = true;
               this[Actions.CREATE_NEW_BYTOM](this.selected.value).then(() =>{
                 loader.hide();
                 this.formItem = {};
@@ -318,7 +317,6 @@ export default {
             return;
           }
           account.restore(this.restore.fileTxt).then(res => {
-            // localStorage.login = true;
             this[Actions.IMPORT_BYTOM]().then(() =>{
               this.$router.push('/');
             });
