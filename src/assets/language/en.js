@@ -65,7 +65,8 @@ const en = {
   main: {
     mainNet: 'Mainnet',
     testNet: 'Testnet',
-    vaporTestnet: 'Vapor Testnet',
+    vapor: 'Vapor',
+    bytom: 'Bytom',
     soloNet: 'Solonet',
     mainNetShort: 'Mainnet',
     testNetShort: 'Testnet',

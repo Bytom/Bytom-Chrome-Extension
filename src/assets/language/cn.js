@@ -66,7 +66,6 @@ const cn = {
     mainNet: '主网络',
     testNet: '测试网络',
     soloNet: '单机网络',
-    vaporTestnet: 'Vapor测试网络',
     mainNetShort: 'Bytom主网络',
     testNetShort: 'Bytom测试网络',
     soloNetShort: 'Bytom单机网络',

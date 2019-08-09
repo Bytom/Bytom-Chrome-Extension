@@ -8,7 +8,7 @@
     display:flex;
 }
 .topbar .topbar-left {
-    width: 87px;
+    width: 115px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -173,14 +173,12 @@
                         <i class="iconfont icon-menu"></i>
                     </a>
                 </div>
-                <!--<div class="topbar-middle bg-secondary">-->
-                    <!--<select v-model="network" @change="networkToggle">-->
-                        <!--<option value="mainnet">{{ $t('main.mainNet') }}</option>-->
-                        <!--<option value="testnet">{{ $t('main.testNet') }}</option>-->
-                        <!--<option value="solonet">{{ $t('main.soloNet') }}</option>-->
-                        <!--<option value="vaporTestnet">{{ $t('main.vaporTestnet') }}</option>-->
-                    <!--</select>-->
-                <!--</div>-->
+                <div class="topbar-middle bg-secondary">
+                    <select :value="netType" @change="netTypeToggle">
+                        <option value="bytom">{{ $t('main.bytom') }}</option>
+                        <option value="vapor">{{ $t('main.vapor') }}</option>
+                    </select>
+                </div>
             </div>
             <div class="content">
                 <div v-if="currentAccount.address!=undefined" class="amount color-white">
@@ -196,7 +194,16 @@
                 </div>
             </div>
             <div class="btn-send-transfer">
-                <a v-if="currentAccount.address!=undefined" class="btn btn-primary btn-received" @click="showQrcode">
+
+
+                <a v-if="(currentAccount.address!=undefined) && (netType =='vapor')" class="btn btn-primary btn-received" @click="showQrcode">
+                  <i class="iconfont icon-receive"></i>
+                  vote
+                </a>
+                <a v-if="currentAccount.address!=undefined && (netType =='vapor')" class="btn btn-primary btn-transfer" @click="transferOpen">
+                  <i class="iconfont icon-send"></i>
+                  cross-chain
+                </a><a v-if="currentAccount.address!=undefined" class="btn btn-primary btn-received" @click="showQrcode">
                   <i class="iconfont icon-receive"></i>
                   {{ $t('main.receive') }}
                 </a>
@@ -331,7 +338,8 @@ export default {
         ...mapGetters([
           'currentAccount',
           'accountList',
-          'net'
+          'net',
+          'netType'
         ])
     },
     methods: {
@@ -341,13 +349,32 @@ export default {
             }, 10000)
         },
         setupNetwork() {
-            account.setupNet(this.net);
+            account.setupNet(`${this.net}${this.netType}`);
         },
-        networkToggle: function (val) {
-            // localStorage.bytomNet = this.network;
-            // account.setupNet(this.network);
-            // this.currentAccount = {}
-            // this.refreshAccounts();
+        netTypeToggle: function (event) {
+            const newNetType = event.target.value
+            if( newNetType !== this.netType){
+              const bytom = this.bytom.clone();
+
+              bytom.settings.netType = newNetType;
+
+              account.setupNet(`${this.net}${newNetType}`)
+              if(newNetType === 'vapor'&& !this.currentAccount.vpAddress){
+                account.copy(this.currentAccount.guid).then(accounts => {
+                  //update currentAccount
+                  bytom.currentAccount = accounts
+
+                  //update AccountList
+                  const objectIndex = bytom.accountList.findIndex(a => a.guid == this.currentAccount.guid)
+                  bytom.accountList[objectIndex].vpAddress = accounts.vpAddress
+
+                  this[Actions.UPDATE_STORED_BYTOM](bytom)
+                })
+              }else{
+                this[Actions.UPDATE_STORED_BYTOM](bytom)
+              }
+              this.refreshBalance(this.currentAccount.guid)
+            }
         },
         showQrcode: function () {
           this.$router.push('received')
@@ -383,12 +410,7 @@ export default {
                     const bytom = this.bytom.clone();
 
                     bytom.currentAccount.balances = balances;
-
-                    account.setupNet(this.net)
-                    account.list().then(accounts => {
-                      bytom.accountList = accounts;
-                      this[Actions.UPDATE_STORED_BYTOM](bytom)
-                    })
+                    this[Actions.UPDATE_STORED_BYTOM](bytom)
                 }
               })
               .catch(error => {

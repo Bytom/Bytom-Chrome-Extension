@@ -247,7 +247,8 @@ export default {
       ]),
       ...mapGetters([
         'net',
-        'language'
+        'language',
+        'netType'
       ])
     },
     props: {
@@ -333,7 +334,7 @@ export default {
     },
     watch: {
         selected: function (value) {
-            account.setupNet(value.value);
+            account.setupNet(`${value.value}bytom`);
         }
     },
     mounted() {
@@ -357,7 +358,7 @@ export default {
         } else {
             this.selected = mainNet;
         }
-        account.setupNet(this.selected);
+        account.setupNet(`${this.selected}bytom`);
         this.i18n = getLanguage(this.language);
     }
 };

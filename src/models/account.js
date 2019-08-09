@@ -30,6 +30,20 @@ account.create = function(accountAlias, keyAlias, passwd, success, error) {
   return retPromise
 }
 
+account.copy = function(guid) {
+  let retPromise = new Promise((resolve, reject) => {
+    bytom.accounts
+      .copyAccountUseServer(guid, 'btm')
+      .then(ret => {
+        resolve(ret)
+      })
+      .catch(error => {
+        reject(error)
+      })
+  })
+  return retPromise
+}
+
 account.balance = function(guid) {
   let retPromise = new Promise((resolve, reject) => {
     bytom.accounts

@@ -45,8 +45,9 @@
 }
 .account {
     width: 200px;
-    display: inline-block;
-    vertical-align: middle;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .account-alias {
     width: 200px;
@@ -89,7 +90,7 @@
                       </div>
                         <div class="account">
                             <div class="account-alias">{{account.alias}}</div>
-                            <div class="account-asset">{{calculateBalance(account.balances)}} BTM</div>
+                            <!--<div class="account-asset">{{calculateBalance(account.balances)}} BTM</div>-->
                         </div>
                     </div>
                 </div>

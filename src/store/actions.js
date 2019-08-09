@@ -29,7 +29,7 @@ export const actions = {
         return new Promise(async (resolve, reject) => {
             const bytom = Bytom.fromJson(state.bytom);
             bytom.settings.network = 'mainnet';
-            account.setupNet('mainnet')
+            account.setupNet('mainnetbytom')
             account.list().then(accounts => {
                 bytom.accountList = accounts;
                 if (accounts.length > 0) {
@@ -37,7 +37,8 @@ export const actions = {
                 }
 
                 bytom.settings.login = true
-                dispatch(Actions.UPDATE_STORED_BYTOM, bytom).then(_bytom => {
+              bytom.settings.netType = 'bytom'
+              dispatch(Actions.UPDATE_STORED_BYTOM, bytom).then(_bytom => {
                     dispatch(Actions.SET_BYTOM, Bytom.fromJson(_bytom));
                     resolve();
                 })
@@ -50,7 +51,7 @@ export const actions = {
         return new Promise(async (resolve, reject) => {
             const bytom = Bytom.fromJson(state.bytom);
             bytom.settings.network = network;
-            account.setupNet(network)
+            account.setupNet(`${network}bytom`)
             account.list().then(accounts => {
               bytom.accountList = accounts;
               if (accounts.length > 0) {
@@ -58,6 +59,7 @@ export const actions = {
               }
 
               bytom.settings.login = true
+              bytom.settings.netType = 'bytom'
               dispatch(Actions.UPDATE_STORED_BYTOM, bytom).then(_bytom => {
                   dispatch(Actions.SET_BYTOM, Bytom.fromJson(_bytom));
                   resolve();
@@ -70,15 +72,12 @@ export const actions = {
   [Actions.CREATE_NEW_BYTOM_ACCOUNT]:({state, commit, dispatch}, currentAccount) => {
         return new Promise(async (resolve, reject) => {
             const bytom = Bytom.fromJson(state.bytom);
-            account.setupNet(bytom.settings.network)
-            account.list().then(accounts => {
-              bytom.accountList = accounts;
-              bytom.currentAccount = currentAccount;
+            bytom.accountList.push(currentAccount);
+            bytom.currentAccount = currentAccount;
 
-              dispatch(Actions.UPDATE_STORED_BYTOM, bytom).then(_bytom => {
-                  dispatch(Actions.SET_BYTOM, Bytom.fromJson(_bytom));
-                  resolve();
-              })
+            dispatch(Actions.UPDATE_STORED_BYTOM, bytom).then(_bytom => {
+                dispatch(Actions.SET_BYTOM, Bytom.fromJson(_bytom));
+                resolve();
             })
 
         })

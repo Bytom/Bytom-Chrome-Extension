@@ -53,7 +53,7 @@
 <script>
 import account from "@/models/account";
 import * as Actions from '@/store/constants';
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 
 export default {
     name: "",
@@ -73,6 +73,10 @@ export default {
       ...mapState([
         'bytom'
       ]),
+      ...mapGetters([
+        'net',
+        'netType'
+      ])
     },
     methods: {
         create: function () {
@@ -102,19 +106,38 @@ export default {
                 onCancel: this.onCancel
             });
 
-            account.create(this.formItem.accAlias, null, this.formItem.passwd1).then(account => {
-              this[Actions.CREATE_NEW_BYTOM_ACCOUNT](account).then(()=>{
-                loader.hide();
-                this.$router.push('/');
-              })
+            if(this.netType === 'bytom'){
+              account.create(this.formItem.accAlias, null, this.formItem.passwd1).then(account => {
+                this[Actions.CREATE_NEW_BYTOM_ACCOUNT](account).then(()=>{
+                  loader.hide();
+                  this.$router.push('/');
+                })
 
-            }).catch(err => {
+              }).catch(err => {
+                  console.log(err);
+                  loader.hide();
+                  this.$dialog.show({
+                      body: err.message
+                  });
+              });
+            }else if(this.netType === 'vapor'){
+              account.setupNet(`${this.net}bytom`);
+              account.create(this.formItem.accAlias, null, this.formItem.passwd1).then((resp) => {
+                account.setupNet(`${this.net}vapor`);
+                return account.copy(resp.guid).then((currentRespAccount)=>{
+                  this[Actions.CREATE_NEW_BYTOM_ACCOUNT](currentRespAccount).then(()=>{
+                    loader.hide();
+                    this.$router.push('/');
+                  })
+                })
+              }).catch(err => {
                 console.log(err);
                 loader.hide();
                 this.$dialog.show({
-                    body: err.message
+                  body: err.message
                 });
-            });
+              });
+            }
         },
         ...mapActions([
           Actions.CREATE_NEW_BYTOM_ACCOUNT,

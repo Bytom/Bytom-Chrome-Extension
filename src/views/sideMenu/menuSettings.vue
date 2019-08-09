@@ -83,7 +83,8 @@ export default {
       ]),
       ...mapGetters([
         'net',
-        'language'
+        'language',
+        'netType'
       ])
     },
     methods: {
@@ -103,7 +104,7 @@ export default {
           if (bytom.settings.network != val.value) {
             bytom.settings.network = val.value;
             this.network = val;
-            account.setupNet(val.value);
+            account.setupNet(`${val.value}${this.netType}`);
 
             bytom.currentAccount = {}
             account.list()

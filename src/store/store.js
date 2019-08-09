@@ -19,6 +19,7 @@ const getters = {
     currentAccount:state => state.bytom.currentAccount,
     accountList:state => state.bytom.accountList,
     net:state => state.bytom.settings.network,
+    netType:state => state.bytom.settings.netType,
     language:state => state.bytom.settings.language,
     login:state => state.bytom.settings.login,
 
