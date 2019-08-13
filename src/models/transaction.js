@@ -18,7 +18,7 @@ transaction.convertArgument = function(argArray) {
   return Promise.all(actionFunction);
 };
 
-transaction.blockCount = function() {
+transaction.chainStatus = function() {
   return bytom.query.getblockcount();
 };
 
@@ -30,6 +30,20 @@ transaction.build = function(guid, to, asset, amount, fee, confirmations) {
   let retPromise = new Promise((resolve, reject) => {
     bytom.transaction
       .buildPayment(guid, to, asset, Number(amount), Number(fee*100000000), confirmations)
+      .then(res => {
+        resolve(res);
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+  return retPromise;
+};
+
+transaction.buildCrossChain = function(guid, to, asset, amount, confirmations) {
+  let retPromise = new Promise((resolve, reject) => {
+    bytom.transaction
+      .buildCrossChain(guid, to, asset, Number(amount), confirmations)
       .then(res => {
         resolve(res);
       })

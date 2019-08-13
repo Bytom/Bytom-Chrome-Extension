@@ -223,6 +223,9 @@ hr {
 .color-lightgrey {
   color: #e0e0e0;
 }
+.color-red {
+  color: #d84c4c;
+}
 
 .bg-red {
   background-color: #d84c4c !important;
@@ -457,11 +460,15 @@ select {
   margin-bottom: 5px;
 }
 .form-item-content input{
-  border-bottom: 1px solid #E0E0E0;
+  border-bottom: 1px solid #c7c7c7;
   padding-bottom: 5px;
 }
 .form-item-content input:focus{
   border-bottom: 1px solid #035BD4;
+}
+
+.form-item-content input::placeholder{
+  color:#E0E0E0;
 }
 
 .center-text{

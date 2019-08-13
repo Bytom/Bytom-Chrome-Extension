@@ -155,6 +155,7 @@
 
 <script>
 import transaction from "@/models/transaction";
+import account from "@/models/account";
 import modalPasswd from "@/components/modal-passwd";
 import getLang from "@/assets/language/sdk";
 import { LocalStream } from 'extension-streams';
@@ -179,7 +180,8 @@ export default {
     },
     computed: {
       ...mapGetters([
-        'language'
+        'language',
+        'net'
       ])
     },
     methods: {
@@ -210,6 +212,9 @@ export default {
                       body: this.$t("transfer.success")
                     });
                     this.$router.push('/')
+                    if(this.transaction.type === 'toVapor'){
+                      account.setupNet(`${this.net}vapor`)
+                    }
                 })
                 .catch(error => {
                     loader.hide();

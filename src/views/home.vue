@@ -181,7 +181,7 @@
                 </div>
             </div>
             <div class="content">
-                <div v-if="currentAccount.address!=undefined" class="amount color-white">
+                <div v-if="address!=undefined" class="amount color-white">
                     <span class="alias color-grey">{{currentAccount.alias}}</span>
                     <div class="token-amount">
                         {{accountBalance}}
@@ -193,21 +193,27 @@
 
                 </div>
             </div>
-            <div class="btn-send-transfer">
+            <div v-if="netType =='vapor'" class="btn-send-transfer">
 
 
-                <a v-if="(currentAccount.address!=undefined) && (netType =='vapor')" class="btn btn-primary btn-received" @click="showQrcode">
-                  <i class="iconfont icon-receive"></i>
+                <a v-if="address!=undefined" class="btn btn-primary btn-received" @click="showQrcode">
                   vote
                 </a>
-                <a v-if="currentAccount.address!=undefined && (netType =='vapor')" class="btn btn-primary btn-transfer" @click="transferOpen">
-                  <i class="iconfont icon-send"></i>
-                  cross-chain
-                </a><a v-if="currentAccount.address!=undefined" class="btn btn-primary btn-received" @click="showQrcode">
+                <a v-if="address!=undefined " class="btn btn-primary btn-transfer" @click="crossChainOpen">
+                  cross
+                </a><a v-if="address!=undefined" class="btn btn-primary btn-received" @click="showQrcode">
+                  {{ $t('main.receive') }}
+                </a>
+                <a v-if="address!=undefined" class="btn btn-primary btn-transfer" @click="transferOpen">
+                  {{ $t('main.send') }}
+                </a>
+            </div>
+            <div v-else class="btn-send-transfer">
+                <a v-if="address!=undefined" class="btn btn-primary btn-received" @click="showQrcode">
                   <i class="iconfont icon-receive"></i>
                   {{ $t('main.receive') }}
                 </a>
-                <a v-if="currentAccount.address!=undefined" class="btn btn-primary btn-transfer" @click="transferOpen">
+                <a v-if="address!=undefined" class="btn btn-primary btn-transfer" @click="transferOpen">
                   <i class="iconfont icon-send"></i>
                   {{ $t('main.send') }}
                 </a>
@@ -218,7 +224,7 @@
                 <h3 class="bg-gray color-grey">{{ $t('main.record') }}</h3>
             </section>
             <section class="transactions">
-                 <div v-if="currentAccount.address!=undefined">
+                 <div v-if="address!=undefined">
                   <div v-if="transactions.length != 0">
                       <vue-scroll @handle-scroll="handleScroll">
                       <ul class="list">
@@ -304,7 +310,8 @@ export default {
                 this.leaveActive = ''
             }
             if (from.name == 'transfer-confirm') {
-              this.refreshTransactions(this.currentAccount.guid, this.currentAccount.address).then(transactions => {
+              this.setupNetwork()
+              this.refreshTransactions(this.currentAccount.guid, this.address).then(transactions => {
                 this.transactions = transactions
               });
             }
@@ -314,23 +321,44 @@ export default {
               return;
             }
 
-            this.refreshTransactions(newVal.guid, newVal.address).then(transactions => {
+            let addr
+            if(this.netType === 'vapor'){
+              addr = newVal.vpAddress
+            }else{
+              addr = newVal.address
+            }
+
+            this.refreshTransactions(newVal.guid, addr).then(transactions => {
                 this.transactions = transactions
             });
         },
     },
     computed: {
         shortAddress: function () {
-            return address.short(this.currentAccount.address)
+            return address.short(this.address)
         },
         accountBalance: function () {
             let balance
-            const balances = this.currentAccount.balances
+            const balances = this.balances
             if(balances && balances.length >0 ){
                 const balanceObject = balances.filter(b => b.asset === BTM)[0]
                 balance = balanceObject.balance/Math.pow(10,balanceObject.decimals)
             }
             return (balance != null && balance != 0) ? balance : '0.00'
+        },
+        address: function(){
+          if(this.netType === 'vapor'){
+            return this.currentAccount.vpAddress
+          }else{
+            return this.currentAccount.address
+          }
+        },
+        balances: function(){
+          if(this.netType === 'vapor'){
+            return this.currentAccount.vpBalances
+          }else{
+            return this.currentAccount.balances
+          }
         },
         ...mapState([
           'bytom'
@@ -385,10 +413,13 @@ export default {
         transferOpen: function () {
             this.$router.push('transfer')
         },
+        crossChainOpen: function () {
+            this.$router.push('crossChain')
+        },
         handleScroll(vertical, horizontal, nativeEvent) {
             if (vertical.process == 0) {
                 this.start = 0;
-                this.refreshTransactions(this.currentAccount.guid, this.currentAccount.address).then(transactions => {
+                this.refreshTransactions(this.currentAccount.guid, this.address).then(transactions => {
                     this.transactions = transactions
                 });
                 return;
@@ -396,7 +427,7 @@ export default {
 
             if (vertical.process == 1) {
                 this.start += this.limit;
-                this.refreshTransactions(this.currentAccount.guid, this.currentAccount.address, this.start, this.limit).then(transactions => {
+                this.refreshTransactions(this.currentAccount.guid, this.address, this.start, this.limit).then(transactions => {
                     transactions.forEach(transaction => {
                         this.transactions.push(transaction);
                     });
@@ -406,10 +437,21 @@ export default {
         refreshBalance: function (guid) {
             account.balance(guid)
               .then((balances)=>{
-                if(!_.isEqual(this.currentAccount.balances, balances)){
+                if(!_.isEqual(this.balances, balances)){
                     const bytom = this.bytom.clone();
 
-                    bytom.currentAccount.balances = balances;
+                    //update AccountList
+                    const objectIndex = bytom.accountList.findIndex(a => a.guid == this.currentAccount.guid)
+
+                    if(this.netType === 'vapor'){
+                      bytom.currentAccount.vpBalances = balances;
+                      bytom.accountList[objectIndex].vpBalances = balances
+                    }else{
+                      bytom.currentAccount.balances = balances;
+                      bytom.accountList[objectIndex].balances = balances
+                    }
+
+
                     this[Actions.UPDATE_STORED_BYTOM](bytom)
                 }
               })
@@ -443,11 +485,11 @@ export default {
             if(balanceObject.length ===1 ){
 
                 const inputAddresses = transaction.inputs
-                  .filter(input => input.asset === assetID && input.address !== this.currentAccount.address)
+                  .filter(input => input.asset === assetID && input.address !== this.address)
                   .map(input => input.address)
 
                 const outputAddresses = transaction.outputs
-                  .filter(output => output.asset === assetID && output.address !== this.currentAccount.address)
+                  .filter(output => output.asset === assetID && output.address !== this.address)
                   .map(output => output.address)
 
 
@@ -476,7 +518,7 @@ export default {
     mounted() {
         this.setupNetwork();
         this.setupRefreshTimer();
-        this.refreshTransactions(this.currentAccount.guid, this.currentAccount.address).then(transactions => {
+        this.refreshTransactions(this.currentAccount.guid, this.address).then(transactions => {
           this.transactions = transactions
         });
     },

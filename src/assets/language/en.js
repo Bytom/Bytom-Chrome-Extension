@@ -45,6 +45,14 @@ const en = {
     view:'View All',
     hide:'Hide All'
   },
+  crossChain:{
+    title:'Cross Chain',
+    amountPlaceHolder:" available amount: ",
+    amountHint:'Cross Chain Transaction will be completed in 24 hrs.',
+    toVapor:'Transfer to \n Vapor Chain',
+    toBytom:'Transfer to \n Bytom Chain',
+    asset:'Select Asset'
+  },
   signMessage:{
     title:'Request Signature',
     address: 'Sign Address',
@@ -60,7 +68,8 @@ const en = {
   },
   receive:{
     address: 'Address',
-    tips:'Tips: Click address to copy directly.'
+    tips:'Tips: Click address to copy directly.',
+    vpWarning:'Please don\'t use Vapor address in the real transaction.'
   },
   main: {
     mainNet: 'Mainnet',

@@ -104,7 +104,7 @@ export default {
           if (bytom.settings.network != val.value) {
             bytom.settings.network = val.value;
             this.network = val;
-            account.setupNet(`${val.value}${this.netType}`);
+            account.setupNet(`${val.value}bytom`);
 
             bytom.currentAccount = {}
             account.list()

@@ -193,7 +193,9 @@
 </template>
 
 <script>
-export default {
+  import {  mapGetters } from 'vuex'
+
+  export default {
     name: "",
     data() {
         return {
@@ -215,13 +217,21 @@ export default {
           'pending-header': !this.transaction.status_fail  && !this.transaction.hasOwnProperty('block_timestamp') ,
           'fail-header': this.transaction.status_fail
         }
-      }
+      },
+      ...mapGetters([
+        'currentAccount',
+        'netType'
+      ])
     },
     mounted() {
         let params = this.$route.params;
 
         this.transaction = params.transaction;
-        this.selfAddress = params.address;
+        if(this.netType === 'vapor'){
+          this.selfAddress = this.currentAccount.vpAddress;
+        }else{
+          this.selfAddress = this.currentAccount.address;
+        }
         console.log(params.transaction)
     }
 };

@@ -18,6 +18,14 @@ const routers = [
         }
       },
       {
+        path: '/crossChain',
+        name: 'cross-chain',
+        meta: { title: '跨链' },
+        component: resolve => {
+          require(['@/views/sendTransaction/crossChainTransaction.vue'], resolve)
+        }
+      },
+      {
         path: '/signMessage',
         name: 'sign-message',
         meta: { title: '请求签名' },

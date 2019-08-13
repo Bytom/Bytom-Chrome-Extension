@@ -17,6 +17,12 @@
     margin: 30px auto;
   }
 
+  .vp-warning {
+    text-align: center;
+    width: 100%;
+    font-size: 12px;
+  }
+
   .address-text{
     cursor: pointer;
   }
@@ -42,6 +48,7 @@
       <p>{{$t('receive.address')}}</p>
       <span class="color-black font-medium address-text"  :title="addressTitle" :data-clipboard-text="addr">{{addr}}</span>
     </div>
+    <div v-if="netType === 'vapor'" class="vp-warning color-red"> {{$t('receive.vpWarning')}}</div>
     <div class="footer color-grey"> {{$t('receive.tips')}}</div>
   </div>
 </template>
@@ -63,6 +70,7 @@
     computed: {
       ...mapGetters([
         'currentAccount',
+        'netType'
       ])
     },
   methods: {
@@ -87,7 +95,11 @@
   },
   mounted() {
     if (this.currentAccount.address != undefined) {
-      this.addr = this.currentAccount.address;
+      if(this.netType === 'vapor'){
+        this.addr = this.currentAccount.vpAddress;
+      }else{
+        this.addr = this.currentAccount.address;
+      }
       this.qrcode = new QRCode( "qrcode", {
         text: this.addr,
         width: 150,

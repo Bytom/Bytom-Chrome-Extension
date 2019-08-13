@@ -45,6 +45,14 @@ const cn = {
     view:'展示全部',
     hide:'隐藏全部'
   },
+  crossChain:{
+    title:'跨链',
+    amountPlaceHolder:"链可用",
+    amountHint:'跨链交易预计24小时内完成',
+    toVapor:'转入\nVapor链',
+    toBytom:'转出至\nBytom链',
+    asset:'选择资产'
+  },
   signMessage:{
     title:'请求签名',
     address: '签名地址',
@@ -60,7 +68,8 @@ const cn = {
   },
   receive:{
     address: '地址',
-    tips:'提示：点击地址进行拷贝。'
+    tips:'提示：点击地址进行拷贝。',
+    vpWarning:'Vapor钱包地址请勿用于交易所充值提现'
   },
   main: {
     mainNet: '主网络',
