@@ -53,6 +53,19 @@ const en = {
     toBytom:'Transfer to \n Bytom Chain',
     asset:'Select Asset'
   },
+  listVote:{
+    title:'Block Producer Voting',
+    myVote:'My votes',
+    totalVote:'All votes',
+    voteRecord:'voting history',
+    voteRules:'voting rules',
+    cancelVote:'veto',
+    bp:'BP',
+    standbyBP:'Standby BP',
+    bpName:'BP name',
+    vote:'Vote',
+    votes:'Votes'
+  },
   signMessage:{
     title:'Request Signature',
     address: 'Sign Address',

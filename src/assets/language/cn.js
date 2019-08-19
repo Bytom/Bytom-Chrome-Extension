@@ -53,6 +53,19 @@ const cn = {
     toBytom:'转出至\nBytom链',
     asset:'选择资产'
   },
+  listVote:{
+    title:'节点投票',
+    myVote:'我的投票',
+    totalVote:'全网投票',
+    voteRecord:'投票记录',
+    voteRules:'投票规则',
+    cancelVote:'取消投票',
+    bp:'正式共识节点',
+    standbyBP:'备选共识节点',
+    bpName:'节点名称',
+    vote:'投票',
+    votes:'票数'
+  },
   signMessage:{
     title:'请求签名',
     address: '签名地址',

@@ -18,6 +18,14 @@ const routers = [
         }
       },
       {
+        path: '/listVote',
+        name: 'listVote',
+        meta: { title: '节点展示' },
+        component: resolve => {
+          require(['@/views/vote/listVote.vue'], resolve)
+        }
+      },
+      {
         path: '/crossChain',
         name: 'cross-chain',
         meta: { title: '跨链' },

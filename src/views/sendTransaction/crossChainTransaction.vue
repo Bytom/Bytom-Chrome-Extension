@@ -94,12 +94,12 @@
 
         <section class="form-container">
           <div class="form bg-white">
-              <div class="form-item">
-                  <label class="form-item-label">{{ $t('crossChain.asset') }}</label>
-                  <!--<div class="form-item-content" >-->
-                    <v-select style="height: 32px;" class="v-select" v-bind:colorBlack="true" :clearable="false" :value="aOptions[0]" :options="aOptions"></v-select>
-                  <!--</div>-->
-              </div>
+              <!--<div class="form-item">-->
+                  <!--<label class="form-item-label">{{ $t('crossChain.asset') }}</label>-->
+                  <!--&lt;!&ndash;<div class="form-item-content" >&ndash;&gt;-->
+                    <!--<v-select style="height: 32px;" class="v-select" v-bind:colorBlack="true" :clearable="false" :value="aOptions[0]" :options="aOptions"></v-select>-->
+                  <!--&lt;!&ndash;</div>&ndash;&gt;-->
+              <!--</div>-->
               <div class="form-item">
                   <label class="form-item-label">
                     {{ $t('transfer.quantity') }}

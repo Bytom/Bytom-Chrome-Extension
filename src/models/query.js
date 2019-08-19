@@ -1,8 +1,9 @@
 import bytom from "./bytom";
 
-function query(bytom) {
-  this.bytom = bytom;
-}
+let query = {};
 
+query.chainStatus = function() {
+  return bytom.query.getVoteStatus();
+};
 
 export default query;

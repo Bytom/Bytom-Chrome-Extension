@@ -50,9 +50,13 @@ account.balance = function(guid) {
       .listAddressUseServer(guid)
       .then(addresses => {
         let balances = []
+        let votes = []
         addresses.forEach(address => {
           if (address.balances != null) {
             balances = balances.concat(address.balances)
+          }
+          if (address.votes != null) {
+            votes = votes.concat(address.votes)
           }
         })
         let obj = {};
@@ -78,7 +82,10 @@ account.balance = function(guid) {
           res.push(obj[prop]);
         }
 
-        resolve(res)
+        resolve({
+            balances:res,
+            votes
+          })
       })
       .catch(error => {
         reject(error)

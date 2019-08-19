@@ -196,7 +196,7 @@
             <div v-if="netType =='vapor'" class="btn-send-transfer">
 
 
-                <a v-if="address!=undefined" class="btn btn-primary btn-received" @click="showQrcode">
+                <a v-if="address!=undefined" class="btn btn-primary btn-received" @click="listVoteOpen">
                   vote
                 </a>
                 <a v-if="address!=undefined " class="btn btn-primary btn-transfer" @click="crossChainOpen">
@@ -416,6 +416,9 @@ export default {
         crossChainOpen: function () {
             this.$router.push('crossChain')
         },
+        listVoteOpen: function () {
+            this.$router.push('listVote')
+        },
         handleScroll(vertical, horizontal, nativeEvent) {
             if (vertical.process == 0) {
                 this.start = 0;
@@ -436,21 +439,34 @@ export default {
         },
         refreshBalance: function (guid) {
             account.balance(guid)
-              .then((balances)=>{
-                if(!_.isEqual(this.balances, balances)){
+              .then((obj)=>{
+                const balances = obj.balances
+                const votes = obj.votes
+
+                const balanceNotEqual = !_.isEqual(this.balances, balances)
+                const voteNotEqual = (this.netType === 'vapor' && !_.isEqual(this.currentAccount.votes, votes))
+
+                if(balanceNotEqual || voteNotEqual){
+                    //update AccountList
+
                     const bytom = this.bytom.clone();
 
-                    //update AccountList
                     const objectIndex = bytom.accountList.findIndex(a => a.guid == this.currentAccount.guid)
 
-                    if(this.netType === 'vapor'){
-                      bytom.currentAccount.vpBalances = balances;
-                      bytom.accountList[objectIndex].vpBalances = balances
-                    }else{
-                      bytom.currentAccount.balances = balances;
-                      bytom.accountList[objectIndex].balances = balances
+                    if(balanceNotEqual){
+                      if(this.netType === 'vapor'){
+                        bytom.currentAccount.vpBalances = balances;
+                        bytom.accountList[objectIndex].vpBalances = balances
+                      }else{
+                        bytom.currentAccount.balances = balances;
+                        bytom.accountList[objectIndex].balances = balances
+                      }
                     }
 
+                    if(voteNotEqual){
+                      bytom.currentAccount.votes = votes;
+                      bytom.accountList[objectIndex].votes = votes
+                    }
 
                     this[Actions.UPDATE_STORED_BYTOM](bytom)
                 }
