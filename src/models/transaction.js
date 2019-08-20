@@ -54,6 +54,34 @@ transaction.buildCrossChain = function(guid, to, asset, amount, confirmations) {
   return retPromise;
 };
 
+transaction.buildVote = function(guid, vote, amount, confirmations, memo) {
+  let retPromise = new Promise((resolve, reject) => {
+    bytom.transaction
+      .buildVote(guid, vote, Number(amount), confirmations, memo)
+      .then(res => {
+        resolve(res);
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+  return retPromise;
+};
+
+transaction.buildVeto = function(guid, vote, amount, confirmations, memo) {
+  let retPromise = new Promise((resolve, reject) => {
+    bytom.transaction
+      .buildVeto(guid, vote, Number(amount), confirmations, memo)
+      .then(res => {
+        resolve(res);
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+  return retPromise;
+};
+
 transaction.buildTransaction = function(guid, inputs, outputs, gas, confirmations) {
   let retPromise = new Promise((resolve, reject) => {
     bytom.transaction

@@ -191,7 +191,8 @@ export default {
                 }
             });
 
-            account.balance(newGuid).then(balances => {
+            account.balance(newGuid).then(obj => {
+              const balances = obj.balances
               let balance = 0.00
               if(balances.length >0 ) {
                 const balanceObject = balances.filter(b => b.asset === BTM)[0]

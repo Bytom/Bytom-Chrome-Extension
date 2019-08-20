@@ -143,7 +143,11 @@
                     </div>
                     <div class="vote-number">{{$t('listVote.votes')}} {{formatNue(vote.vote_num)}} ({{formatFraction(vote.vote_num, totalVote)}})</div>
                   </td>
-                <td><button>{{$t('listVote.vote')}}</button></td>
+                <td>
+                  <router-link :to="{name: 'vote', params: { vote: vote }}">
+                    {{$t('listVote.vote')}}
+                  </router-link>
+                </td>
               </tr>
             </table>
           </div>
@@ -156,6 +160,7 @@ import query from "@/models/query";
 import { BTM } from "@/utils/constants";
 import Number from "@/utils/Number"
 import { mapActions, mapGetters, mapState } from 'vuex'
+import _ from 'lodash';
 
 export default {
     components: {
@@ -186,11 +191,12 @@ export default {
             }
         },
       myVote() {
-          if(this.currentAccount.votes && this.currentAccount.votes.length === 0){
-            return 0
-          }else{
-            return 'ddddd'
-          }
+        let vote
+        const votes = this.currentAccount.votes
+        if(votes && votes.length >0 ){
+          vote = _.sumBy(votes,'total')
+        }
+        return (vote != null && vote != 0) ? Number.formatNue(vote) : '0.00'
       },
       filteredList() {
         return this.votes.filter(post => {
@@ -219,7 +225,8 @@ export default {
         formatFraction: function (upper, lower) {
           return Number.fractionalNum(upper, lower);
         }
-    }, mounted() {
+    },
+    mounted() {
       query.chainStatus().then(resp => {
         if(resp){
           this.totalVote = resp.total_vote_num;
@@ -227,7 +234,6 @@ export default {
             item.rank = index+1;
             return item
           });
-          console.log(this.votes)
         }
       });
     }

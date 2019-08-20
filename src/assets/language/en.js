@@ -66,6 +66,9 @@ const en = {
     vote:'Vote',
     votes:'Votes'
   },
+  vote:{
+    selectNode:'Select Node'
+  },
   signMessage:{
     title:'Request Signature',
     address: 'Sign Address',

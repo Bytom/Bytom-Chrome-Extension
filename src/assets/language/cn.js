@@ -66,6 +66,9 @@ const cn = {
     vote:'投票',
     votes:'票数'
   },
+  vote:{
+    selectNode:'选择节点'
+  },
   signMessage:{
     title:'请求签名',
     address: '签名地址',
