@@ -8,7 +8,7 @@
     display:flex;
 }
 .topbar .topbar-left {
-    width: 115px;
+    width: 85px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -79,6 +79,7 @@
     height: 48px;
     line-height: 23px;
     font-size: 16px;
+    padding: 12px 10px;
 }
 
 .btn-received {
@@ -125,10 +126,6 @@
     width: 90%;
 }
 
-.list-item .value {
-    float: right;
-    margin-top: 13px;
-}
 .account-address {
     cursor: pointer;
 }
@@ -175,8 +172,8 @@
                 </div>
                 <div class="topbar-middle bg-secondary">
                     <select :value="netType" @change="netTypeToggle">
-                        <option value="bytom">{{ $t('main.bytom') }}</option>
-                        <option value="vapor">{{ $t('main.vapor') }}</option>
+                        <option value="bytom">{{ $t('main.bytom') }} {{net}}</option>
+                        <option value="vapor">{{ $t('main.vapor') }} {{net}}</option>
                     </select>
                 </div>
             </div>
@@ -229,7 +226,12 @@
                       <vue-scroll @handle-scroll="handleScroll">
                       <ul class="list">
                           <li class="list-item" v-for="(transaction, index) in transactions" :key="index" @click="$router.push({name: 'transfer-info', params: {transaction: transaction, address: currentAccount.address}})">
-                              <div class="value">{{transaction.direct}} {{transaction.val.toFixed(2)}} BTM</div>
+                              <div class="float-right text-aglin-right">
+                                <div class="value">{{transaction.direct}} {{transaction.val.toFixed(2)}} BTM</div>
+                                <div v-if="transaction.type == 'vote'" class="addr color-grey">{{ $t('listVote.vote')}} {{transaction.vAmount}}</div>
+                                <div v-else-if="transaction.type == 'veto'" class="addr color-grey">{{ $t('listVote.cancelVote')}}  {{transaction.vAmount}}</div>
+                                <div v-else-if="transaction.type == 'crossChain'" class="addr color-grey">{{ $t('crossChain.title')}}</div>
+                              </div>
                               <div>
                                   <div v-if="transaction.hasOwnProperty('block_timestamp')">
                                     {{transaction.submission_timestamp | moment}}
@@ -278,6 +280,7 @@ import { BTM } from "@/utils/constants";
 import { mapActions, mapGetters, mapState } from 'vuex'
 import * as Actions from '@/store/constants';
 import _ from 'lodash';
+import { Number as Num } from "@/utils/Number"
 
 
 const EnterActive = 'animated faster fadeInLeft';
@@ -438,6 +441,7 @@ export default {
             }
         },
         refreshBalance: function (guid) {
+          if(guid){
             account.balance(guid)
               .then((obj)=>{
                 const balances = obj.balances
@@ -474,6 +478,7 @@ export default {
               .catch(error => {
                 console.log(error);
             });
+          }
         },
         refreshTransactions: function (guid, address, start, limit) {
             return new Promise((resolve, reject) => {
@@ -498,8 +503,22 @@ export default {
             const balanceObject = transaction.balances
               .filter(b => b.asset === assetID);
 
-            if(balanceObject.length ===1 ){
+            const filterInput = _.find(transaction.inputs, function(o) { return o.type =='veto'; })
 
+            if(filterInput){
+              transaction.type = 'veto'
+              const inAmount = _.sumBy((transaction.inputs.filter(i => i.type ==='veto')), 'amount')
+              const outAmount = _.sumBy((transaction.outputs.filter(i => i.type ==='vote')), 'amount')
+              transaction.vAmount =  Num.formatNue(inAmount-outAmount)
+            }else if(_.find(transaction.outputs, function(o) { return o.type =='vote'; })){
+              const outAmount = _.sumBy((transaction.outputs.filter(i => i.type ==='vote')), 'amount')
+              transaction.vAmount =  Num.formatNue(outAmount)
+              transaction.type = 'vote'
+            }else if(_.find(transaction.outputs, function(o) { return o.type =='crosschain_output'; })){
+              transaction.type = 'crossChain'
+            }
+
+            if(balanceObject.length ===1 ){
                 const inputAddresses = transaction.inputs
                   .filter(input => input.asset === assetID && input.address !== this.address)
                   .map(input => input.address)

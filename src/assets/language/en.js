@@ -66,6 +66,11 @@ const en = {
     vote:'Vote',
     votes:'Votes'
   },
+  listCancel:{
+    voted:'Voted',
+    cancel:'Cancel',
+    selectVote:'Choose to vote'
+  },
   vote:{
     selectNode:'Select Node'
   },

@@ -53,7 +53,7 @@
     <div class="warp-chlid bg-gray">
         <section class="header bg-header">
             <i class="iconfont icon-back" @click="close"></i>
-            <p>{{ $t('listVote.vote') }}</p>
+            <p>{{ $t('listVote.cancelVote') }}</p>
         </section>
 
         <section class="form-container">
@@ -95,6 +95,8 @@ import getLang from "@/assets/language/sdk";
 import Confirm from "../sendTransaction/transferConfirm";
 import { BTM } from "@/utils/constants";
 import { mapGetters, mapState } from 'vuex'
+import { Number as Num } from "@/utils/Number"
+
 
 export default {
     components: {
@@ -116,14 +118,13 @@ export default {
     },
     computed: {
       bytomBalance: function () {
-        let balance,
-          balances = this.currentAccount.vpBalances
-        if(balances && balances.length >0 ){
-          const balanceObject = balances.filter(b => b.asset === BTM)[0]
-          balance = balanceObject.balance/Math.pow(10,balanceObject.decimals)
+        const vote = this.selectVote
+        let vetoAmount
+        if(vote && vote.total > vote.locked ){
+          vetoAmount = Num.formatNue(vote.total-vote.locked)
         }
 
-          return `Vapor${this.$t("crossChain.amountPlaceHolder")}${(balance != null && balance != 0) ? balance : '0.00'}`
+          return `Vapor${this.$t("crossChain.amountPlaceHolder")}${(vetoAmount != null && vetoAmount != 0) ? vetoAmount : '0.00'}`
       },
       ...mapState([
         'bytom',
@@ -169,8 +170,9 @@ export default {
 
             const vote = this.selectVote.pub_key
             this.transaction.to = vote
-            transaction.buildVote(this.currentAccount.guid, vote,  this.transaction.amount*100000000, this.transaction.confirmations).then(result => {
+            transaction.buildVeto(this.currentAccount.guid, vote,  this.transaction.amount*100000000, this.transaction.confirmations).then(result => {
                 loader.hide();
+                console.log(result)
                 this.transaction.fee = Number(result.fee / 100000000);
                 this.$router.push({ name: 'transfer-confirm', params: { account: this.currentAccount, transaction: this.transaction, rawData: result} })
             }).catch(error => {

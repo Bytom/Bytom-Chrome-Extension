@@ -13,6 +13,8 @@ const state = {
     alertResult:null,
 
     prompt:null,
+    listVote:[],
+    selectVote: null,
 };
 
 const getters = {

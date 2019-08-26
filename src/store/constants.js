@@ -7,6 +7,8 @@ export const CREATE_NEW_BYTOM = 'createNewBytom';
 export const CREATE_NEW_BYTOM_ACCOUNT = 'createNewAccount';
 export const IMPORT_BYTOM = 'importBytom';
 export const SET_AUTO_LOCK = 'setAutoLock';
+export const SET_LIST_VOTE = 'setListVote';
+export const SET_SELECTED_VOTE = 'setSelectVote';
 export const LOCK = 'lock';
 export const DESTROY = 'destroy';
 

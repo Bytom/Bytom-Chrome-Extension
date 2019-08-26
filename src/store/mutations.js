@@ -8,6 +8,9 @@ export const mutations = {
     [Mutations.PUSH_ALERT_RESULT]:(state, alertResult) => state.alertResult = alertResult,
     [Mutations.CLEAR_ALERT_RESULT]:(state) => state.alertResult = null,
     [Mutations.PUSH_PROMPT]:(state, prompt) => state.prompt = prompt,
-    // [Mutations.SET_AUTO_LOCK]:(state, inactivityInterval) =>
+    [Mutations.SET_LIST_VOTE]:(state, listVote) => state.listVote = listVote,
+    [Mutations.SET_SELECTED_VOTE]:(state, selectVote) => state.selectVote = selectVote,
+
+  // [Mutations.SET_AUTO_LOCK]:(state, inactivityInterval) =>
     //     state.bytom.settings.inactivityInterval = TimingHelpers.minutes(inactivityInterval),
 };

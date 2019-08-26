@@ -6,8 +6,11 @@ import account from "../models/account";
 
 export const actions = {
     [Actions.SET_BYTOM]:({commit}, bytom) => commit(Actions.SET_BYTOM, bytom),
+    [Actions.SET_LIST_VOTE]:({commit}, listVote) => commit(Actions.SET_LIST_VOTE, listVote),
+    [Actions.SET_SELECTED_VOTE]:({commit}, selectVote) => commit(Actions.SET_SELECTED_VOTE, selectVote),
 
-    [Actions.LOAD_BYTOM]:({dispatch}) => {
+
+  [Actions.LOAD_BYTOM]:({dispatch}) => {
         return new Promise((resolve, reject) => {
             InternalMessage.signal(InternalMessageTypes.LOAD).send().then(_bytom => {
                 dispatch(Actions.SET_BYTOM, Bytom.fromJson(_bytom));

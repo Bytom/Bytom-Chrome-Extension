@@ -26,11 +26,27 @@ const routers = [
         }
       },
       {
+        path: '/listCancel',
+        name: 'listCancel',
+        meta: { title: '选择节点' },
+        component: resolve => {
+          require(['@/views/vote/listCancel.vue'], resolve)
+        }
+      },
+      {
         path: '/vote',
         name: 'vote',
         meta: { title: '投票' },
         component: resolve => {
           require(['@/views/vote/vote.vue'], resolve)
+        }
+      },
+      {
+        path: '/veto',
+        name: 'veto',
+        meta: { title: '取消投票' },
+        component: resolve => {
+          require(['@/views/vote/veto.vue'], resolve)
         }
       },
       {

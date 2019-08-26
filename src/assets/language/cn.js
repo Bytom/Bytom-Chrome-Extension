@@ -66,6 +66,11 @@ const cn = {
     vote:'投票',
     votes:'票数'
   },
+  listCancel:{
+    voted:'已投票',
+    cancel:'可取消',
+    selectVote:'选择节点'
+  },
   vote:{
     selectNode:'选择节点'
   },

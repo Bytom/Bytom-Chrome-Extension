@@ -22,19 +22,20 @@
 }
 
 .vote-list {
-    margin-bottom: 20px;
-    padding: 10px 15px;
     border-radius:4px;
-    height: 300px;
+    height: 505px;
     overflow: scroll;
+    padding: 20px 0px;
 }
 
-.transfer-header{
-  background: #035BD4;
+.votes{
+  width: 100%;
 }
+
 .vote-item> td{
-  padding: 12px 5px;
+  padding: 12px 15px;
   border-bottom: 1px solid #F0F0F0;
+  cursor: pointer;
 }
   .vote-item img{
     height: 36px;
@@ -60,76 +61,19 @@
     display: flex;
   }
 
-  .bp{
-    background: #F4FBE5;
-    color: #91D303;
-  }
-
-  .stanbybp{
-    background: #FFFAE5;
-    color: #FFCC00;
-  }
-
-  .otherbp{
-    background: #F2F3F4;
-    color: #808A95;
-  }
-  .vote-role{
-    width: 20px;
-    height: 20px;
-    border-radius: 12px;
-    font-size: 12px;
-    line-height: 20px;
-    text-align: center
-  }
-
-  .vote-label{
-    font-size: 14px;
-    padding: 20px;
-    display:flex;
-    border-bottom: 1px solid #F0F0F0;
-
-  }
-
 </style>
 
 <template>
     <div class="warp-chlid bg-gray">
-        <section class="header bg-header">
-            <i class="iconfont icon-back" @click="close"></i>
-            <p>{{ $t('listVote.title') }}</p>
-        </section>
-
-        <section class="my-vote transfer-header">
-          <div>{{ $t('listVote.myVote') }}</div>
-          <div class="vote-number">{{myVote}}</div>
-          <div>{{ $t('listVote.totalVote')}} {{formatNue(totalVote)}}</div>
-        </section>
+      <section class="header bg-header">
+        <i class="iconfont icon-back" @click="close"></i>
+        <p>{{ $t('listCancel.selectVote') }}</p>
+      </section>
 
         <section class="vote-container  bg-white">
-          <div>
-            <button>{{ $t('listVote.voteRules')}}</button>
-            <router-link :to="{name: 'listCancel'}">
-              {{ $t('listVote.cancelVote')}}
-            </router-link>
-          </div>
-          <div class="vote-label color-black">
-            <div>
-              {{ $t('listVote.bp') }}
-            </div>
-            <div>{{ $t('listVote.standbyBP') }}</div>
-            <div class="search-wrapper">
-              <input type="text" v-model="search" placeholder="Search title.."/>
-            </div>
-          </div>
           <div class="vote-list">
-            <table class="list accounts">
-              <tr class="vote-item" v-for="(vote, index) in filteredList" :key="index">
-                  <td>
-                    <div :class="voteRole(vote.role)">
-                      {{ vote.rank }}
-                    </div>
-                  </td>
+            <table class="list votes">
+              <tr class="vote-item" v-for="(vote, index) in filteredList" :key="index"  @click="openVeto(vote)">
                   <td >
                     <div class="vote-title" >
                       <img  :src="vote.logo" alt="">
@@ -142,12 +86,11 @@
                         {{vote.name}}
                       </div>
                     </div>
-                    <div class="vote-number">{{$t('listVote.votes')}} {{formatNue(vote.vote_num)}} ({{formatFraction(vote.vote_num, totalVote)}})</div>
+                    <div class="vote-number">{{$t('listCancel.voted')}} {{formatNue(vote.total)}}</div>
                   </td>
                 <td>
-                  <button @click="openVote(vote)">
-                    {{$t('listVote.vote')}}
-                  </button>
+                  <div class="vote-title">{{formatNue(vote.total-vote.locked)}} </div>
+                   <div class="vote-number"> {{$t('listCancel.cancel')}} </div>
                 </td>
               </tr>
             </table>
@@ -161,14 +104,16 @@ import query from "@/models/query";
 import { BTM } from "@/utils/constants";
 import Number from "@/utils/Number"
 import { mapActions, mapGetters, mapState } from 'vuex'
-import * as Actions from '@/store/constants';
 import _ from 'lodash';
+import * as Actions from '@/store/constants';
+
 
 export default {
     components: {
     },
     data() {
         return {
+          votes:[],
           totalVote:0,
           search:''
         };
@@ -200,7 +145,7 @@ export default {
         return (vote != null && vote != 0) ? Number.formatNue(vote) : '0.00'
       },
       filteredList() {
-        return this.listVote.filter(post => {
+        return this.votes.filter(post => {
           return post.name.toLowerCase().includes(this.search.toLowerCase())
         })
       },
@@ -211,7 +156,7 @@ export default {
       ...mapGetters([
         'currentAccount',
         'accountList',
-        'net',
+        'net'
       ])
     },
     watch: {
@@ -227,25 +172,19 @@ export default {
         formatFraction: function (upper, lower) {
           return Number.fractionalNum(upper, lower);
         },
-        openVote: function(vote){
-          this[Actions.SET_SELECTED_VOTE](vote);
-          this.$router.push({name: 'vote'});
+        openVeto: function(veto){
+          this[Actions.SET_SELECTED_VOTE](veto);
+          this.$router.push({name: 'veto'});
         },
         ...mapActions([
-          Actions.SET_LIST_VOTE,
           Actions.SET_SELECTED_VOTE,
         ])
     },
     mounted() {
-      query.chainStatus().then(resp => {
-        if(resp){
-          this.totalVote = resp.total_vote_num;
-          const votes =  resp.consensus_nodes.map( (item, index) => {
-            item.rank = index+1;
-            return item
-          });
-          this[Actions.SET_LIST_VOTE](votes)
-        }
+      const originVotes = this.currentAccount.votes
+      const allVotes = this.listVote;
+      this.votes = _.map(originVotes, function(obj) {
+        return _.assign(obj, _.find(allVotes, {pub_key: obj.vote}));
       });
     }
 };
