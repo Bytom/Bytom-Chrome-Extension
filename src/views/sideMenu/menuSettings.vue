@@ -48,6 +48,14 @@
                 <v-select style="height: 32px;" class="select"  :value="network" :clearable="false" :options="networks" :onChange="networkToggle"></v-select>
             </div>
         </div>
+        <div class="row">
+            <div class="label">
+                <p>{{ $t("setting.currency") }}</p>
+            </div>
+            <div class="form-item setting">
+                <v-select style="height: 32px;" class="select"  :value="currentCurrency" :clearable="false" :options="currencyList" :onChange="currencyToggle"></v-select>
+            </div>
+        </div>
     </MenuPage>
 </template>
 
@@ -74,7 +82,13 @@ export default {
               { label: this.$t('main.soloNet'), value: "solonet" }
             ],
             selected: { label: "中文", value: "cn" },
-            hashVersion: ""
+            hashVersion: "",
+            currentCurrency: { label: "CNY", value: "in_cny" },
+            currencyList: [
+              { label: "CNY", value: "in_cny" },
+              { label: "USD", value: "in_usd" },
+              { label: "BTC", value: "in_btc" }
+            ],
         };
     },
     computed: {
@@ -84,7 +98,8 @@ export default {
       ...mapGetters([
         'net',
         'language',
-        'netType'
+        'netType',
+        'currency'
       ])
     },
     methods: {
@@ -121,6 +136,15 @@ export default {
               bytom.accountList =[]
               this[Actions.UPDATE_STORED_BYTOM](bytom)
             })
+          }
+        },
+        currencyToggle: function (val) {
+          const bytom = this.bytom.clone();
+
+          if (bytom.settings.currency != val.value) {
+            bytom.settings.currency = val.value;
+            this.currentCurrency = val;
+            this[Actions.UPDATE_STORED_BYTOM](bytom)
           }
         },
         refreshAccounts: function () {
@@ -163,6 +187,20 @@ export default {
                 break;
             }
             this.setupNetwork(network);
+          }
+
+          if(this.currency) {
+            switch(this.currency){
+              case 'in_cny':
+                this.currentCurrency = this.currencyList[0]
+                break;
+              case 'in_usd':
+                this.currentCurrency = this.currencyList[1]
+                break;
+              case 'in_btc':
+                this.currentCurrency = this.currencyList[2]
+                break;
+            }
           }
 
     }

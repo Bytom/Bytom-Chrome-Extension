@@ -104,6 +104,7 @@ const cn = {
     send: '发送',
     receive: '接收',
     record: '交易记录',
+    asset:'资产',
     noAccount: '当前网络无账户信息',
     create: '创建账户',
     unconfirmed :'未确认交易',
@@ -123,7 +124,8 @@ const cn = {
     success:'交易成功',
     fail:'交易失败',
     pending:'未确认交易',
-    tips:'提示：访问blockmeta.com来获取交易的相关信息。'
+    tips:'提示：访问blockmeta.com来获取交易的相关信息。',
+    assetId:'资产Id'
   },
   menu: {
     title: '切换账户',
@@ -157,7 +159,8 @@ const cn = {
     title: '设置',
     version: '钱包版本',
     lang: '语言',
-    unit: 'BTM数量单位'
+    unit: 'BTM数量单位',
+    currency:'货币'
   },
   backup: {
     title: '备份',

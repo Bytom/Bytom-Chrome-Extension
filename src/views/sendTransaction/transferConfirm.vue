@@ -93,6 +93,10 @@
     margin:0;
     margin-bottom: 10px;
   }
+  .scorll-panel{
+    overflow: scroll;
+    height: 545px;
+  }
 </style>
 
 <template>
@@ -102,51 +106,53 @@
             <p>{{ $t('transfer.confirmTransaction') }}</p>
         </section>
 
-        <section class="content bg-white">
-            <table>
-                <tbody>
-                    <tr class="row">
-                        <td class="col label">{{ $t('transfer.from') }}</td>
-                        <td class="col value">{{account.alias}}</td>
-                    </tr>
-                    <tr class="row">
-                        <td class="col label">{{ $t('transfer.to') }}</td>
-                        <td class="col value">{{transaction.toShort}}</td>
-                    </tr>
-                    <div class="divider"></div>
-                    <tr class="row">
-                        <td class="col label">{{ $t('transfer.transferAmount') }}</td>
-                        <td class="col value">{{transaction.amount}}<span class="uint">BTM</span></td>
-                    </tr>
-                    <tr class="row">
-                        <td class="col label">{{ $t('transfer.fee') }}</td>
-                        <td class="col value">{{transaction.fee}}<span class="uint">BTM</span></td>
-                    </tr>
+        <div class="scorll-panel">
+            <section class="content bg-white">
+                <table>
+                    <tbody>
+                        <tr class="row">
+                            <td class="col label">{{ $t('transfer.from') }}</td>
+                            <td class="col value">{{account.alias}}</td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col label">{{ $t('transfer.to') }}</td>
+                            <td class="col value">{{transaction.toShort}}</td>
+                        </tr>
+                        <div class="divider"></div>
+                        <tr class="row">
+                            <td class="col label">{{ $t('transfer.transferAmount') }}</td>
+                            <td class="col value">{{transaction.amount}}<span class="uint">BTM</span></td>
+                        </tr>
+                        <tr class="row">
+                            <td class="col label">{{ $t('transfer.fee') }}</td>
+                            <td class="col value">{{transaction.fee}}<span class="uint">BTM</span></td>
+                        </tr>
 
-                    <tr class="row">
-                        <td class="col label">{{ $t('transfer.total') }}</td>
-                        <td class="col value">
-                            <!--<p class="fee-intro">{{ $t('transfer.totalTip') }}</p>-->
-                            {{Number(transaction.amount)+Number(transaction.fee)}}<span class="uint">BTM</span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
+                        <tr class="row">
+                            <td class="col label">{{ $t('transfer.total') }}</td>
+                            <td class="col value">
+                                <!--<p class="fee-intro">{{ $t('transfer.totalTip') }}</p>-->
+                                {{Number(transaction.amount)+Number(transaction.fee)}}<span class="uint">BTM</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
 
-        <section class="content bg-white">
-          <div class="form">
-            <div class="form-item">
-              <label class="form-item-label">{{ $t('transfer.confirmPassword') }}</label>
-              <div class="form-item-content">
-                <input type="password"  v-model="password" autofocus>
+            <section class="content bg-white">
+              <div class="form">
+                <div class="form-item">
+                  <label class="form-item-label">{{ $t('transfer.confirmPassword') }}</label>
+                  <div class="form-item-content">
+                    <input type="password"  v-model="password" autofocus>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        </section>
+            </section>
 
-        <div class="row" style="margin: 20px;">
-            <div class="btn bg-green" @click="transfer">{{ $t('transfer.confirm') }}</div>
+            <div class="row" style="margin: 20px;">
+                <div class="btn bg-green" @click="transfer">{{ $t('transfer.confirm') }}</div>
+            </div>
         </div>
 
     </div>

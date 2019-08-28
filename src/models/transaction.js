@@ -2,8 +2,9 @@ import bytom from "./bytom";
 
 let transaction = {};
 
-transaction.list = function(guid, address, start, limit) {
-  return bytom.transaction.list(guid, address, start, limit);
+transaction.list = function(guid, asset_id, start, limit) {
+  const filter = {asset_id}
+  return bytom.transaction.list(guid, filter, null, start, limit);
 };
 
 transaction.convertArgument = function(argArray) {

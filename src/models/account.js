@@ -69,9 +69,9 @@ account.balance = function(guid) {
             obj[balance.asset] = balance;
             delete obj[balance.asset]['total_received']
             delete obj[balance.asset]['total_sent']
-            delete obj[balance.asset]['in_btc']
-            delete obj[balance.asset]['in_cny']
-            delete obj[balance.asset]['in_usd']
+            // delete obj[balance.asset]['in_btc']
+            // delete obj[balance.asset]['in_cny']
+            // delete obj[balance.asset]['in_usd']
           }
         });
 

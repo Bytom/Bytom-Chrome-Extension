@@ -5,13 +5,13 @@ export class Number {
    * format num to BTM
    * @returns number
    */
-  static formatNue(num) {
+  static formatNue(num, dec) {
     let n = new BigNumber(num);
-    let base = new BigNumber(100000000)
+    let base = new BigNumber(10).exponentiatedBy(dec)
 
     let result = n.dividedBy(base)
 
-    return result.toFormat();
+    return result.toFormat(dec);
   }
 
   /***
@@ -23,6 +23,24 @@ export class Number {
 
     let result = n.shiftedBy(2).decimalPlaces(2)
     return result+'%';
+  }
+
+  /***
+   * format num to currency value
+   * @returns percentage
+   */
+  static formatCurrency(num, type) {
+    let n = new BigNumber(num);
+    switch(type){
+      case "in_cny":
+        return `¥ ${n.toFormat()}`
+      case "in_usd":
+        return `$ ${n.toFormat()}`
+      case "in_btc":
+        return `₿ ${n.toFormat()}`
+      default:
+        return `¥ ${n.toFormat()}`
+    }
   }
 
 }

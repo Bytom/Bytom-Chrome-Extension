@@ -18,6 +18,14 @@ const routers = [
         }
       },
       {
+        path: '/asset',
+        name: 'asset',
+        meta: { title: '资产' },
+        component: resolve => {
+          require(['@/views/assetList.vue'], resolve)
+        }
+      },
+      {
         path: '/listVote',
         name: 'listVote',
         meta: { title: '节点展示' },

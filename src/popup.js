@@ -34,7 +34,9 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
   Vue.component('v-select', vSelect)
 
   Vue.prototype.$vuescrollConfig = {
-    mode: 'pure-native',
+    mode: 'native',
+    sizeStrategy: 'percent',
+    detectResize: true,
     bar: {
       keepShow: true,
       background: '#c9c9c9'

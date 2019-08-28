@@ -45,28 +45,13 @@
     text-align: center;
     padding: 0 30px 10px;
 }
-.content .token-icon {
-    display: inline-flex;
-    height: 40px;
-    width: 40px;
-    padding: 8px;
-    margin: 8px;
-}
+
 .content .amount {
     padding-bottom: 10px;
 }
 .content .token-amount {
     font-size: 32px;
     line-height: 45px;
-}
-.token-amount .asset {
-    font-size: 18px;
-    margin-left: 2px;
-}
-.qrcode {
-    margin-left: 5px;
-    vertical-align: middle;
-    cursor: pointer;
 }
 
 .btn-send-transfer {
@@ -114,21 +99,14 @@
     position: relative;
     display: block;
     padding: 10px 20px;
+    height: 52px;
+    text-transform: uppercase;
 }
 
-.list-item:after {
-    content:"";
-    background: #e0e0e0;
-    position: absolute;
-    bottom: 0;
-    left: 20px;
-    height: 1px;
-    width: 90%;
+.network-select{
+  text-transform: capitalize;
 }
 
-.account-address {
-    cursor: pointer;
-}
 .btn-creation {
     display: block;
     width: 310px;
@@ -140,17 +118,10 @@
     left: 20px;
 }
 
-.time, .value{
-  font-weight: 500;
-  font-size: 16px;
-}
 .addr{
   font-size: 12px;
 }
-.no-tx-img{
-  width: 100px;
-  height: 100px;
-}
+
 .no-record{
   display: block;
 }
@@ -171,7 +142,7 @@
                     </a>
                 </div>
                 <div class="topbar-middle bg-secondary">
-                    <select :value="netType" @change="netTypeToggle">
+                    <select class="network-select" :value="netType" @change="netTypeToggle">
                         <option value="bytom">{{ $t('main.bytom') }} {{net}}</option>
                         <option value="vapor">{{ $t('main.vapor') }} {{net}}</option>
                     </select>
@@ -182,7 +153,6 @@
                     <span class="alias color-grey">{{currentAccount.alias}}</span>
                     <div class="token-amount">
                         {{accountBalance}}
-                        <span class="asset">BTM</span>
                     </div>
                 </div>
                 <div v-else>
@@ -216,52 +186,46 @@
                 </a>
             </div>
         </section>
+      <section class="transaction-title">
+      <h3 class="bg-gray color-grey">{{ $t('main.asset') }}</h3>
+      </section>
+      <section class="transactions">
+        <div v-if="address!=undefined">
+        <div v-if="balances && balances.length > 0">
+          <ul class="list">
+            <li class="list-item" v-for="(asset, index) in balances.slice().reverse()" :key="index" @click="assetOpen(asset)">
+              <div class="float-right text-align-right">
+                <div class="value">{{ itemBalance(asset) }}</div>
+                <div class="addr color-grey">{{ formatCurrency(asset[ currency ]) }}</div>
+              </div>
+              <div>
+                <div v-if="asset.alias !== ''">
+                  {{asset.alias}}
+                </div>
 
-            <section class="transaction-title">
-                <h3 class="bg-gray color-grey">{{ $t('main.record') }}</h3>
-            </section>
-            <section class="transactions">
-                 <div v-if="address!=undefined">
-                  <div v-if="transactions.length != 0">
-                      <vue-scroll @handle-scroll="handleScroll">
-                      <ul class="list">
-                          <li class="list-item" v-for="(transaction, index) in transactions" :key="index" @click="$router.push({name: 'transfer-info', params: {transaction: transaction, address: currentAccount.address}})">
-                              <div class="float-right text-aglin-right">
-                                <div class="value">{{transaction.direct}} {{transaction.val.toFixed(2)}} BTM</div>
-                                <div v-if="transaction.type == 'vote'" class="addr color-grey">{{ $t('listVote.vote')}} {{transaction.vAmount}}</div>
-                                <div v-else-if="transaction.type == 'veto'" class="addr color-grey">{{ $t('listVote.cancelVote')}}  {{transaction.vAmount}}</div>
-                                <div v-else-if="transaction.type == 'crossChain'" class="addr color-grey">{{ $t('crossChain.title')}}</div>
-                              </div>
-                              <div>
-                                  <div v-if="transaction.hasOwnProperty('block_timestamp')">
-                                    {{transaction.submission_timestamp | moment}}
-                                  </div>
-                                  <div v-else>
-                                    {{ $t('main.unconfirmed') }}
-                                  </div>
-                                  <div class="addr color-grey">{{transaction.address}}</div>
-                              </div>
-                          </li>
-                      </ul>
-                  </vue-scroll>
-                  </div>
-                      <div v-else>
-                          <div class="bg-emptytx"></div>
-                          <div>
-                              <span class="color-lightgrey center-text no-record">{{$t('main.noRecord')}}</span>
-                          </div>
-                      </div>
-                  </div>
-                  <div v-else>
-                      <router-link :to="{name: 'menu-account-creation'}">
-                          <div class="bg-emptytx"></div>
-                          <div>
-                            <span class="color-lightgrey center-text no-record">{{$t('main.noRecord')}}</span>
-                          </div>
-                          <a class="btn btn-primary btn-creation">{{ $t('main.create') }}</a>
-                      </router-link>
-                  </div>
-            </section>
+                <div class="addr color-grey">{{shortAddress(asset.asset)}}</div>
+              </div>
+
+            </li>
+          </ul>
+        </div>
+          <div v-else>
+            <div class="bg-emptytx"></div>
+            <div>
+              <span class="color-lightgrey center-text no-record">{{$t('main.noRecord')}}</span>
+            </div>
+          </div>
+        </div>
+        <div v-else>
+          <router-link :to="{name: 'menu-account-creation'}">
+            <div class="bg-emptytx"></div>
+            <div>
+              <span class="color-lightgrey center-text no-record">{{$t('main.noRecord')}}</span>
+            </div>
+            <a class="btn btn-primary btn-creation">{{ $t('main.create') }}</a>
+          </router-link>
+        </div>
+      </section>
 
         <!-- child page -->
         <div class="mask" v-show="maskShow"></div>
@@ -314,9 +278,6 @@ export default {
             }
             if (from.name == 'transfer-confirm') {
               this.setupNetwork()
-              this.refreshTransactions(this.currentAccount.guid, this.address).then(transactions => {
-                this.transactions = transactions
-              });
             }
         },
         currentAccount(newVal, oldVal) {
@@ -330,24 +291,18 @@ export default {
             }else{
               addr = newVal.address
             }
-
-            this.refreshTransactions(newVal.guid, addr).then(transactions => {
-                this.transactions = transactions
-            });
         },
     },
     computed: {
-        shortAddress: function () {
-            return address.short(this.address)
-        },
         accountBalance: function () {
             let balance
             const balances = this.balances
+
             if(balances && balances.length >0 ){
-                const balanceObject = balances.filter(b => b.asset === BTM)[0]
-                balance = balanceObject.balance/Math.pow(10,balanceObject.decimals)
+                const currency = this.currency
+                balance = _.sumBy(balances, function(o) { return Number(o[currency]); })
             }
-            return (balance != null && balance != 0) ? balance : '0.00'
+            return  Num.formatCurrency( (balance != null && balance != 0)? balance : '0.00', this.currency)
         },
         address: function(){
           if(this.netType === 'vapor'){
@@ -370,10 +325,24 @@ export default {
           'currentAccount',
           'accountList',
           'net',
-          'netType'
+          'netType',
+          'currency'
         ])
     },
     methods: {
+      shortAddress: function (add) {
+        return address.short(add)
+      },
+      formatCurrency: function (num) {
+        return Num.formatCurrency(num, this.currency)
+      },
+      itemBalance: function(asset){
+        if(asset.asset === BTM){
+          return Num.formatNue(asset.balance,8)
+        }else{
+          return Num.formatNue(asset.balance,asset.decimals)
+        }
+      },
         setupRefreshTimer() {
             setInterval(() => {
                 this.refreshBalance(this.currentAccount.guid)
@@ -422,23 +391,9 @@ export default {
         listVoteOpen: function () {
             this.$router.push('listVote')
         },
-        handleScroll(vertical, horizontal, nativeEvent) {
-            if (vertical.process == 0) {
-                this.start = 0;
-                this.refreshTransactions(this.currentAccount.guid, this.address).then(transactions => {
-                    this.transactions = transactions
-                });
-                return;
-            }
-
-            if (vertical.process == 1) {
-                this.start += this.limit;
-                this.refreshTransactions(this.currentAccount.guid, this.address, this.start, this.limit).then(transactions => {
-                    transactions.forEach(transaction => {
-                        this.transactions.push(transaction);
-                    });
-                });
-            }
+        assetOpen: function (asset) {
+            this[Actions.SET_CURRENT_ASSET](asset)
+            this.$router.push('asset')
         },
         refreshBalance: function (guid) {
           if(guid){
@@ -480,82 +435,15 @@ export default {
             });
           }
         },
-        refreshTransactions: function (guid, address, start, limit) {
-            return new Promise((resolve, reject) => {
-                transaction.list(guid, address, start, limit).then(transactions => {
-                    if (transactions == null) {
-                        return;
-                    }
-
-                    const formattedTx = this.transactionsFormat(transactions);
-                    resolve(formattedTx)
-                }).catch(error => {
-                    console.log(error);
-                    reject(error)
-                });
-            })
-        },
-        transactionsFormat: function (transactions) {
-          const formattedTransactions = []
-          const assetID = BTM
-
-          transactions.forEach(transaction => {
-            const balanceObject = transaction.balances
-              .filter(b => b.asset === assetID);
-
-            const filterInput = _.find(transaction.inputs, function(o) { return o.type =='veto'; })
-
-            if(filterInput){
-              transaction.type = 'veto'
-              const inAmount = _.sumBy((transaction.inputs.filter(i => i.type ==='veto')), 'amount')
-              const outAmount = _.sumBy((transaction.outputs.filter(i => i.type ==='vote')), 'amount')
-              transaction.vAmount =  Num.formatNue(inAmount-outAmount)
-            }else if(_.find(transaction.outputs, function(o) { return o.type =='vote'; })){
-              const outAmount = _.sumBy((transaction.outputs.filter(i => i.type ==='vote')), 'amount')
-              transaction.vAmount =  Num.formatNue(outAmount)
-              transaction.type = 'vote'
-            }else if(_.find(transaction.outputs, function(o) { return o.type =='crosschain_output'; })){
-              transaction.type = 'crossChain'
-            }
-
-            if(balanceObject.length ===1 ){
-                const inputAddresses = transaction.inputs
-                  .filter(input => input.asset === assetID && input.address !== this.address)
-                  .map(input => input.address)
-
-                const outputAddresses = transaction.outputs
-                  .filter(output => output.asset === assetID && output.address !== this.address)
-                  .map(output => output.address)
-
-
-                const val  = assetID===BTM ? Number(balanceObject[0].amount)/ 100000000 : Number(balanceObject[0].amount);
-
-                if (val > 0) {
-                    transaction.direct = "+";
-                    transaction.address = address.short(inputAddresses.pop());
-                } else {
-                    transaction.direct = "-";
-                    transaction.address = address.short(outputAddresses.pop());
-                }
-
-                transaction.val = Math.abs(val);
-                transaction.fee = transaction.fee / 100000000;
-
-                formattedTransactions.push(transaction);
-              }
-            });
-          return formattedTransactions;
-        },
       ...mapActions([
         Actions.UPDATE_STORED_BYTOM,
+        Actions.SET_CURRENT_ASSET,
       ])
     },
     mounted() {
         this.setupNetwork();
         this.setupRefreshTimer();
-        this.refreshTransactions(this.currentAccount.guid, this.address).then(transactions => {
-          this.transactions = transactions
-        });
+        this.refreshBalance(this.currentAccount.guid)
     },
   };
 </script>

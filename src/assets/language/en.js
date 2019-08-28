@@ -106,6 +106,7 @@ const en = {
     send: 'Send',
     receive: 'Receive',
     record: 'Transaction Record',
+    asset:'Asset',
     noAccount: 'No account information on this network.',
     create: 'Create account',
     noRecord:"No transaction records found.",
@@ -125,7 +126,8 @@ const en = {
     success:'The transaction is succeed',
     fail:'The transaction is Failed.',
     pending:'The transaction is pending…',
-    tips:'Tip: Visit Blockmeta.com to check more information. '
+    tips:'Tip: Visit Blockmeta.com to check more information. ',
+    assetId:'Asset Id'
   },
   menu: {
     title: 'Switch Account',
@@ -160,7 +162,8 @@ const en = {
     title: 'Setting',
     version: 'Version',
     lang: 'Language',
-    unit: 'Btm Amount Unit'
+    unit: 'Btm Amount Unit',
+    currency:'Currency'
   },
   backup: {
     title: 'Backup',

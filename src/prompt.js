@@ -35,7 +35,9 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
     return moment(value * 1000).format(formatString)
   })
   Vue.prototype.$vuescrollConfig = {
-    mode: 'pure-native',
+    mode: 'native',
+    sizeStrategy: 'percent',
+    detectResize: true,
     bar: {
       keepShow: true,
       background: '#c9c9c9'

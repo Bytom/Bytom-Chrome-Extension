@@ -82,7 +82,7 @@
     color:rgba(255,255,255,0.50);
   }
   .asset{
-    margin-left: 3px;
+    text-transform: uppercase;
   }
   .divider{
     margin: 10px 0;
@@ -106,7 +106,7 @@
         <section class="panel">
             <div class="tx-header"
                  v-bind:class="classObject">
-              <p class="value">{{transaction.direct}}{{transaction.val}}<span class="asset">BTM</span></p>
+              <p class="value">{{transaction.direct}}{{transaction.val}}</p>
               <small class="header-text" v-if="transaction.status_fail">
                 {{ $t('transactionDetail.fail') }}
               </small>
@@ -133,6 +133,14 @@
                         <td colspan="2"><div class="divider"></div></td>
                       </tr>
 
+                      <tr>
+                        <td class="label">
+                          {{ $t('transactionDetail.assetId') }}
+                        </td>
+                        <td class="asset value">
+                          <p>{{currentAsset.asset}}</p>
+                        </td>
+                      </tr>
                       <tr>
                         <td class="label">
                           {{ $t('transactionDetail.time') }}
@@ -193,7 +201,7 @@
 </template>
 
 <script>
-  import {  mapGetters } from 'vuex'
+  import {  mapState, mapGetters } from 'vuex'
 
   export default {
     name: "",
@@ -218,6 +226,9 @@
           'fail-header': this.transaction.status_fail
         }
       },
+      ...mapState([
+        'currentAsset'
+      ]),
       ...mapGetters([
         'currentAccount',
         'netType'

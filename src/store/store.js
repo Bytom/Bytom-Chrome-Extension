@@ -15,6 +15,7 @@ const state = {
     prompt:null,
     listVote:[],
     selectVote: null,
+    currentAsset: null,
 };
 
 const getters = {
@@ -24,6 +25,7 @@ const getters = {
     netType:state => state.bytom.settings.netType,
     language:state => state.bytom.settings.language,
     login:state => state.bytom.settings.login,
+    currency:state => state.bytom.settings.currency,
 
     // FOR PROMPTS ONLY
     messages:state => state.prompt.data.messages || [],

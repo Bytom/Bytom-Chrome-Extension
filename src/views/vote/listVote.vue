@@ -197,7 +197,7 @@ export default {
         if(votes && votes.length >0 ){
           vote = _.sumBy(votes,'total')
         }
-        return (vote != null && vote != 0) ? Number.formatNue(vote) : '0.00'
+        return (vote != null && vote != 0) ? Number.formatNue(vote, 8) : '0.00'
       },
       filteredList() {
         return this.listVote.filter(post => {
@@ -222,7 +222,7 @@ export default {
             this.$router.go(-1)
             },
         formatNue: function (nue) {
-          return Number.formatNue(nue);
+          return Number.formatNue(nue, 8);
         },
         formatFraction: function (upper, lower) {
           return Number.fractionalNum(upper, lower);
