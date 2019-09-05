@@ -68,6 +68,24 @@
   line-height: 40px;
   text-align: center;
 }
+
+.asset-option{
+  font-size: 15px;
+  text-transform: uppercase;
+}
+
+.asset-option  .asset-id{
+  font-size: 13px;
+}
+
+.v-select{
+  height: 50px;
+  width: 100%;
+  background: rgba(247,247,247,1);
+  font-size: 14px;
+  margin: auto;
+  border-bottom: 1px solid #E0E0E0;
+}
 </style>
 
 <template>
@@ -94,17 +112,30 @@
 
         <section class="form-container">
           <div class="form bg-white">
-              <!--<div class="form-item">-->
-                  <!--<label class="form-item-label">{{ $t('crossChain.asset') }}</label>-->
-                  <!--&lt;!&ndash;<div class="form-item-content" >&ndash;&gt;-->
-                    <!--<v-select style="height: 32px;" class="v-select" v-bind:colorBlack="true" :clearable="false" :value="aOptions[0]" :options="aOptions"></v-select>-->
-                  <!--&lt;!&ndash;</div>&ndash;&gt;-->
-              <!--</div>-->
+              <div class="form-item">
+                <label class="form-item-label">{{ $t('crossChain.asset') }}</label>
+                <div class="form-item-content" >
+                  <v-select :options="assets" v-bind:colorBlack="true" :clearable="false" :value="selectAsset" :onChange="assetChange" label="asset">
+                    <template slot="selected-option" slot-scope="asset">
+                      <div class="asset-option">
+                        <div>{{asset.symbol || 'Asset'}}</div>
+                        <div  class="color-grey asset-id">{{shortAddress(asset.asset)}}</div>
+                      </div>
+                    </template>
+                    <template slot="option" slot-scope="asset">
+                      <div class="asset-option">
+                        <div>{{asset.symbol || 'Asset'}}</div>
+                        <div class="color-grey  asset-id">{{shortAddress(asset.asset)}}</div>
+                      </div>
+                    </template>
+                  </v-select>
+                </div>
+              </div>
               <div class="form-item">
                   <label class="form-item-label">
                     {{ $t('transfer.quantity') }}
 
-                    <small class="float-right" style="margin-right: 8px;">{{ transaction.cost||0 }} CNY</small>
+                    <small class="float-right" style="margin-right: 8px;">{{formatCurrency(transaction.cost||0) }}</small>
                   </label>
                   <div class="form-item-content" style=" display: flex;">
                       <input type="number" v-model="transaction.amount" :placeholder="bytomBalance">
@@ -119,39 +150,33 @@
 </template>
 
 <script>
-import account from "@/models/account";
+  import address from "@/utils/address";
+  import account from "@/models/account";
 import transaction from "@/models/transaction";
 import getLang from "@/assets/language/sdk";
 import Confirm from "./transferConfirm";
 import { BTM } from "@/utils/constants";
 import { mapActions, mapGetters, mapState } from 'vuex'
-import * as Actions from '@/store/constants';
+import { Number as Num } from "@/utils/Number"
+
+const currencyInPrice = {
+  in_cny: 'cny_price',
+  in_usd: 'usd_price',
+  in_btc:'btc_price'
+}
 
 export default {
     components: {
         Confirm
     },
     data() {
-        const ASSET_BTM =
-            "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
         return {
-            selectAsset: {
-                assets: ASSET_BTM,
-                name: "BTM"
-            },
-            assetOptions: [
-                {
-                    assets: ASSET_BTM,
-                    name: "BTM"
-                }
-            ],
-            aOptions: [
-              { label: "BTM", value: ASSET_BTM },
-            ],
+          selectAsset: {
+            asset: BTM,
+            symbol: "BTM",
+            decimals:8
+          },
             show: false,
-            assets: {
-                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff: "BTM"
-            },
             guid: null,
             account: {},
             accountBalance: 0.00,
@@ -159,7 +184,7 @@ export default {
             feeTypeOptions: [this.$t("transfer.feeType")],
             transaction: {
                 type:'toVapor',
-                asset: ASSET_BTM,
+                asset: BTM,
                 fee: 0,
                 amount: "",
                 to:'',
@@ -168,8 +193,15 @@ export default {
         };
     },
     computed: {
+      assets(){
+        if(this.transaction.type === 'toVapor'){
+          return this.currentAccount.balances
+        }else{
+          return this.currentAccount.vpBalances
+        }
+      },
         unit() {
-            return this.assets[this.transaction.asset];
+          return this.selectAsset.symbol;
         },
       bytomBalance: function () {
         let balance, balances
@@ -179,8 +211,9 @@ export default {
           balances = this.currentAccount.vpBalances
         }
         if(balances && balances.length >0 ){
-          const balanceObject = balances.filter(b => b.asset === BTM)[0]
-          balance = balanceObject.balance/Math.pow(10,balanceObject.decimals)
+          const balanceObject = balances.filter(b => b.asset === this.selectAsset.asset)[0]
+
+          balance = Num.formatNue(balanceObject.balance, balanceObject.decimals)
         }
 
         if(this.transaction.type === 'toVapor'){
@@ -196,17 +229,13 @@ export default {
         'currentAccount',
         'accountList',
         'net',
-        'netType'
+        'netType',
+        'currency'
       ])
     },
     watch: {
-        selectAsset: function (val) {
-            this.transaction.asset = val.assets;
-        },
         "transaction.amount": function (newAmount) {
-            transaction.asset(this.transaction.asset).then(ret => {
-                this.transaction.cost = Number(ret.cny_price * newAmount).toFixed(2);
-            });
+          this.transaction.cost = Number(this.selectAsset[currencyInPrice[this.currency]] * newAmount).toFixed(2);
         },
         account: function (newAccount) {
             this.guid = newAccount.guid;
@@ -232,6 +261,9 @@ export default {
         }
     },
     methods: {
+        shortAddress: function (add) {
+          return address.short(add)
+        },
         close: function () {
             this.$router.go(-1)
             this.transaction.to = "";
@@ -240,6 +272,25 @@ export default {
             if(this.$route.query.type == 'popup'){
                window.close();
             }
+        },
+        formatCurrency: function (num) {
+          return Num.formatCurrency(num, this.currency)
+        },
+        assetChange: function (val) {
+          if(val.asset !== this.selectAsset.asset){
+            this.transaction.asset = val.asset;
+            const balances = this.currentAccount.balances
+            let balance = 0.00
+            if(balances.length >0 ) {
+              const balanceObject = balances.filter(b => b.asset === val.asset)[0]
+              balance = Num.formatNue(balanceObject.balance, balanceObject.decimals)
+            }
+            this.accountBalance = balance;
+            transaction.asset(val.asset).then(ret => {
+              this.selectAsset = Object.assign(ret,val)
+              this.transaction.cost = Number(ret[currencyInPrice[this.currency]] * this.transaction.amount).toFixed(2);
+            });
+          }
         },
         send: function () {
             if (this.transaction.amount <= 0) {
@@ -262,10 +313,10 @@ export default {
                 const address = resp.federation_address
                 account.setupNet(`${this.net}bytom`)
                 this.transaction.to = address
-                transaction.build(this.account.guid, address, this.transaction.asset, this.transaction.amount*100000000, this.transaction.confirmations).then(result => {
+                transaction.build(this.account.guid, address, this.transaction.asset, Num.convertToNue(this.transaction.amount,this.selectAsset.decimals), this.transaction.confirmations).then(result => {
                   loader.hide();
                   this.transaction.fee = Number(result.fee / 100000000);
-                  this.$router.push({ name: 'transfer-confirm', params: { account: this.account, transaction: this.transaction, rawData: result, type: this.$route.query.type } })
+                  this.$router.push({ name: 'transfer-confirm', params: { account: this.account, transaction: this.transaction, rawData: result,assetAlias: this.selectAsset.symbol, type: this.$route.query.type } })
                 }).catch(error => {
                   loader.hide();
                   this.$dialog.show({
@@ -280,10 +331,10 @@ export default {
               const address = this.account.address
               account.setupNet(`${this.net}vapor`)
               this.transaction.to = address
-              transaction.buildCrossChain(this.account.guid, address, this.transaction.asset, this.transaction.amount*100000000, this.transaction.confirmations).then(result => {
+              transaction.buildCrossChain(this.account.guid, address, this.transaction.asset,  Num.convertToNue(this.transaction.amount,this.selectAsset.decimals), this.transaction.confirmations).then(result => {
                   loader.hide();
                 this.transaction.fee = Number(result.fee / 100000000);
-                this.$router.push({ name: 'transfer-confirm', params: { account: this.account, transaction: this.transaction, rawData: result, type: this.$route.query.type } })
+                this.$router.push({ name: 'transfer-confirm', params: { account: this.account, transaction: this.transaction, rawData: result, assetAlias: this.selectAsset.symbol, type: this.$route.query.type } })
               }).catch(error => {
                   loader.hide();
                   this.$dialog.show({
@@ -319,6 +370,14 @@ export default {
         }else{
           this.account = this.currentAccount
         }
+
+      const currentAsset = this.currentAccount.balances[0]
+
+      if(currentAsset){
+        transaction.asset(currentAsset.asset).then(ret => {
+          this.selectAsset = Object.assign(ret,currentAsset)
+        });
+      }
     }
 };
 </script>

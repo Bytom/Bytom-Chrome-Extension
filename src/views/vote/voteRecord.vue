@@ -11,22 +11,6 @@
 .topbar-left .btn-menu i {
     font-size: 100%;
 }
-.alias {
-    font-size: 13px;
-}
-
-.content {
-    text-align: center;
-    padding: 20px 30px;
-}
-
-.content .amount {
-    padding-bottom: 10px;
-}
-.content .token-amount {
-    font-size: 32px;
-    line-height: 45px;
-}
 
 .transaction-title h3 {
     font-size: 16px;
@@ -35,16 +19,17 @@
 }
 .transactions {
   font-size: 15px;
-  height: 340px;
+  height: 500px;
 }
-.list-item {
+.list-item-non {
     padding: 10px 20px;
     display: flex;
     justify-content: space-between;
     position: relative;
+    cursor: auto;
 }
 
-.list-item:after {
+.list-item-non:after {
     content:"";
     background: #e0e0e0;
     position: absolute;
@@ -62,10 +47,6 @@
   display: block;
 }
 
-  .symbol{
-    margin-bottom: -8px;
-    font-size:15px;
-  }
 
 </style>
 
@@ -75,52 +56,28 @@
           <i class="iconfont icon-back" @click="close"></i>
           <p>{{ $t('main.receive') }}</p>
         </section>
-        <section class="bg-green">
-            <div class="content">
-                <div v-if="currentAsset!=undefined" class="amount color-white">
-                    <div v-if="currentAsset.symbol">
-                      <div class="symbol">
-                        {{currentAsset.symbol}}
-                      </div>
-
-                      <div class="alias color-grey">{{currentAsset.name}}</div>
-                    </div>
-                    <div v-else>
-                      <div class="symbol">
-                        Asset
-                      </div>
-
-                      <div class="alias color-grey">{{shortAddress(currentAsset.asset)}}</div>
-                    </div>
-                    <div class="token-amount">
-                        {{itemBalance(currentAsset)}}
-                    </div>
-                    <div>{{formatCurrency(currentAsset[ currency ])}}</div>
-                </div>
-            </div>
-        </section>
-            <section class="transaction-title">
-                <h3 class="bg-gray color-grey">{{ $t('main.record') }}</h3>
-            </section>
             <section class="transactions">
                   <div class="transactions" v-if="transactions.length != 0">
                       <vue-scroll ref="vs" @handle-scroll="handleScroll">
                       <ul class="list">
-                          <li class="list-item" v-for="(transaction, index) in transactions" :key="index" @click="$router.push({name: 'transfer-info', params: {transaction: transaction, address: currentAccount.address}})">
+                          <li class="list-item-non bg-white" v-for="(transaction, index) in transactions" :key="index">
                               <div>
-                                  <div>{{transaction.address}}</div>
-                                  <div class="addr color-grey" v-if="transaction.hasOwnProperty('block_timestamp')">
-                                    {{transaction.submission_timestamp | moment}}
+                                  <div>
+                                    {{transaction.vName}}
                                   </div>
-                                  <div class="addr color-grey" v-else>
-                                    {{ $t('main.unconfirmed') }}
+                                  <div class="addr color-grey">
+                                    <div v-if="transaction.hasOwnProperty('block_timestamp')">
+                                      {{transaction.submission_timestamp | moment}}
+                                    </div>
+                                    <div v-else>
+                                      {{ $t('main.unconfirmed') }}
+                                    </div>
                                   </div>
                               </div>
                               <div class="text-align-right">
-                                <div class="value">{{transaction.direct}} {{transaction.val}}</div>
-                                <div v-if="transaction.type == 'vote'" class="addr color-grey">{{ $t('listVote.vote')}} {{transaction.vAmount}}</div>
-                                <div v-else-if="transaction.type == 'veto'" class="addr color-grey">{{ $t('listVote.cancelVote')}}  {{transaction.vAmount}}</div>
-                                <div v-else-if="transaction.type == 'crossChain'" class="addr color-grey">{{ $t('crossChain.title')}}</div>
+                                <div class="value">{{transaction.vAmount}} BTM</div>
+                                <div v-if="transaction.type == 'vote'" class="addr color-grey">{{ $t('listVote.vote')}}</div>
+                                <div v-else-if="transaction.type == 'veto'" class="addr color-grey">{{ $t('listVote.cancelVote')}}</div>
                               </div>
                           </li>
                       </ul>
@@ -149,6 +106,8 @@ import { Number as Num } from "@/utils/Number"
 
 const EnterActive = 'animated faster fadeInLeft';
 const LeaveActive = 'animated faster fadeOutLeft';
+
+const tx_types = ["veto", "vote"]
 export default {
     name: "",
     data() {
@@ -191,7 +150,8 @@ export default {
     computed: {
         ...mapState([
           'bytom',
-          'currentAsset'
+          'currentAsset',
+          'listVote'
         ]),
         ...mapGetters([
           'currentAccount',
@@ -201,20 +161,6 @@ export default {
     methods: {
       close: function () {
         this.$router.go(-1)
-      },
-      shortAddress: function (add) {
-        return address.short(add)
-      },
-      formatCurrency: function (num) {
-        return Num.formatCurrency(num, this.currency)
-      },
-      itemBalance: function(asset){
-        if(asset.asset === BTM){
-          return Num.formatNue(asset.balance,8)
-        }else{
-          return Num.formatNue(asset.balance,asset.decimals)
-        }
-
       },
         handleScroll(vertical, horizontal, nativeEvent) {
             if (vertical.process == 0) {
@@ -236,7 +182,7 @@ export default {
         },
         refreshTransactions: function (start, limit) {
             return new Promise((resolve, reject) => {
-                transaction.list(this.currentAccount.guid, this.currentAsset.asset, start, limit).then(transactions => {
+                transaction.list(this.currentAccount.guid, BTM, start, limit, tx_types).then(transactions => {
                     if (transactions == null) {
                         return;
                     }
@@ -251,7 +197,7 @@ export default {
         },
         transactionsFormat: function (transactions) {
           const formattedTransactions = []
-          const assetID = this.currentAsset.asset
+          const assetID = BTM
 
           transactions.forEach(transaction => {
             const balanceObject = transaction.balances
@@ -259,39 +205,32 @@ export default {
 
             const filterInput = _.find(transaction.inputs, function(o) { return o.type =='veto'; })
 
+            const allVotes = this.listVote;
+
             if(filterInput){
               transaction.type = 'veto'
+              const pubkey = (transaction.inputs.filter(i => i.type ==='veto'))[0].vote
+
               const inAmount = _.sumBy((transaction.inputs.filter(i => i.type ==='veto')), 'amount')
               const outAmount = _.sumBy((transaction.outputs.filter(i => i.type ==='vote')), 'amount')
               transaction.vAmount =  Num.formatNue(inAmount-outAmount,8)
+              transaction.vName =  (_.find(allVotes, {pub_key: pubkey})).name
             }else if(_.find(transaction.outputs, function(o) { return o.type =='vote'; })){
+
+              const pubkey = (transaction.outputs.filter(i => i.type ==='vote'))[0].vote
+
               const outAmount = _.sumBy((transaction.outputs.filter(i => i.type ==='vote')), 'amount')
               transaction.vAmount =  Num.formatNue(outAmount,8)
+              transaction.vName =  (_.find(allVotes, {pub_key: pubkey})).name
+
               transaction.type = 'vote'
-            }else if(_.find(transaction.outputs, function(o) { return o.type =='crosschain_output'; })){
-              transaction.type = 'crossChain'
             }
 
             if(balanceObject.length ===1 ){
-                const inputAddresses = transaction.inputs
-                  .filter(input => input.asset === assetID && input.address !== this.currentAccount.address)
-                  .map(input => input.address)
-
-                const outputAddresses = transaction.outputs
-                  .filter(output => output.asset === assetID && output.address !== this.currentAccount.address)
-                  .map(output => output.address)
 
                 let val = Math.abs(balanceObject[0].amount)
 
-                if (Number(balanceObject[0].amount) > 0) {
-                    transaction.direct = "+";
-                    transaction.address = address.short(inputAddresses.pop());
-                } else {
-                    transaction.direct = "-";
-                    transaction.address = address.short(outputAddresses.pop());
-                }
-
-                transaction.val =  Num.formatNue(val, this.currentAsset.decimals) ;
+                transaction.val =  Num.formatNue(val, 8) ;
                 transaction.fee = transaction.fee / 100000000;
 
                 formattedTransactions.push(transaction);

@@ -42,6 +42,14 @@ const routers = [
         }
       },
       {
+        path: '/voteRecord',
+        name: 'voteRecord',
+        meta: { title: '投票记录' },
+        component: resolve => {
+          require(['@/views/vote/voteRecord.vue'], resolve)
+        }
+      },
+      {
         path: '/vote',
         name: 'vote',
         meta: { title: '投票' },

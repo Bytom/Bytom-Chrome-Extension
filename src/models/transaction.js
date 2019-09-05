@@ -2,8 +2,11 @@ import bytom from "./bytom";
 
 let transaction = {};
 
-transaction.list = function(guid, asset_id, start, limit) {
+transaction.list = function(guid, asset_id, start, limit, tx_types) {
   const filter = {asset_id}
+  if(tx_types){
+    filter.tx_types = tx_types
+  }
   return bytom.transaction.list(guid, filter, null, start, limit);
 };
 

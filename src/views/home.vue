@@ -193,14 +193,21 @@
         <div v-if="address!=undefined">
         <div v-if="balances && balances.length > 0">
           <ul class="list">
-            <li class="list-item" v-for="(asset, index) in balances.slice().reverse()" :key="index" @click="assetOpen(asset)">
+            <li class="list-item" v-for="(asset, index) in balances" :key="index" @click="assetOpen(asset)">
               <div class="float-right text-align-right">
                 <div class="value">{{ itemBalance(asset) }}</div>
                 <div class="addr color-grey">{{ formatCurrency(asset[ currency ]) }}</div>
               </div>
-              <div>
-                <div v-if="asset.alias !== ''">
-                  {{asset.alias}}
+              <div v-if="asset.symbol">
+                <div>
+                  {{asset.symbol}}
+                </div>
+
+                <div class="addr color-grey">{{asset.name}}</div>
+              </div>
+              <div v-else>
+                <div>
+                  Asset
                 </div>
 
                 <div class="addr color-grey">{{shortAddress(asset.asset)}}</div>
@@ -399,7 +406,7 @@ export default {
           if(guid){
             account.balance(guid)
               .then((obj)=>{
-                const balances = obj.balances
+                const balances = obj.balances.reverse()
                 const votes = obj.votes
 
                 const balanceNotEqual = !_.isEqual(this.balances, balances)

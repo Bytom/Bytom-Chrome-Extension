@@ -31,6 +31,7 @@ const en = {
     cancel: 'Cancel',
     emptyPassword: 'Password can not be empty.',
     unit: 'unit',
+    asset:'Asset',
     assetId: 'Asset Id',
     emptyTo: 'Empty address',
     noneBTM: 'Error BTM Amount',
@@ -42,8 +43,10 @@ const en = {
     confirmTransaction:'Confirm Transaction',
     from:'From',
     to:'To',
-    view:'View All',
-    hide:'Hide All'
+    view:'View',
+    hide:'Hide',
+    viewAll:'View All',
+    hideAll:'Hide All'
   },
   crossChain:{
     title:'Cross Chain',
@@ -69,7 +72,8 @@ const en = {
   listCancel:{
     voted:'Voted',
     cancel:'Cancel',
-    selectVote:'Choose to vote'
+    selectVote:'Choose to vote',
+    availableVeto:'Available veto amount'
   },
   vote:{
     selectNode:'Select Node'
@@ -119,7 +123,7 @@ const en = {
     time:'Time',
     blockHeight: 'Block Height',
     blockSize: 'Block Size',
-    transactionID: 'Tx ID',
+    transactionID: 'Tx Id',
     sendAddress: 'Send Address',
     receiveAddress: 'Receive Address',
     myAddress: '(My Address)',

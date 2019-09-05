@@ -31,7 +31,8 @@ const cn = {
     cancel: '取消发送',
     emptyPassword: '密码不能为空',
     unit: '单位',
-    assetId:'资产ID',
+    asset:'资产',
+    assetId:'资产Id',
     emptyTo: '地址不能为空',
     noneBTM: '错误的BTM数量',
     transferAmount: '转账金额',
@@ -42,8 +43,10 @@ const cn = {
     success: '交易发送成功',
     from:'发送账户',
     to:'接收地址',
-    view:'展示全部',
-    hide:'隐藏全部'
+    view:'展开',
+    hide:'隐藏',
+    viewAll:'展示全部',
+    hideAll:'隐藏全部'
   },
   crossChain:{
     title:'跨链',
@@ -69,7 +72,8 @@ const cn = {
   listCancel:{
     voted:'已投票',
     cancel:'可取消',
-    selectVote:'选择节点'
+    selectVote:'选择节点',
+    availableVeto:'可取消投票数'
   },
   vote:{
     selectNode:'选择节点'
@@ -117,7 +121,7 @@ const cn = {
     time:'交易时间',
     blockHeight: '区块高度',
     blockSize: '区块大小',
-    transactionID: '交易ID',
+    transactionID: '交易Id',
     sendAddress: '发送地址',
     receiveAddress: '接收地址',
     myAddress: '（我的地址）',

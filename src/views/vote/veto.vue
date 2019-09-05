@@ -76,7 +76,7 @@
                   <label class="form-item-label">
                     {{ $t('transfer.quantity') }}
 
-                    <small class="float-right" style="margin-right: 8px;">{{ transaction.cost||0 }} CNY</small>
+                    <small class="float-right" style="margin-right: 8px;">{{ formatCurrency(transaction.cost||0 )}}</small>
                   </label>
                   <div class="form-item-content" style=" display: flex;">
                       <input type="number" v-model="transaction.amount" :placeholder="bytomBalance">
@@ -97,6 +97,11 @@ import { BTM } from "@/utils/constants";
 import { mapGetters, mapState } from 'vuex'
 import { Number as Num } from "@/utils/Number"
 
+const currencyInPrice = {
+  in_cny: 'cny_price',
+  in_usd: 'usd_price',
+  in_btc:'btc_price'
+}
 
 export default {
     components: {
@@ -104,13 +109,19 @@ export default {
     },
     data() {
         return {
+          selectAsset: {
+            asset: BTM,
+            symbol: "BTM",
+            decimals:8
+          },
             show: false,
             accountBalance: 0.00,
             unit: 'BTM',
             fee: this.$t("transfer.feeType"),
             feeTypeOptions: [this.$t("transfer.feeType")],
             transaction: {
-                amount: "",
+              asset: BTM,
+              amount: "",
                 to:'',
                 confirmations: 1
             }
@@ -121,10 +132,10 @@ export default {
         const vote = this.selectVote
         let vetoAmount
         if(vote && vote.total > vote.locked ){
-          vetoAmount = Num.formatNue(vote.total-vote.locked)
+          vetoAmount = Num.formatNue(vote.total-vote.locked,8)
         }
 
-          return `Vapor${this.$t("crossChain.amountPlaceHolder")}${(vetoAmount != null && vetoAmount != 0) ? vetoAmount : '0.00'}`
+          return `Vapor${this.$t("listCancel.availableVeto")}${(vetoAmount != null && vetoAmount != 0) ? vetoAmount : '0.00'}`
       },
       ...mapState([
         'bytom',
@@ -134,14 +145,14 @@ export default {
         'currentAccount',
         'accountList',
         'net',
-        'netType'
+        'netType',
+        'currency',
       ])
     },
     watch: {
         "transaction.amount": function (newAmount) {
-            transaction.asset(BTM).then(ret => {
-                this.transaction.cost = Number(ret.cny_price * newAmount).toFixed(2);
-            });
+          this.transaction.cost = Number(this.selectAsset[currencyInPrice[this.currency]] * newAmount).toFixed(2);
+
         },
         account: function (newAccount) {
             this.guid = newAccount.guid;
@@ -153,6 +164,9 @@ export default {
             this.transaction.vote = "";
             this.transaction.amount = "";
         },
+      formatCurrency: function (num) {
+        return Num.formatCurrency(num, this.currency)
+      },
         send: function () {
             if (this.transaction.amount <= 0) {
                 this.$dialog.show({
@@ -170,11 +184,10 @@ export default {
 
             const vote = this.selectVote.pub_key
             this.transaction.to = vote
-            transaction.buildVeto(this.currentAccount.guid, vote,  this.transaction.amount*100000000, this.transaction.confirmations).then(result => {
+            transaction.buildVeto(this.currentAccount.guid, vote,  Num.convertToNue(this.transaction.amount,8), this.transaction.confirmations).then(result => {
                 loader.hide();
-                console.log(result)
                 this.transaction.fee = Number(result.fee / 100000000);
-                this.$router.push({ name: 'transfer-confirm', params: { account: this.currentAccount, transaction: this.transaction, rawData: result} })
+                this.$router.push({ name: 'transfer-confirm', params: { account: this.currentAccount, transaction: this.transaction, assetAlias: 'BTM',rawData: result} })
             }).catch(error => {
                 loader.hide();
                 this.$dialog.show({
@@ -184,6 +197,9 @@ export default {
 
         }
     }, mounted() {
+    transaction.asset(BTM).then(ret => {
+      this.selectAsset = ret
+    });
     }
 };
 </script>

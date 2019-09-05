@@ -25,6 +25,7 @@
 .balance .token-amount .asset {
     font-size: 18px;
     margin-left: 2px;
+    text-transform: uppercase;
 }
 .form-container{
   margin: 20px;
@@ -57,6 +58,25 @@
   line-height: 40px;
   text-align: center;
 }
+
+.asset-option{
+  font-size: 15px;
+  text-transform: uppercase;
+}
+
+.asset-option  .asset-id{
+  font-size: 13px;
+}
+
+.v-select{
+  height: 50px;
+  width: 100%;
+  background: rgba(247,247,247,1);
+  font-size: 14px;
+  margin: auto;
+  border-bottom: 1px solid #E0E0E0;
+}
+
 </style>
 
 <template>
@@ -73,10 +93,10 @@
           <div>
             <div class="token-amount">
                 {{accountBalance}}
-                <span class="asset">BTM</span>
+                <span v-if="selectAsset.symbol" class="asset">{{selectAsset.symbol}}</span>
             </div>
             <div class="small color-grey">
-              {{account.alias}}
+              {{currentAccount.alias}}
             </div>
           </div>
         </section>
@@ -84,20 +104,39 @@
         <section class="form-container">
           <div class="form bg-white">
               <div class="form-item">
-                  <label class="form-item-label">{{ $t('transfer.address') }}</label>
+                  <label class="form-item-label">{{ $t('transfer.asset') }}</label>
                   <div class="form-item-content" >
-                      <input type="text" v-model="transaction.to">
+                    <v-select :options="assets" v-bind:colorBlack="true" :clearable="false" :value="selectAsset" :onChange="assetChange" label="asset">
+                      <template slot="selected-option" slot-scope="asset">
+                        <div class="asset-option">
+                          <div>{{asset.symbol || 'Asset'}}</div>
+                          <div  class="color-grey asset-id">{{shortAddress(asset.asset)}}</div>
+                        </div>
+                      </template>
+                      <template slot="option" slot-scope="asset">
+                        <div class="asset-option">
+                          <div>{{asset.symbol || 'Asset'}}</div>
+                          <div class="color-grey  asset-id">{{shortAddress(asset.asset)}}</div>
+                        </div>
+                      </template>
+                    </v-select>
                   </div>
+              </div>
+              <div class="form-item">
+                <label class="form-item-label">{{ $t('transfer.address') }}</label>
+                <div class="form-item-content" >
+                  <input type="text" v-model="transaction.to">
+                </div>
               </div>
               <div class="form-item">
                   <label class="form-item-label">
                     {{ $t('transfer.quantity') }}
 
-                    <small class="float-right" style="margin-right: 8px;">{{ transaction.cost||0 }} CNY</small>
+                    <small class="float-right" style="margin-right: 8px;">{{formatCurrency(transaction.cost||0)}}</small>
                   </label>
                   <div class="form-item-content" style=" display: flex;">
-                      <input type="number" v-model="transaction.amount" placeholder="0">
-                      <span class="color-grey" style="width: 40px; font-size: 15px;position: absolute;right: 0;">{{unit}}</span>
+                    <input type="number" v-model="transaction.amount" placeholder="0" @keypress="limitAmount">
+                      <span class="color-grey" style="width: 40px; font-size: 15px;position: absolute;right: 0;text-transform: uppercase;">{{unit}}</span>
                   </div>
               </div>
               <div class="form-item">
@@ -114,36 +153,34 @@
 </template>
 
 <script>
-import account from "@/models/account";
+  import address from "@/utils/address";
+  import account from "@/models/account";
 import transaction from "@/models/transaction";
 import getLang from "@/assets/language/sdk";
 import Confirm from "./transferConfirm";
 import { BTM } from "@/utils/constants";
+  import { Number as Num } from "@/utils/Number"
 import { mapActions, mapGetters, mapState } from 'vuex'
 import * as Actions from '@/store/constants';
+
+  const currencyInPrice = {
+    in_cny: 'cny_price',
+    in_usd: 'usd_price',
+    in_btc:'btc_price'
+  }
 
 export default {
     components: {
         Confirm
     },
     data() {
-        const ASSET_BTM =
-            "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
         return {
             selectAsset: {
-                assets: ASSET_BTM,
-                name: "BTM"
+                asset: BTM,
+                symbol: "BTM",
+                decimals:8
             },
-            assetOptions: [
-                {
-                    assets: ASSET_BTM,
-                    name: "BTM"
-                }
-            ],
             show: false,
-            assets: {
-                ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff: "BTM"
-            },
             guid: null,
             account: {},
             accountBalance: 0.00,
@@ -151,7 +188,7 @@ export default {
             feeTypeOptions: [this.$t("transfer.feeType")],
             transaction: {
                 to: "",
-                asset: ASSET_BTM,
+                asset: BTM,
                 amount: "",
                 fee: null,
                 cost: "",
@@ -160,25 +197,29 @@ export default {
         };
     },
     computed: {
+        assets(){
+          if(this.netType === 'vapor'){
+            return this.currentAccount.vpBalances
+          }else{
+            return this.currentAccount.balances
+          }
+        },
         unit() {
-            return this.assets[this.transaction.asset];
+            return this.selectAsset.symbol;
         },
       ...mapState([
         'bytom'
       ]),
       ...mapGetters([
         'currentAccount',
-        'accountList'
+        'accountList',
+        'currency',
+        'netType'
       ])
     },
     watch: {
-        selectAsset: function (val) {
-            this.transaction.asset = val.assets;
-        },
         "transaction.amount": function (newAmount) {
-            transaction.asset(this.transaction.asset).then(ret => {
-                this.transaction.cost = Number(ret.cny_price * newAmount).toFixed(2);
-            });
+            this.transaction.cost = Number(this.selectAsset[currencyInPrice[this.currency]] * newAmount).toFixed(2);
         },
         account: function (newAccount) {
             this.guid = newAccount.guid;
@@ -195,8 +236,8 @@ export default {
               const balances = obj.balances
               let balance = 0.00
               if(balances.length >0 ) {
-                const balanceObject = balances.filter(b => b.asset === BTM)[0]
-                balance = balanceObject.balance / Math.pow(10, balanceObject.decimals)
+                const balanceObject = balances.filter(b => b.asset === this.selectAsset.asset)[0]
+                balance = Num.formatNue(balanceObject.balance, balanceObject.decimals)
               }
                 this.accountBalance = balance;
             }).catch(error => {
@@ -205,6 +246,34 @@ export default {
         }
     },
     methods: {
+        shortAddress: function (add) {
+          return address.short(add)
+        },
+        formatCurrency: function (num) {
+          return Num.formatCurrency(num, this.currency)
+        },
+        limitAmount ($event) {
+          // restrict to 2 decimal places
+          if(this.transaction.amount!=null && this.transaction.amount.indexOf(".")>-1 && (this.transaction.amount.split('.')[1].length > (this.selectAsset.decimals-1))){
+            $event.preventDefault();
+          }
+        },
+        assetChange: function (val) {
+          if(val.asset !== this.selectAsset.asset){
+            this.transaction.asset = val.asset;
+            const balances = this.currentAccount.balances
+            let balance = 0.00
+            if(balances.length >0 ) {
+              const balanceObject = balances.filter(b => b.asset === val.asset)[0]
+              balance = Num.formatNue(balanceObject.balance, balanceObject.decimals)
+            }
+            this.accountBalance = balance;
+            transaction.asset(val.asset).then(ret => {
+              this.selectAsset = Object.assign(ret,val)
+              this.transaction.cost = Number(ret[currencyInPrice[this.currency]] * this.transaction.amount).toFixed(2);
+            });
+          }
+        },
         close: function () {
             this.$router.go(-1)
             this.transaction.to = "";
@@ -234,12 +303,12 @@ export default {
                 canCancel: true,
                 onCancel: this.onCancel
             });
-            transaction.build(this.account.guid, this.transaction.to, this.transaction.asset, this.transaction.amount*100000000, this.transaction.fee, this.transaction.confirmations).then(result => {
+            transaction.build(this.account.guid, this.transaction.to, this.transaction.asset, Num.convertToNue(this.transaction.amount,this.selectAsset.decimals), this.transaction.fee, this.transaction.confirmations).then(result => {
                 loader.hide();
                 if(!this.transaction.fee){
                     this.transaction.fee = Number(result.fee / 100000000);
                 }
-                this.$router.push({ name: 'transfer-confirm', params: { account: this.account, transaction: this.transaction, rawData: result, type: this.$route.query.type } })
+                this.$router.push({ name: 'transfer-confirm', params: { account: this.account, transaction: this.transaction, rawData: result, assetAlias: this.selectAsset.symbol, type: this.$route.query.type } })
             }).catch(error => {
                 loader.hide();
                 this.$dialog.show({
@@ -272,6 +341,14 @@ export default {
           }
         }else{
           this.account = this.currentAccount
+        }
+
+        const currentAsset = this.currentAccount.balances[0]
+
+        if(currentAsset){
+          transaction.asset(currentAsset.asset).then(ret => {
+              this.selectAsset = Object.assign(ret,currentAsset)
+          });
         }
     }
 };

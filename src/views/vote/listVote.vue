@@ -108,6 +108,9 @@
 
         <section class="vote-container  bg-white">
           <div>
+            <router-link :to="{name: 'voteRecord'}">
+              voteRecord
+            </router-link>
             <button>{{ $t('listVote.voteRules')}}</button>
             <router-link :to="{name: 'listCancel'}">
               {{ $t('listVote.cancelVote')}}

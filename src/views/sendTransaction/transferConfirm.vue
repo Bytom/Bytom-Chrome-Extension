@@ -58,6 +58,7 @@
 .value .uint {
     font-size: 12px;
     margin-left: 3px;
+    text-transform: uppercase;
 }
 
 .fee-intro {
@@ -85,6 +86,9 @@
     color: #282828;
     width: 60%;
   }
+  .asset{
+    text-transform: uppercase;
+  }
   table{
     width: 100%;
   }
@@ -97,6 +101,10 @@
     overflow: scroll;
     height: 545px;
   }
+.view-link{
+  font-size: 14px;
+  color: #035BD4;
+}
 </style>
 
 <template>
@@ -118,10 +126,19 @@
                             <td class="col label">{{ $t('transfer.to') }}</td>
                             <td class="col value">{{transaction.toShort}}</td>
                         </tr>
+                        <tr class="row">
+                            <td class="col label">{{ $t('transfer.asset') }}</td>
+                            <td class="col value asset">
+                              {{full? transaction.asset:shortAddress(transaction.asset)}}
+                              <a v-on:click="full = !full"  class="view-link">
+                                {{ full? $t('transfer.hide'): $t('transfer.view') }}
+                              </a>
+                            </td>
+                        </tr>
                         <div class="divider"></div>
                         <tr class="row">
                             <td class="col label">{{ $t('transfer.transferAmount') }}</td>
-                            <td class="col value">{{transaction.amount}}<span class="uint">BTM</span></td>
+                            <td class="col value">{{transaction.amount}}<span v-if="assetAlias" class="uint">{{assetAlias}}</span></td>
                         </tr>
                         <tr class="row">
                             <td class="col label">{{ $t('transfer.fee') }}</td>
@@ -132,7 +149,8 @@
                             <td class="col label">{{ $t('transfer.total') }}</td>
                             <td class="col value">
                                 <!--<p class="fee-intro">{{ $t('transfer.totalTip') }}</p>-->
-                                {{Number(transaction.amount)+Number(transaction.fee)}}<span class="uint">BTM</span>
+                                <!--{{(assetAlias && assetAlias.toUpperCase() === 'BTM')?Number(transaction.amount)+Number(transaction.fee): Number(transaction.amount)}}<span v-if="assetAlias" class="uint">{{assetAlias}}</span>-->
+                                {{totalAmount}}<span v-if="assetAlias" class="uint">{{assetAlias}}</span>
                             </td>
                         </tr>
                     </tbody>
@@ -160,8 +178,10 @@
 </template>
 
 <script>
-import transaction from "@/models/transaction";
-import account from "@/models/account";
+  import address from "@/utils/address";
+  import transaction from "@/models/transaction";
+  import BigNumber from "bignumber.js"
+  import account from "@/models/account";
 import modalPasswd from "@/components/modal-passwd";
 import getLang from "@/assets/language/sdk";
 import { LocalStream } from 'extension-streams';
@@ -173,7 +193,8 @@ export default {
     },
     data() {
         return {
-            rawData: {},
+          full: false,
+          rawData: {},
             account: {},
             transaction: {
                 to: "",
@@ -181,16 +202,28 @@ export default {
                 amount: 0,
                 fee: ""
             },
-            password:''
+            password:'',
+            assetAlias:null
         };
     },
     computed: {
+      totalAmount(){
+        if(this.assetAlias && this.assetAlias.toUpperCase() === 'BTM'){
+          const n = new BigNumber(this.transaction.amount)
+          return n.plus(this.transaction.fee).toNumber()
+        }else{
+          return Number(this.transaction.amount)
+        }
+      },
       ...mapGetters([
         'language',
         'net'
       ])
     },
     methods: {
+        shortAddress: function (add) {
+          return address.short(add)
+        },
         transfer: function () {
             if (this.password == "") {
               this.$dialog.show({
@@ -236,6 +269,8 @@ export default {
         this.transaction = params.transaction;
         this.transaction.toShort = params.transaction.to;
         this.rawData = params.rawData;
+
+        this.assetAlias = params.assetAlias;
     }
 };
 </script>

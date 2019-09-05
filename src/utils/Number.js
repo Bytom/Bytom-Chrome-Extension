@@ -15,6 +15,19 @@ export class Number {
   }
 
   /***
+   * convert num to Nue
+   * @returns number
+   */
+  static convertToNue(num, dec) {
+    let n = new BigNumber(num);
+    let base = new BigNumber(10).exponentiatedBy(dec)
+
+    let result = n.multipliedBy(base)
+
+    return result.toNumber().toFixed(0) ;
+  }
+
+  /***
    * format num to percent
    * @returns percentage
    */

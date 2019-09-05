@@ -101,7 +101,7 @@
           <tr class="row">
             <td colspan="2" class="center-text">
               <a v-on:click="full = !full"  class="view-link">
-                {{ full? $t('transfer.hide'): $t('transfer.view') }} >>
+                {{ full? $t('transfer.hideAll'): $t('transfer.viewAll') }} >>
               </a>
             </td>
           </tr>

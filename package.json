@@ -6,7 +6,7 @@
     "license": "MIT",
     "private": true,
     "scripts": {
-        "dev": "webpack --config ./build/webpack.dev.conf.js --hide-modules --hot",
+        "dev": "webpack --config ./build/webpack.dev.conf.js --watch --hot",
         "build": "node build/build.js --env.minor",
         "zip": "zip -q -r extension.zip dist",
         "clear": "rm -rf chrome-ext.crx extension.zip dist"
