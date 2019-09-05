@@ -1,11 +1,18 @@
 <style lang="" scoped>
-  .header {
-    display: flex;
+  .topbar {
+    font-size: 19px;
+    display:flex;
   }
-  .header p{
+  .topbar .topbar-left {
+    width:140px;
+    overflow:hidden;
+    white-space:nowrap;
+  }
+
+  .topbar .topbar-middle {
+    margin-top: 10px;
+    padding: 0 20px;
     text-align: center;
-    width: 280px;
-    padding-top: 17px;
   }
 
 .topbar-left .btn-menu i {
@@ -71,27 +78,32 @@
 
 <template>
     <div class="warp-chlid bg-white">
-        <section class="header bg-header">
-          <i class="iconfont icon-back" @click="close"></i>
-          <p>{{ $t('main.receive') }}</p>
-        </section>
-        <section class="bg-green">
+        <section class="bg-image">
+          <div class="topbar">
+            <div class="topbar-left">
+              <i class="iconfont icon-back" @click="close"></i>
+            </div>
+            <div class="topbar-middle">
+              <div v-if="currentAsset!=undefined" class="amount color-white">
+                <div v-if="currentAsset.symbol">
+                  <div class="symbol">
+                    {{currentAsset.symbol}}
+                  </div>
+
+                  <div class="alias color-grey">{{currentAsset.name}}</div>
+                </div>
+                <div v-else>
+                  <div class="symbol">
+                    Asset
+                  </div>
+
+                  <div class="alias color-grey">{{shortAddress(currentAsset.asset)}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
             <div class="content">
                 <div v-if="currentAsset!=undefined" class="amount color-white">
-                    <div v-if="currentAsset.symbol">
-                      <div class="symbol">
-                        {{currentAsset.symbol}}
-                      </div>
-
-                      <div class="alias color-grey">{{currentAsset.name}}</div>
-                    </div>
-                    <div v-else>
-                      <div class="symbol">
-                        Asset
-                      </div>
-
-                      <div class="alias color-grey">{{shortAddress(currentAsset.asset)}}</div>
-                    </div>
                     <div class="token-amount">
                         {{itemBalance(currentAsset)}}
                     </div>

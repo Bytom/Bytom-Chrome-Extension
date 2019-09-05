@@ -1,0 +1,16 @@
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="4.9" y="7.4" width="30.2" height="22.2" stroke="black" stroke-width="1.8"/>
+<mask id="path-2-inside-1" fill="white">
+<rect x="9" y="10.5" width="7" height="7" rx="1"/>
+</mask>
+<rect x="9" y="10.5" width="7" height="7" rx="1" stroke="black" stroke-width="2.4" mask="url(#path-2-inside-1)"/>
+<mask id="path-3-inside-2" fill="white">
+<rect x="9" y="19.5" width="7" height="7" rx="1"/>
+</mask>
+<rect x="9" y="19.5" width="7" height="7" rx="1" stroke="#035BD4" stroke-width="2.4" mask="url(#path-3-inside-2)"/>
+<path d="M19 11.9C18.6686 11.9 18.4 12.1686 18.4 12.5C18.4 12.8314 18.6686 13.1 19 13.1V11.9ZM30 13.1C30.3314 13.1 30.6 12.8314 30.6 12.5C30.6 12.1686 30.3314 11.9 30 11.9V13.1ZM19 13.1H30V11.9H19V13.1Z" fill="black"/>
+<path d="M19 14.9C18.6686 14.9 18.4 15.1686 18.4 15.5C18.4 15.8314 18.6686 16.1 19 16.1V14.9ZM24 16.1C24.3314 16.1 24.6 15.8314 24.6 15.5C24.6 15.1686 24.3314 14.9 24 14.9V16.1ZM19 16.1H24V14.9H19V16.1Z" fill="#035BD4"/>
+<path d="M19 20.9C18.6686 20.9 18.4 21.1686 18.4 21.5C18.4 21.8314 18.6686 22.1 19 22.1V20.9ZM30 22.1C30.3314 22.1 30.6 21.8314 30.6 21.5C30.6 21.1686 30.3314 20.9 30 20.9V22.1ZM19 22.1H30V20.9H19V22.1Z" fill="black"/>
+<path d="M19 23.9C18.6686 23.9 18.4 24.1686 18.4 24.5C18.4 24.8314 18.6686 25.1 19 25.1V23.9ZM24 25.1C24.3314 25.1 24.6 24.8314 24.6 24.5C24.6 24.1686 24.3314 23.9 24 23.9V25.1ZM19 25.1H24V23.9H19V25.1Z" fill="black"/>
+<path d="M6 33H34" stroke="black" stroke-width="1.5"/>
+</svg>

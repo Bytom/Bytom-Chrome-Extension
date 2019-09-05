@@ -483,6 +483,6 @@ label{
   color:#7B7B7B;
 }
 
-.footer{
-
+.uppercase{
+  text-transform: uppercase;
 }

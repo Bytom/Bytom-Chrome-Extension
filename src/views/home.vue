@@ -55,38 +55,24 @@
 }
 
 .btn-send-transfer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.btn-send-transfer .btn {
-    width: 160px;
-    height: 48px;
-    line-height: 23px;
-    font-size: 16px;
-    padding: 12px 10px;
-}
-
-.btn-received {
-    background: #0DBF37;
-    border-radius:4px 0px 0px 0px;
-}
-.btn-received:active,
-.btn-received:hover,.btn-received:focus {
-    background: #05A02A;
-}
-
-.btn-transfer {
-    background: #035BD4;
-    border-radius:0px 4px 0px 0px;
-}
-.btn-transfer:active,
-.btn-transfer:hover,.btn-transfer:focus {
-  background: #044BAF;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  text-align:center;
+  position: absolute;
+  width: 320px;
+  height: 102px;
+  left: 20px;
+  top: 165px;
+  background: #FFFFFF;
+  box-shadow: 0px 2px 16px rgba(0, 0, 0, 0.08);
+  border-radius: 4px;
+  color: black;
+  font-size: 12px;
 }
 
 .transaction-title h3 {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: inherit;
     padding: 10px 0 10px 20px;
 }
@@ -100,7 +86,7 @@
     display: block;
     padding: 10px 20px;
     height: 52px;
-    text-transform: uppercase;
+     border-bottom: solid 1px rgba(0, 0, 0, 0.04)
 }
 
 .network-select{
@@ -126,9 +112,27 @@
   display: block;
 }
 
-  .btn-send-transfer .iconfont{
-    margin-right: 4px;
+  .bg-image{
+    height: 216px;
+    margin-bottom: 55px;
   }
+
+.icon{
+  width: 40px;
+  height: 40px;
+}
+.icon-crosschain-svg{
+  background-image: url('../assets/img/icon/crosschain.svg');
+}
+.icon-vote-svg{
+  background-image: url('../assets/img/icon/vote.svg');
+}
+.icon-receive-svg{
+  background-image: url('../assets/img/icon/receive.svg');
+}
+.icon-send-svg{
+  background-image: url('../assets/img/icon/send.svg');
+}
 
 </style>
 
@@ -163,31 +167,35 @@
             <div v-if="netType =='vapor'" class="btn-send-transfer">
 
 
-                <a v-if="address!=undefined" class="btn btn-primary btn-received" @click="listVoteOpen">
-                  vote
+                <a v-if="address!=undefined" class="" @click="listVoteOpen">
+                  <div class="icon icon-vote-svg"></div>
+                  <div>{{ $t('main.vote') }}</div>
                 </a>
-                <a v-if="address!=undefined " class="btn btn-primary btn-transfer" @click="crossChainOpen">
-                  cross
-                </a><a v-if="address!=undefined" class="btn btn-primary btn-received" @click="showQrcode">
-                  {{ $t('main.receive') }}
+                <a v-if="address!=undefined " class="" @click="crossChainOpen">
+                  <div class="icon icon-crosschain-svg"></div>
+                  <div>{{ $t('main.crossChain') }}</div>
+                </a><a v-if="address!=undefined" class="" @click="showQrcode">
+                  <div class="icon icon-receive-svg"></div>
+                  <div>{{ $t('main.receive') }}</div>
                 </a>
-                <a v-if="address!=undefined" class="btn btn-primary btn-transfer" @click="transferOpen">
-                  {{ $t('main.send') }}
+                <a v-if="address!=undefined" class="" @click="transferOpen">
+                  <div class="icon icon-send-svg"></div>
+                  <div>{{ $t('main.send') }}</div>
                 </a>
             </div>
             <div v-else class="btn-send-transfer">
-                <a v-if="address!=undefined" class="btn btn-primary btn-received" @click="showQrcode">
-                  <i class="iconfont icon-receive"></i>
-                  {{ $t('main.receive') }}
+                <a v-if="address!=undefined" class="" @click="showQrcode">
+                  <div class="icon icon-receive-svg"></div>
+                  <div>{{ $t('main.receive') }}</div>
                 </a>
-                <a v-if="address!=undefined" class="btn btn-primary btn-transfer" @click="transferOpen">
-                  <i class="iconfont icon-send"></i>
-                  {{ $t('main.send') }}
+                <a v-if="address!=undefined" class="" @click="transferOpen">
+                  <div class="icon icon-send-svg"></div>
+                  <div>{{ $t('main.send') }}</div>
                 </a>
             </div>
         </section>
       <section class="transaction-title">
-      <h3 class="bg-gray color-grey">{{ $t('main.asset') }}</h3>
+      <h3 class="color-black">{{ $t('main.asset') }}</h3>
       </section>
       <section class="transactions">
         <div v-if="address!=undefined">
@@ -199,7 +207,7 @@
                 <div class="addr color-grey">{{ formatCurrency(asset[ currency ]) }}</div>
               </div>
               <div v-if="asset.symbol">
-                <div>
+                <div class="uppercase">
                   {{asset.symbol}}
                 </div>
 
@@ -210,7 +218,7 @@
                   Asset
                 </div>
 
-                <div class="addr color-grey">{{shortAddress(asset.asset)}}</div>
+                <div class="addr color-grey uppercase">{{shortAddress(asset.asset)}}</div>
               </div>
 
             </li>

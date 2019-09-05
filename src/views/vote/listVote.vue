@@ -4,12 +4,12 @@
 }
 .header p{
   text-align: center;
-  width: 270px;
+  width: 281px;
   padding-top: 17px;
 }
 .my-vote {
   height: 115px;
-    padding: 20px;
+    padding: 15px;
   display: flex;
   text-align: center;
   flex-direction: column;
@@ -18,7 +18,7 @@
 
 .my-vote .vote-number{
   font-size: 28px;
-  padding: 15px 0;
+  padding: 10px 0 5px;
 }
 
 .vote-list {
@@ -29,9 +29,6 @@
     overflow: scroll;
 }
 
-.transfer-header{
-  background: #035BD4;
-}
 .vote-item> td{
   padding: 12px 5px;
   border-bottom: 1px solid #F0F0F0;
@@ -91,29 +88,73 @@
 
   }
 
+  .bg-image{
+    height: 239px;
+    margin-bottom: 55px;
+  }
+
+  .button-container{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    text-align:center;
+    position: absolute;
+    width: 320px;
+    height: 102px;
+    left: 20px;
+    top: 188px;
+    background: #FFFFFF;
+    box-shadow: 0px 2px 16px rgba(0, 0, 0, 0.08);
+    border-radius: 4px;
+    color: black;
+    font-size: 12px;
+  }
+.icon{
+  width: 40px;
+  height: 40px;
+  margin: 0 auto;
+}
+.icon-record-svg{
+  background-image: url('../../assets/img/icon/vote-record.svg');
+}
+.icon-rules-svg{
+  background-image: url('../../assets/img/icon/vote-regulation.svg');
+}
+.icon-veto-svg{
+  background-image: url('../../assets/img/icon/veto.svg');
+}
+
+
 </style>
 
 <template>
-    <div class="warp-chlid bg-gray">
-        <section class="header bg-header">
-            <i class="iconfont icon-back" @click="close"></i>
-            <p>{{ $t('listVote.title') }}</p>
-        </section>
+    <div class="warp-chlid bg-white">
 
-        <section class="my-vote transfer-header">
-          <div>{{ $t('listVote.myVote') }}</div>
-          <div class="vote-number">{{myVote}}</div>
-          <div>{{ $t('listVote.totalVote')}} {{formatNue(totalVote)}}</div>
+        <section class="bg-image">
+          <div class="header">
+              <i class="iconfont icon-back" @click="close"></i>
+              <p>{{ $t('listVote.title') }}</p>
+          </div>
+          <div class="my-vote">
+            <div class="color-grey">{{ $t('listVote.myVote') }}</div>
+            <div class="vote-number">{{myVote}}</div>
+            <div class="color-grey">{{ $t('listVote.totalVote')}} {{formatNue(totalVote)}}</div>
+          </div>
         </section>
 
         <section class="vote-container  bg-white">
-          <div>
-            <router-link :to="{name: 'voteRecord'}">
-              voteRecord
+          <div class="button-container">
+            <router-link class="color-black" :to="{name: 'voteRecord'}">
+              <div class="icon icon-record-svg"></div>
+              <div>{{$t('listVote.voteRecord')}}</div>
             </router-link>
-            <button>{{ $t('listVote.voteRules')}}</button>
-            <router-link :to="{name: 'listCancel'}">
-              {{ $t('listVote.cancelVote')}}
+            <button>
+              <div class="icon icon-rules-svg"></div>
+              <div>{{ $t('listVote.voteRules')}}</div>
+            </button>
+            <router-link class="color-black" :to="{name: 'listCancel'}">
+              <div class="icon icon-veto-svg"></div>
+              <div>{{ $t('listVote.cancelVote')}}</div>
             </router-link>
           </div>
           <div class="vote-label color-black">

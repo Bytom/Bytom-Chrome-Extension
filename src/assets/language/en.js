@@ -109,6 +109,8 @@ const en = {
     copy: 'Click to copy',
     send: 'Send',
     receive: 'Receive',
+    vote:'Vote',
+    crossChain:'Cross',
     record: 'Transaction Record',
     asset:'Asset',
     noAccount: 'No account information on this network.',
