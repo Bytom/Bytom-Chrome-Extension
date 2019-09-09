@@ -54,7 +54,7 @@
     <div class="warp-chlid bg-white">
         <section class="header bg-header">
           <i class="iconfont icon-back" @click="close"></i>
-          <p>{{ $t('main.receive') }}</p>
+          <p>{{ $t('listVote.voteRecord') }}</p>
         </section>
             <section class="transactions">
                   <div class="transactions" v-if="transactions.length != 0">
@@ -133,19 +133,6 @@ export default {
             this.enterActive = EnterActive
             this.leaveActive = LeaveActive
         },
-      'currentAccount.balances'() {
-        this.$refs['vs'].scrollTo(
-          {
-            y: 0
-          },
-          500,
-          'easeInQuad'
-        );
-          this.start = 0
-          this.refreshTransactions( this.start, this.limit).then(transactions => {
-            this.transactions = transactions
-          });
-      },
     },
     computed: {
         ...mapState([

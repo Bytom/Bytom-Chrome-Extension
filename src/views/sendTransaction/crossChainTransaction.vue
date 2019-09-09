@@ -21,20 +21,34 @@
 
 .transferType input[type="radio"]:checked+label{
   color:white;
-  background-color: #333333;
+  background: linear-gradient(90deg, #227AF1 100%, #035BD4 0%);;
+}
+.transferType input[type="radio"]:checked+label .cross-icon{
+  background-image: url('../../assets/img/icon/crosschain-toV.svg');
 }
 
+.transferType div:last-child input[type="radio"]:checked+label{
+  color:white;
+  background: linear-gradient(91deg, #4B4B4B 0.27%, #1C1C1C 99.68%);
+}
+
+.transferType div:last-child input[type="radio"]:checked+label .cross-icon{
+  background-image: url('../../assets/img/icon/crosschain-toB.svg');
+}
+
+.transferType div:last-child .choice{
+  border-radius: 0px 40px 40px 0px;
+
+}
 .choice {
-  border: 1px solid;
-  border-radius: 6px;
   cursor: pointer;
-  padding: 20px;
-  font-size: 14px;
-  white-space:pre-wrap;
-  display: block;
-  background-color: white;
-  width:108px;
-  margin-right:20px;
+  padding: 10px;
+  font-size: 12px;
+  white-space: pre-wrap;
+  display: flex;
+  width: 140px;
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 40px 0px 0px 40px;
 }
 
 .choice:hover {
@@ -86,10 +100,20 @@
   margin: auto;
   border-bottom: 1px solid #E0E0E0;
 }
+
+  .cross-icon{
+    background-image: url('../../assets/img/icon/crosschain-default.svg');
+    height:40px;
+    width:40px;
+    margin:auto 12px;
+  }
+  .separator{
+    height: 12px;
+  }
 </style>
 
 <template>
-    <div class="warp-chlid bg-gray">
+    <div class="warp-chlid bg-white">
         <section class="header bg-header">
             <i class="iconfont icon-back" @click="close"></i>
             <p>{{ $t('crossChain.title') }}</p>
@@ -99,19 +123,18 @@
           <div>
             <input type="radio" id="typeChoice1"
                    value="toVapor" v-model="transaction.type">
-            <label class="choice" for="typeChoice1">{{$t('crossChain.toVapor')}}</label>
+            <label class="choice" for="typeChoice1"> <div class="cross-icon"></div><div>{{$t('crossChain.toVapor')}}</div></label>
 
           </div>
           <div>
             <input type="radio" id="typeChoice2"
                    value="toBytom" v-model="transaction.type">
-            <label class="choice" for="typeChoice2">{{$t('crossChain.toBytom')}}</label>
+            <label class="choice" for="typeChoice2"><div class="cross-icon"></div><div>{{$t('crossChain.toBytom')}}</div></label>
 
           </div>
         </section>
 
         <section class="form-container">
-          <div class="form bg-white">
               <div class="form-item">
                 <label class="form-item-label">{{ $t('crossChain.asset') }}</label>
                 <div class="form-item-content" >
@@ -131,6 +154,11 @@
                   </v-select>
                 </div>
               </div>
+        </section>
+
+        <div class="separator bg-gray"></div>
+        <section class="form-container">
+          <div class="">
               <div class="form-item">
                   <label class="form-item-label">
                     {{ $t('transfer.quantity') }}

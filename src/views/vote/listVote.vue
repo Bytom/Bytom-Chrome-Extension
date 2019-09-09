@@ -23,23 +23,22 @@
 
 .vote-list {
     margin-bottom: 20px;
-    padding: 10px 15px;
+    padding: 0px 15px 10px;
     border-radius:4px;
-    height: 300px;
+    height: 246px;
     overflow: scroll;
 }
 
 .vote-item> td{
-  padding: 12px 5px;
+  padding: 12px 2px;
   border-bottom: 1px solid #F0F0F0;
 }
   .vote-item img{
-    height: 36px;
-    width: 36px;
+    height: 54px;
+    width: 54px;
     border:1px solid #E0E0E0;
     opacity:1;
     border-radius:4px;
-    margin-right: 15px;
   }
   .vote-item .vote-title{
     font-size: 14px;
@@ -58,18 +57,18 @@
   }
 
   .bp{
-    background: #F4FBE5;
-    color: #91D303;
+    color: white;
+    background: #91D303;
   }
 
   .stanbybp{
-    background: #FFFAE5;
-    color: #FFCC00;
+    color: white;
+    background: #FFCC00;
   }
 
   .otherbp{
-    background: #F2F3F4;
-    color: #808A95;
+    color: white;
+    background: #C4C4C4;
   }
   .vote-role{
     width: 20px;
@@ -80,12 +79,27 @@
     text-align: center
   }
 
-  .vote-label{
-    font-size: 14px;
-    padding: 20px;
-    display:flex;
-    border-bottom: 1px solid #F0F0F0;
+  .outer-dot{
+    width: 16px;
+    height: 16px;
 
+    position:relative;
+    border-radius: 9px;
+  }
+
+  .inner-dot{
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    left: 5px;
+    top: 5px;
+    border-radius: 3px;
+  }
+
+  .vote-label{
+    font-size: 12px;
+    padding: 20px 20px 5px;
+    display:flex;
   }
 
   .bg-image{
@@ -124,7 +138,61 @@
   background-image: url('../../assets/img/icon/veto.svg');
 }
 
+  .btn-vote{
+    width: 72px;
+    height: 32px;
+    border: 1px solid #035BD4;
+    box-sizing: border-box;
+    border-radius: 2px;
+    color: #035BD4;
+    font-size:14px;
+    background: white;
+    padding: 0;
+  }
 
+  .v-label{
+    display: flex;
+    align-items: center;
+    margin-right:5px;
+  }
+
+  .v-icon{
+    margin-right: 5px;
+  }
+
+  .bp-icon .outer-dot{
+    background: rgba(145, 211, 3, 0.1);
+  }
+  .bp-icon .inner-dot{
+    background: #91D303;
+  }
+
+  .stanbybp-icon .outer-dot{
+    background: rgba(255, 204, 0, 0.1);
+  }
+ .stanbybp-icon .inner-dot{
+    background: #FFCC00;
+  }
+
+  .search-wrapper input{
+    margin-left: 5px;
+    background: url('../../assets/img/icon/search.svg') top 3px left 2px no-repeat;
+    padding-left: 27px;
+    width: 118px;
+    height: 32px;
+    border: 1px solid rgba(0, 0, 0, 0.16);
+    box-sizing: border-box;
+    border-radius: 100px;
+    line-height: 32px;
+  }
+
+  .list{
+    width: 100%;
+  }
+
+  .node-label{
+    width: 160px;
+  }
 </style>
 
 <template>
@@ -148,22 +216,34 @@
               <div class="icon icon-record-svg"></div>
               <div>{{$t('listVote.voteRecord')}}</div>
             </router-link>
-            <button>
+            <router-link class="color-black" :to="{name: 'voteRegulation'}">
               <div class="icon icon-rules-svg"></div>
               <div>{{ $t('listVote.voteRules')}}</div>
-            </button>
+            </router-link>
             <router-link class="color-black" :to="{name: 'listCancel'}">
               <div class="icon icon-veto-svg"></div>
               <div>{{ $t('listVote.cancelVote')}}</div>
             </router-link>
           </div>
           <div class="vote-label color-black">
-            <div>
-              {{ $t('listVote.bp') }}
+            <div class="v-label">
+              <div class="v-icon bp-icon">
+                <div class="outer-dot">
+                  <div class="inner-dot"></div>
+                </div>
+              </div>
+              <div>{{ $t('listVote.bp') }}</div>
             </div>
-            <div>{{ $t('listVote.standbyBP') }}</div>
+            <div class="v-label">
+              <div class="v-icon stanbybp-icon">
+                <div class="outer-dot">
+                  <div class="inner-dot"></div>
+                </div>
+              </div>
+              <div>{{ $t('listVote.standbyBP') }}</div>
+            </div>
             <div class="search-wrapper">
-              <input type="text" v-model="search" placeholder="Search title.."/>
+              <input type="text" v-model="search" :placeholder="$t('listVote.bpName')"/>
             </div>
           </div>
           <div class="vote-list">
@@ -174,9 +254,11 @@
                       {{ vote.rank }}
                     </div>
                   </td>
-                  <td >
+                  <td>
+                    <img  :src="vote.logo || defaultUrlImg" alt="">
+                  </td>
+                  <td class="node-label">
                     <div class="vote-title" >
-                      <img  :src="vote.logo" alt="">
                       <div v-if="net === 'mainnet'">
                         <a :href="`https://vapor.blockmeta.com/node/${vote.pub_key}`" target="_blank">
                           {{vote.name}}
@@ -188,8 +270,8 @@
                     </div>
                     <div class="vote-number">{{$t('listVote.votes')}} {{formatNue(vote.vote_num)}} ({{formatFraction(vote.vote_num, totalVote)}})</div>
                   </td>
-                <td>
-                  <button @click="openVote(vote)">
+                <td class="text-align-right">
+                  <button class="btn btn-vote" @click="openVote(vote)">
                     {{$t('listVote.vote')}}
                   </button>
                 </td>
@@ -207,12 +289,14 @@ import Number from "@/utils/Number"
 import { mapActions, mapGetters, mapState } from 'vuex'
 import * as Actions from '@/store/constants';
 import _ from 'lodash';
+import image from '@/assets/img/icon/node-default.svg';
 
 export default {
     components: {
     },
     data() {
         return {
+          defaultUrlImg:image,
           totalVote:0,
           search:''
         };
@@ -241,7 +325,7 @@ export default {
         if(votes && votes.length >0 ){
           vote = _.sumBy(votes,'total')
         }
-        return (vote != null && vote != 0) ? Number.formatNue(vote, 8) : '0.00'
+        return (vote != null && vote != 0) ? Number.formatNue(vote,0, 8) : '0.00'
       },
       filteredList() {
         return this.listVote.filter(post => {
@@ -266,7 +350,7 @@ export default {
             this.$router.go(-1)
             },
         formatNue: function (nue) {
-          return Number.formatNue(nue, 8);
+          return Number.formatNue(nue,0, 8);
         },
         formatFraction: function (upper, lower) {
           return Number.fractionalNum(upper, lower);

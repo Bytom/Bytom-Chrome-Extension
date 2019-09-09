@@ -5,9 +5,12 @@ export class Number {
    * format num to BTM
    * @returns number
    */
-  static formatNue(num, dec) {
+  static formatNue(num, dec, exp) {
     let n = new BigNumber(num);
-    let base = new BigNumber(10).exponentiatedBy(dec)
+    if(!exp){
+      exp = dec
+    }
+    let base = new BigNumber(10).exponentiatedBy(exp)
 
     let result = n.dividedBy(base)
 

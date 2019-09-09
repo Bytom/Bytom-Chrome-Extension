@@ -71,6 +71,10 @@
   font-size: 12px;
 }
 
+.transaction-title{
+  margin-top: 55px;
+}
+
 .transaction-title h3 {
     font-size: 14px;
     font-weight: inherit;
@@ -114,7 +118,6 @@
 
   .bg-image{
     height: 216px;
-    margin-bottom: 55px;
   }
 
 .icon{
@@ -164,37 +167,37 @@
 
                 </div>
             </div>
-            <div v-if="netType =='vapor'" class="btn-send-transfer">
+            <div v-if="netType =='vapor' && address!=undefined" class="btn-send-transfer">
 
-
-                <a v-if="address!=undefined" class="" @click="listVoteOpen">
+                <a @click="listVoteOpen">
                   <div class="icon icon-vote-svg"></div>
                   <div>{{ $t('main.vote') }}</div>
                 </a>
-                <a v-if="address!=undefined " class="" @click="crossChainOpen">
+                <a @click="crossChainOpen">
                   <div class="icon icon-crosschain-svg"></div>
                   <div>{{ $t('main.crossChain') }}</div>
-                </a><a v-if="address!=undefined" class="" @click="showQrcode">
+                </a>
+                <a  @click="showQrcode">
                   <div class="icon icon-receive-svg"></div>
                   <div>{{ $t('main.receive') }}</div>
                 </a>
-                <a v-if="address!=undefined" class="" @click="transferOpen">
+                <a  @click="transferOpen">
                   <div class="icon icon-send-svg"></div>
                   <div>{{ $t('main.send') }}</div>
                 </a>
             </div>
-            <div v-else class="btn-send-transfer">
-                <a v-if="address!=undefined" class="" @click="showQrcode">
+            <div v-else-if="address!=undefined" class="btn-send-transfer">
+                <a @click="showQrcode">
                   <div class="icon icon-receive-svg"></div>
                   <div>{{ $t('main.receive') }}</div>
                 </a>
-                <a v-if="address!=undefined" class="" @click="transferOpen">
+                <a @click="transferOpen">
                   <div class="icon icon-send-svg"></div>
                   <div>{{ $t('main.send') }}</div>
                 </a>
             </div>
         </section>
-      <section class="transaction-title">
+      <section v-if="address!=undefined" class="transaction-title">
       <h3 class="color-black">{{ $t('main.asset') }}</h3>
       </section>
       <section class="transactions">
@@ -227,7 +230,7 @@
           <div v-else>
             <div class="bg-emptytx"></div>
             <div>
-              <span class="color-lightgrey center-text no-record">{{$t('main.noRecord')}}</span>
+              <span class="color-lightgrey center-text no-record">{{$t('main.noAssetRecord')}}</span>
             </div>
           </div>
         </div>
@@ -235,7 +238,7 @@
           <router-link :to="{name: 'menu-account-creation'}">
             <div class="bg-emptytx"></div>
             <div>
-              <span class="color-lightgrey center-text no-record">{{$t('main.noRecord')}}</span>
+              <span class="color-lightgrey center-text no-record">{{$t('main.noAssetRecord')}}</span>
             </div>
             <a class="btn btn-primary btn-creation">{{ $t('main.create') }}</a>
           </router-link>
@@ -414,10 +417,11 @@ export default {
           if(guid){
             account.balance(guid)
               .then((obj)=>{
-                const balances = obj.balances.reverse()
+                const balances = obj.balances
                 const votes = obj.votes
 
                 const balanceNotEqual = !_.isEqual(this.balances, balances)
+
                 const voteNotEqual = (this.netType === 'vapor' && !_.isEqual(this.currentAccount.votes, votes))
 
                 if(balanceNotEqual || voteNotEqual){

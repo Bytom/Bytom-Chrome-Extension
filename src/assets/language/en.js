@@ -116,6 +116,7 @@ const en = {
     noAccount: 'No account information on this network.',
     create: 'Create account',
     noRecord:"No transaction records found.",
+    noAssetRecord:"No asset records found.",
     unconfirmed :'Unconfirmed',
     network:'Network'
   },

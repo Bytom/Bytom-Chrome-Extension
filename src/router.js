@@ -50,6 +50,14 @@ const routers = [
         }
       },
       {
+        path: '/voteRegulation',
+        name: 'voteRegulation',
+        meta: { title: '投票规则' },
+        component: resolve => {
+          require(['@/views/vote/voteRegulation.vue'], resolve)
+        }
+      },
+      {
         path: '/vote',
         name: 'vote',
         meta: { title: '投票' },

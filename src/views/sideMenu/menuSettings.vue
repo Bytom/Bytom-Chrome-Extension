@@ -125,6 +125,7 @@ export default {
             account.list()
               .then(accounts => {
 
+                console.log(accounts)
                 bytom.accountList = accounts;
                 if (accounts.length > 0) {
                   bytom.currentAccount = accounts[0];

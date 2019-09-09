@@ -115,6 +115,7 @@ const cn = {
     create: '创建账户',
     unconfirmed :'未确认交易',
     noRecord:"没有交易记录",
+    noAssetRecord:"没有资产记录",
     network:'网络'
   },
   transactionDetail: {

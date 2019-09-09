@@ -38,6 +38,8 @@ export const actions = {
                 bytom.accountList = accounts;
                 if (accounts.length > 0) {
                     bytom.currentAccount = accounts[0];
+                }else{
+                  bytom.currentAccount={}
                 }
 
                 bytom.settings.login = true

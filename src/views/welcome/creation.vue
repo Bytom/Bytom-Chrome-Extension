@@ -131,7 +131,7 @@
           <div  v-if="activeTab === 'register'" >
             <div class="form panel">
                 <div class="form-item">
-                    <label :class="formItemLabel">network</label>
+                    <label :class="formItemLabel">{{ $t('main.network') }}</label>
                     <div :class="formItemContent">
                       <v-select  class="v-select" v-bind:colorBlack="true" :clearable="false" v-model="selected" :options="nets"></v-select>
                     </div>
@@ -142,12 +142,6 @@
                         <input type="text" v-model="formItem.accAlias" autofocus>
                     </div>
                 </div>
-                <!--<div class="form-item">-->
-                    <!--<label :class="formItemLabel">{{ $t('createAccount.keyAlias') }}</label>-->
-                    <!--<div :class="formItemContent">-->
-                        <!--<input type="text" v-model="formItem.keyAlias">-->
-                    <!--</div>-->
-                <!--</div>-->
                 <div class="form-item">
                     <label :class="formItemLabel">{{ $t('createAccount.keyPassword') }}</label>
                     <div :class="formItemContent">

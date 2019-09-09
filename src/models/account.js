@@ -79,7 +79,7 @@ account.balance = function(guid) {
         let res = [];
 
         for(let prop in obj) {
-          res.push(obj[prop]);
+          res.unshift(obj[prop]);
         }
 
         resolve({
@@ -101,8 +101,9 @@ account.list = function() {
       .then(accounts => {
         Promise.all(accounts.map(async (account) => {
           try{
-            const balances = await this.balance(account.guid)
-            account.balances = balances
+            const obj = await this.balance(account.guid)
+            account.balances = obj.balances
+            account.votes = obj.votes
           }catch (e) {
             return e
           }
