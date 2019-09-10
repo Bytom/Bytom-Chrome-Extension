@@ -108,10 +108,16 @@
 
           <div class="divider"></div>
 
+          <tr v-for="(amountInput, index) in transaction.amounts" :key="index" class="row">
+            <td class="col label">{{index ==0 && $t('transfer.transferAmount') }}</td>
+            <td class="col value">{{amountInput.amount}}<span class="uint uppercase">{{amountInput.alias || amountInput.asset}}</span></td>
+          </tr>
+
           <tr class="row">
             <td class="col label">{{ $t('transfer.fee') }}</td>
             <td class="col value">{{transaction.fee}}<span class="uint">BTM</span></td>
           </tr>
+          
         </tbody>
       </table>
     </section>
@@ -140,13 +146,16 @@ import { LocalStream } from 'extension-streams';
 import {apis} from '@/utils/BrowserApis';
 import NotificationService from '../../services/NotificationService'
 import { mapActions, mapGetters, mapState } from 'vuex'
+import _ from 'lodash';
+import account from "@/models/account";
+import { Number as Num } from "@/utils/Number"
+
+
 
 export default {
     data() {
         return {
             full: false,
-            // full2: false,
-            // account: {},
             transaction: {
                 input: "",
                 output: "",
@@ -162,6 +171,8 @@ export default {
     computed: {
       ...mapGetters([
         'currentAccount',
+        'net',
+        'netType',
       ])
     },
     watch: {
@@ -205,7 +216,10 @@ export default {
                     body: getLang(error.message)
                 });
             });
-        }
+        },
+      queryAsset: function(assetID){
+        return transaction.asset(assetID)
+      }
     }, mounted() {
           this.prompt = window.data || apis.extension.getBackgroundPage().notification || null;
 
@@ -228,7 +242,30 @@ export default {
               }
 
               const array = inout.input.filter(action => action.type ==='spend_wallet')
-              this.transaction.amounts = array
+
+              if(array.length>0){
+                account.setupNet(`${this.net}${this.netType}`)
+              const promise =
+                _(array)
+                  .groupBy('asset')
+                  .map((objs, key) => {
+                    return this.queryAsset(key).then(resp =>{
+                      return {
+                        'asset': key,
+                        'alias':resp.alias,
+                        'amount':Num.formatNue( _.sumBy(objs, 'amount'), resp.decimals)
+                      }
+                    })
+                  })
+
+                let that = this;
+                Promise.all(promise).then(function(output) {
+                  that.transaction.amounts = output
+                })
+
+              }
+
+
           }
       }
 };
