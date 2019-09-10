@@ -33,7 +33,7 @@ export const actions = {
         return new Promise(async (resolve, reject) => {
             const bytom = Bytom.fromJson(state.bytom);
             bytom.settings.network = 'mainnet';
-            account.setupNet('mainnetbytom')
+            account.setupNet('mainnet')
             account.list().then(accounts => {
                 bytom.accountList = accounts;
                 if (accounts.length > 0) {
@@ -43,8 +43,9 @@ export const actions = {
                 }
 
                 bytom.settings.login = true
-              bytom.settings.netType = 'bytom'
-              dispatch(Actions.UPDATE_STORED_BYTOM, bytom).then(_bytom => {
+                bytom.settings.currency = "in_cny"
+                bytom.settings.netType = ''
+                dispatch(Actions.UPDATE_STORED_BYTOM, bytom).then(_bytom => {
                     dispatch(Actions.SET_BYTOM, Bytom.fromJson(_bytom));
                     resolve();
                 })
@@ -57,7 +58,7 @@ export const actions = {
         return new Promise(async (resolve, reject) => {
             const bytom = Bytom.fromJson(state.bytom);
             bytom.settings.network = network;
-            account.setupNet(`${network}bytom`)
+            account.setupNet(`${network}`)
             account.list().then(accounts => {
               bytom.accountList = accounts;
               if (accounts.length > 0) {
@@ -65,7 +66,8 @@ export const actions = {
               }
 
               bytom.settings.login = true
-              bytom.settings.netType = 'bytom'
+              bytom.settings.currency = "in_cny"
+              bytom.settings.netType = ''
               dispatch(Actions.UPDATE_STORED_BYTOM, bytom).then(_bytom => {
                   dispatch(Actions.SET_BYTOM, Bytom.fromJson(_bytom));
                   resolve();

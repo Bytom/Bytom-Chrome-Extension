@@ -339,7 +339,7 @@ export default {
             if(this.transaction.type === 'toVapor'){
               transaction.chainStatus().then((resp)=>{
                 const address = resp.federation_address
-                account.setupNet(`${this.net}bytom`)
+                account.setupNet(`${this.net}`)
                 this.transaction.to = address
                 transaction.build(this.account.guid, address, this.transaction.asset, Num.convertToNue(this.transaction.amount,this.selectAsset.decimals), this.transaction.confirmations).then(result => {
                   loader.hide();

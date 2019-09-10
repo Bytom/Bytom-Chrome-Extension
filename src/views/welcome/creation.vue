@@ -328,7 +328,7 @@ export default {
     },
     watch: {
         selected: function (value) {
-            account.setupNet(`${value.value}bytom`);
+            account.setupNet(`${value.value}`);
         }
     },
     mounted() {
@@ -352,7 +352,7 @@ export default {
         } else {
             this.selected = mainNet;
         }
-        account.setupNet(`${this.selected}bytom`);
+        account.setupNet(`${this.selected}`);
         this.i18n = getLanguage(this.language);
     }
 };

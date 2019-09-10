@@ -106,22 +106,8 @@ export default {
                 onCancel: this.onCancel
             });
 
-            if(this.netType === 'bytom'){
-              account.create(this.formItem.accAlias, null, this.formItem.passwd1).then(account => {
-                this[Actions.CREATE_NEW_BYTOM_ACCOUNT](account).then(()=>{
-                  loader.hide();
-                  this.$router.push('/');
-                })
-
-              }).catch(err => {
-                  console.log(err);
-                  loader.hide();
-                  this.$dialog.show({
-                      body: err.message
-                  });
-              });
-            }else if(this.netType === 'vapor'){
-              account.setupNet(`${this.net}bytom`);
+            if(this.netType === 'vapor'){
+              account.setupNet(`${this.net}`);
               account.create(this.formItem.accAlias, null, this.formItem.passwd1).then((resp) => {
                 account.setupNet(`${this.net}vapor`);
                 return account.copy(resp.guid).then((currentRespAccount)=>{
@@ -130,6 +116,20 @@ export default {
                     this.$router.push('/');
                   })
                 })
+              }).catch(err => {
+                console.log(err);
+                loader.hide();
+                this.$dialog.show({
+                  body: err.message
+                });
+              });
+            }else{
+              account.create(this.formItem.accAlias, null, this.formItem.passwd1).then(account => {
+                this[Actions.CREATE_NEW_BYTOM_ACCOUNT](account).then(()=>{
+                  loader.hide();
+                  this.$router.push('/');
+                })
+
               }).catch(err => {
                 console.log(err);
                 loader.hide();

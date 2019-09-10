@@ -282,6 +282,8 @@ export default {
               transaction.type = 'vote'
             }else if(_.find(transaction.outputs, function(o) { return o.type =='crosschain_output'; })){
               transaction.type = 'crossChain'
+            }else if(_.find(transaction.inputs, function(o) { return o.type =='crosschain_input'; })){
+              transaction.type = 'crossChain'
             }
 
             if(balanceObject.length ===1 ){

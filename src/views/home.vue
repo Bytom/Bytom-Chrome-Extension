@@ -149,7 +149,7 @@
                     </a>
                 </div>
                 <div class="topbar-middle bg-secondary">
-                    <select class="network-select" :value="netType" @change="netTypeToggle">
+                    <select class="network-select" :value="netType||'bytom'" @change="netTypeToggle">
                         <option value="bytom">{{ $t('main.bytom') }} {{net}}</option>
                         <option value="vapor">{{ $t('main.vapor') }} {{net}}</option>
                     </select>
@@ -228,10 +228,29 @@
           </ul>
         </div>
           <div v-else>
-            <div class="bg-emptytx"></div>
-            <div>
-              <span class="color-lightgrey center-text no-record">{{$t('main.noAssetRecord')}}</span>
-            </div>
+            <ul class="list">
+              <li class="list-item" v-for="(asset, index) in defaultBalances" :key="index" @click="assetOpen(asset)">
+                <div class="float-right text-align-right">
+                  <div class="value">{{ itemBalance(asset) }}</div>
+                  <div class="addr color-grey">{{ formatCurrency(asset[ currency ]) }}</div>
+                </div>
+                <div v-if="asset.symbol">
+                  <div class="uppercase">
+                    {{asset.symbol}}
+                  </div>
+
+                  <div class="addr color-grey">{{asset.name}}</div>
+                </div>
+                <div v-else>
+                  <div>
+                    Asset
+                  </div>
+
+                  <div class="addr color-grey uppercase">{{shortAddress(asset.asset)}}</div>
+                </div>
+
+              </li>
+            </ul>
           </div>
         </div>
         <div v-else>
@@ -277,6 +296,19 @@ export default {
             limit: 10,
             enterActive: EnterActive,
             leaveActive: LeaveActive,
+            defaultBalances: [
+              {
+                alias: "btm",
+                asset: BTM,
+                name: "Bytom",
+                symbol: "BTM",
+                balance: 0,
+                decimals: 8,
+                in_btc: "0",
+                in_cny: "0",
+                in_usd: "0"
+              }
+            ],
         };
     },
     watch: {
@@ -370,7 +402,7 @@ export default {
             account.setupNet(`${this.net}${this.netType}`);
         },
         netTypeToggle: function (event) {
-            const newNetType = event.target.value
+            const newNetType = event.target.value  ==='bytom'? '' :event.target.value;
             if( newNetType !== this.netType){
               const bytom = this.bytom.clone();
 
