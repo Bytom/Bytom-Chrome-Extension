@@ -22,10 +22,9 @@
 }
 
 .vote-list {
-    margin-bottom: 20px;
     padding: 0px 15px 10px;
     border-radius:4px;
-    height: 246px;
+    height: 300px;
     overflow: scroll;
 }
 
@@ -98,45 +97,24 @@
 
   .vote-label{
     font-size: 12px;
-    padding: 20px 20px 5px;
+    padding: 0px 20px 5px;
     display:flex;
   }
 
   .bg-image{
-    height: 239px;
-    margin-bottom: 55px;
+    height: 188px;
   }
 
   .button-container{
     display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    text-align:center;
-    position: absolute;
-    width: 320px;
-    height: 102px;
-    left: 20px;
-    top: 188px;
-    background: #FFFFFF;
-    box-shadow: 0px 2px 16px rgba(0, 0, 0, 0.08);
-    border-radius: 4px;
-    color: black;
-    font-size: 12px;
+    font-size: 14px;
+    margin: 20px;
   }
-.icon{
-  width: 40px;
-  height: 40px;
-  margin: 0 auto;
-}
-.icon-record-svg{
-  background-image: url('../../assets/img/icon/vote-record.svg');
-}
-.icon-rules-svg{
-  background-image: url('../../assets/img/icon/vote-regulation.svg');
-}
-.icon-veto-svg{
-  background-image: url('../../assets/img/icon/veto.svg');
-}
+
+  .button-container a:nth-child(2){
+    flex: 1;
+    margin-left: 20px;
+  }
 
   .btn-vote{
     width: 72px;
@@ -213,15 +191,12 @@
         <section class="vote-container  bg-white">
           <div class="button-container">
             <router-link class="color-black" :to="{name: 'voteRecord'}">
-              <div class="icon icon-record-svg"></div>
               <div>{{$t('listVote.voteRecord')}}</div>
             </router-link>
             <router-link class="color-black" :to="{name: 'voteRegulation'}">
-              <div class="icon icon-rules-svg"></div>
               <div>{{ $t('listVote.voteRules')}}</div>
             </router-link>
-            <router-link class="color-black" :to="{name: 'listCancel'}">
-              <div class="icon icon-veto-svg"></div>
+            <router-link class="color-grey" :to="{name: 'listCancel'}">
               <div>{{ $t('listVote.cancelVote')}}</div>
             </router-link>
           </div>
