@@ -50,6 +50,7 @@ const en = {
   },
   crossChain:{
     title:'Cross Chain',
+    detail:'Cross Chain Details',
     amountPlaceHolder:" available amount: ",
     amountHint:'Cross Chain Transaction will be completed in 24 hrs.',
     toVapor:'Transfer to \n Vapor Chain',
@@ -69,7 +70,8 @@ const en = {
     bpPubkey:'BP Public Key',
     vote:'Vote',
     votes:'Votes',
-    voteAccount:'Vote Account'
+    voteAccount:'Vote Account',
+    vetoAccount:'Veto Account'
   },
   listCancel:{
     voted:'Voted',
@@ -78,7 +80,12 @@ const en = {
     availableVeto:'Available veto amount'
   },
   vote:{
-    selectNode:'Select Node'
+    selectNode:'Select Node',
+    voteDetials:'Vote Details',
+    vetoDetials:'Veto Details',
+    confirmVote:'Confirm Vote',
+    confirmVeto:'Confirm Veto',
+    amountPlaceHolder:"available amount: "
   },
   signMessage:{
     title:'Request Signature',

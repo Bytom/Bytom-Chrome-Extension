@@ -111,7 +111,7 @@
     <div class="warp bg-gray">
         <section class="header bg-header">
             <i class="iconfont icon-back" @click="$router.go(-1)"></i>
-            <p>{{ title || $t('transfer.confirmTransaction') }}</p>
+            <p>{{ title || $t('vote.voteDetials') }}</p>
         </section>
 
         <div class="scorll-panel">
@@ -119,7 +119,7 @@
                 <table>
                     <tbody>
                         <tr class="row">
-                            <td class="col label">{{ $t('listVote.voteAccount') }}</td>
+                            <td class="col label">{{ accountLabel }}</td>
                             <td class="col value">{{account.alias}}</td>
                         </tr>
                         <tr v-if="selectVote.name" class="row">
@@ -181,6 +181,7 @@ export default {
         return {
           full: false,
           title:null,
+          accountLabel: this.$t('listVote.voteAccount'),
           rawData: {},
             account: {},
             transaction: {
@@ -193,18 +194,17 @@ export default {
             assetAlias:null
         };
     },
-    watch: {
-      '$route'(to, from) {
-        console.log(from)
-        console.log(to)
-        if (from.name == 'vote') {
-          this.title = 'vote'
-        }else if(from.name =='veto'){
-          this.title = 'veto'
-        }
-      },
-    },
-    computed: {
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      if(from.name === 'veto') {
+        vm.title = vm.$t('vote.vetoDetials')
+        vm.accountLabel = vm.$t('listVote.vetoAccount')
+      }
+
+      next()
+    });
+  },
+  computed: {
       totalAmount(){
         if(this.assetAlias && this.assetAlias.toUpperCase() === 'BTM'){
           const n = new BigNumber(this.transaction.amount)

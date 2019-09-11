@@ -83,7 +83,7 @@
                   </div>
               </div>
           </div>
-          <a class="btn btn-primary" @click="send">{{ $t('transfer.send') }}</a>
+          <a class="btn btn-primary" @click="send">{{ $t('transfer.confirm') }}</a>
         </section>
     </div>
 </template>
@@ -95,6 +95,7 @@ import Confirm from "../sendTransaction/transferConfirm";
 import { BTM } from "@/utils/constants";
 import { mapGetters, mapState } from 'vuex'
 import { Number as Num } from "@/utils/Number"
+import _ from 'lodash';
 
 const currencyInPrice = {
   in_cny: 'cny_price',
@@ -132,10 +133,19 @@ export default {
           balances = this.currentAccount.vpBalances
         if(balances && balances.length >0 ){
           const balanceObject = balances.filter(b => b.asset === BTM)[0]
-          balance = balanceObject.balance/Math.pow(10,balanceObject.decimals)
+          balance = balanceObject.balance
+
+          let vote, lock
+          const votes = this.currentAccount.votes
+          if(votes && votes.length >0 ){
+            vote = _.sumBy(votes,'total')
+            lock = _.sumBy(votes,'locked')
+          }
+
+          balance = (balance-vote-lock)/Math.pow(10,balanceObject.decimals)
         }
 
-          return `Vapor${this.$t("crossChain.amountPlaceHolder")}${(balance != null && balance != 0) ? balance : '0.00'}`
+          return `${this.$t("vote.amountPlaceHolder")}${(balance != null && balance != 0) ? balance : '0.00'}`
       },
       ...mapState([
         'bytom',
@@ -150,9 +160,6 @@ export default {
       ])
     },
     watch: {
-        "transaction.amount": function (newAmount) {
-          this.transaction.cost = Number(this.selectAsset[currencyInPrice[this.currency]] * newAmount).toFixed(2);
-        },
         account: function (newAccount) {
             this.guid = newAccount.guid;
         }

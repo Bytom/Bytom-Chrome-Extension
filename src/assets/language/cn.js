@@ -27,8 +27,8 @@ const cn = {
     feeType: '标准',
     send: '发送交易',
     confirmPassword: '密码',
-    confirm: '确认发送',
-    cancel: '取消发送',
+    confirm: '提交',
+    cancel: '取消',
     emptyPassword: '密码不能为空',
     unit: '单位',
     asset:'资产',
@@ -50,6 +50,7 @@ const cn = {
   },
   crossChain:{
     title:'跨链',
+    detail:'跨链详情',
     amountPlaceHolder:"链可用",
     amountHint:'跨链交易预计24小时内完成',
     toVapor:'转入\nVapor链',
@@ -69,7 +70,8 @@ const cn = {
     bpPubkey:'节点公钥',
     vote:'投票',
     votes:'票数',
-    voteAccount:'投票账户'
+    voteAccount:'投票账户',
+    vetoAccount:'取消投票账户'
   },
   listCancel:{
     voted:'已投票',
@@ -78,7 +80,12 @@ const cn = {
     availableVeto:'可取消投票数'
   },
   vote:{
-    selectNode:'选择节点'
+    selectNode:'选择节点',
+    voteDetials:'投票详情',
+    vetoDetials:'取消投票详情',
+    confirmVote:'确认投票',
+    confirmVeto:'确认取消投票',
+    amountPlaceHolder:"可用"
   },
   signMessage:{
     title:'请求签名',

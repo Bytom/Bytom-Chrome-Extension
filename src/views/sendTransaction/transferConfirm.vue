@@ -111,7 +111,7 @@
     <div class="warp bg-gray">
         <section class="header bg-header">
             <i class="iconfont icon-back" @click="$router.go(-1)"></i>
-            <p>{{ $t('transfer.confirmTransaction') }}</p>
+            <p>{{ title || $t('transfer.confirmTransaction') }}</p>
         </section>
 
         <div class="scorll-panel">
@@ -194,6 +194,7 @@ export default {
     data() {
         return {
           full: false,
+          title:null,
           rawData: {},
             account: {},
             transaction: {
@@ -206,6 +207,15 @@ export default {
             assetAlias:null
         };
     },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      if(from.name === 'cross-chain') {
+        vm.title = vm.$t('crossChain.detail')
+      }
+
+      next()
+    });
+  },
     computed: {
       totalAmount(){
         if(this.assetAlias && this.assetAlias.toUpperCase() === 'BTM'){

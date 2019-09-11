@@ -186,8 +186,9 @@ import Confirm from "./transferConfirm";
 import { BTM } from "@/utils/constants";
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { Number as Num } from "@/utils/Number"
+  import _ from 'lodash';
 
-const currencyInPrice = {
+  const currencyInPrice = {
   in_cny: 'cny_price',
   in_usd: 'usd_price',
   in_btc:'btc_price'
@@ -235,13 +236,31 @@ export default {
         let balance, balances
         if(this.transaction.type === 'toVapor'){
           balances = this.currentAccount.balances
-        }else if(this.transaction.type === 'toBytom'){
+        }else if(this.transaction.type === 'toBytom') {
           balances = this.currentAccount.vpBalances
         }
-        if(balances && balances.length >0 ){
-          const balanceObject = balances.filter(b => b.asset === this.selectAsset.asset)[0]
 
-          balance = Num.formatNue(balanceObject.balance, balanceObject.decimals)
+        if(balances && balances.length >0 ){
+          if( this.selectAsset.asset === BTM && this.transaction.type === 'toBytom' ){
+            const balanceObject = balances.filter(b => b.asset === BTM)[0]
+            balance = balanceObject.balance
+
+            let vote, lock
+
+            const votes = this.currentAccount.votes
+
+            if (votes && votes.length > 0) {
+              vote = _.sumBy(votes, 'total')
+              lock = _.sumBy(votes, 'locked')
+            }
+
+            balance = Num.formatNue((balance - vote - lock), balanceObject.decimals)
+          }else{
+
+            const balanceObject = balances.filter(b => b.asset === this.selectAsset.asset)[0]
+            balance = Num.formatNue(balanceObject.balance, balanceObject.decimals)
+          }
+
         }
 
         if(this.transaction.type === 'toVapor'){

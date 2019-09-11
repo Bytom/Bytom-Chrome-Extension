@@ -76,7 +76,6 @@
                   <label class="form-item-label">
                     {{ $t('transfer.quantity') }}
 
-                    <small class="float-right" style="margin-right: 8px;">{{ formatCurrency(transaction.cost||0 )}}</small>
                   </label>
                   <div class="form-item-content" style=" display: flex;">
                       <input type="number" v-model="transaction.amount" :placeholder="bytomBalance">
@@ -84,7 +83,7 @@
                   </div>
               </div>
           </div>
-          <a class="btn btn-primary" @click="send">{{ $t('transfer.send') }}</a>
+          <a class="btn btn-primary" @click="send">{{ $t('transfer.confirm') }}</a>
         </section>
     </div>
 </template>
@@ -135,7 +134,7 @@ export default {
           vetoAmount = Num.formatNue(vote.total-vote.locked,8)
         }
 
-          return `Vapor${this.$t("listCancel.availableVeto")}${(vetoAmount != null && vetoAmount != 0) ? vetoAmount : '0.00'}`
+          return `${this.$t("listCancel.availableVeto")}${(vetoAmount != null && vetoAmount != 0) ? vetoAmount : '0.00'}`
       },
       ...mapState([
         'bytom',
@@ -150,10 +149,6 @@ export default {
       ])
     },
     watch: {
-        "transaction.amount": function (newAmount) {
-          this.transaction.cost = Number(this.selectAsset[currencyInPrice[this.currency]] * newAmount).toFixed(2);
-
-        },
         account: function (newAccount) {
             this.guid = newAccount.guid;
         }
