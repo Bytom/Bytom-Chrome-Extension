@@ -117,7 +117,7 @@
             <td class="col label">{{ $t('transfer.fee') }}</td>
             <td class="col value">{{transaction.fee}}<span class="uint">BTM</span></td>
           </tr>
-          
+
         </tbody>
       </table>
     </section>

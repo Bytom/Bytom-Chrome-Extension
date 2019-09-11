@@ -76,7 +76,6 @@
                   <label class="form-item-label">
                     {{ $t('transfer.quantity') }}
 
-                    <small class="float-right" style="margin-right: 8px;">{{ formatCurrency(transaction.cost||0) }}</small>
                   </label>
                   <div class="form-item-content" style=" display: flex;">
                       <input type="number" v-model="transaction.amount" :placeholder="bytomBalance">
@@ -187,7 +186,7 @@ export default {
             transaction.buildVote(this.currentAccount.guid, vote,  Num.convertToNue(this.transaction.amount,8), this.transaction.confirmations).then(result => {
                 loader.hide();
                 this.transaction.fee = Number(result.fee / 100000000);
-                this.$router.push({ name: 'transfer-confirm', params: { account: this.currentAccount,  transaction: this.transaction,assetAlias: 'BTM', rawData: result} })
+                this.$router.push({ name: 'vote-confirm', params: { account: this.currentAccount,  transaction: this.transaction,assetAlias: 'BTM', rawData: result} })
             }).catch(error => {
                 loader.hide();
                 this.$dialog.show({

@@ -66,8 +66,10 @@ const cn = {
     bp:'正式共识节点',
     standbyBP:'备选共识节点',
     bpName:'节点名称',
+    bpPubkey:'节点公钥',
     vote:'投票',
-    votes:'票数'
+    votes:'票数',
+    voteAccount:'投票账户'
   },
   listCancel:{
     voted:'已投票',

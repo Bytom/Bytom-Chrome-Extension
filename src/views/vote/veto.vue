@@ -187,7 +187,7 @@ export default {
             transaction.buildVeto(this.currentAccount.guid, vote,  Num.convertToNue(this.transaction.amount,8), this.transaction.confirmations).then(result => {
                 loader.hide();
                 this.transaction.fee = Number(result.fee / 100000000);
-                this.$router.push({ name: 'transfer-confirm', params: { account: this.currentAccount, transaction: this.transaction, assetAlias: 'BTM',rawData: result} })
+                this.$router.push({ name: 'vote-confirm', params: { account: this.currentAccount, transaction: this.transaction, assetAlias: 'BTM',rawData: result} })
             }).catch(error => {
                 loader.hide();
                 this.$dialog.show({

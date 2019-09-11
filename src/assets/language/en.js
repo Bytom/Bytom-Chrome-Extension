@@ -66,8 +66,10 @@ const en = {
     bp:'BP',
     standbyBP:'Standby BP',
     bpName:'BP name',
+    bpPubkey:'BP Public Key',
     vote:'Vote',
-    votes:'Votes'
+    votes:'Votes',
+    voteAccount:'Vote Account'
   },
   listCancel:{
     voted:'Voted',

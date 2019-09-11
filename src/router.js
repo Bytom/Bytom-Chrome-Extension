@@ -74,6 +74,14 @@ const routers = [
         }
       },
       {
+        path: '/vote/confirm',
+        name: 'vote-confirm',
+        meta: { title: '投票确认' },
+        component: resolve => {
+          require(['@/views/vote/voteConfirm.vue'], resolve)
+        }
+      },
+      {
         path: '/crossChain',
         name: 'cross-chain',
         meta: { title: '跨链' },
