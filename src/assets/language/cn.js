@@ -55,7 +55,8 @@ const cn = {
     amountHint:'跨链交易预计24小时内完成',
     toVapor:'转入\nVapor链',
     toBytom:'转出至\nBytom链',
-    asset:'选择资产'
+    asset:'选择资产',
+    direction:'跨链方向'
   },
   listVote:{
     title:'节点投票',
@@ -70,6 +71,7 @@ const cn = {
     bpPubkey:'节点公钥',
     vote:'投票',
     votes:'票数',
+    voteVotes:'投票票数',
     voteAccount:'投票账户',
     vetoAccount:'取消投票账户'
   },

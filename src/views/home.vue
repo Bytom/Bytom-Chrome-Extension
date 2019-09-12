@@ -403,6 +403,9 @@ export default {
         },
         netTypeToggle: function (event) {
             const newNetType = event.target.value  ==='bytom'? '' :event.target.value;
+
+            console.log(newNetType)
+          console.log(this.netType)
             if( newNetType !== this.netType){
               const bytom = this.bytom.clone();
 

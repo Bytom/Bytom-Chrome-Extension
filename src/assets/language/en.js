@@ -55,7 +55,8 @@ const en = {
     amountHint:'Cross Chain Transaction will be completed in 24 hrs.',
     toVapor:'Transfer to \n Vapor Chain',
     toBytom:'Transfer to \n Bytom Chain',
-    asset:'Select Asset'
+    asset:'Select Asset',
+    direction:'Cross Direction'
   },
   listVote:{
     title:'Block Producer Voting',
@@ -70,6 +71,7 @@ const en = {
     bpPubkey:'BP Public Key',
     vote:'Vote',
     votes:'Votes',
+    voteVotes:'Votes',
     voteAccount:'Vote Account',
     vetoAccount:'Veto Account'
   },

@@ -179,6 +179,36 @@
                           <p>{{transaction.fee}}</p>
                         </td>
                       </tr>
+                      <tr v-if="transaction.type =='vote'">
+                        <td colspan="2"><div class="divider"></div></td>
+                      </tr>
+                      <tr  v-if="transaction.type =='vote'">
+                        <td class="label">
+                          {{ $t('listVote.bpName') }}
+                        </td>
+                        <td class="value">
+                          <p>{{transaction.vName}}</p>
+                        </td>
+                      </tr>
+                      <tr  v-if="transaction.type =='vote'">
+                        <td class="label">
+                          {{ $t('listVote.voteVotes') }}
+                        </td>
+                        <td class="value">
+                          <p>{{transaction.vAmount}}</p>
+                        </td>
+                      </tr>
+                      <tr v-if="transaction.type =='crossChain'">
+                        <td colspan="2"><div class="divider"></div></td>
+                      </tr>
+                      <tr  v-if="transaction.type =='crossChain'">
+                        <td class="label">
+                          {{ $t('crossChain.direction') }}
+                        </td>
+                        <td class="value">
+                          <p>{{transaction.cDirection}}</p>
+                        </td>
+                      </tr>
                       <tr>
                         <td colspan="2"><div class="divider"></div></td>
                       </tr>
@@ -227,7 +257,8 @@
         }
       },
       ...mapState([
-        'currentAsset'
+        'currentAsset',
+        'listVote'
       ]),
       ...mapGetters([
         'currentAccount',
@@ -237,13 +268,18 @@
     mounted() {
         let params = this.$route.params;
 
-        this.transaction = params.transaction;
+        let transaction = params.transaction;
         if(this.netType === 'vapor'){
           this.selfAddress = this.currentAccount.vpAddress;
         }else{
           this.selfAddress = this.currentAccount.address;
         }
         console.log(params.transaction)
+        if(transaction.type =='vote' || transaction.type =='veto'){
+          const node =_.find(this.listVote, {pub_key: transaction.pubkey})
+          transaction.vName = node.name
+        }
+        this.transaction = transaction
     }
 };
 </script>

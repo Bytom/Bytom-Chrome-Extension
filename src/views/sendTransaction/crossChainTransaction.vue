@@ -245,7 +245,7 @@ export default {
             const balanceObject = balances.filter(b => b.asset === BTM)[0]
             balance = balanceObject.balance
 
-            let vote, lock
+            let vote = 0, lock = 0
 
             const votes = this.currentAccount.votes
 

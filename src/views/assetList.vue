@@ -151,6 +151,7 @@
 
 <script>
 import address from "@/utils/address";
+import query from "@/models/query";
 import transaction from "@/models/transaction";
 import { BTM } from "@/utils/constants";
 import { mapActions, mapGetters, mapState } from 'vuex'
@@ -203,7 +204,8 @@ export default {
     computed: {
         ...mapState([
           'bytom',
-          'currentAsset'
+          'currentAsset',
+          'listVote'
         ]),
         ...mapGetters([
           'currentAccount',
@@ -270,20 +272,25 @@ export default {
               .filter(b => b.asset === assetID);
 
             const filterInput = _.find(transaction.inputs, function(o) { return o.type =='veto'; })
+            const filterOutput = _.find(transaction.outputs, function(o) { return o.type =='vote'; })
 
             if(filterInput){
               transaction.type = 'veto'
               const inAmount = _.sumBy((transaction.inputs.filter(i => i.type ==='veto')), 'amount')
               const outAmount = _.sumBy((transaction.outputs.filter(i => i.type ==='vote')), 'amount')
+              transaction.pubkey = filterInput.vote
               transaction.vAmount =  Num.formatNue(inAmount-outAmount,8)
-            }else if(_.find(transaction.outputs, function(o) { return o.type =='vote'; })){
+            }else if(filterOutput){
               const outAmount = _.sumBy((transaction.outputs.filter(i => i.type ==='vote')), 'amount')
+              transaction.pubkey = filterOutput.vote
               transaction.vAmount =  Num.formatNue(outAmount,8)
               transaction.type = 'vote'
             }else if(_.find(transaction.outputs, function(o) { return o.type =='crosschain_output'; })){
               transaction.type = 'crossChain'
+              transaction.cDirection ='Vapor -> Bytom'
             }else if(_.find(transaction.inputs, function(o) { return o.type =='crosschain_input'; })){
               transaction.type = 'crossChain'
+              transaction.cDirection ='Bytom -> Vapor'
             }
 
             if(balanceObject.length ===1 ){
@@ -315,12 +322,24 @@ export default {
         },
       ...mapActions([
         Actions.UPDATE_STORED_BYTOM,
+        Actions.SET_LIST_VOTE
       ])
     },
     mounted() {
         this.refreshTransactions( this.start, this.limit).then(transactions => {
           this.transactions = transactions
         });
+        if(this.listVote.length == 0){
+          query.chainStatus().then(resp => {
+            if(resp){
+              const votes =  resp.consensus_nodes.map( (item, index) => {
+                item.rank = index+1;
+                return item
+              });
+              this[Actions.SET_LIST_VOTE](votes)
+            }
+          })
+        }
     },
   };
 </script>
