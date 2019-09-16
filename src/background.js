@@ -7,34 +7,12 @@ import Prompt from './prompts/Prompt';
 import * as PromptTypes from './prompts/PromptTypes'
 
 import Error from './utils/errors/Error'
-import accountAction from "@/models/account";
-import bytom from "@/models/bytom";
 
 let prompt = null;
 
 export default class Background {
   constructor() {
     this.setupInternalMessaging()
-    this.setupBytom()
-  }
-
-  setupBytom(){
-    const network = localStorage.bytomNet||'mainnet'
-    bytom.setupNet(network)
-
-    window.addEventListener('storage', storageEventHandler, false);
-    function storageEventHandler(evt){
-      if(evt.key === 'bytomNet'){
-        bytom.setupNet( evt.newValue )
-        chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
-          chrome.tabs.sendMessage(tabs[0].id, {action: "updateNetAndAccounts"}, function(response) {});
-        });
-      }else if(evt.key === 'currentAccount'){
-        chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
-          chrome.tabs.sendMessage(tabs[0].id, {action: "updateAccount"}, function(response) {});
-        });
-      }
-    }
   }
 
   setupInternalMessaging() {
@@ -73,6 +51,12 @@ export default class Background {
         break;
       case MsgTypes.GET_PROMPT:
         Background.getPrompt(sendResponse);
+        break;
+      case MsgTypes.LOAD:
+        Background.load(sendResponse);
+        break;
+      case MsgTypes.UPDATE:
+        Background.update(sendResponse, message.payload);
         break;
     }
   }
@@ -186,7 +170,7 @@ export default class Background {
     Background.load(bytom => {
       const domain = payload.domain;
       if(bytom.settings.domains.find(_domain => _domain === domain)) {
-        const currentAccount = JSON.parse(localStorage.currentAccount)
+        const currentAccount =  Object.assign({}, bytom.currentAccount)
         delete(currentAccount['label'])
         delete(currentAccount['net'])
         currentAccount['accountId'] = currentAccount['guid']
@@ -203,7 +187,9 @@ export default class Background {
   }
 
   requestCurrentNetwork(sendResponse){
-    sendResponse(localStorage.bytomNet)
+    Background.load(bytom => {
+        sendResponse(bytom.settings.network);
+    })
   }
 
   send(sendResponse, payload) {
@@ -250,7 +236,7 @@ export default class Background {
   static authenticate(sendResponse, payload){
     Background.load(bytom => {
       const domain = payload.domain;
-      const currentAccount = JSON.parse(localStorage.currentAccount)
+      const currentAccount = Object.assign({}, bytom.currentAccount)
       delete(currentAccount['label'])
       delete(currentAccount['net'])
       currentAccount['accountId'] = currentAccount['guid']

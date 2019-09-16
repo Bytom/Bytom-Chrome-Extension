@@ -31,6 +31,7 @@ const en = {
     cancel: 'Cancel',
     emptyPassword: 'Password can not be empty.',
     unit: 'unit',
+    asset:'Asset',
     assetId: 'Asset Id',
     emptyTo: 'Empty address',
     noneBTM: 'Error BTM Amount',
@@ -42,8 +43,51 @@ const en = {
     confirmTransaction:'Confirm Transaction',
     from:'From',
     to:'To',
-    view:'View All',
-    hide:'Hide All'
+    view:'View',
+    hide:'Hide',
+    viewAll:'View All',
+    hideAll:'Hide All'
+  },
+  crossChain:{
+    title:'Cross Chain',
+    detail:'Cross Chain Details',
+    amountPlaceHolder:" available amount: ",
+    amountHint:'Cross Chain Transaction will be completed in 24 hrs.',
+    toVapor:'Transfer to \n Vapor Chain',
+    toBytom:'Transfer to \n Bytom Chain',
+    asset:'Select Asset',
+    direction:'Cross Direction'
+  },
+  listVote:{
+    title:'Block Producer Voting',
+    myVote:'My votes',
+    totalVote:'All votes',
+    voteRecord:'Voting History',
+    voteRules:'Voting Rules',
+    cancelVote:'Veto',
+    bp:'BP',
+    standbyBP:'Standby BP',
+    bpName:'BP name',
+    bpPubkey:'BP Public Key',
+    vote:'Vote',
+    votes:'Votes',
+    voteVotes:'Votes',
+    voteAccount:'Vote Account',
+    vetoAccount:'Veto Account'
+  },
+  listCancel:{
+    voted:'Voted',
+    cancel:'Cancel',
+    selectVote:'Choose to vote',
+    availableVeto:'Available veto amount'
+  },
+  vote:{
+    selectNode:'Select Node',
+    voteDetials:'Vote Details',
+    vetoDetials:'Veto Details',
+    confirmVote:'Confirm Vote',
+    confirmVeto:'Confirm Veto',
+    amountPlaceHolder:"available amount: "
   },
   signMessage:{
     title:'Request Signature',
@@ -60,23 +104,32 @@ const en = {
   },
   receive:{
     address: 'Address',
-    tips:'Tips: Click address to copy directly.'
+    tips:'Tips: Click address to copy directly.',
+    vpWarning:'Please don\'t use Vapor address in the real transaction.'
   },
   main: {
-    mainNet: 'Bytom Mainnet',
-    testNet: 'Bytom Testnet',
-    soloNet: 'Bytom Solonet',
+    mainNet: 'Mainnet',
+    testNet: 'Testnet',
+    vapor: 'Vapor',
+    bytom: 'Bytom',
+    soloNet: 'Solonet',
     mainNetShort: 'Mainnet',
     testNetShort: 'Testnet',
+    vaporTestNetShort: 'Vapor Testnet',
     soloNetShort: 'Solonet',
     copy: 'Click to copy',
     send: 'Send',
     receive: 'Receive',
+    vote:'Vote',
+    crossChain:'Cross',
     record: 'Transaction Record',
+    asset:'Asset',
     noAccount: 'No account information on this network.',
     create: 'Create account',
     noRecord:"No transaction records found.",
+    noAssetRecord:"No asset records found.",
     unconfirmed :'Unconfirmed',
+    network:'Network'
   },
   transactionDetail: {
     title: 'Transaction Detail',
@@ -84,14 +137,15 @@ const en = {
     time:'Time',
     blockHeight: 'Block Height',
     blockSize: 'Block Size',
-    transactionID: 'Tx ID',
+    transactionID: 'Tx Id',
     sendAddress: 'Send Address',
     receiveAddress: 'Receive Address',
     myAddress: '(My Address)',
     success:'The transaction is succeed',
     fail:'The transaction is Failed.',
     pending:'The transaction is pending…',
-    tips:'Tip: Visit Blockmeta.com to check more information. '
+    tips:'Tip: Visit Blockmeta.com to check more information. ',
+    assetId:'Asset Id'
   },
   menu: {
     title: 'Switch Account',
@@ -126,7 +180,8 @@ const en = {
     title: 'Setting',
     version: 'Version',
     lang: 'Language',
-    unit: 'Btm Amount Unit'
+    unit: 'Btm Amount Unit',
+    currency:'Currency'
   },
   backup: {
     title: 'Backup',

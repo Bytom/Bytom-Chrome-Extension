@@ -23,13 +23,13 @@
 </style>
 
 <template>
-    <MenuPage :title="$t('setting.title')" @back="back">
+    <MenuPage :title="$t('setting.title')">
         <div class="row">
             <div class="label">
                 <p>{{ $t("setting.lang") }}</p>
             </div>
             <div class="form-item setting">
-                <v-select style="height: 32px;" class="select" :value="selected" :clearable="false" :onChange="onChange" :options="i18nOptions"></v-select>
+                <v-select style="height: 32px;" class="select" :value="selected" :clearable="false" :onChange="changeLanguage" :options="i18nOptions"></v-select>
             </div>
         </div>
         <div class="row">
@@ -40,49 +40,166 @@
                 <v-select style="height: 32px;" class="select" :value="unit" :clearable="false" :options="['BTM']"></v-select>
             </div>
         </div>
+        <div class="row">
+            <div class="label">
+                <p>{{ $t("main.network") }}</p>
+            </div>
+            <div class="form-item setting">
+                <v-select style="height: 32px;" class="select"  :value="network" :clearable="false" :options="networks" :onChange="networkToggle"></v-select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="label">
+                <p>{{ $t("setting.currency") }}</p>
+            </div>
+            <div class="form-item setting">
+                <v-select style="height: 32px;" class="select"  :value="currentCurrency" :clearable="false" :options="currencyList" :onChange="currencyToggle"></v-select>
+            </div>
+        </div>
     </MenuPage>
 </template>
 
 <script>
 import { have } from "@/assets/language";
+import account from "@/models/account";
+import * as Actions from '@/store/constants';
+import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
     name: "",
     data() {
         return {
-            unit: "BTM",
+          currentAccount: {},
+          network: { label: this.$t('main.mainNet'), value: "mainnet" },
+          unit: "BTM",
             i18nOptions: [
                 { label: "中文", value: "cn" },
                 { label: "English", value: "en" }
             ],
+            networks: [
+              { label: this.$t('main.mainNet'), value: "mainnet" },
+              { label: this.$t('main.testNet'), value: "testnet" },
+            ],
             selected: { label: "中文", value: "cn" },
-            hashVersion: ""
+            hashVersion: "",
+            currentCurrency: { label: "CNY", value: "in_cny" },
+            currencyList: [
+              { label: "CNY", value: "in_cny" },
+              { label: "USD", value: "in_usd" },
+              { label: "BTC", value: "in_btc" }
+            ],
         };
     },
+    computed: {
+      ...mapState([
+        'bytom'
+      ]),
+      ...mapGetters([
+        'net',
+        'language',
+        'netType',
+        'currency'
+      ])
+    },
     methods: {
-        onChange: function (value) {
-            if (localStorage.lang != value.value) {
-                localStorage.lang = value.value;
-                this.$i18n.locale = value.value;
-                this.selected = value;
+        changeLanguage(lang){
+          const bytom = this.bytom.clone();
+
+          if (bytom.settings.language != lang.value) {
+            bytom.settings.language = lang.value;
+            this.$i18n.locale = lang.value;
+            this.selected = lang;
+            this[Actions.UPDATE_STORED_BYTOM](bytom)
+          }
+        },
+        networkToggle: function (val) {
+          const bytom = this.bytom.clone();
+
+          if (bytom.settings.network != val.value) {
+            bytom.settings.network = val.value;
+            this.network = val;
+            account.setupNet(`${val.value}`);
+
+            bytom.currentAccount = {}
+            account.list()
+              .then(accounts => {
+
+                console.log(accounts)
+                bytom.accountList = accounts;
+                if (accounts.length > 0) {
+                  bytom.currentAccount = accounts[0];
+                }
+
+                this[Actions.UPDATE_STORED_BYTOM](bytom)
+              })
+              .catch((errors) =>{
+              bytom.accountList =[]
+              this[Actions.UPDATE_STORED_BYTOM](bytom)
+            })
+          }
+        },
+        currencyToggle: function (val) {
+          const bytom = this.bytom.clone();
+
+          if (bytom.settings.currency != val.value) {
+            bytom.settings.currency = val.value;
+            this.currentCurrency = val;
+            this[Actions.UPDATE_STORED_BYTOM](bytom)
+          }
+        },
+        refreshAccounts: function () {
+          account.list().then(accounts => {
+            this.accounts = accounts;
+            if (accounts.length == 0) {
+              return;
             }
+
+            this.currentAccount = accounts[0];
+          })
         },
-        back: function () {
-            this.$emit("on-back");
+        setupNetwork(network) {
+          this.network = network;
         },
-        close: function () {
-            this.$emit("on-exit");
-        }
+        ...mapActions([
+          Actions.UPDATE_STORED_BYTOM,
+        ])
     },
     mounted: function () {
         this.hashVersion = version.hash;
-        if (have(localStorage.lang)) {
-            if (localStorage.lang == "cn") {
-                this.selected = { label: "中文", value: "cn" };
-            } else if (localStorage.lang == "en") {
-                this.selected = { label: "English", value: "en" };
+        if (have(this.language)) {
+              if (this.language == "cn") {
+                  this.selected = { label: "中文", value: "cn" };
+              } else if (this.language == "en") {
+                  this.selected = { label: "English", value: "en" };
+              }
+          }
+        if(this.net) {
+            let network
+            switch(this.net){
+              case 'mainnet':
+                network = this.networks[0]
+                break;
+              case 'testnet':
+                network = this.networks[1]
+                break;
             }
-        }
+            this.setupNetwork(network);
+          }
+
+          if(this.currency) {
+            switch(this.currency){
+              case 'in_cny':
+                this.currentCurrency = this.currencyList[0]
+                break;
+              case 'in_usd':
+                this.currentCurrency = this.currencyList[1]
+                break;
+              case 'in_btc':
+                this.currentCurrency = this.currencyList[2]
+                break;
+            }
+          }
+
     }
 };
 </script>

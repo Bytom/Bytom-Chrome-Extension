@@ -8,6 +8,8 @@ export const ENABLE = 'enable'
 export const ADVTRANSFER = 'advTransfer'
 export const SIGNMESSAGE = 'signMessage'
 export const SEND = 'send'
+export const LOAD = 'load';
+export const UPDATE = 'update';
 
 
 export const REQUEST_CURRENT_ACCOUNT = 'defaultAccount';

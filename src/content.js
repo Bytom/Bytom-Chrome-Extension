@@ -5,6 +5,7 @@ import InternalMessage from '@/messages/internal'
 import * as MsgTypes from './messages/types'
 import * as EventNames from '@/messages/event'
 import {strippedHost} from '@/utils/GenericTools'
+import _ from 'lodash';
 
 
 let stream = new WeakMap()
@@ -46,27 +47,28 @@ class Content {
       document.dispatchEvent(new CustomEvent('chromeBytomLoaded'))
     })
 
-    chrome.runtime.onMessage.addListener(async (obj) => {
-      switch (obj.action) {
-        case 'updateAccount':
-          const defaultAccount = await this.getDefaultAccount();
-          if(defaultAccount){
-            stream.send(
-              NetworkMessage.payload(MsgTypes.UPDATE_BYTOM, {type:'default_account', value: defaultAccount}),
-              EventNames.INJECT
-            )
-          }
-          break
-        case 'updateNetAndAccounts':
-          const net = await this.getDefaultNetwork();
+    chrome.storage.onChanged.addListener(async (evt) => {
+      if(evt.bytom.newValue.settings.network !== evt.bytom.oldValue.settings.network){
+        const net = await this.getDefaultNetwork();
+        const defaultAccount = await this.getDefaultAccount();
+        stream.send(
+          NetworkMessage.payload(MsgTypes.UPDATE_BYTOM, {type:'net', value: net}),
+          EventNames.INJECT
+        )
+        stream.send(
+          NetworkMessage.payload(MsgTypes.UPDATE_BYTOM, {type:'default_account', value: defaultAccount}),
+          EventNames.INJECT
+        )
+      }else if(!_.isEqual(evt.bytom.newValue.currentAccount,evt.bytom.oldValue.currentAccount)){
+        const defaultAccount = await this.getDefaultAccount();
+        if(defaultAccount){
           stream.send(
-            NetworkMessage.payload(MsgTypes.UPDATE_BYTOM, {type:'net', value: net}),
+            NetworkMessage.payload(MsgTypes.UPDATE_BYTOM, {type:'default_account', value: defaultAccount}),
             EventNames.INJECT
           )
-          break
+        }
       }
-      return true;
-    })
+    });
   }
 
 

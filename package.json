@@ -1,12 +1,12 @@
 {
     "name": "Byone",
     "description": "Bytom Chrome Extension Wallet",
-    "version": "2.0.1",
+    "version": "2.1.0",
     "author": "zhiting.fly@8btc.com",
     "license": "MIT",
     "private": true,
     "scripts": {
-        "dev": "webpack --config ./build/webpack.dev.conf.js --hide-modules --hot",
+        "dev": "webpack --config ./build/webpack.dev.conf.js --watch --hot",
         "build": "node build/build.js --env.minor",
         "zip": "zip -q -r extension.zip dist",
         "clear": "rm -rf chrome-ext.crx extension.zip dist"
@@ -15,18 +15,22 @@
         "animate.css": "^3.7.0",
         "axios": "^0.18.0",
         "babel-preset-es2015": "^6.24.1",
+        "bignumber.js": "^9.0.0",
         "bytom-js-sdk": "^1.4.0",
         "clipboard": "^2.0.1",
         "extension-streams": "^1.0.7",
         "file-saver": "^2.0.0-rc.3",
         "iview": "^3.0.0",
+        "lodash": "^4.17.15",
         "moment": "^2.22.2",
         "qrcodejs2": "0.0.2",
+        "uuid": "^3.3.2",
         "vue": "^2.5.11",
         "vue-i18n": "^8.2.1",
         "vue-loading-overlay": "^3.0.1",
         "vue-router": "^3.0.2",
-        "vuescroll": "^4.9.0-beta.5"
+        "vuescroll": "^4.14.0",
+        "vuex": "^3.1.1"
     },
     "browserslist": [
         "> 1%",

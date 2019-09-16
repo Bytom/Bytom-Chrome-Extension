@@ -111,7 +111,7 @@
     <div class="warp bg-gray">
         <section class="header bg-header">
             <i class="iconfont icon-back" @click="$router.go(-1)"></i>
-            <p>{{ title || $t('transfer.confirmTransaction') }}</p>
+            <p>{{ title || $t('vote.voteDetials') }}</p>
         </section>
 
         <div class="scorll-panel">
@@ -119,39 +119,25 @@
                 <table>
                     <tbody>
                         <tr class="row">
-                            <td class="col label">{{ $t('transfer.from') }}</td>
+                            <td class="col label">{{ accountLabel }}</td>
                             <td class="col value">{{account.alias}}</td>
                         </tr>
-                        <tr class="row">
-                            <td class="col label">{{ $t('transfer.to') }}</td>
-                            <td class="col value">{{transaction.toShort}}</td>
+                        <tr v-if="selectVote.name" class="row">
+                            <td class="col label">{{ $t('listVote.bpName')}}</td>
+                            <td class="col value">{{selectVote.name}}</td>
                         </tr>
-                        <tr class="row">
-                            <td class="col label">{{ $t('transfer.asset') }}</td>
-                            <td class="col value asset">
-                              {{full? transaction.asset:shortAddress(transaction.asset)}}
-                              <a v-on:click="full = !full"  class="view-link">
-                                {{ full? $t('transfer.hide'): $t('transfer.view') }}
-                              </a>
-                            </td>
+                        <tr v-else class="row">
+                            <td class="col label">{{ $t('listVote.bpPubkey')}}</td>
+                            <td class="col value">{{transaction.toShort}}</td>
                         </tr>
                         <div class="divider"></div>
                         <tr class="row">
-                            <td class="col label">{{ $t('transfer.transferAmount') }}</td>
+                            <td class="col label">{{ $t('listVote.votes') }}</td>
                             <td class="col value">{{transaction.amount}}<span v-if="assetAlias" class="uint">{{assetAlias}}</span></td>
                         </tr>
                         <tr class="row">
                             <td class="col label">{{ $t('transfer.fee') }}</td>
                             <td class="col value">{{transaction.fee}}<span class="uint">BTM</span></td>
-                        </tr>
-
-                        <tr class="row">
-                            <td class="col label">{{ $t('transfer.total') }}</td>
-                            <td class="col value">
-                                <!--<p class="fee-intro">{{ $t('transfer.totalTip') }}</p>-->
-                                <!--{{(assetAlias && assetAlias.toUpperCase() === 'BTM')?Number(transaction.amount)+Number(transaction.fee): Number(transaction.amount)}}<span v-if="assetAlias" class="uint">{{assetAlias}}</span>-->
-                                {{totalAmount}}<span v-if="assetAlias" class="uint">{{assetAlias}}</span>
-                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -185,7 +171,7 @@
 import modalPasswd from "@/components/modal-passwd";
 import getLang from "@/assets/language/sdk";
 import { LocalStream } from 'extension-streams';
-import { mapGetters } from 'vuex'
+import { mapGetters,mapState } from 'vuex'
 
 export default {
     components: {
@@ -195,6 +181,7 @@ export default {
         return {
           full: false,
           title:null,
+          accountLabel: this.$t('listVote.voteAccount'),
           rawData: {},
             account: {},
             transaction: {
@@ -209,14 +196,15 @@ export default {
     },
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      if(from.name === 'cross-chain') {
-        vm.title = vm.$t('crossChain.detail')
+      if(from.name === 'veto') {
+        vm.title = vm.$t('vote.vetoDetials')
+        vm.accountLabel = vm.$t('listVote.vetoAccount')
       }
 
       next()
     });
   },
-    computed: {
+  computed: {
       totalAmount(){
         if(this.assetAlias && this.assetAlias.toUpperCase() === 'BTM'){
           const n = new BigNumber(this.transaction.amount)
@@ -225,6 +213,9 @@ export default {
           return Number(this.transaction.amount)
         }
       },
+      ...mapState([
+        'selectVote'
+      ]),
       ...mapGetters([
         'language',
         'net'

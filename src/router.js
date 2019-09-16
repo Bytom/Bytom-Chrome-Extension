@@ -18,6 +18,78 @@ const routers = [
         }
       },
       {
+        path: '/asset',
+        name: 'asset',
+        meta: { title: '资产' },
+        component: resolve => {
+          require(['@/views/assetList.vue'], resolve)
+        }
+      },
+      {
+        path: '/listVote',
+        name: 'listVote',
+        meta: { title: '节点展示' },
+        component: resolve => {
+          require(['@/views/vote/listVote.vue'], resolve)
+        }
+      },
+      {
+        path: '/listCancel',
+        name: 'listCancel',
+        meta: { title: '选择节点' },
+        component: resolve => {
+          require(['@/views/vote/listCancel.vue'], resolve)
+        }
+      },
+      {
+        path: '/voteRecord',
+        name: 'voteRecord',
+        meta: { title: '投票记录' },
+        component: resolve => {
+          require(['@/views/vote/voteRecord.vue'], resolve)
+        }
+      },
+      {
+        path: '/voteRegulation',
+        name: 'voteRegulation',
+        meta: { title: '投票规则' },
+        component: resolve => {
+          require(['@/views/vote/voteRegulation.vue'], resolve)
+        }
+      },
+      {
+        path: '/vote',
+        name: 'vote',
+        meta: { title: '投票' },
+        component: resolve => {
+          require(['@/views/vote/vote.vue'], resolve)
+        }
+      },
+      {
+        path: '/veto',
+        name: 'veto',
+        meta: { title: '取消投票' },
+        component: resolve => {
+          require(['@/views/vote/veto.vue'], resolve)
+        }
+      },
+      {
+        path: '/vote/confirm',
+        name: 'vote-confirm',
+        meta: { title: '投票确认' },
+        component: resolve => {
+          require(['@/views/vote/voteConfirm.vue'], resolve)
+        }
+      },
+      {
+        path: '/crossChain',
+        name: 'cross-chain',
+        meta: { title: '跨链' },
+        component: resolve => {
+          require(['@/views/sendTransaction/crossChainTransaction.vue'], resolve)
+        }
+      },
+      {
         path: '/signMessage',
         name: 'sign-message',
         meta: { title: '请求签名' },

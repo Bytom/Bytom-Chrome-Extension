@@ -82,7 +82,7 @@
     color:rgba(255,255,255,0.50);
   }
   .asset{
-    margin-left: 3px;
+    text-transform: uppercase;
   }
   .divider{
     margin: 10px 0;
@@ -106,7 +106,7 @@
         <section class="panel">
             <div class="tx-header"
                  v-bind:class="classObject">
-              <p class="value">{{transaction.direct}}{{transaction.val}}<span class="asset">BTM</span></p>
+              <p class="value">{{transaction.direct}}{{transaction.val}}</p>
               <small class="header-text" v-if="transaction.status_fail">
                 {{ $t('transactionDetail.fail') }}
               </small>
@@ -133,6 +133,14 @@
                         <td colspan="2"><div class="divider"></div></td>
                       </tr>
 
+                      <tr>
+                        <td class="label">
+                          {{ $t('transactionDetail.assetId') }}
+                        </td>
+                        <td class="asset value">
+                          <p>{{currentAsset.asset}}</p>
+                        </td>
+                      </tr>
                       <tr>
                         <td class="label">
                           {{ $t('transactionDetail.time') }}
@@ -171,14 +179,44 @@
                           <p>{{transaction.fee}}</p>
                         </td>
                       </tr>
+                      <tr v-if="transaction.type =='vote'">
+                        <td colspan="2"><div class="divider"></div></td>
+                      </tr>
+                      <tr  v-if="transaction.type =='vote'">
+                        <td class="label">
+                          {{ $t('listVote.bpName') }}
+                        </td>
+                        <td class="value">
+                          <p>{{transaction.vName}}</p>
+                        </td>
+                      </tr>
+                      <tr  v-if="transaction.type =='vote'">
+                        <td class="label">
+                          {{ $t('listVote.voteVotes') }}
+                        </td>
+                        <td class="value">
+                          <p>{{transaction.vAmount}}</p>
+                        </td>
+                      </tr>
+                      <tr v-if="transaction.type =='crossChain'">
+                        <td colspan="2"><div class="divider"></div></td>
+                      </tr>
+                      <tr  v-if="transaction.type =='crossChain'">
+                        <td class="label">
+                          {{ $t('crossChain.direction') }}
+                        </td>
+                        <td class="value">
+                          <p>{{transaction.cDirection}}</p>
+                        </td>
+                      </tr>
                       <tr>
                         <td colspan="2"><div class="divider"></div></td>
                       </tr>
-                      <tr :key="index" v-for="(input, index) in transaction.inputs">
+                      <tr :key="'input'+index" v-for="(input, index) in transaction.inputs">
                         <td class="label">{{ $t('transactionDetail.sendAddress') }}{{transaction.inputs.length > 1 ? index+1 : ''}}</td>
                         <td class="value">{{input.address}}<span v-if="input.address == selfAddress"> {{ $t('transactionDetail.myAddress') }}</span></td>
                       </tr>
-                      <tr :key="index" v-for="(output, index) in transaction.outputs">
+                      <tr :key="'output'+ index" v-for="(output, index) in transaction.outputs">
                         <td class="label">{{ $t('transactionDetail.receiveAddress') }}{{transaction.outputs.length > 1 ? index+1 : ''}}</td>
                         <td class="value">{{output.address}}<span v-if="output.address == selfAddress"> {{ $t('transactionDetail.myAddress') }}</span></td>
                       </tr>
@@ -193,7 +231,9 @@
 </template>
 
 <script>
-export default {
+  import {  mapState, mapGetters } from 'vuex'
+
+  export default {
     name: "",
     data() {
         return {
@@ -215,14 +255,31 @@ export default {
           'pending-header': !this.transaction.status_fail  && !this.transaction.hasOwnProperty('block_timestamp') ,
           'fail-header': this.transaction.status_fail
         }
-      }
+      },
+      ...mapState([
+        'currentAsset',
+        'listVote'
+      ]),
+      ...mapGetters([
+        'currentAccount',
+        'netType'
+      ])
     },
     mounted() {
         let params = this.$route.params;
 
-        this.transaction = params.transaction;
-        this.selfAddress = params.address;
+        let transaction = params.transaction;
+        if(this.netType === 'vapor'){
+          this.selfAddress = this.currentAccount.vpAddress;
+        }else{
+          this.selfAddress = this.currentAccount.address;
+        }
         console.log(params.transaction)
+        if(transaction.type =='vote' || transaction.type =='veto'){
+          const node =_.find(this.listVote, {pub_key: transaction.pubkey})
+          transaction.vName = node.name
+        }
+        this.transaction = transaction
     }
 };
 </script>

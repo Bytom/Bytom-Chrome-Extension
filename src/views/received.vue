@@ -17,6 +17,12 @@
     margin: 30px auto;
   }
 
+  .vp-warning {
+    text-align: center;
+    width: 100%;
+    font-size: 12px;
+  }
+
   .address-text{
     cursor: pointer;
   }
@@ -42,6 +48,7 @@
       <p>{{$t('receive.address')}}</p>
       <span class="color-black font-medium address-text"  :title="addressTitle" :data-clipboard-text="addr">{{addr}}</span>
     </div>
+    <div v-if="netType === 'vapor'" class="vp-warning color-red"> {{$t('receive.vpWarning')}}</div>
     <div class="footer color-grey"> {{$t('receive.tips')}}</div>
   </div>
 </template>
@@ -49,6 +56,8 @@
 <script>
   import QRCode from "qrcodejs2";
   import ClipboardJS from "clipboard";
+  import {  mapGetters } from 'vuex'
+
   export default {
   data() {
     return {
@@ -58,6 +67,12 @@
       addressTitle: this.$t("main.copy")
     };
   },
+    computed: {
+      ...mapGetters([
+        'currentAccount',
+        'netType'
+      ])
+    },
   methods: {
     close: function () {
       this.$router.go(-1)
@@ -79,8 +94,12 @@
     },
   },
   mounted() {
-    if (this.$route.params.address != undefined) {
-      this.addr = this.$route.params.address;
+    if (this.currentAccount.address != undefined) {
+      if(this.netType === 'vapor'){
+        this.addr = this.currentAccount.vpAddress;
+      }else{
+        this.addr = this.currentAccount.address;
+      }
       this.qrcode = new QRCode( "qrcode", {
         text: this.addr,
         width: 150,

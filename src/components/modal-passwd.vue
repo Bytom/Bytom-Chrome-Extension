@@ -51,6 +51,8 @@
 
 <script>
 import { getLanguage } from "@/assets/language"
+import { mapGetters } from 'vuex'
+
 const CLASS_CN = "form-item-content form-item-content-cn";
 const CLASS_EN = "form-item-content form-item-content-en"
 export default {
@@ -75,10 +77,13 @@ export default {
             }
             return CLASS_CN;
         },
+        ...mapGetters([
+          'language'
+        ])
     },
     methods: {
         open() {
-            this.i18n = getLanguage();
+            this.i18n = getLanguage(this.language);
             this.show = true;
             this.passwd = "";
         },

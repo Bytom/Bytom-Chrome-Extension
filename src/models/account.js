@@ -1,4 +1,6 @@
 import bytom from './bytom'
+import uuid from 'uuid'
+
 
 let account = {
   setupNet: bytom.setupNet
@@ -6,6 +8,9 @@ let account = {
 
 account.create = function(accountAlias, keyAlias, passwd, success, error) {
   let retPromise = new Promise((resolve, reject) => {
+    if(!keyAlias){
+      keyAlias = `${accountAlias}-key-${uuid.v4()}`
+    }
     bytom.keys
       .create(keyAlias, passwd)
       .then(res => {
@@ -25,15 +30,47 @@ account.create = function(accountAlias, keyAlias, passwd, success, error) {
   return retPromise
 }
 
+account.copy = function(guid) {
+  let retPromise = new Promise((resolve, reject) => {
+    bytom.accounts
+      .copyAccountUseServer(guid, 'btm')
+      .then(ret => {
+        resolve(ret)
+      })
+      .catch(error => {
+        reject(error)
+      })
+  })
+  return retPromise
+}
+
+account.listVapor = function(guid) {
+  let retPromise = new Promise((resolve, reject) => {
+    bytom.accounts
+      .listVaporAccountUseServer(guid)
+      .then(ret => {
+        resolve(ret)
+      })
+      .catch(error => {
+        reject(error)
+      })
+  })
+  return retPromise
+}
+
 account.balance = function(guid) {
   let retPromise = new Promise((resolve, reject) => {
     bytom.accounts
       .listAddressUseServer(guid)
       .then(addresses => {
         let balances = []
+        let votes = []
         addresses.forEach(address => {
           if (address.balances != null) {
             balances = balances.concat(address.balances)
+          }
+          if (address.votes != null) {
+            votes = votes.concat(address.votes)
           }
         })
         let obj = {};
@@ -46,9 +83,9 @@ account.balance = function(guid) {
             obj[balance.asset] = balance;
             delete obj[balance.asset]['total_received']
             delete obj[balance.asset]['total_sent']
-            delete obj[balance.asset]['in_btc']
-            delete obj[balance.asset]['in_cny']
-            delete obj[balance.asset]['in_usd']
+            // delete obj[balance.asset]['in_btc']
+            // delete obj[balance.asset]['in_cny']
+            // delete obj[balance.asset]['in_usd']
           }
         });
 
@@ -56,10 +93,13 @@ account.balance = function(guid) {
         let res = [];
 
         for(let prop in obj) {
-          res.push(obj[prop]);
+          res.unshift(obj[prop]);
         }
 
-        resolve(res)
+        resolve({
+            balances:res,
+            votes
+          })
       })
       .catch(error => {
         reject(error)
@@ -74,10 +114,17 @@ account.list = function() {
       .listAccountUseServer()
       .then(accounts => {
         Promise.all(accounts.map(async (account) => {
-          const balances = await this.balance(account.guid)
-          account.balances = balances
+          try{
+            const obj = await this.balance(account.guid)
+            account.balances = obj.balances
+            account.votes = obj.votes
+          }catch (e) {
+            return e
+          }
         })).then(()=>{
           resolve(accounts)
+        }).catch(error=>{
+          throw error
         })
       })
       .catch(error => {

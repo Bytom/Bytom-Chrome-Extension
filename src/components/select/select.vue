@@ -38,7 +38,7 @@
     width: 12px; /* To account for extra width from rotating. */
   }
   .v-select .open-indicator:before {
-    border-color: rgb(255, 255, 255);
+    border-color: grey;
     border-style: solid;
     border-width: 3px 3px 0 0;
     content: '';

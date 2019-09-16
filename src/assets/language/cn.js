@@ -27,11 +27,12 @@ const cn = {
     feeType: '标准',
     send: '发送交易',
     confirmPassword: '密码',
-    confirm: '确认发送',
-    cancel: '取消发送',
+    confirm: '提交',
+    cancel: '取消',
     emptyPassword: '密码不能为空',
     unit: '单位',
-    assetId:'资产ID',
+    asset:'资产',
+    assetId:'资产Id',
     emptyTo: '地址不能为空',
     noneBTM: '错误的BTM数量',
     transferAmount: '转账金额',
@@ -42,8 +43,51 @@ const cn = {
     success: '交易发送成功',
     from:'发送账户',
     to:'接收地址',
-    view:'展示全部',
-    hide:'隐藏全部'
+    view:'展开',
+    hide:'隐藏',
+    viewAll:'展示全部',
+    hideAll:'隐藏全部'
+  },
+  crossChain:{
+    title:'跨链',
+    detail:'跨链详情',
+    amountPlaceHolder:"链可用",
+    amountHint:'跨链交易预计24小时内完成',
+    toVapor:'转入\nVapor链',
+    toBytom:'转出至\nBytom链',
+    asset:'选择资产',
+    direction:'跨链方向'
+  },
+  listVote:{
+    title:'节点投票',
+    myVote:'我的投票',
+    totalVote:'全网投票',
+    voteRecord:'投票记录',
+    voteRules:'投票规则',
+    cancelVote:'取消投票',
+    bp:'正式共识节点',
+    standbyBP:'备选共识节点',
+    bpName:'节点名称',
+    bpPubkey:'节点公钥',
+    vote:'投票',
+    votes:'票数',
+    voteVotes:'投票票数',
+    voteAccount:'投票账户',
+    vetoAccount:'取消投票账户'
+  },
+  listCancel:{
+    voted:'已投票',
+    cancel:'可取消',
+    selectVote:'选择节点',
+    availableVeto:'可取消投票数'
+  },
+  vote:{
+    selectNode:'选择节点',
+    voteDetials:'投票详情',
+    vetoDetials:'取消投票详情',
+    confirmVote:'确认投票',
+    confirmVeto:'确认取消投票',
+    amountPlaceHolder:"可用"
   },
   signMessage:{
     title:'请求签名',
@@ -60,23 +104,30 @@ const cn = {
   },
   receive:{
     address: '地址',
-    tips:'提示：点击地址进行拷贝。'
+    tips:'提示：点击地址进行拷贝。',
+    vpWarning:'Vapor钱包地址请勿用于交易所充值提现'
   },
   main: {
-    mainNet: 'Bytom主网络',
-    testNet: 'Bytom测试网络',
-    soloNet: 'Bytom单机网络',
+    mainNet: '主网络',
+    testNet: '测试网络',
+    soloNet: '单机网络',
     mainNetShort: 'Bytom主网络',
     testNetShort: 'Bytom测试网络',
     soloNetShort: 'Bytom单机网络',
+    vaporTestnetShort: 'Vapor测试网络',
     copy: '点击复制',
-    send: '发送',
-    receive: '接收',
+    send: '转账',
+    receive: '收款',
+    vote:'投票',
+    crossChain:'跨链',
     record: '交易记录',
+    asset:'资产',
     noAccount: '当前网络无账户信息',
     create: '创建账户',
     unconfirmed :'未确认交易',
-    noRecord:"没有交易记录"
+    noRecord:"没有交易记录",
+    noAssetRecord:"没有资产记录",
+    network:'网络'
   },
   transactionDetail: {
     title: '交易详情',
@@ -84,14 +135,15 @@ const cn = {
     time:'交易时间',
     blockHeight: '区块高度',
     blockSize: '区块大小',
-    transactionID: '交易ID',
+    transactionID: '交易Id',
     sendAddress: '发送地址',
     receiveAddress: '接收地址',
     myAddress: '（我的地址）',
     success:'交易成功',
     fail:'交易失败',
     pending:'未确认交易',
-    tips:'提示：访问blockmeta.com来获取交易的相关信息。'
+    tips:'提示：访问blockmeta.com来获取交易的相关信息。',
+    assetId:'资产Id'
   },
   menu: {
     title: '切换账户',
@@ -125,7 +177,8 @@ const cn = {
     title: '设置',
     version: '钱包版本',
     lang: '语言',
-    unit: 'BTM数量单位'
+    unit: 'BTM数量单位',
+    currency:'货币'
   },
   backup: {
     title: '备份',

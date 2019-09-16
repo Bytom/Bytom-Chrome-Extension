@@ -31,12 +31,7 @@
                     <input type="text" v-model="formItem.accAlias">
                 </div>
             </div>
-            <div class="form-item">
-                <label class="form-item-label">{{ $t('createAccount.keyAlias') }}</label>
-                <div class="form-item-content">
-                    <input type="text" v-model="formItem.keyAlias">
-                </div>
-            </div>
+
             <div class="form-item">
                 <label class="form-item-label">{{ $t('createAccount.keyPassword') }}</label>
                 <div class="form-item-content">
@@ -57,6 +52,9 @@
 
 <script>
 import account from "@/models/account";
+import * as Actions from '@/store/constants';
+import { mapActions, mapState, mapGetters } from 'vuex'
+
 export default {
     name: "",
     components: {},
@@ -71,6 +69,15 @@ export default {
             tips: ""
         };
     },
+    computed: {
+      ...mapState([
+        'bytom'
+      ]),
+      ...mapGetters([
+        'net',
+        'netType'
+      ])
+    },
     methods: {
         create: function () {
             if (this.formItem.accAlias == "") {
@@ -79,12 +86,7 @@ export default {
                 });
                 return;
             }
-            if (this.formItem.keyAlias == "") {
-                this.$dialog.show({
-                    body: this.$t("createAccount.inputKey")
-                });
-                return;
-            }
+
             if (this.formItem.passwd1 == "") {
                 this.$dialog.show({
                     body: this.$t("createAccount.inputPass")
@@ -104,18 +106,42 @@ export default {
                 onCancel: this.onCancel
             });
 
-            account.create(this.formItem.accAlias, this.formItem.keyAlias, this.formItem.passwd1).then(res => {
-                loader.hide();
-                console.log("bytom.Account.create", res);
-                this.$router.push({ name: "home", params: { selectedAccount: res } });
-            }).catch(err => {
+            if(this.netType === 'vapor'){
+              account.setupNet(`${this.net}`);
+              account.create(this.formItem.accAlias, null, this.formItem.passwd1).then((resp) => {
+                account.setupNet(`${this.net}vapor`);
+                return account.copy(resp.guid).then((currentRespAccount)=>{
+                  this[Actions.CREATE_NEW_BYTOM_ACCOUNT](currentRespAccount).then(()=>{
+                    loader.hide();
+                    this.$router.push('/');
+                  })
+                })
+              }).catch(err => {
                 console.log(err);
                 loader.hide();
                 this.$dialog.show({
-                    body: err.message
+                  body: err.message
                 });
-            });
-        }
+              });
+            }else{
+              account.create(this.formItem.accAlias, null, this.formItem.passwd1).then(account => {
+                this[Actions.CREATE_NEW_BYTOM_ACCOUNT](account).then(()=>{
+                  loader.hide();
+                  this.$router.push('/');
+                })
+
+              }).catch(err => {
+                console.log(err);
+                loader.hide();
+                this.$dialog.show({
+                  body: err.message
+                });
+              });
+            }
+        },
+        ...mapActions([
+          Actions.CREATE_NEW_BYTOM_ACCOUNT,
+        ])
     },
     mounted() { }
 };

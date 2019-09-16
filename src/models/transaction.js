@@ -2,8 +2,12 @@ import bytom from "./bytom";
 
 let transaction = {};
 
-transaction.list = function(guid, address, start, limit) {
-  return bytom.transaction.list(guid, address, start, limit);
+transaction.list = function(guid, asset_id, start, limit, tx_types) {
+  const filter = {asset_id}
+  if(tx_types){
+    filter.tx_types = tx_types
+  }
+  return bytom.transaction.list(guid, filter, null, start, limit);
 };
 
 transaction.convertArgument = function(argArray) {
@@ -15,11 +19,10 @@ transaction.convertArgument = function(argArray) {
   };
 
   let actionFunction = argArray.map(fn)
-  console.log(actionFunction)
   return Promise.all(actionFunction);
 };
 
-transaction.blockCount = function() {
+transaction.chainStatus = function() {
   return bytom.query.getblockcount();
 };
 
@@ -31,6 +34,48 @@ transaction.build = function(guid, to, asset, amount, fee, confirmations) {
   let retPromise = new Promise((resolve, reject) => {
     bytom.transaction
       .buildPayment(guid, to, asset, Number(amount), Number(fee*100000000), confirmations)
+      .then(res => {
+        resolve(res);
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+  return retPromise;
+};
+
+transaction.buildCrossChain = function(guid, to, asset, amount, confirmations) {
+  let retPromise = new Promise((resolve, reject) => {
+    bytom.transaction
+      .buildCrossChain(guid, to, asset, Number(amount), confirmations)
+      .then(res => {
+        resolve(res);
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+  return retPromise;
+};
+
+transaction.buildVote = function(guid, vote, amount, confirmations, memo) {
+  let retPromise = new Promise((resolve, reject) => {
+    bytom.transaction
+      .buildVote(guid, vote, Number(amount), confirmations, memo)
+      .then(res => {
+        resolve(res);
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+  return retPromise;
+};
+
+transaction.buildVeto = function(guid, vote, amount, confirmations, memo) {
+  let retPromise = new Promise((resolve, reject) => {
+    bytom.transaction
+      .buildVeto(guid, vote, Number(amount), confirmations, memo)
       .then(res => {
         resolve(res);
       })
