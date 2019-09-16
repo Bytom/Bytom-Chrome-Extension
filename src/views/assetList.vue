@@ -209,7 +209,8 @@ export default {
         ]),
         ...mapGetters([
           'currentAccount',
-          'currency'
+          'currency',
+          'netType'
         ])
     },
     methods: {
@@ -329,7 +330,7 @@ export default {
         this.refreshTransactions( this.start, this.limit).then(transactions => {
           this.transactions = transactions
         });
-        if(this.listVote.length == 0){
+        if(this.listVote.length == 0 && this.netType === 'vapor'){
           query.chainStatus().then(resp => {
             if(resp){
               const votes =  resp.consensus_nodes.map( (item, index) => {

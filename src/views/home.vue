@@ -82,7 +82,7 @@
 }
 .transactions {
   font-size: 15px;
-  height: 340px;
+  height: 283px;
   overflow: auto;
 }
 .list-item {
@@ -404,8 +404,6 @@ export default {
         netTypeToggle: function (event) {
             const newNetType = event.target.value  ==='bytom'? '' :event.target.value;
 
-            console.log(newNetType)
-          console.log(this.netType)
             if( newNetType !== this.netType){
               const bytom = this.bytom.clone();
 
@@ -422,6 +420,19 @@ export default {
                   bytom.accountList[objectIndex].vpAddress = accounts.vpAddress
 
                   this[Actions.UPDATE_STORED_BYTOM](bytom)
+                }).catch(e =>{
+                  if(e.message == 'Error: wallet has exist'){
+                    account.listVapor(this.currentAccount.guid).then(accounts => {
+                      //update currentAccount
+                      bytom.currentAccount = accounts
+
+                      const objectIndex = bytom.accountList.findIndex(a => a.guid == this.currentAccount.guid)
+                      bytom.accountList[objectIndex].vpAddress = accounts.vpAddress
+
+                      this[Actions.UPDATE_STORED_BYTOM](bytom)
+                    })
+
+                  }
                 })
               }else{
                 this[Actions.UPDATE_STORED_BYTOM](bytom)

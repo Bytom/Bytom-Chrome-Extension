@@ -197,8 +197,6 @@ import * as Actions from '@/store/constants';
 
 let mainNet = null;
 let testNet = null;
-let soloNet = null;
-let vaporTestnet = null;
 export default {
     name: "",
     data() {
@@ -334,21 +332,13 @@ export default {
     mounted() {
         mainNet = { label: this.$t('main.mainNet'), value: "mainnet" };
         testNet = { label: this.$t('main.testNet'), value: "testnet" };
-        soloNet = { label: this.$t('main.soloNet'), value: "solonet" };
-        // vaporTestnet = { label: this.$t('main.vaporTestnet'), value: "vaporTestnet" };
-        this.nets = [mainNet, testNet,soloNet];
+        this.nets = [mainNet, testNet];
         if (this.net != undefined) {
             if (this.net == "mainnet") {
                 this.selected = mainNet;
             } else if (this.net == "testnet") {
                 this.selected = testNet;
-            } else if (this.net == "solonet") {
-                this.selected = soloNet;
             }
-
-            // else if (this.net == "vaporTestnet") {
-            //     this.selected = vaporTestnet;
-            // }
         } else {
             this.selected = mainNet;
         }

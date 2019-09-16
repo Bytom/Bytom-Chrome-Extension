@@ -44,6 +44,20 @@ account.copy = function(guid) {
   return retPromise
 }
 
+account.listVapor = function(guid) {
+  let retPromise = new Promise((resolve, reject) => {
+    bytom.accounts
+      .listVaporAccountUseServer(guid)
+      .then(ret => {
+        resolve(ret)
+      })
+      .catch(error => {
+        reject(error)
+      })
+  })
+  return retPromise
+}
+
 account.balance = function(guid) {
   let retPromise = new Promise((resolve, reject) => {
     bytom.accounts
