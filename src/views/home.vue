@@ -419,7 +419,9 @@ export default {
                   const objectIndex = bytom.accountList.findIndex(a => a.guid == this.currentAccount.guid)
                   bytom.accountList[objectIndex].vpAddress = accounts.vpAddress
 
-                  this[Actions.UPDATE_STORED_BYTOM](bytom)
+                  this[Actions.UPDATE_STORED_BYTOM](bytom).then(()=>{
+                    this.refreshBalance(this.currentAccount.guid)
+                  })
                 }).catch(e =>{
                   if(e.message == 'Error: wallet has exist'){
                     account.listVapor(this.currentAccount.guid).then(accounts => {
@@ -429,15 +431,18 @@ export default {
                       const objectIndex = bytom.accountList.findIndex(a => a.guid == this.currentAccount.guid)
                       bytom.accountList[objectIndex].vpAddress = accounts.vpAddress
 
-                      this[Actions.UPDATE_STORED_BYTOM](bytom)
+                      this[Actions.UPDATE_STORED_BYTOM](bytom).then(()=>{
+                        this.refreshBalance(this.currentAccount.guid)
+                      })
                     })
 
                   }
                 })
               }else{
-                this[Actions.UPDATE_STORED_BYTOM](bytom)
+                this[Actions.UPDATE_STORED_BYTOM](bytom).then(()=>{
+                  this.refreshBalance(this.currentAccount.guid)
+                })
               }
-              this.refreshBalance(this.currentAccount.guid)
             }
         },
         showQrcode: function () {

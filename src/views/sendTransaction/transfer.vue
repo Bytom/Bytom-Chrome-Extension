@@ -136,7 +136,7 @@
                   </label>
                   <div class="form-item-content" style=" display: flex;">
                     <input type="number" v-model="transaction.amount" placeholder="0" @keypress="limitAmount">
-                      <span class="color-grey" style="width: 40px; font-size: 15px;position: absolute;right: 0;text-transform: uppercase;">{{unit}}</span>
+                      <span class="color-grey" style="font-size: 15px;position: absolute;right: 0;text-transform: uppercase;">{{unit}}</span>
                   </div>
               </div>
               <div class="form-item">
@@ -199,9 +199,17 @@ export default {
     computed: {
         assets(){
           if(this.netType === 'vapor'){
-            return this.currentAccount.vpBalances
+            if(!this.currentAccount.vpBalances ||this.currentAccount.vpBalances.length == 0){
+              return [this.selectAsset]
+            }else{
+              return this.currentAccount.vpBalances
+            }
           }else{
-            return this.currentAccount.balances
+            if(!this.currentAccount.balances ||this.currentAccount.balances.length == 0){
+              return [this.selectAsset]
+            }else{
+              return this.currentAccount.balances
+            }
           }
         },
         unit() {
@@ -219,7 +227,8 @@ export default {
     },
     watch: {
         "transaction.amount": function (newAmount) {
-            this.transaction.cost = Number(this.selectAsset[currencyInPrice[this.currency]] * newAmount).toFixed(2);
+            const singlePrice = this.selectAsset[currencyInPrice[this.currency]]||this.selectAsset[this.currency]||0
+            this.transaction.cost = Number( singlePrice * newAmount).toFixed(2);
         },
         account: function (newAccount) {
             this.guid = newAccount.guid;
@@ -261,7 +270,7 @@ export default {
         assetChange: function (val) {
           if(val.asset !== this.selectAsset.asset){
             this.transaction.asset = val.asset;
-            const balances = this.currentAccount.balances
+            const balances = this.netType === 'vapor'?this.currentAccount.vpBalances:this.currentAccount.balances
             let balance = 0.00
             if(balances.length >0 ) {
               const balanceObject = balances.filter(b => b.asset === val.asset)[0]
@@ -325,7 +334,14 @@ export default {
           }
 
           if (this.$route.query.asset != undefined) {
-              this.transaction.asset= this.$route.query.asset
+            const currentAssetId = this.$route.query.asset
+
+            this.transaction.asset= currentAssetId
+
+            const assets = this.assets
+            this.selectAsset = assets.filter(b => b.asset === currentAssetId.toLowerCase())[0]
+
+
           }
           if (this.$route.query.to != undefined) {
               this.transaction.to = this.$route.query.to
@@ -341,15 +357,16 @@ export default {
           }
         }else{
           this.account = this.currentAccount
+
+          const currentAsset = this.currentAccount.balances[0]
+
+          if(currentAsset){
+            transaction.asset(currentAsset.asset).then(ret => {
+                this.selectAsset = Object.assign(ret,currentAsset)
+            });
+          }
         }
 
-        const currentAsset = this.currentAccount.balances[0]
-
-        if(currentAsset){
-          transaction.asset(currentAsset.asset).then(ret => {
-              this.selectAsset = Object.assign(ret,currentAsset)
-          });
-        }
     }
 };
 </script>

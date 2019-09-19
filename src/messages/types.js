@@ -14,6 +14,7 @@ export const UPDATE = 'update';
 
 export const REQUEST_CURRENT_ACCOUNT = 'defaultAccount';
 export const REQUEST_CURRENT_NETWORK = 'currentNetwork';
+export const REQUEST_CURRENT_CHAIN_TYPE = 'currentChain';
 export const REQUEST_ACCOUNT_LIST = 'accountList';
 
 

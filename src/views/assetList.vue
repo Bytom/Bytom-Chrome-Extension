@@ -4,7 +4,6 @@
     display:flex;
   }
   .topbar .topbar-left {
-    width:140px;
     overflow:hidden;
     white-space:nowrap;
   }
@@ -13,6 +12,7 @@
     margin-top: 10px;
     padding: 0 20px;
     text-align: center;
+    width: 245px;
   }
 
 .topbar-left .btn-menu i {

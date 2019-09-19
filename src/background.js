@@ -43,6 +43,9 @@ export default class Background {
       case MsgTypes.REQUEST_CURRENT_NETWORK:
         this.requestCurrentNetwork(sendResponse)
         break
+      case MsgTypes.REQUEST_CURRENT_CHAIN_TYPE:
+        this.requestCurrentChain(sendResponse)
+        break
       case MsgTypes.ENABLE:
         Background.authenticate(sendResponse, message.payload)
         break
@@ -109,6 +112,9 @@ export default class Background {
       return false;
     }
 
+    // NotificationService.open(new Prompt(PromptTypes.REQUEST_TRANSFER, '', payload ,approved => {
+    //   sendResponse(approved);
+    // }));
 
       chrome.windows.create(
       {
@@ -170,14 +176,29 @@ export default class Background {
     Background.load(bytom => {
       const domain = payload.domain;
       if(bytom.settings.domains.find(_domain => _domain === domain)) {
-        const currentAccount =  Object.assign({}, bytom.currentAccount)
-        delete(currentAccount['label'])
-        delete(currentAccount['net'])
-        currentAccount['accountId'] = currentAccount['guid']
-        delete(currentAccount['guid'])
-        delete(currentAccount['balance'])
+        const currentAccount =  bytom.currentAccount
+        let account
+        if(bytom.settings.netType === 'vapor'){
+          account = {
+            address: currentAccount.vpAddress,
+            alias:currentAccount.alias,
+            balances: currentAccount.vpBalances|| [],
+            accountId: currentAccount.guid,
+            rootXPub: currentAccount.rootXPub
+          };
+        }else{
+          let balances = currentAccount.balances ||[]
 
-        sendResponse(currentAccount);
+          account ={
+            address: currentAccount.address,
+            alias:currentAccount.alias,
+            balances: currentAccount.balances|| [],
+            accountId: currentAccount.guid,
+            rootXPub: currentAccount.rootXPub
+          };
+        }
+
+        sendResponse(account)
       } else{
         sendResponse(null);
         return false;
@@ -191,6 +212,14 @@ export default class Background {
         sendResponse(bytom.settings.network);
     })
   }
+
+  requestCurrentChain(sendResponse){
+    Background.load(bytom => {
+      const chain = bytom.settings.netType ==='vapor'?'vapor':'bytom'
+      sendResponse(chain);
+    })
+  }
+
 
   send(sendResponse, payload) {
     const action = payload.action
@@ -236,22 +265,40 @@ export default class Background {
   static authenticate(sendResponse, payload){
     Background.load(bytom => {
       const domain = payload.domain;
-      const currentAccount = Object.assign({}, bytom.currentAccount)
-      delete(currentAccount['label'])
-      delete(currentAccount['net'])
-      currentAccount['accountId'] = currentAccount['guid']
-      delete(currentAccount['guid'])
-      delete(currentAccount['balance'])
+      const currentAccount =  bytom.currentAccount
+
+      let account
+      if(bytom.settings.netType === 'vapor'){
+        let balances = currentAccount.vpBalances ||[]
+
+
+        account ={
+          address: currentAccount.vpAddress,
+          alias:currentAccount.alias,
+          balances: currentAccount.vpBalances || [],
+          accountId: currentAccount.guid,
+          rootXPub: currentAccount.rootXPub
+        };
+
+      }else{
+        account ={
+          address: currentAccount.address,
+          alias:currentAccount.alias,
+          balances: currentAccount.balances|| [],
+          accountId: currentAccount.guid,
+          rootXPub: currentAccount.rootXPub
+        };
+      }
 
       if(bytom.settings.domains.find(_domain => _domain === domain)) {
-        sendResponse(currentAccount);
+        sendResponse(account);
       } else{
         NotificationService.open(new Prompt(PromptTypes.REQUEST_AUTH, payload.domain, {}, approved => {
           if(approved === false || approved.hasOwnProperty('isError')) sendResponse(approved);
           else {
             bytom.settings.domains.unshift(domain);
             if(approved === true){
-              this.update(() => sendResponse(currentAccount), bytom);
+              this.update(() => sendResponse(account), bytom);
             }else{
               this.update(() => sendResponse(approved), bytom);
             }

@@ -34,10 +34,11 @@ class Content {
     stream.onSync(async () => {
       const defaultAccount = await this.getDefaultAccount();
       const net = await this.getDefaultNetwork();
+      const chain = await this.getDefaultChain()
 
       // Pushing an instance of Bytomdapp to the web application
       stream.send(
-        NetworkMessage.payload(MsgTypes.PUSH_BYTOM, {defaultAccount, net}),
+        NetworkMessage.payload(MsgTypes.PUSH_BYTOM, {defaultAccount, net, chain}),
         EventNames.INJECT
       )
 
@@ -67,6 +68,17 @@ class Content {
             EventNames.INJECT
           )
         }
+      }else if(evt.bytom.newValue.settings.netType!== evt.bytom.oldValue.settings.netType){
+        const chain = await this.getDefaultChain();
+        const defaultAccount = await this.getDefaultAccount();
+        stream.send(
+          NetworkMessage.payload(MsgTypes.UPDATE_BYTOM, {type:'chain', value: chain}),
+          EventNames.INJECT
+        )
+        stream.send(
+          NetworkMessage.payload(MsgTypes.UPDATE_BYTOM, {type:'default_account', value: defaultAccount}),
+          EventNames.INJECT
+        )
       }
     });
   }
@@ -111,6 +123,11 @@ class Content {
 
   getDefaultNetwork(){
     return InternalMessage.signal(MsgTypes.REQUEST_CURRENT_NETWORK)
+      .send()
+  }
+
+  getDefaultChain(){
+    return InternalMessage.signal(MsgTypes.REQUEST_CURRENT_CHAIN_TYPE)
       .send()
   }
 
