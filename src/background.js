@@ -6,7 +6,9 @@ import StorageService from './services/StorageService'
 import Prompt from './prompts/Prompt';
 import * as PromptTypes from './prompts/PromptTypes'
 
+import _ from 'lodash'
 import Error from './utils/errors/Error'
+import { BTM } from './utils/constants'
 
 let prompt = null;
 
@@ -179,20 +181,35 @@ export default class Background {
         const currentAccount =  bytom.currentAccount
         let account
         if(bytom.settings.netType === 'vapor'){
+          let vote
+          const votes = currentAccount.votes
+          if(votes && votes.length >0 ){
+            vote = _.sumBy(votes,'total')
+          }
+
+          let balances = currentAccount.vpBalances ||[]
+          balances = balances.map(({ in_btc, in_cny, in_usd, name, ...keepAttrs}) => {
+            if(keepAttrs.asset === BTM)
+              return {availableBalance: (keepAttrs.balance-vote),...keepAttrs}
+              else
+                return keepAttrs
+          })
+
           account = {
             address: currentAccount.vpAddress,
             alias:currentAccount.alias,
-            balances: currentAccount.vpBalances|| [],
+            balances: balances|| [],
             accountId: currentAccount.guid,
             rootXPub: currentAccount.rootXPub
           };
         }else{
           let balances = currentAccount.balances ||[]
+          balances = balances.map(({ in_btc, in_cny, in_usd, name, ...keepAttrs}) => keepAttrs)
 
           account ={
             address: currentAccount.address,
             alias:currentAccount.alias,
-            balances: currentAccount.balances|| [],
+            balances: balances|| [],
             accountId: currentAccount.guid,
             rootXPub: currentAccount.rootXPub
           };
@@ -269,22 +286,36 @@ export default class Background {
 
       let account
       if(bytom.settings.netType === 'vapor'){
-        let balances = currentAccount.vpBalances ||[]
+        let vote = 0
+        const votes = currentAccount.votes
+        if(votes && votes.length >0 ){
+          vote = _.sumBy(votes,'total')
+        }
 
+        let balances = currentAccount.vpBalances ||[]
+        balances = balances.map(({ in_btc, in_cny, in_usd, name, ...keepAttrs}) => {
+          if(keepAttrs.asset === BTM)
+            return {availableBalance: (keepAttrs.balance-vote),...keepAttrs}
+          else
+            return keepAttrs
+        })
 
         account ={
           address: currentAccount.vpAddress,
           alias:currentAccount.alias,
-          balances: currentAccount.vpBalances || [],
+          balances: balances || [],
           accountId: currentAccount.guid,
           rootXPub: currentAccount.rootXPub
         };
 
       }else{
+        let balances = currentAccount.balances ||[]
+        balances = balances.map(({ in_btc, in_cny, in_usd, name, ...keepAttrs}) => keepAttrs)
+
         account ={
           address: currentAccount.address,
           alias:currentAccount.alias,
-          balances: currentAccount.balances|| [],
+          balances: balances|| [],
           accountId: currentAccount.guid,
           rootXPub: currentAccount.rootXPub
         };
