@@ -124,17 +124,19 @@ export default {
             account.list()
               .then(accounts => {
 
-                console.log(accounts)
                 bytom.accountList = accounts;
                 if (accounts.length > 0) {
                   bytom.currentAccount = accounts[0];
                 }
 
+                account.setupNet(`${val.value}${this.netType}`);
                 this[Actions.UPDATE_STORED_BYTOM](bytom)
               })
               .catch((errors) =>{
               bytom.accountList =[]
-              this[Actions.UPDATE_STORED_BYTOM](bytom)
+
+                account.setupNet(`${val.value}${this.netType}`);
+                this[Actions.UPDATE_STORED_BYTOM](bytom)
             })
           }
         },

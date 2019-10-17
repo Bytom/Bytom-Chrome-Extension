@@ -162,6 +162,7 @@ import { BTM } from "@/utils/constants";
   import { Number as Num } from "@/utils/Number"
 import { mapActions, mapGetters, mapState } from 'vuex'
 import * as Actions from '@/store/constants';
+  import _ from 'lodash'
 
   const currencyInPrice = {
     in_cny: 'cny_price',
@@ -315,7 +316,7 @@ export default {
             transaction.build(this.account.guid, this.transaction.to, this.transaction.asset, Num.convertToNue(this.transaction.amount,this.selectAsset.decimals), this.transaction.fee, this.transaction.confirmations).then(result => {
                 loader.hide();
                 if(!this.transaction.fee){
-                    this.transaction.fee = Number(result.fee / 100000000);
+                    this.transaction.fee = Number( _.sumBy(result, 'fee') / 100000000);
                 }
                 this.$router.push({ name: 'transfer-confirm', params: { account: this.account, transaction: this.transaction, rawData: result, assetAlias: this.selectAsset.symbol, type: this.$route.query.type } })
             }).catch(error => {

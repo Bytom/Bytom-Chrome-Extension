@@ -195,7 +195,7 @@ export default {
         return {
           full: false,
           title:null,
-          rawData: {},
+          rawData: [],
             account: {},
             transaction: {
                 to: "",
@@ -249,11 +249,12 @@ export default {
             });
 
             // rawData, password
-            transaction.transfer(this.account.guid, this.rawData, this.password)
+
+         Promise.all(this.rawData.map( (rawdata) => transaction.transfer(this.account.guid, rawdata, this.password)))
                 .then(ret => {
                     loader.hide();
                     if(this.$route.params.type == 'popup'){
-                      LocalStream.send({method:'transfer',action:'success', message:ret});
+                      LocalStream.send({method:'transfer',action:'success', message:ret[ret.length-1]});
                       window.close();
                     }
                     this.$dialog.show({
