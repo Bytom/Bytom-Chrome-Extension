@@ -85,7 +85,7 @@
             </div>
             <div class="topbar-middle">
               <div v-if="currentAsset!=undefined" class="amount color-white">
-                <div v-if="currentAsset.symbol">
+                <div v-if="currentAsset.symbol!=='-'">
                   <div class="symbol">
                     {{currentAsset.symbol}}
                   </div>
