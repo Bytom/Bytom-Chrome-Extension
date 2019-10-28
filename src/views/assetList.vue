@@ -307,10 +307,12 @@ export default {
 
                 if (Number(balanceObject[0].amount) > 0) {
                     transaction.direct = "+";
-                    transaction.address = address.short(inputAddresses.pop());
+                    const resultAddr = inputAddresses.pop()
+                    transaction.address = resultAddr.includes(' ')?resultAddr:address.short(resultAddr);
                 } else {
                     transaction.direct = "-";
-                    transaction.address = address.short(outputAddresses.pop());
+                    const resultAddr = outputAddresses.pop()
+                    transaction.address = resultAddr.includes(' ')?resultAddr:address.short(resultAddr);
                 }
 
                 transaction.val =  Num.formatNue(val, this.currentAsset.decimals) ;
