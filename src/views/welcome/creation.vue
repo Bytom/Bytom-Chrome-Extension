@@ -196,7 +196,6 @@ import { mapActions, mapGetters, mapState } from 'vuex'
 import * as Actions from '@/store/constants';
 
 let mainNet = null;
-let testNet = null;
 export default {
     name: "",
     data() {
@@ -331,18 +330,15 @@ export default {
     },
     mounted() {
         mainNet = { label: this.$t('main.mainNet'), value: "mainnet" };
-        testNet = { label: this.$t('main.testNet'), value: "testnet" };
-        this.nets = [mainNet, testNet];
+        this.nets = [mainNet];
         if (this.net != undefined) {
             if (this.net == "mainnet") {
                 this.selected = mainNet;
-            } else if (this.net == "testnet") {
-                this.selected = testNet;
             }
         } else {
             this.selected = mainNet;
         }
-        account.setupNet(`${this.selected}`);
+        account.setupNet(`${this.selected.value}`);
         this.i18n = getLanguage(this.language);
     }
 };

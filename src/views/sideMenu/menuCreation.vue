@@ -106,8 +106,8 @@ export default {
                 onCancel: this.onCancel
             });
 
+            account.setupNet(`${this.net}`);
             if(this.netType === 'vapor'){
-              account.setupNet(`${this.net}`);
               account.create(this.formItem.accAlias, null, this.formItem.passwd1).then((resp) => {
                 account.setupNet(`${this.net}vapor`);
                 return account.copy(resp.guid).then((currentRespAccount)=>{

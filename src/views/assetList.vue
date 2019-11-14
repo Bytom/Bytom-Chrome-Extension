@@ -85,7 +85,7 @@
             </div>
             <div class="topbar-middle">
               <div v-if="currentAsset!=undefined" class="amount color-white">
-                <div v-if="currentAsset.symbol!=='-'">
+                <div v-if="currentAsset.symbol!=='Asset'">
                   <div class="symbol">
                     {{currentAsset.symbol}}
                   </div>
@@ -308,11 +308,11 @@ export default {
                 if (Number(balanceObject[0].amount) > 0) {
                     transaction.direct = "+";
                     const resultAddr = inputAddresses.pop()
-                    transaction.address = resultAddr.includes(' ')?resultAddr:address.short(resultAddr);
+                    transaction.address = (resultAddr && resultAddr.includes(' '))?resultAddr:address.short(resultAddr);
                 } else {
                     transaction.direct = "-";
                     const resultAddr = outputAddresses.pop()
-                    transaction.address = resultAddr.includes(' ')?resultAddr:address.short(resultAddr);
+                    transaction.address = (resultAddr && resultAddr.includes(' '))?resultAddr:address.short(resultAddr);
                 }
 
                 transaction.val =  Num.formatNue(val, this.currentAsset.decimals) ;

@@ -239,29 +239,28 @@ export default {
                 onCancel: this.onCancel
             });
 
-            // rawData, password
-            transaction.transfer(this.account.guid, this.rawData, this.password)
-                .then(ret => {
-                    loader.hide();
-                    if(this.$route.params.type == 'popup'){
-                      LocalStream.send({method:'transfer',action:'success', message:ret});
-                      window.close();
-                    }
-                    this.$dialog.show({
-                      type: 'success',
-                      body: this.$t("transfer.success")
-                    });
-                    this.$router.push('/')
-                    if(this.transaction.type === 'toVapor'){
-                      account.setupNet(`${this.net}vapor`)
-                    }
-                })
-                .catch(error => {
-                    loader.hide();
-                    this.$dialog.show({
-                        body: getLang(error.message, this.language)
-                    });
-                });
+          Promise.all(this.rawData.map( (rawdata) => transaction.transfer(this.account.guid, rawdata, this.password)))
+            .then(ret => {
+              loader.hide();
+              if(this.$route.params.type == 'popup'){
+                LocalStream.send({method:'transfer',action:'success', message:ret[ret.length-1]});
+                window.close();
+              }
+              this.$dialog.show({
+                type: 'success',
+                body: this.$t("transfer.success")
+              });
+              this.$router.push('/')
+              if(this.transaction.type === 'toVapor'){
+                account.setupNet(`${this.net}vapor`)
+              }
+            })
+            .catch(error => {
+              loader.hide();
+              this.$dialog.show({
+                body: getLang(error.message, this.language)
+              });
+            });
         }
     }, mounted() {
         let params = this.$route.params;

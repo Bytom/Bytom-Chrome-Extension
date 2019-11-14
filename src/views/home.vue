@@ -209,7 +209,7 @@
                 <div class="value">{{ itemBalance(asset) }}</div>
                 <div class="addr color-grey">{{ formatCurrency(asset[ currency ]) }}</div>
               </div>
-              <div v-if="asset.symbol!== '-'">
+              <div v-if="asset.symbol!== 'Asset'">
                 <div class="uppercase">
                   {{asset.symbol}}
                 </div>
@@ -221,7 +221,7 @@
                   Asset
                 </div>
 
-                <div class="addr color-grey uppercase">{{shortAddress(asset.asset)}}</div>
+                <div class="addr color-grey uppercase">{{ shortAddress(asset.asset) }}</div>
               </div>
 
             </li>
@@ -234,7 +234,7 @@
                   <div class="value">{{ itemBalance(asset) }}</div>
                   <div class="addr color-grey">{{ formatCurrency(asset[ currency ]) }}</div>
                 </div>
-                <div v-if="asset.symbol!== '-'">
+                <div v-if="asset.symbol!== 'Asset'">
                   <div class="uppercase">
                     {{asset.symbol}}
                   </div>

@@ -362,7 +362,9 @@ export default {
                 this.transaction.to = address
                 transaction.build(this.account.guid, address, this.transaction.asset, Num.convertToNue(this.transaction.amount,this.selectAsset.decimals), this.transaction.confirmations).then(result => {
                   loader.hide();
-                  this.transaction.fee = Number(result.fee / 100000000);
+                  if(!this.transaction.fee){
+                    this.transaction.fee = Number( _.sumBy(result, 'fee') / 100000000);
+                  }
                   this.$router.push({ name: 'transfer-confirm', params: { account: this.account, transaction: this.transaction, rawData: result,assetAlias: this.selectAsset.symbol, type: this.$route.query.type } })
                 }).catch(error => {
                   loader.hide();
@@ -380,7 +382,9 @@ export default {
               this.transaction.to = address
               transaction.buildCrossChain(this.account.guid, address, this.transaction.asset,  Num.convertToNue(this.transaction.amount,this.selectAsset.decimals), this.transaction.confirmations).then(result => {
                   loader.hide();
-                this.transaction.fee = Number(result.fee / 100000000);
+                if(!this.transaction.fee){
+                  this.transaction.fee = Number( _.sumBy(result, 'fee') / 100000000);
+                }
                 this.$router.push({ name: 'transfer-confirm', params: { account: this.account, transaction: this.transaction, rawData: result, assetAlias: this.selectAsset.symbol, type: this.$route.query.type } })
               }).catch(error => {
                   loader.hide();
