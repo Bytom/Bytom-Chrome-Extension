@@ -6,6 +6,7 @@ export const AUTHENTICATE = 'authenticate'
 export const TRANSFER = 'transfer'
 export const ENABLE = 'enable'
 export const ADVTRANSFER = 'advTransfer'
+export const SIGNTRANSACTION = 'signTransaction'
 export const SIGNMESSAGE = 'signMessage'
 export const SEND = 'send'
 export const LOAD = 'load';

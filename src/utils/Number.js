@@ -49,13 +49,13 @@ export class Number {
     let n = new BigNumber(num);
     switch(type){
       case "in_cny":
-        return `¥ ${n.toFormat()}`
+        return `¥ ${n.toFormat(2)}`
       case "in_usd":
         return `$ ${n.toFormat()}`
       case "in_btc":
         return `₿ ${n.toFormat()}`
       default:
-        return `¥ ${n.toFormat()}`
+        return `¥ ${n.toFormat(2)}`
     }
   }
 

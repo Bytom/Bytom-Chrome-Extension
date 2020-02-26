@@ -36,6 +36,9 @@ export default class Background {
       case MsgTypes.SEND:
         this.send(sendResponse, message.payload)
         break
+      case MsgTypes.SIGNTRANSACTION:
+        this.signTransaction(sendResponse, message.payload)
+        break
       case MsgTypes.SIGNMESSAGE:
         this.signMessage(sendResponse, message.payload)
         break
@@ -169,6 +172,13 @@ export default class Background {
     }
 
     NotificationService.open(new Prompt(PromptTypes.REQUEST_ADVANCED_TRANSFER, '', payload ,approved => {
+      sendResponse(approved);
+    }));
+
+  }
+
+  signTransaction(sendResponse, payload) {
+    NotificationService.open(new Prompt(PromptTypes.REQUEST_SIGN_TRANSACTION, '', payload ,approved => {
       sendResponse(approved);
     }));
 

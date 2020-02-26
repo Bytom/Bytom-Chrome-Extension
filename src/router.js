@@ -114,6 +114,14 @@ const routers = [
         }
       },
       {
+        path: '/signTransaction',
+        name: 'sign-transaction',
+        meta: { title: '签名交易' },
+        component: resolve => {
+          require(['@/views/sendTransaction/signTransaction.vue'], resolve)
+        }
+      },
+      {
         path: '/enable',
         name: 'enable',
         meta: { title: '授权' },

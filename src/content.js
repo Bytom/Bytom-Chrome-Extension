@@ -100,6 +100,7 @@ class Content {
         this.sync(msg)
         break
       case MsgTypes.TRANSFER:
+      case MsgTypes.SIGNTRANSACTION:
       case MsgTypes.ADVTRANSFER:
       case MsgTypes.SIGNMESSAGE:
       case MsgTypes.SEND:

@@ -100,6 +100,20 @@ transaction.buildTransaction = function(guid, inputs, outputs, gas, confirmation
   return retPromise;
 };
 
+transaction.signTransaction = function(guid, transaction, password) {
+  let retPromise = new Promise((resolve, reject) => {
+    bytom.transaction
+      .signTransaction(guid, JSON.stringify(transaction), password)
+      .then(res => {
+        resolve(res);
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+  return retPromise;
+};
+
 transaction.transfer = function(guid, transaction, password) {
   let retPromise = new Promise((resolve, reject) => {
     bytom.transaction
