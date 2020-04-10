@@ -12,6 +12,8 @@ import ViewBase from '@/views/viewBase'
 import Dialog from '@/components/dialog'
 import vSelect from '@/components/select'
 import MenuPage from '@/components/menu-page'
+import Header from '@/components/header'
+import Footer from '@/components/footer'
 import messages, { getLanguage } from '@/assets/language'
 import '@/assets/style.css'
 import {store} from "./store/store";
@@ -22,13 +24,15 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
   Vue.use(VueI18n)
   const i18n = new VueI18n({
     fallbackLocale: 'en',
-    locale: getLanguage(store.getters.language),
+    locale: lagetLanguage(store.getters.language),
     messages
   })
   Vue.use(i18n)
   Vue.use(vuescroll)
   Vue.use(VueRouter)
   Vue.use(MenuPage)
+  Vue.use(Header)
+  Vue.use(Footer)
   Vue.use(Loading)
   Vue.use(Dialog, i18n)
   Vue.component('v-select', vSelect)
@@ -55,7 +59,7 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
   router.beforeEach((to, from, next) => {
     // wallet init
     if (store.getters.login == undefined && to.name == 'home') {
-      next({ name: 'welcome-creation' })
+      next({ name: 'welcome' })
       return
     }
 

@@ -139,8 +139,8 @@ account.backup = function() {
   return bytom.wallet.backup()
 }
 
-account.restore = function(walletImage) {
-  return bytom.wallet.restore(walletImage)
+account.restore = function(walletImage, password) {
+  return bytom.wallet.restore(walletImage, password)
 }
 
 export default account

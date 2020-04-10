@@ -109,37 +109,33 @@
 
 <template>
     <div class="warp bg-gray">
-      <Header :title="$t('welcome.register')"></Header>
+      <div class="bg-image">
+      </div>
+      <div class="topbar">
+        <!--<div v-if="activeTab === 'register'" class="topbar-middle">-->
+          <!--<v-select  class="v-select" v-bind:colorBlack="true" :clearable="false" v-model="selected" :options="nets"></v-select>-->
+        <!--</div>-->
+        <a href="http://github.com/bycoinio/Bystore" target="_blank"><i class="iconfont icon-github"></i></a>
+      </div>
+      <div class="header">
+        <h1>Byone</h1>
+        <p>{{ $t('home.title')}}</p>
 
-          <div class="form panel">
-            <div class="form-item">
-                  <label :class="formItemLabel">{{ $t('createAccount.accountAlias') }}</label>
-                  <div :class="formItemContent">
-                      <input type="text" v-model="formItem.accAlias" autofocus>
-                  </div>
-              </div>
-              <div class="form-item">
-                  <label :class="formItemLabel">{{ $t('createAccount.keyPassword') }}</label>
-                  <div :class="formItemContent">
-                      <input type="password" v-model="formItem.passwd1">
-                  </div>
-              </div>
-              <div class="form-item">
-                  <label :class="formItemLabel">{{ $t('createAccount.confirmPassword') }}</label>
-                  <div :class="formItemContent">
-                      <input type="password" v-model="formItem.passwd2">
-                  </div>
-              </div>
-            <div class="form-checkbox">
-              <input type="checkbox" id="checkbox1" v-model="formItem.checked">
-              <label for="checkbox1">
-                {{ $t('welcome.term1') }}<a class="color-green" @click="$router.push({ name: 'welcome-protocol' })">{{  $t('welcome.term2')}}</a>
-              </label>
-            </div>
+      </div>
+
+        <section class="container">
+         <div>
+
+           <h4>lip</h4>
+           <p>lip</p>
+           <a @click="$router.push({ name: 'welcome-creation' })">{{  $t('welcome.register')}}</a>
+         </div>
+          <div>
+            <h4>lip</h4>
+            <p>lip</p>
+            <a @click="$router.push({ name: 'welcome-import' })">{{  $t('welcome.restore')}}</a>
           </div>
-          <div class="btn-group">
-              <div class="btn btn-primary" @click="create">{{ $t('createAccount.create') }}</div>
-          </div>
+        </section>
       <Footer/>
     </div>
 </template>

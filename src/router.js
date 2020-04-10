@@ -198,11 +198,27 @@ const routers = [
     }
   },
   {
+    path: '/welcome',
+    name: 'welcome',
+    meta: { title: '创建账户' },
+    component: resolve => {
+      require(['@/views/welcome/welcome.vue'], resolve)
+    }
+  },
+  {
     path: '/creation',
     name: 'welcome-creation',
     meta: { title: '创建账户' },
     component: resolve => {
       require(['@/views/welcome/creation.vue'], resolve)
+    }
+  },
+  {
+    path: '/import',
+    name: 'welcome-import',
+    meta: { title: '创建账户' },
+    component: resolve => {
+      require(['@/views/welcome/import.vue'], resolve)
     }
   }
 ]

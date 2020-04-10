@@ -109,37 +109,30 @@
 
 <template>
     <div class="warp bg-gray">
-      <Header :title="$t('welcome.register')"></Header>
-
-          <div class="form panel">
-            <div class="form-item">
-                  <label :class="formItemLabel">{{ $t('createAccount.accountAlias') }}</label>
-                  <div :class="formItemContent">
-                      <input type="text" v-model="formItem.accAlias" autofocus>
-                  </div>
-              </div>
-              <div class="form-item">
-                  <label :class="formItemLabel">{{ $t('createAccount.keyPassword') }}</label>
-                  <div :class="formItemContent">
-                      <input type="password" v-model="formItem.passwd1">
-                  </div>
-              </div>
-              <div class="form-item">
-                  <label :class="formItemLabel">{{ $t('createAccount.confirmPassword') }}</label>
-                  <div :class="formItemContent">
-                      <input type="password" v-model="formItem.passwd2">
-                  </div>
-              </div>
-            <div class="form-checkbox">
-              <input type="checkbox" id="checkbox1" v-model="formItem.checked">
-              <label for="checkbox1">
-                {{ $t('welcome.term1') }}<a class="color-green" @click="$router.push({ name: 'welcome-protocol' })">{{  $t('welcome.term2')}}</a>
-              </label>
+      <Header :title="$t('welcome.restore')"></Header>
+        <div class="form panel">
+          <div class="form-item">
+            <label class="form-item-label" for="file">{{ $t('createAccount.file') }}</label>
+            <div class="file-selection">
+              <input type="file" id="file" @change="tirggerFile($event)"/>
             </div>
           </div>
-          <div class="btn-group">
-              <div class="btn btn-primary" @click="create">{{ $t('createAccount.create') }}</div>
+          <div class="form-checkbox">
+            <input type="checkbox" id="checkbox2" v-model="restore.checked">
+            <label for="checkbox2">
+              {{ $t('welcome.term1') }}<a class="color-green" @click="$router.push({ name: 'welcome-protocol' })">{{  $t('welcome.term2')}}</a>
+            </label>
           </div>
+          <div class="form-item">
+            <label :class="formItemLabel" for="password">{{ $t('createAccount.keyPassword') }}</label>
+            <div :class="formItemContent">
+              <input type="password" id="password" v-model="restore.password" />
+            </div>
+          </div>
+        </div>
+        <div class="btn-group">
+          <div class="btn btn-primary recovery-btn" @click="recovery">{{ $t('createAccount.import') }}</div>
+        </div>
       <Footer/>
     </div>
 </template>
@@ -158,16 +151,10 @@ export default {
         return {
             nets: [],
             selected: mainNet,
-            formItem: {
-                accAlias: "",
-                // keyAlias: "",
-                passwd1: "",
-                passwd2: "",
-                checked: false
-            },
             restore:{
                 fileTxt:"",
-                checked: false
+                checked: false,
+                password: ""
             },
             activeTab: 'register'
         };
@@ -205,49 +192,6 @@ export default {
         }
     },
     methods: {
-        create: function () {
-            if (this.formItem.accAlias == "") {
-                this.$dialog.show({
-                    body: this.$t("createAccount.inputAlias")
-                });
-                return;
-            }
-            if (this.formItem.passwd1 == "") {
-                this.$dialog.show({
-                    body: this.$t("createAccount.inputPass")
-                });
-                return;
-            }
-            if (this.formItem.passwd1 != this.formItem.passwd2) {
-                this.$dialog.show({
-                    body: this.$t('createAccount.passwordAgain'),
-                });
-                return;
-            }
-            if (!this.formItem.checked) {
-                this.$dialog.show({
-                    body: this.$t('createAccount.agreeService'),
-                });
-                return;
-            }
-            let loader = this.$loading.show({
-                container: null,
-                canCancel: true,
-                onCancel: this.onCancel
-            });
-            account.create(this.formItem.accAlias, null, this.formItem.passwd1).then(currentAccount => {
-              this[Actions.CREATE_NEW_BYTOM](this.selected.value).then(() =>{
-                loader.hide();
-                this.formItem = {};
-                this.$router.push('/');
-              });
-            }).catch(err => {
-                loader.hide();
-                this.$dialog.show({
-                    body: err.message,
-                });
-            });
-        },
         tirggerFile: function (event) {
           var reader = new FileReader();
           reader.onload = e => {
@@ -264,7 +208,7 @@ export default {
             });
             return;
           }
-          account.restore(this.restore.fileTxt).then(res => {
+          account.restore(this.restore.fileTxt, this.restore.password).then(res => {
             this[Actions.IMPORT_BYTOM]().then(() =>{
               this.$router.push('/');
             });
