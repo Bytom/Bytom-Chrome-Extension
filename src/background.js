@@ -8,7 +8,7 @@ import * as PromptTypes from './prompts/PromptTypes'
 
 import _ from 'lodash'
 import Error from './utils/errors/Error'
-import { BTM } from './utils/constants'
+import { BTM, camelize } from './utils/constants'
 
 let prompt = null;
 
@@ -27,6 +27,9 @@ export default class Background {
 
   dispatchMessage(sendResponse, message) {
     switch (message.type) {
+      case MsgTypes.SETCHAIN:
+        Background.setChain(sendResponse, message.payload)
+        break
       case MsgTypes.TRANSFER:
         this.transfer(sendResponse, message.payload)
         break
@@ -89,7 +92,7 @@ export default class Background {
     }
 
     NotificationService.open(new Prompt(PromptTypes.REQUEST_SIGN, '', payload ,approved => {
-     sendResponse(approved);
+     sendResponse(camelize(approved));
     }));
   }
 
@@ -136,7 +139,7 @@ export default class Background {
             switch (request.method){
               case 'transfer':
                 if (request.action === 'success'){
-                  sendResponse(request.message);
+                  sendResponse(camelize(request.message));
                   return true;
                 } else if (request.action === 'reject'){
                   sendResponse(request.message);
@@ -172,16 +175,15 @@ export default class Background {
     }
 
     NotificationService.open(new Prompt(PromptTypes.REQUEST_ADVANCED_TRANSFER, '', payload ,approved => {
-      sendResponse(approved);
+      sendResponse(camelize(approved));
     }));
 
   }
 
   signTransaction(sendResponse, payload) {
     NotificationService.open(new Prompt(PromptTypes.REQUEST_SIGN_TRANSACTION, '', payload ,approved => {
-      sendResponse(approved);
+      sendResponse(camelize(approved));
     }));
-
   }
 
   requestCurrentAccount(sendResponse, payload){
@@ -247,7 +249,6 @@ export default class Background {
     })
   }
 
-
   send(sendResponse, payload) {
     const action = payload.action
     if(action){
@@ -286,6 +287,19 @@ export default class Background {
   static update(sendResponse, bytom){
     StorageService.save(bytom).then(saved => {
       sendResponse(bytom)
+    })
+  }
+
+  static setChain(sendResponse, newNetType) {
+    Background.load(bytom => {
+      const currentNet = bytom.settings.netType
+
+      if( newNetType !== currentNet){
+        bytom.settings.netType = newNetType;
+        this.update(() => sendResponse({status:'success'}), bytom);
+      }else{
+        sendResponse(Error.duplicate(newNetType));
+      }
     })
   }
 

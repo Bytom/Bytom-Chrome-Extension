@@ -2,7 +2,7 @@ import NetworkMessage from '@/messages/network'
 import * as MsgTypes from './messages/types'
 import * as EventNames from '@/messages/event'
 import IdGenerator from '@/utils/IdGenerator'
-
+import { networks } from '@/utils/constants'
 /***
  * This is just a helper to manage resolving fake-async
  * requests using browser messaging.
@@ -60,9 +60,15 @@ export default class Bytomdapp {
     // currentVersion = parseFloat(_options.version)
     stream = _stream
     resolvers = []
+
+    //v1.4.0
+    this.defaultAccount = _options.defaultAccount
+    this.chain = _options.chain
+    this.currentProvider = networks[_options.net || 'mainnet']
+
+
     this.default_account = _options.defaultAccount
     this.net = _options.net
-    this.chain = _options.chain
 
     _subscribe()
   }
@@ -71,10 +77,30 @@ export default class Bytomdapp {
     return _send(MsgTypes.ENABLE)
       .then(async default_account =>{
         this.default_account = default_account;
+        this.defaultAccount = default_account;
         return default_account;
       })
   }
 
+  //v1.4.0
+  setChain(params) {
+    return _send(MsgTypes.SETCHAIN, params)
+  }
+
+  sendTransaction(params) {
+    return _send(MsgTypes.TRANSFER, params)
+  }
+
+  sendAdvancedTransaction(params) {
+    return _send(MsgTypes.ADVTRANSFER, params)
+  }
+
+  signMessage(params) {
+    return _send(MsgTypes.SIGNMESSAGE, params)
+  }
+
+
+  //v1.0.0
   send_transaction(params) {
     return _send(MsgTypes.TRANSFER, params)
   }

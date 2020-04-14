@@ -103,6 +103,7 @@ class Content {
       case MsgTypes.SIGNTRANSACTION:
       case MsgTypes.ADVTRANSFER:
       case MsgTypes.SIGNMESSAGE:
+      case MsgTypes.SETCHAIN:
       case MsgTypes.SEND:
         this.transfer(msg.type, networkMessage)
         break
