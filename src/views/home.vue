@@ -391,9 +391,9 @@ export default {
       itemBalance: function(assetObj){
         const asset = assetObj.asset
         if(asset.asset_id === BTM){
-          return Num.formatNue(assetObj.balance,8)
+          return Num.formatNue(assetObj.available_balance,8)
         }else{
-          return assetObj.balance
+          return assetObj.available_balance
         }
       },
         setupRefreshTimer() {

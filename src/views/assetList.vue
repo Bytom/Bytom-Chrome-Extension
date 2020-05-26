@@ -85,19 +85,19 @@
             </div>
             <div class="topbar-middle">
               <div v-if="currentAsset!=undefined" class="amount color-white">
-                <div v-if="currentAsset.symbol!=='Asset'">
+                <div v-if="currentAsset.asset.symbol!=='Asset'">
                   <div class="symbol">
-                    {{currentAsset.symbol}}
+                    {{currentAsset.asset.symbol}}
                   </div>
 
-                  <div class="alias color-grey">{{currentAsset.name}}</div>
+                  <div class="alias color-grey">{{currentAsset.asset.name}}</div>
                 </div>
                 <div v-else>
                   <div class="symbol">
                     Asset
                   </div>
 
-                  <div class="alias color-grey">{{shortAddress(currentAsset.asset)}}</div>
+                  <div class="alias color-grey">{{shortAddress(currentAsset.asset.asset)}}</div>
                 </div>
               </div>
             </div>
@@ -202,6 +202,13 @@ export default {
       },
     },
     computed: {
+      address: function(){
+        if(this.netType === 'vapor'){
+          return this.currentAccount.vpAddress
+        }else{
+          return this.currentAccount.address
+        }
+      },
         ...mapState([
           'bytom',
           'currentAsset',
@@ -225,9 +232,9 @@ export default {
       },
       itemBalance: function(asset){
         if(asset.asset === BTM){
-          return Num.formatNue(asset.balance,8)
+          return Num.formatNue(asset.available_balance,8)
         }else{
-          return Num.formatNue(asset.balance,asset.decimals)
+          return Num.formatNue(asset.available_balance,asset.decimals)
         }
 
       },
@@ -251,8 +258,8 @@ export default {
         },
         refreshTransactions: function (start, limit) {
             return new Promise((resolve, reject) => {
-                transaction.list(this.currentAccount.guid, this.currentAsset.asset, start, limit).then(transactions => {
-                    if (transactions == null) {
+                transaction.list(this.address, this.currentAsset.asset.asset_id, start, limit).then(transactions => {
+                  if (transactions == null) {
                         return;
                     }
 
@@ -266,11 +273,11 @@ export default {
         },
         transactionsFormat: function (transactions) {
           const formattedTransactions = []
-          const assetID = this.currentAsset.asset
+          const assetID = this.currentAsset.asset.asset_id
 
           transactions.forEach(transaction => {
             const balanceObject = transaction.balances
-              .filter(b => b.asset === assetID);
+              .filter(b => b.asset.asset_id === assetID);
 
             const filterInput = _.find(transaction.inputs, function(o) { return o.type =='veto'; })
             const filterOutput = _.find(transaction.outputs, function(o) { return o.type =='vote'; })
@@ -296,11 +303,11 @@ export default {
 
             if(balanceObject.length ===1 ){
                 const inputAddresses = transaction.inputs
-                  .filter(input => input.asset === assetID && input.address !== this.currentAccount.address)
+                  .filter(input => input.asset.asset_id === assetID && input.address !== this.currentAccount.address)
                   .map(input => input.address)
 
                 const outputAddresses = transaction.outputs
-                  .filter(output => output.asset === assetID && output.address !== this.currentAccount.address)
+                  .filter(output => output.asset.asset_id === assetID && output.address !== this.currentAccount.address)
                   .map(output => output.address)
 
                 let val = Math.abs(balanceObject[0].amount)
@@ -315,7 +322,7 @@ export default {
                     transaction.address = (resultAddr && resultAddr.includes(' '))?resultAddr:address.short(resultAddr);
                 }
 
-                transaction.val =  Num.formatNue(val, this.currentAsset.decimals) ;
+                transaction.val =  val ;
                 transaction.fee = transaction.fee / 100000000;
 
                 formattedTransactions.push(transaction);

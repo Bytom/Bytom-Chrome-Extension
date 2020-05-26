@@ -1,5 +1,6 @@
 import bytom from './bytom'
 import uuid from 'uuid'
+import address from "../utils/address";
 
 
 let account = {
@@ -62,42 +63,12 @@ account.balance = function(guid) {
   let retPromise = new Promise((resolve, reject) => {
     bytom.accounts
       .listAddressUseServer(guid)
-      .then(addresses => {
-        let balances = []
-        let votes = []
-        addresses.forEach(address => {
-          if (address.balances != null) {
-            balances = balances.concat(address.balances)
-          }
-          if (address.votes != null) {
-            votes = votes.concat(address.votes)
-          }
-        })
-        let obj = {};
-
-        balances.forEach(function (balance) {
-          if(obj.hasOwnProperty(balance.asset)) {
-            obj[balance.asset].balance = Number(obj[balance.asset].balance) + Number(balance.balance);
-          } else {
-            balance.balance =  Number(balance.balance)
-            obj[balance.asset] = balance;
-            delete obj[balance.asset]['total_received']
-            delete obj[balance.asset]['total_sent']
-            // delete obj[balance.asset]['in_btc']
-            // delete obj[balance.asset]['in_cny']
-            // delete obj[balance.asset]['in_usd']
-          }
-        });
-
-
-        let res = [];
-
-        for(let prop in obj) {
-          res.unshift(obj[prop]);
-        }
+      .then(address => {
+        let balances = address.balances || []
+        let votes = address.votes || []
 
         resolve({
-            balances:res,
+            balances,
             votes
           })
       })

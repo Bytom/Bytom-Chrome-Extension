@@ -60,6 +60,7 @@ export default class Bytomdapp {
     // currentVersion = parseFloat(_options.version)
     stream = _stream
     resolvers = []
+    this.version = '2.0.0'
 
     //v1.4.0
     this.defaultAccount = _options.defaultAccount
