@@ -204,24 +204,24 @@
         <div v-if="address!=undefined">
         <div v-if="balances && balances.length > 0">
           <ul class="list">
-            <li class="list-item" v-for="(asset, index) in balances" :key="index" @click="assetOpen(asset)">
+            <li class="list-item" v-for="(balance, index) in balances" :key="index" @click="assetOpen(balance)">
               <div class="float-right text-align-right">
-                <div class="value">{{ itemBalance(asset) }}</div>
-                <div class="addr color-grey">{{ formatCurrency(asset[ currency ]) }}</div>
+                <div class="value">{{ itemBalance(balance) }}</div>
+                <div class="addr color-grey">{{ formatCurrency(balance[ currency ]) }}</div>
               </div>
-              <div v-if="asset.symbol!== 'Asset'">
+              <div v-if="balance.asset.symbol!== 'Asset'">
                 <div class="uppercase">
-                  {{asset.symbol}}
+                  {{balance.asset.symbol}}
                 </div>
 
-                <div class="addr color-grey">{{asset.name}}</div>
+                <div class="addr color-grey">{{balance.asset.name}}</div>
               </div>
               <div v-else>
                 <div>
                   Asset
                 </div>
 
-                <div class="addr color-grey uppercase">{{ shortAddress(asset.asset) }}</div>
+                <div class="addr color-grey uppercase">{{ shortAddress(balance.asset.asset_id) }}</div>
               </div>
 
             </li>
@@ -298,10 +298,12 @@ export default {
             leaveActive: LeaveActive,
             defaultBalances: [
               {
-                alias: "btm",
-                asset: BTM,
-                name: "Bytom",
-                symbol: "BTM",
+                asset:{
+                  asset_id: BTM,
+                  name: "Bytom",
+                  symbol: "BTM",
+
+                } ,
                 balance: 0,
                 decimals: 8,
                 in_btc: "0",
@@ -386,16 +388,17 @@ export default {
       formatCurrency: function (num) {
         return Num.formatCurrency(num, this.currency)
       },
-      itemBalance: function(asset){
-        if(asset.asset === BTM){
-          return Num.formatNue(asset.balance,8)
+      itemBalance: function(assetObj){
+        const asset = assetObj.asset
+        if(asset.asset_id === BTM){
+          return Num.formatNue(assetObj.balance,8)
         }else{
-          return Num.formatNue(asset.balance,asset.decimals)
+          return assetObj.balance
         }
       },
         setupRefreshTimer() {
             setInterval(() => {
-                this.refreshBalance(this.currentAccount.guid)
+                this.refreshBalance(this.address)
             }, 10000)
         },
         setupNetwork() {
@@ -464,9 +467,9 @@ export default {
             this[Actions.SET_CURRENT_ASSET](asset)
             this.$router.push('asset')
         },
-        refreshBalance: function (guid) {
-          if(guid){
-            account.balance(guid)
+        refreshBalance: function (address) {
+          if(address){
+            account.balance(address)
               .then((obj)=>{
                 const balances = obj.balances
                 const votes = obj.votes
@@ -479,7 +482,6 @@ export default {
                     //update AccountList
 
                     const bytom = this.bytom.clone();
-
                     const objectIndex = bytom.accountList.findIndex(a => a.guid == this.currentAccount.guid)
 
                     if(balanceNotEqual){
@@ -513,7 +515,7 @@ export default {
     mounted() {
         this.setupNetwork();
         this.setupRefreshTimer();
-        this.refreshBalance(this.currentAccount.guid)
+        this.refreshBalance(this.address)
     },
   };
 </script>
