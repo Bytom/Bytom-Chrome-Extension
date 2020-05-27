@@ -110,7 +110,7 @@
               <small class="header-text" v-if="transaction.status_fail">
                 {{ $t('transactionDetail.fail') }}
               </small>
-              <small class="header-text" v-else-if="transaction.hasOwnProperty('block_timestamp')">
+              <small class="header-text" v-else-if="transaction.hasOwnProperty('blockTimestamp')">
                 {{ $t('transactionDetail.success') }}
               </small>
               <small class="header-text" v-else>
@@ -138,7 +138,7 @@
                           {{ $t('transactionDetail.assetId') }}
                         </td>
                         <td class="asset value">
-                          <p>{{currentAsset.asset}}</p>
+                          <p>{{currentAsset.asset.assetId}}</p>
                         </td>
                       </tr>
                       <tr>
@@ -146,8 +146,8 @@
                           {{ $t('transactionDetail.time') }}
                         </td>
                         <td class="value">
-                            <div v-if="transaction.hasOwnProperty('block_timestamp')">
-                              {{transaction.submission_timestamp | moment}}
+                            <div v-if="transaction.hasOwnProperty('blockTimestamp')">
+                              {{transaction.submissionTimestamp | moment}}
                             </div>
                             <div v-else>
                               -
@@ -159,7 +159,7 @@
                             {{ $t('transactionDetail.blockHeight') }}
                         </td>
                         <td class="value">
-                          <p v-if="transaction.block_height != undefined">{{transaction.block_height}}</p>
+                          <p v-if="transaction.blockHeight != undefined">{{transaction.blockHeight}}</p>
                           <p v-else>-</p>
                         </td>
                       </tr>
@@ -251,9 +251,9 @@
     computed: {
       classObject: function () {
         return {
-          'success-header': !this.transaction.status_fail && this.transaction.hasOwnProperty('block_timestamp'),
-          'pending-header': !this.transaction.status_fail  && !this.transaction.hasOwnProperty('block_timestamp') ,
-          'fail-header': this.transaction.status_fail
+          'success-header': this.transaction.status && this.transaction.hasOwnProperty('blockTimestamp'),
+          'pending-header': this.transaction.status  && !this.transaction.hasOwnProperty('blockTimestamp') ,
+          'fail-header': !this.transaction.status
         }
       },
       ...mapState([

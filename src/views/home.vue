@@ -207,7 +207,7 @@
             <li class="list-item" v-for="(balance, index) in balances" :key="index" @click="assetOpen(balance)">
               <div class="float-right text-align-right">
                 <div class="value">{{ itemBalance(balance) }}</div>
-                <div class="addr color-grey">{{ formatCurrency(balance[ currency ]) }}</div>
+                <div class="addr color-grey">{{ formatCurrency(currentBalanceAmount(balance)) }}</div>
               </div>
               <div v-if="balance.asset.symbol!== 'Asset'">
                 <div class="uppercase">
@@ -221,7 +221,7 @@
                   Asset
                 </div>
 
-                <div class="addr color-grey uppercase">{{ shortAddress(balance.asset.asset_id) }}</div>
+                <div class="addr color-grey uppercase">{{ shortAddress(balance.asset.assetId) }}</div>
               </div>
 
             </li>
@@ -277,6 +277,7 @@
 import address from "@/utils/address";
 import account from "@/models/account";
 import transaction from "@/models/transaction";
+import { camelize } from "@/utils/utils";
 import { BTM } from "@/utils/constants";
 import { mapActions, mapGetters, mapState } from 'vuex'
 import * as Actions from '@/store/constants';
@@ -299,16 +300,16 @@ export default {
             defaultBalances: [
               {
                 asset:{
-                  asset_id: BTM,
+                  assetId: BTM,
                   name: "Bytom",
                   symbol: "BTM",
 
                 } ,
                 balance: 0,
                 decimals: 8,
-                in_btc: "0",
-                in_cny: "0",
-                in_usd: "0"
+                inBtc: "0",
+                inCny: "0",
+                inUsd: "0"
               }
             ],
         };
@@ -351,7 +352,7 @@ export default {
             const balances = this.balances
 
             if(balances && balances.length >0 ){
-                const currency = this.currency
+                const currency = camelize(this.currency)
                 balance = _.sumBy(balances, function(o) { return Number(o[currency]); })
             }
             return  Num.formatCurrency( (balance != null && balance != 0)? balance : '0.00', this.currency)
@@ -382,6 +383,9 @@ export default {
         ])
     },
     methods: {
+      currentBalanceAmount: function (balance) {
+        return balance[ camelize(this.currency) ]
+      },
       shortAddress: function (add) {
         return address.short(add)
       },
@@ -390,10 +394,10 @@ export default {
       },
       itemBalance: function(assetObj){
         const asset = assetObj.asset
-        if(asset.asset_id === BTM){
-          return Num.formatNue(assetObj.available_balance,8)
+        if(asset.assetId === BTM){
+          return Num.formatNue(assetObj.availableBalance,8)
         }else{
-          return assetObj.available_balance
+          return assetObj.availableBalance
         }
       },
         setupRefreshTimer() {

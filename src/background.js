@@ -200,7 +200,7 @@ export default class Background {
           }
 
           let balances = currentAccount.vpBalances ||[]
-          balances = balances.map(({ in_btc, in_cny, in_usd, name, ...keepAttrs}) => {
+          balances = balances.map(({ inBtc, inCny, inUsd, name, ...keepAttrs}) => {
             if(keepAttrs.asset === BTM)
               return {availableBalance: (keepAttrs.balance-vote),...keepAttrs}
               else
@@ -216,7 +216,7 @@ export default class Background {
           };
         }else{
           let balances = currentAccount.balances ||[]
-          balances = balances.map(({ in_btc, in_cny, in_usd, name, ...keepAttrs}) => keepAttrs)
+          balances = balances.map(({ inBtc, inCny, inUsd, name, ...keepAttrs}) => keepAttrs)
 
           account ={
             address: currentAccount.address,
@@ -317,7 +317,7 @@ export default class Background {
         }
 
         let balances = currentAccount.vpBalances ||[]
-        balances = balances.map(({ in_btc, in_cny, in_usd, name, ...keepAttrs}) => {
+        balances = balances.map(({ inBtc, inCny, inUsd, name, ...keepAttrs}) => {
           if(keepAttrs.asset === BTM)
             return {availableBalance: (keepAttrs.balance-vote),...keepAttrs}
           else
@@ -334,7 +334,7 @@ export default class Background {
 
       }else{
         let balances = currentAccount.balances ||[]
-        balances = balances.map(({ in_btc, in_cny, in_usd, name, ...keepAttrs}) => keepAttrs)
+        balances = balances.map(({ inBtc, inCny, inUsd, name, ...keepAttrs}) => keepAttrs)
 
         account ={
           address: currentAccount.address,

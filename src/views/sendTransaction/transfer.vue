@@ -165,9 +165,9 @@ import * as Actions from '@/store/constants';
   import _ from 'lodash'
 
   const currencyInPrice = {
-    in_cny: 'cny_price',
-    in_usd: 'usd_price',
-    in_btc:'btc_price'
+    inCny: 'cny_price',
+    inUsd: 'usd_price',
+    inBtc:'btc_price'
   }
 
 export default {
@@ -316,7 +316,7 @@ export default {
             transaction.build(this.account.guid, this.transaction.to, this.transaction.asset, Num.convertToNue(this.transaction.amount,this.selectAsset.decimals), this.transaction.fee, this.transaction.confirmations).then(result => {
                 loader.hide();
                 if(!this.transaction.fee){
-                    this.transaction.fee = Number( _.sumBy(result, 'fee') / 100000000);
+                    this.transaction.fee = Number( _.sumBy(result, 'fee'));
                 }
                 this.$router.push({ name: 'transfer-confirm', params: { account: this.account, transaction: this.transaction, rawData: result, assetAlias: this.selectAsset.symbol, type: this.$route.query.type } })
             }).catch(error => {
@@ -348,10 +348,10 @@ export default {
               this.transaction.to = this.$route.query.to
           }
           if (this.$route.query.amount != undefined) {
-              this.transaction.amount = this.$route.query.amount /100000000
+              this.transaction.amount = this.$route.query.amount
           }
           if (this.$route.query.gas != undefined) {
-              this.transaction.fee = this.$route.query.gas /100000000
+              this.transaction.fee = this.$route.query.gas
           }
           if(this.$route.query.confirmations != undefined) {
               this.transaction.confirmations = this.$route.query.confirmations

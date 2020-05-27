@@ -218,7 +218,7 @@ export default {
                 let val = Math.abs(balanceObject[0].amount)
 
                 transaction.val =  Num.formatNue(val, 8) ;
-                transaction.fee = transaction.fee / 100000000;
+                transaction.fee = transaction.fee ;
 
                 formattedTransactions.push(transaction);
               }

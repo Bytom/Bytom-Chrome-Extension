@@ -81,11 +81,11 @@ export default {
             ],
             selected: { label: "中文", value: "cn" },
             hashVersion: "",
-            currentCurrency: { label: "CNY", value: "in_cny" },
+            currentCurrency: { label: "CNY", value: "inCny" },
             currencyList: [
-              { label: "CNY", value: "in_cny" },
-              { label: "USD", value: "in_usd" },
-              { label: "BTC", value: "in_btc" }
+              { label: "CNY", value: "inCny" },
+              { label: "USD", value: "inUsd" },
+              { label: "BTC", value: "inBtc" }
             ],
         };
     },
@@ -186,13 +186,13 @@ export default {
 
           if(this.currency) {
             switch(this.currency){
-              case 'in_cny':
+              case 'inCny':
                 this.currentCurrency = this.currencyList[0]
                 break;
-              case 'in_usd':
+              case 'inUsd':
                 this.currentCurrency = this.currencyList[1]
                 break;
-              case 'in_btc':
+              case 'inBtc':
                 this.currentCurrency = this.currencyList[2]
                 break;
             }

@@ -98,9 +98,9 @@ import { Number as Num } from "@/utils/Number"
 import _ from 'lodash';
 
 const currencyInPrice = {
-  in_cny: 'cny_price',
-  in_usd: 'usd_price',
-  in_btc:'btc_price'
+  inCny: 'cny_price',
+  inUsd: 'usd_price',
+  inBtc:'btc_price'
 }
 
 export default {
@@ -193,7 +193,7 @@ export default {
             transaction.buildVote(this.currentAccount.guid, vote,  Num.convertToNue(this.transaction.amount,8), this.transaction.confirmations).then(result => {
                 loader.hide();
               if(!this.transaction.fee){
-                this.transaction.fee = Number( _.sumBy(result, 'fee') / 100000000);
+                this.transaction.fee = Number( _.sumBy(result, 'fee') );
               }
                 this.$router.push({ name: 'vote-confirm', params: { account: this.currentAccount,  transaction: this.transaction,assetAlias: 'BTM', rawData: result} })
             }).catch(error => {

@@ -107,7 +107,7 @@
                     <div class="token-amount">
                         {{itemBalance(currentAsset)}}
                     </div>
-                    <div>{{formatCurrency(currentAsset[ currency ])}}</div>
+                    <div>{{formatCurrency(currentAsset[ camelize(currency) ])}}</div>
                 </div>
             </div>
         </section>
@@ -121,8 +121,8 @@
                           <li class="list-item" v-for="(transaction, index) in transactions" :key="index" @click="$router.push({name: 'transfer-info', params: {transaction: transaction, address: currentAccount.address}})">
                               <div>
                                   <div>{{transaction.address}}</div>
-                                  <div class="addr color-grey" v-if="transaction.hasOwnProperty('block_timestamp')">
-                                    {{transaction.submission_timestamp | moment}}
+                                  <div class="addr color-grey" v-if="transaction.hasOwnProperty('blockTimestamp')">
+                                    {{transaction.submissionTimestamp | moment}}
                                   </div>
                                   <div class="addr color-grey" v-else>
                                     {{ $t('main.unconfirmed') }}
@@ -153,6 +153,7 @@
 import address from "@/utils/address";
 import query from "@/models/query";
 import transaction from "@/models/transaction";
+import { camelize } from "@/utils/utils";
 import { BTM } from "@/utils/constants";
 import { mapActions, mapGetters, mapState } from 'vuex'
 import * as Actions from '@/store/constants';
@@ -221,6 +222,9 @@ export default {
         ])
     },
     methods: {
+      camelize: function (object) {
+        return camelize(object)
+      },
       close: function () {
         this.$router.go(-1)
       },
@@ -232,9 +236,9 @@ export default {
       },
       itemBalance: function(asset){
         if(asset.asset === BTM){
-          return Num.formatNue(asset.available_balance,8)
+          return Num.formatNue(asset.availableBalance,8)
         }else{
-          return Num.formatNue(asset.available_balance,asset.decimals)
+          return Num.formatNue(asset.availableBalance,asset.decimals)
         }
 
       },
@@ -258,7 +262,7 @@ export default {
         },
         refreshTransactions: function (start, limit) {
             return new Promise((resolve, reject) => {
-                transaction.list(this.address, this.currentAsset.asset.asset_id, start, limit).then(transactions => {
+                transaction.list(this.address, this.currentAsset.asset.assetId, start, limit).then(transactions => {
                   if (transactions == null) {
                         return;
                     }
@@ -273,11 +277,11 @@ export default {
         },
         transactionsFormat: function (transactions) {
           const formattedTransactions = []
-          const assetID = this.currentAsset.asset.asset_id
+          const assetID = this.currentAsset.asset.assetId
 
           transactions.forEach(transaction => {
             const balanceObject = transaction.balances
-              .filter(b => b.asset.asset_id === assetID);
+              .filter(b => b.asset.assetId === assetID);
 
             const filterInput = _.find(transaction.inputs, function(o) { return o.type =='veto'; })
             const filterOutput = _.find(transaction.outputs, function(o) { return o.type =='vote'; })
@@ -303,11 +307,11 @@ export default {
 
             if(balanceObject.length ===1 ){
                 const inputAddresses = transaction.inputs
-                  .filter(input => input.asset.asset_id === assetID && input.address !== this.currentAccount.address)
+                  .filter(input => input.asset.assetId === assetID && input.address !== this.currentAccount.address)
                   .map(input => input.address)
 
                 const outputAddresses = transaction.outputs
-                  .filter(output => output.asset.asset_id === assetID && output.address !== this.currentAccount.address)
+                  .filter(output => output.asset.assetId === assetID && output.address !== this.currentAccount.address)
                   .map(output => output.address)
 
                 let val = Math.abs(balanceObject[0].amount)
@@ -323,7 +327,6 @@ export default {
                 }
 
                 transaction.val =  val ;
-                transaction.fee = transaction.fee / 100000000;
 
                 formattedTransactions.push(transaction);
               }
@@ -342,7 +345,7 @@ export default {
         if(this.listVote.length == 0 && this.netType === 'vapor'){
           query.chainStatus().then(resp => {
             if(resp){
-              const votes =  resp.consensus_nodes.map( (item, index) => {
+              const votes =  resp.consensusNodes.map( (item, index) => {
                 item.rank = index+1;
                 return item
               });

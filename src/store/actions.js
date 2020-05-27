@@ -43,7 +43,7 @@ export const actions = {
                 }
 
                 bytom.settings.login = true
-                bytom.settings.currency = "in_cny"
+                bytom.settings.currency = "inCny"
                 bytom.settings.netType = ''
                 dispatch(Actions.UPDATE_STORED_BYTOM, bytom).then(_bytom => {
                     dispatch(Actions.SET_BYTOM, Bytom.fromJson(_bytom));
@@ -66,7 +66,7 @@ export const actions = {
               }
 
               bytom.settings.login = true
-              bytom.settings.currency = "in_cny"
+              bytom.settings.currency = "inCny"
               bytom.settings.netType = ''
               dispatch(Actions.UPDATE_STORED_BYTOM, bytom).then(_bytom => {
                   dispatch(Actions.SET_BYTOM, Bytom.fromJson(_bytom));

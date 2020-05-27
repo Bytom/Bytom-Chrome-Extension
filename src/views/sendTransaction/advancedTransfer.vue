@@ -189,7 +189,7 @@ export default {
                 onCancel: this.onCancel
             });
 
-            transaction.buildTransaction(this.currentAccount.guid,  this.transaction.input, this.transaction.output, this.transaction.fee * 100000000, this.transaction.confirmations).then(async (result) => {
+            transaction.buildTransaction(this.currentAccount.guid,  this.transaction.input, this.transaction.output, this.transaction.fee , this.transaction.confirmations).then(async (result) => {
 
               let arrayData
               if(this.transaction.args){
@@ -235,7 +235,7 @@ export default {
                  this.transaction.args = inout.args
               }
               if(inout.gas !== undefined){
-                 this.transaction.fee = inout.gas/100000000
+                 this.transaction.fee = inout.gas
               }
               if(inout.confirmations !== undefined){
                  this.transaction.confirmations = inout.confirmations
