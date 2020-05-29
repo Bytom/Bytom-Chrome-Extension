@@ -1,4 +1,6 @@
 import bytom from "./bytom";
+import { snakeize } from "@/utils/utils";
+
 
 let transaction = {};
 
@@ -30,10 +32,10 @@ transaction.asset = function(asset_id) {
   return bytom.query.asset(asset_id);
 };
 
-transaction.build = function(guid, to, asset, amount, fee, confirmations) {
+transaction.build = function(address, to, asset, amount, fee, confirmations) {
   let retPromise = new Promise((resolve, reject) => {
     bytom.transaction
-      .buildPayment(guid, to, asset, Number(amount), Number(fee), confirmations)
+      .buildPayment(address, to, asset, amount.toString(), fee, confirmations)
       .then(res => {
         resolve(res);
       })
@@ -103,7 +105,7 @@ transaction.buildTransaction = function(guid, inputs, outputs, gas, confirmation
 transaction.signTransaction = function(guid, transaction, password) {
   let retPromise = new Promise((resolve, reject) => {
     bytom.transaction
-      .signTransaction(guid, JSON.stringify(transaction), password)
+      .signTransaction(guid, JSON.stringify(snakeize(transaction)), password)
       .then(res => {
         resolve(res);
       })
@@ -114,13 +116,13 @@ transaction.signTransaction = function(guid, transaction, password) {
   return retPromise;
 };
 
-transaction.transfer = function(guid, transaction, password) {
+transaction.transfer = function(guid, transaction, password, address) {
   let retPromise = new Promise((resolve, reject) => {
     bytom.transaction
-      .signTransaction(guid, JSON.stringify(transaction), password)
+      .signTransaction(guid, JSON.stringify(snakeize(transaction)), password)
       .then(ret => {
         bytom.transaction
-          .submitPayment(guid, ret.raw_transaction, ret.signatures)
+          .submitPayment(address, ret.raw_transaction, ret.signatures)
           .then(res3 => {
             resolve(res3);
           })

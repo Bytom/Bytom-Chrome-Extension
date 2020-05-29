@@ -22,3 +22,27 @@ export const camelize = (object) => {
   }
 };
 
+export const snakeize = (object) => {
+  for(let key in object) {
+    let value = object[key]
+    let newKey = key
+
+    // Skip all-caps keys
+    if (/^[A-Z]+$/.test(key)) {
+      continue
+    }
+
+    if (/[A-Z]/.test(key)) {
+      newKey = key.replace(/([A-Z])/g, v => `_${v.toLowerCase()}`)
+      delete object[key]
+    }
+
+    if (typeof value == 'object' ) {
+      value = snakeize(value)
+    }
+
+    object[newKey] = value
+  }
+
+  return object
+}

@@ -305,15 +305,15 @@ export default {
               transaction.cDirection ='Bytom -> Vapor'
             }
 
+            const inputAddresses = transaction.inputs
+              .filter(input => input.asset.assetId === assetID && input.address !== this.currentAccount.address)
+              .map(input => input.address)
+
+            const outputAddresses = transaction.outputs
+              .filter(output => output.asset.assetId === assetID && output.address !== this.currentAccount.address)
+              .map(output => output.address)
+
             if(balanceObject.length ===1 ){
-                const inputAddresses = transaction.inputs
-                  .filter(input => input.asset.assetId === assetID && input.address !== this.currentAccount.address)
-                  .map(input => input.address)
-
-                const outputAddresses = transaction.outputs
-                  .filter(output => output.asset.assetId === assetID && output.address !== this.currentAccount.address)
-                  .map(output => output.address)
-
                 let val = Math.abs(balanceObject[0].amount)
 
                 if (Number(balanceObject[0].amount) > 0) {
@@ -327,6 +327,11 @@ export default {
                 }
 
                 transaction.val =  val ;
+
+                formattedTransactions.push(transaction);
+              }else{
+                transaction.val =  0
+                transaction.address = address.short(this.currentAccount.address)
 
                 formattedTransactions.push(transaction);
               }
