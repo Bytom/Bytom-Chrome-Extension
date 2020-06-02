@@ -107,7 +107,7 @@
             <div class="tx-header"
                  v-bind:class="classObject">
               <p class="value">{{transaction.direct}}{{transaction.val}}</p>
-              <small class="header-text" v-if="transaction.status_fail">
+              <small class="header-text" v-if="!transaction.status">
                 {{ $t('transactionDetail.fail') }}
               </small>
               <small class="header-text" v-else-if="transaction.hasOwnProperty('blockTimestamp')">
@@ -179,10 +179,10 @@
                           <p>{{transaction.fee}}</p>
                         </td>
                       </tr>
-                      <tr v-if="transaction.type =='vote'">
+                      <tr v-if="transaction.type =='vote' || transaction.type =='veto' ">
                         <td colspan="2"><div class="divider"></div></td>
                       </tr>
-                      <tr  v-if="transaction.type =='vote'">
+                      <tr  v-if="transaction.type =='vote' || transaction.type =='veto'">
                         <td class="label">
                           {{ $t('listVote.bpName') }}
                         </td>
@@ -276,7 +276,7 @@
         }
         console.log(params.transaction)
         if(transaction.type =='vote' || transaction.type =='veto'){
-          const node =_.find(this.listVote, {pub_key: transaction.pubkey})
+          const node =_.find(this.listVote, {pubKey: transaction.pubkey})
           transaction.vName = node.name
         }
         this.transaction = transaction

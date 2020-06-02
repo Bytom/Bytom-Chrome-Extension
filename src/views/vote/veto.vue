@@ -179,10 +179,10 @@ export default {
 
             const vote = this.selectVote.pubKey
             this.transaction.to = vote
-            transaction.buildVeto(this.currentAccount.guid, vote,  Num.convertToNue(this.transaction.amount,8), this.transaction.confirmations).then(result => {
+            transaction.buildVeto(this.currentAccount.vpAddress, vote, this.transaction.amount, this.transaction.confirmations).then(result => {
                 loader.hide();
                 if(!this.transaction.fee){
-                  this.transaction.fee = Number( _.sumBy(result, 'fee'));
+                  this.transaction.fee = Number( _.sumBy(result, 'tx.fee'));
                 }
                 this.$router.push({ name: 'vote-confirm', params: { account: this.currentAccount, transaction: this.transaction, assetAlias: 'BTM',rawData: result} })
             }).catch(error => {

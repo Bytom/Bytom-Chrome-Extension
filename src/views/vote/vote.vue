@@ -132,17 +132,8 @@ export default {
         let balance,
           balances = this.currentAccount.vpBalances
         if(balances && balances.length >0 ){
-          const balanceObject = balances.filter(b => b.asset === BTM)[0]
-          balance = balanceObject.balance
-
-          let vote = 0, lock = 0
-          const votes = this.currentAccount.votes
-          if(votes && votes.length >0 ){
-            vote = _.sumBy(votes,'total')
-            lock = _.sumBy(votes,'locked')
-          }
-
-          balance = (balance-vote-lock)/Math.pow(10,balanceObject.decimals)
+          const balanceObject = balances.filter(b => b.asset.assetId === BTM)[0]
+          balance = balanceObject.availableBalance
         }
 
           return `${this.$t("vote.amountPlaceHolder")}${(balance != null && balance != 0) ? balance : '0.00'}`
@@ -188,12 +179,12 @@ export default {
                 onCancel: this.onCancel
             });
 
-            const vote = this.selectVote.pub_key
+            const vote = this.selectVote.pubKey
             this.transaction.to = vote
-            transaction.buildVote(this.currentAccount.guid, vote,  Num.convertToNue(this.transaction.amount,8), this.transaction.confirmations).then(result => {
+            transaction.buildVote(this.currentAccount.vpAddress, vote,  this.transaction.amount, this.transaction.confirmations).then(result => {
                 loader.hide();
               if(!this.transaction.fee){
-                this.transaction.fee = Number( _.sumBy(result, 'fee') );
+                this.transaction.fee = Number( _.sumBy(result, 'tx.fee') );
               }
                 this.$router.push({ name: 'vote-confirm', params: { account: this.currentAccount,  transaction: this.transaction,assetAlias: 'BTM', rawData: result} })
             }).catch(error => {

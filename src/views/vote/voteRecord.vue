@@ -66,8 +66,8 @@
                                     {{transaction.vName}}
                                   </div>
                                   <div class="addr color-grey">
-                                    <div v-if="transaction.hasOwnProperty('block_timestamp')">
-                                      {{transaction.submission_timestamp | moment}}
+                                    <div v-if="transaction.hasOwnProperty('blockTimestamp')">
+                                      {{transaction.submissionTimestamp | moment}}
                                     </div>
                                     <div v-else>
                                       {{ $t('main.unconfirmed') }}
@@ -169,7 +169,7 @@ export default {
         },
         refreshTransactions: function (start, limit) {
             return new Promise((resolve, reject) => {
-                transaction.list(this.currentAccount.guid, BTM, start, limit, tx_types).then(transactions => {
+                transaction.list(this.currentAccount.vpAddress, BTM, start, limit, tx_types).then(transactions => {
                     if (transactions == null) {
                         return;
                     }
@@ -188,10 +188,9 @@ export default {
 
           transactions.forEach(transaction => {
             const balanceObject = transaction.balances
-              .filter(b => b.asset === assetID);
+              .filter(b => b.asset.assetId === assetID);
 
-            const filterInput = _.find(transaction.inputs, function(o) { return o.type =='veto'; })
-
+            const filterInput = transaction.types.includes('veto')
             const allVotes = this.listVote;
 
             if(filterInput){
@@ -201,14 +200,14 @@ export default {
               const inAmount = _.sumBy((transaction.inputs.filter(i => i.type ==='veto')), 'amount')
               const outAmount = _.sumBy((transaction.outputs.filter(i => i.type ==='vote')), 'amount')
               transaction.vAmount =  Num.formatNue(inAmount-outAmount,8)
-              transaction.vName =  (_.find(allVotes, {pub_key: pubkey})).name
-            }else if(_.find(transaction.outputs, function(o) { return o.type =='vote'; })){
+              transaction.vName =  (_.find(allVotes, {pubKey: pubkey})).name
+            }else if(transaction.types.includes('vote')){
 
               const pubkey = (transaction.outputs.filter(i => i.type ==='vote'))[0].vote
 
               const outAmount = _.sumBy((transaction.outputs.filter(i => i.type ==='vote')), 'amount')
               transaction.vAmount =  Num.formatNue(outAmount,8)
-              transaction.vName =  (_.find(allVotes, {pub_key: pubkey})).name
+              transaction.vName =  (_.find(allVotes, {pubKey: pubkey})).name
 
               transaction.type = 'vote'
             }
