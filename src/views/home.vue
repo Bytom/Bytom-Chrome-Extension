@@ -234,19 +234,19 @@
                   <div class="value">{{ itemBalance(asset) }}</div>
                   <div class="addr color-grey">{{ formatCurrency(asset[ currency ]) }}</div>
                 </div>
-                <div v-if="asset.symbol!== 'Asset'">
+                <div v-if="asset.asset.symbol!== 'Asset'">
                   <div class="uppercase">
-                    {{asset.symbol}}
+                    {{asset.asset.symbol}}
                   </div>
 
-                  <div class="addr color-grey">{{asset.name}}</div>
+                  <div class="addr color-grey">{{asset.asset.name}}</div>
                 </div>
                 <div v-else>
                   <div>
                     Asset
                   </div>
 
-                  <div class="addr color-grey uppercase">{{shortAddress(asset.asset)}}</div>
+                  <div class="addr color-grey uppercase">{{shortAddress(asset.asset.assetId)}}</div>
                 </div>
 
               </li>
@@ -305,7 +305,7 @@ export default {
                   symbol: "BTM",
 
                 } ,
-                balance: 0,
+                availableBalance: 0,
                 decimals: 8,
                 inBtc: "0",
                 inCny: "0",
@@ -427,7 +427,7 @@ export default {
                   bytom.accountList[objectIndex].vpAddress = accounts.vpAddress
 
                   this[Actions.UPDATE_STORED_BYTOM](bytom).then(()=>{
-                    this.refreshBalance(this.currentAccount.guid)
+                    this.refreshBalance(this.currentAccount.vpAddress)
                   })
                 }).catch(e =>{
                   if(e.message == 'Error: wallet has exist'){
@@ -439,7 +439,7 @@ export default {
                       bytom.accountList[objectIndex].vpAddress = accounts.vpAddress
 
                       this[Actions.UPDATE_STORED_BYTOM](bytom).then(()=>{
-                        this.refreshBalance(this.currentAccount.guid)
+                        this.refreshBalance(this.currentAccount.vpAddress)
                       })
                     })
 
@@ -447,7 +447,7 @@ export default {
                 })
               }else{
                 this[Actions.UPDATE_STORED_BYTOM](bytom).then(()=>{
-                  this.refreshBalance(this.currentAccount.guid)
+                  this.refreshBalance(this.currentAccount.address)
                 })
               }
             }
