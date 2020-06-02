@@ -283,8 +283,8 @@ export default {
             const balanceObject = transaction.balances
               .filter(b => b.asset.assetId === assetID);
 
-            const filterInput = _.find(transaction.inputs, function(o) { return o.type =='veto'; })
-            const filterOutput = _.find(transaction.outputs, function(o) { return o.type =='vote'; })
+            const filterInput = transaction.types.includes('veto')
+            const filterOutput = transaction.types.includes('vote')
 
             if(filterInput){
               transaction.type = 'veto'
@@ -297,12 +297,20 @@ export default {
               transaction.pubkey = filterOutput.vote
               transaction.vAmount =  Num.formatNue(outAmount,8)
               transaction.type = 'vote'
-            }else if(_.find(transaction.outputs, function(o) { return o.type =='crosschain_output'; })){
+            }else if(transaction.types.includes('out_crosschain')){
               transaction.type = 'crossChain'
-              transaction.cDirection ='Vapor -> Bytom'
-            }else if(_.find(transaction.inputs, function(o) { return o.type =='crosschain_input'; })){
+              if(this.netType === 'vapor'){
+                transaction.cDirection ='Vapor -> Bytom'
+              }else{
+                transaction.cDirection ='Bytom -> Vapor'
+              }
+            }else if(transaction.types.includes('in_crosschain')){
               transaction.type = 'crossChain'
-              transaction.cDirection ='Bytom -> Vapor'
+              if(this.netType === 'vapor'){
+                transaction.cDirection ='Bytom -> Vapor'
+              }else{
+                transaction.cDirection ='Vapor -> Bytom'
+              }
             }
 
             const inputAddresses = transaction.inputs

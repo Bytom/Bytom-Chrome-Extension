@@ -46,10 +46,10 @@ transaction.build = function(address, to, asset, amount, fee, confirmations) {
   return retPromise;
 };
 
-transaction.buildCrossChain = function(guid, to, asset, amount, confirmations) {
+transaction.buildCrossChain = function(address, to, asset, amount, confirmations) {
   let retPromise = new Promise((resolve, reject) => {
     bytom.transaction
-      .buildCrossChain(guid, to, asset, Number(amount), confirmations)
+      .buildCrossChain(address, to, asset, amount.toString(), confirmations)
       .then(res => {
         resolve(res);
       })

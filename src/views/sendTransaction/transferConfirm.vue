@@ -249,9 +249,14 @@ export default {
                 onCancel: this.onCancel
             });
 
-            // rawData, password
-          const address = this.netType === 'vapor'?  this.account.vpAddress: this.account.address;
-          console.log(this.rawData)
+            let address
+          if (this.transaction.type === 'toVapor'){
+            address = this.account.address
+          }else if(this.transaction.type === 'toBytom'){
+            address =  this.account.vpAddress
+          }else{
+            address = this.netType === 'vapor'?  this.account.vpAddress: this.account.address;
+          }
 
           Promise.all(this.rawData.map( (rawdata) => transaction.transfer(this.account.guid, rawdata, this.password, address)))
                 .then(ret => {

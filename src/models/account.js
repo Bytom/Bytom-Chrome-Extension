@@ -59,10 +59,10 @@ account.listVapor = function(guid) {
   return retPromise
 }
 
-account.balance = function(guid) {
+account.balance = function(address) {
   let retPromise = new Promise((resolve, reject) => {
     bytom.accounts
-      .listAddressUseServer(guid)
+      .listAddressUseServer(address)
       .then(address => {
         let balances = address.balances || []
         let votes = address.votes || []
