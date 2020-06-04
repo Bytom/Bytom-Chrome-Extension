@@ -106,17 +106,17 @@
               <div class="form-item">
                   <label class="form-item-label">{{ $t('transfer.asset') }}</label>
                   <div class="form-item-content" >
-                    <v-select :options="assets" v-bind:colorBlack="true" :clearable="false" :value="selectAsset" :onChange="assetChange" label="asset">
+                    <v-select :options="assets" v-bind:colorBlack="true" :clearable="false" :value="selectAsset" :onChange="assetChange" label="assetId">
                       <template slot="selected-option" slot-scope="asset">
                         <div class="asset-option">
                           <div>{{asset.symbol || 'Asset'}}</div>
-                          <div  class="color-grey asset-id">{{shortAddress(asset.asset)}}</div>
+                          <div  class="color-grey asset-id">{{shortAddress(asset.assetId)}}</div>
                         </div>
                       </template>
                       <template slot="option" slot-scope="asset">
                         <div class="asset-option">
                           <div>{{asset.symbol || 'Asset'}}</div>
-                          <div class="color-grey  asset-id">{{shortAddress(asset.asset)}}</div>
+                          <div class="color-grey  asset-id">{{shortAddress(asset.assetId)}}</div>
                         </div>
                       </template>
                     </v-select>
@@ -124,18 +124,16 @@
               </div>
               <div class="form-item">
                 <label class="form-item-label">{{ $t('transfer.address') }}</label>
-                <div class="form-item-content" >
-                  <input type="text" v-model="transaction.to">
-                </div>
+                <input class="form-item-content"  type="text" v-model="transaction.to">
               </div>
               <div class="form-item">
-                  <label class="form-item-label">
+                  <label class="form-item-label" for="tx-amount">
                     {{ $t('transfer.quantity') }}
 
                     <small class="float-right" style="margin-right: 8px;">{{formatCurrency(transaction.cost||0)}}</small>
                   </label>
                   <div class="form-item-content" style=" display: flex;">
-                    <input type="number" v-model="transaction.amount" placeholder="0" @keypress="limitAmount">
+                    <input type="number" id="tx-amount" v-model="transaction.amount" placeholder="0" @keypress="limitAmount">
                       <span class="color-grey" style="font-size: 15px;position: absolute;right: 0;text-transform: uppercase;">{{unit}}</span>
                   </div>
               </div>
@@ -165,9 +163,12 @@ import * as Actions from '@/store/constants';
   import _ from 'lodash'
 
   const currencyInPrice = {
-    in_cny: 'cny_price',
-    in_usd: 'usd_price',
-    in_btc:'btc_price'
+    in_cny: 'cnyPrice',
+    in_usd: 'usdPrice',
+    in_btc:'btcPrice',
+    inCny: 'cnyPrice',
+    inUsd: 'usdPrice',
+    inBtc:'btcPrice'
   }
 
 export default {
@@ -177,11 +178,12 @@ export default {
     data() {
         return {
             selectAsset: {
-                asset: BTM,
+                assetId: BTM,
                 symbol: "BTM",
                 decimals:8
             },
             show: false,
+            address: null,
             guid: null,
             account: {},
             accountBalance: 0.00,
@@ -203,13 +205,13 @@ export default {
             if(!this.currentAccount.vpBalances ||this.currentAccount.vpBalances.length == 0){
               return [this.selectAsset]
             }else{
-              return this.currentAccount.vpBalances
+              return this.currentAccount.vpBalances.map(b=>b.asset)
             }
           }else{
             if(!this.currentAccount.balances ||this.currentAccount.balances.length == 0){
               return [this.selectAsset]
             }else{
-              return this.currentAccount.balances
+              return this.currentAccount.balances.map(b=>b.asset)
             }
           }
         },
@@ -233,20 +235,14 @@ export default {
         },
         account: function (newAccount) {
             this.guid = newAccount.guid;
+            this.address = this.netType === 'vapor'?  newAccount.vpAddress: newAccount.address;
         },
-        guid: function (newGuid) {
-            this.accountList.forEach(account => {
-                if (account.guid == newGuid.guid) {
-                    this.account = account;
-                    return;
-                }
-            });
-
-            account.balance(newGuid).then(obj => {
+        address: function (newAddress) {
+            account.balance(newAddress).then(obj => {
               const balances = obj.balances
               let balance = 0.00
               if(balances.length >0 ) {
-                const balanceObject = balances.filter(b => b.asset === this.selectAsset.asset)[0]
+                const balanceObject = balances.filter(b => b.asset.assetId === this.selectAsset.assetId)[0]
                 balance = Num.formatNue(balanceObject.balance, balanceObject.decimals)
               }
                 this.accountBalance = balance;
@@ -269,16 +265,20 @@ export default {
           }
         },
         assetChange: function (val) {
-          if(val.asset !== this.selectAsset.asset){
-            this.transaction.asset = val.asset;
+          console.log(val)
+          if(val.assetId !== this.selectAsset.assetId){
+            this.transaction.asset = val.assetId;
             const balances = this.netType === 'vapor'?this.currentAccount.vpBalances:this.currentAccount.balances
             let balance = 0.00
             if(balances.length >0 ) {
-              const balanceObject = balances.filter(b => b.asset === val.asset)[0]
-              balance = Num.formatNue(balanceObject.balance, balanceObject.decimals)
+              console.log(balances)
+              const balanceObject = balances.filter(b => b.asset.assetId === val.assetId)[0]
+              balance = balanceObject.balance
             }
             this.accountBalance = balance;
-            transaction.asset(val.asset).then(ret => {
+
+            transaction.asset(val.assetId).then(ret => {
+              console.log(ret)
               this.selectAsset = Object.assign(ret,val)
               this.transaction.cost = Number(ret[currencyInPrice[this.currency]] * this.transaction.amount).toFixed(2);
             });
@@ -313,10 +313,11 @@ export default {
                 canCancel: true,
                 onCancel: this.onCancel
             });
-            transaction.build(this.account.guid, this.transaction.to, this.transaction.asset, Num.convertToNue(this.transaction.amount,this.selectAsset.decimals), this.transaction.fee, this.transaction.confirmations).then(result => {
+            transaction.build(this.address, this.transaction.to, this.transaction.asset, this.transaction.amount, this.transaction.fee, this.transaction.confirmations).then(result => {
+                console.log(result)
                 loader.hide();
                 if(!this.transaction.fee){
-                    this.transaction.fee = Number( _.sumBy(result, 'fee') / 100000000);
+                    this.transaction.fee = Number( _.sumBy(result, 'tx.fee'));
                 }
                 this.$router.push({ name: 'transfer-confirm', params: { account: this.account, transaction: this.transaction, rawData: result, assetAlias: this.selectAsset.symbol, type: this.$route.query.type } })
             }).catch(error => {
@@ -348,10 +349,10 @@ export default {
               this.transaction.to = this.$route.query.to
           }
           if (this.$route.query.amount != undefined) {
-              this.transaction.amount = this.$route.query.amount /100000000
+              this.transaction.amount = this.$route.query.amount
           }
           if (this.$route.query.gas != undefined) {
-              this.transaction.fee = this.$route.query.gas /100000000
+              this.transaction.fee = this.$route.query.gas
           }
           if(this.$route.query.confirmations != undefined) {
               this.transaction.confirmations = this.$route.query.confirmations
@@ -359,10 +360,10 @@ export default {
         }else{
           this.account = this.currentAccount
 
-          const currentAsset = this.currentAccount.balances[0]
+          const currentAsset = this.netType === 'vapor'? this.currentAccount.vpBalances[0]: this.currentAccount.balances[0]
 
           if(currentAsset){
-            transaction.asset(currentAsset.asset).then(ret => {
+            transaction.asset(currentAsset.asset.assetId).then(ret => {
                 this.selectAsset = Object.assign(ret,currentAsset)
             });
           }

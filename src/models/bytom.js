@@ -1,9 +1,5 @@
 import Bytom from 'bytom-js-sdk'
-
-var networks = {
-  mainnet: 'https://bcapi.bystack.com/api/v2/btm/',
-  mainnetvapor: 'https://bcapi.bystack.com/api/v2/vapor/'
-}
+import { networksJS as networks} from '../utils/constants'
 
 var bytom = new Bytom(networks, chrome.runtime.getURL('wasm/main.wasm'))
 

@@ -8,6 +8,7 @@ export const ENABLE = 'enable'
 export const ADVTRANSFER = 'advTransfer'
 export const SIGNTRANSACTION = 'signTransaction'
 export const SIGNMESSAGE = 'signMessage'
+export const SETCHAIN = 'setChain'
 export const SEND = 'send'
 export const LOAD = 'load';
 export const UPDATE = 'update';

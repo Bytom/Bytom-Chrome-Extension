@@ -29,7 +29,7 @@ module.exports = {
       js: ['js/content.js'],
       run_at: 'document_end',
       matches: ['<all_urls>'],
-      all_frames: false
+      all_frames: true
     }
   ],
   background: {

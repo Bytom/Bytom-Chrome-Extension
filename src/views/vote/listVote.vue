@@ -243,7 +243,7 @@
                         {{vote.name}}
                       </div>
                     </div>
-                    <div class="vote-number">{{$t('listVote.votes')}} {{formatNue(vote.vote_num)}} ({{formatFraction(vote.vote_num, totalVote)}})</div>
+                    <div class="vote-number">{{$t('listVote.votes')}} {{formatNue(vote.voteNum)}} ({{formatFraction(vote.voteNum, totalVote)}})</div>
                   </td>
                 <td class="text-align-right">
                   <button class="btn btn-vote" @click="openVote(vote)">
@@ -342,8 +342,8 @@ export default {
     mounted() {
       query.chainStatus().then(resp => {
         if(resp){
-          this.totalVote = resp.total_vote_num;
-          const votes =  resp.consensus_nodes.map( (item, index) => {
+          this.totalVote = resp.totalVoteNum;
+          const votes =  resp.consensusNodes.map( (item, index) => {
             item.rank = index+1;
             return item
           });

@@ -240,7 +240,7 @@ export default {
                   this.transaction.output = param.outputs
               }
               if(param.fee !== undefined){
-                 this.transaction.fee = param.fee/100000000
+                 this.transaction.fee = param.fee
               }
 
               const array = param.inputs.filter(action => action.type ==='spend')
