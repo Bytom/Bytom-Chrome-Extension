@@ -159,6 +159,8 @@ import getLang from "@/assets/language/sdk";
 import { BTM } from "@/utils/constants";
 import {apis} from '@/utils/BrowserApis';
 import NotificationService from '../../services/NotificationService'
+import { mapGetters } from 'vuex'
+
 
 export default {
     data() {
@@ -174,6 +176,11 @@ export default {
         };
     },
     computed: {
+      ...mapGetters([
+        'net',
+        'netType',
+        'accountList'
+      ])
     },
     watch: {
     },
@@ -215,20 +222,17 @@ export default {
             this.message = object.message
         }
 
-        account.setupNet(localStorage.bytomNet);
-        account.list().then(accounts => {
-          const account = accounts.filter(a => a.address === this.address)[0]
+        const account = this.accountList.filter(a => (a.address === this.address || a.vpAddress === this.address) )[0]
+        this.account = account
 
-          const balances = account.balances
-          let balance = 0
-          if(balances.length > 0){
-            const balanceObject = balances.filter(b => b.asset === BTM)[0]
-            balance = balanceObject.balance/Math.pow(10,balanceObject.decimals)
-          }
-          this.accountBalance = balance
+        const balances = this.netType ==='vapor'? account.vpBalances : account.balances
+        let balance = 0
+        if(balances.length > 0){
+          const balanceObject = balances.filter(b => b.asset.assetId === BTM)[0]
+          balance = balanceObject.availableBalance
+        }
 
-          this.account = account
-        });
+        this.accountBalance = balance
       }
 };
 </script>

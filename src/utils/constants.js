@@ -21,11 +21,11 @@ export const camelize = (object) => {
 }
 
 export const networks = {
-  mainnet:'https://bcapi.bystack.com',
+  mainnet:'https://bcapi.movapi.com',
 }
 
 export const networksJS = {
-  mainnet: `${networks['mainnet']}/api/v2/btm/`,
-  mainnetvapor: `${networks['mainnet']}/api/v2/vapor/`
+  mainnet: `${networks['mainnet']}/bytom/v3/`,
+  mainnetvapor: `${networks['mainnet']}/vapor/v3/` ,
 }
 

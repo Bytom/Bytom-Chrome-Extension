@@ -193,37 +193,12 @@ export default class Background {
         const currentAccount =  bytom.currentAccount
         let account
         if(bytom.settings.netType === 'vapor'){
-          let vote
-          const votes = currentAccount.votes
-          if(votes && votes.length >0 ){
-            vote = _.sumBy(votes,'total')
-          }
-
-          let balances = currentAccount.vpBalances ||[]
-          balances = balances.map(({ inBtc, inCny, inUsd, name, ...keepAttrs}) => {
-            if(keepAttrs.asset === BTM)
-              return {availableBalance: (keepAttrs.balance-vote),...keepAttrs}
-              else
-                return keepAttrs
-          })
-
           account = {
             address: currentAccount.vpAddress,
-            alias:currentAccount.alias,
-            balances: balances|| [],
-            accountId: currentAccount.guid,
-            rootXPub: currentAccount.rootXPub
           };
         }else{
-          let balances = currentAccount.balances ||[]
-          balances = balances.map(({ inBtc, inCny, inUsd, name, ...keepAttrs}) => keepAttrs)
-
           account ={
             address: currentAccount.address,
-            alias:currentAccount.alias,
-            balances: balances|| [],
-            accountId: currentAccount.guid,
-            rootXPub: currentAccount.rootXPub
           };
         }
 

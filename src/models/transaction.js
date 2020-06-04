@@ -88,10 +88,10 @@ transaction.buildVeto = function(address, vote, amount, confirmations, memo) {
   return retPromise;
 };
 
-transaction.buildTransaction = function(guid, inputs, outputs, gas, confirmations) {
+transaction.buildTransaction = function(address, inputs, outputs, gas, confirmations) {
   let retPromise = new Promise((resolve, reject) => {
     bytom.transaction
-      .buildTransaction(guid, inputs, outputs, gas, confirmations)
+      .buildTransaction(address, inputs, outputs, gas, confirmations)
       .then(res => {
         resolve(res);
       })
@@ -124,7 +124,10 @@ transaction.transfer = function(guid, transaction, password, address) {
         bytom.transaction
           .submitPayment(address, ret.raw_transaction, ret.signatures)
           .then(res3 => {
-            resolve(res3);
+            const object ={
+              transactionHash: res3.txHash
+            }
+            resolve(object);
           })
           .catch(error => {
             reject(error);
@@ -143,19 +146,22 @@ transaction.signMessage = function(message, password, address) {
   return bytom.keys.signMessage(message, password,address);
 };
 
-transaction.advancedTransfer = function(guid, transaction, password, arrayData) {
+transaction.advancedTransfer = function(guid, transaction, password, arrayData, address) {
   let retPromise = new Promise((resolve, reject) => {
     bytom.transaction
-      .signTransaction(guid, JSON.stringify(transaction), password)
+      .signTransaction(guid, JSON.stringify(snakeize(transaction)), password)
       .then(ret => {
         let signatures = ret.signatures
         if(arrayData){
           signatures[0] = arrayData
         }
         bytom.transaction
-          .submitPayment(guid, ret.raw_transaction, signatures)
+          .submitPayment(address, ret.raw_transaction, signatures)
           .then(res3 => {
-            resolve(res3);
+            const object ={
+              transactionHash: res3.txHash
+            }
+            resolve(object);
           })
           .catch(error => {
             reject(error);
