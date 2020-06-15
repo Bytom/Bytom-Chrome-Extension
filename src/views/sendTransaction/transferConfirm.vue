@@ -227,7 +227,8 @@ export default {
       },
       ...mapGetters([
         'language',
-        'net'
+        'net',
+        'netType'
       ])
     },
     methods: {
@@ -248,9 +249,16 @@ export default {
                 onCancel: this.onCancel
             });
 
-            // rawData, password
+            let address
+          if (this.transaction.type === 'toVapor'){
+            address = this.account.address
+          }else if(this.transaction.type === 'toBytom'){
+            address =  this.account.vpAddress
+          }else{
+            address = this.netType === 'vapor'?  this.account.vpAddress: this.account.address;
+          }
 
-         Promise.all(this.rawData.map( (rawdata) => transaction.transfer(this.account.guid, rawdata, this.password)))
+          Promise.all(this.rawData.map( (rawdata) => transaction.transfer(this.account.guid, rawdata, this.password, address)))
                 .then(ret => {
                     loader.hide();
                     if(this.$route.params.type == 'popup'){

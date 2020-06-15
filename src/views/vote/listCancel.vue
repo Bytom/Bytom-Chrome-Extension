@@ -184,7 +184,7 @@ export default {
       const originVotes = this.currentAccount.votes
       const allVotes = this.listVote;
       this.votes = _.map(originVotes, function(obj) {
-        return _.assign(obj, _.find(allVotes, {pub_key: obj.vote}));
+        return _.assign(obj, _.find(allVotes, {pubKey: obj.vote}));
       });
     }
 };

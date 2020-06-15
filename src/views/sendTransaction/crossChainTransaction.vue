@@ -141,14 +141,14 @@
                   <v-select :options="assets" v-bind:colorBlack="true" :clearable="false" :value="selectAsset" :onChange="assetChange" label="asset">
                     <template slot="selected-option" slot-scope="asset">
                       <div class="asset-option">
-                        <div>{{asset.symbol || 'Asset'}}</div>
-                        <div  class="color-grey asset-id">{{shortAddress(asset.asset)}}</div>
+                        <div>{{asset.asset.symbol || 'Asset'}}</div>
+                        <div  class="color-grey asset-id">{{shortAddress(asset.asset.assetId)}}</div>
                       </div>
                     </template>
                     <template slot="option" slot-scope="asset">
                       <div class="asset-option">
-                        <div>{{asset.symbol || 'Asset'}}</div>
-                        <div class="color-grey  asset-id">{{shortAddress(asset.asset)}}</div>
+                        <div>{{asset.asset.symbol || 'Asset'}}</div>
+                        <div class="color-grey  asset-id">{{shortAddress(asset.asset.assetId)}}</div>
                       </div>
                     </template>
                   </v-select>
@@ -189,9 +189,12 @@ import { Number as Num } from "@/utils/Number"
   import _ from 'lodash';
 
   const currencyInPrice = {
-  in_cny: 'cny_price',
-  in_usd: 'usd_price',
-  in_btc:'btc_price'
+    in_cny: 'cnyPrice',
+    in_usd: 'usdPrice',
+    in_btc:'btcPrice',
+    inCny: 'cnyPrice',
+    inUsd: 'usdPrice',
+    inBtc:'btcPrice'
 }
 
 export default {
@@ -201,9 +204,11 @@ export default {
     data() {
         return {
           selectAsset: {
-            asset: BTM,
-            symbol: "BTM",
-            decimals:8
+            asset:{
+              assetId: BTM,
+              symbol: "BTM",
+              decimals:8
+            }
           },
             show: false,
             guid: null,
@@ -229,9 +234,16 @@ export default {
           return this.currentAccount.vpBalances
         }
       },
-        unit() {
-          return this.selectAsset.symbol;
-        },
+      address(){
+        if(this.transaction.type === 'toVapor'){
+          return this.currentAccount.address
+        }else{
+          return this.currentAccount.vpAddress
+        }
+      },
+      unit() {
+        return this.selectAsset.asset.symbol;
+      },
       bytomBalance: function () {
         let balance, balances
         if(this.transaction.type === 'toVapor'){
@@ -241,26 +253,8 @@ export default {
         }
 
         if(balances && balances.length >0 ){
-          if( this.selectAsset.asset === BTM && this.transaction.type === 'toBytom' ){
-            const balanceObject = balances.filter(b => b.asset === BTM)[0]
-            balance = balanceObject.balance
-
-            let vote = 0, lock = 0
-
-            const votes = this.currentAccount.votes
-
-            if (votes && votes.length > 0) {
-              vote = _.sumBy(votes, 'total')
-              lock = _.sumBy(votes, 'locked')
-            }
-
-            balance = Num.formatNue((balance - vote - lock), balanceObject.decimals)
-          }else{
-
-            const balanceObject = balances.filter(b => b.asset === this.selectAsset.asset)[0]
-            balance = Num.formatNue(balanceObject.balance, balanceObject.decimals)
-          }
-
+            const balanceObject = balances.filter(b => b.asset.assetId === this.selectAsset.asset.assetId)[0]
+            balance = Num.formatNue(balanceObject.availableBalance, balanceObject.decimals)
         }
 
         if(this.transaction.type === 'toVapor'){
@@ -295,11 +289,11 @@ export default {
                 }
             });
 
-            account.balance(newGuid).then(balances => {
+            account.balance(this.address).then(balances => {
               let balance = 0.00
               if(balances.length >0 ) {
                 const balanceObject = balances.filter(b => b.asset === BTM)[0]
-                balance = balanceObject.balance / Math.pow(10, balanceObject.decimals)
+                balance = balanceObject.balance
               }
                 this.accountBalance = balance;
             }).catch(error => {
@@ -324,77 +318,93 @@ export default {
           return Num.formatCurrency(num, this.currency)
         },
         assetChange: function (val) {
-          if(val.asset !== this.selectAsset.asset){
-            this.transaction.asset = val.asset;
-            const balances = this.currentAccount.balances
+          if(val.asset.assetId !== this.selectAsset.asset.assetId){
+            this.transaction.asset = val.asset.assetId;
+            const balances = this.assets
             let balance = 0.00
             if(balances.length >0 ) {
-              const balanceObject = balances.filter(b => b.asset === val.asset)[0]
-              balance = Num.formatNue(balanceObject.balance, balanceObject.decimals)
+              const balanceObject = balances.filter(b => b.asset.assetId === val.asset.assetId)[0]
+              balance = Num.formatNue(balanceObject.availableBalance, 0)
             }
             this.accountBalance = balance;
-            transaction.asset(val.asset).then(ret => {
+            transaction.asset(val.asset.assetId).then(ret => {
               this.selectAsset = Object.assign(ret,val)
               this.transaction.cost = Number(ret[currencyInPrice[this.currency]] * this.transaction.amount).toFixed(2);
             });
           }
         },
         send: function () {
-            if (this.transaction.amount <= 0) {
-                this.$dialog.show({
-                    body: this.$t("transfer.noneBTM")
-                });
-                return;
-            }
-
-            let loader = this.$loading.show({
-                // Optional parameters
-                container: null,
-                canCancel: true,
-                onCancel: this.onCancel
+          if (this.transaction.amount <= 0) {
+            this.$dialog.show({
+              body: this.$t("transfer.noneBTM")
             });
+            return;
+          }
 
-            // Bytom => Vapor
-            if(this.transaction.type === 'toVapor'){
-              transaction.chainStatus().then((resp)=>{
-                const address = resp.federation_address
-                account.setupNet(`${this.net}`)
-                this.transaction.to = address
-                transaction.build(this.account.guid, address, this.transaction.asset, Num.convertToNue(this.transaction.amount,this.selectAsset.decimals), this.transaction.confirmations).then(result => {
-                  loader.hide();
-                  if(!this.transaction.fee){
-                    this.transaction.fee = Number( _.sumBy(result, 'fee') / 100000000);
-                  }
-                  this.$router.push({ name: 'transfer-confirm', params: { account: this.account, transaction: this.transaction, rawData: result,assetAlias: this.selectAsset.symbol, type: this.$route.query.type } })
-                }).catch(error => {
-                  loader.hide();
-                  this.$dialog.show({
-                    body: getLang(error.message)
-                  });
-                });
-              })
-            }
+          let loader = this.$loading.show({
+            // Optional parameters
+            container: null,
+            canCancel: true,
+            onCancel: this.onCancel
+          });
 
-            // Vapor => Bytom
-            else{
-              const address = this.account.address
-              account.setupNet(`${this.net}vapor`)
+          // Bytom => Vapor
+          if (this.transaction.type === 'toVapor') {
+            transaction.chainStatus().then((resp) => {
+              const address = resp.federationAddress
+              account.setupNet(`${this.net}`)
               this.transaction.to = address
-              transaction.buildCrossChain(this.account.guid, address, this.transaction.asset,  Num.convertToNue(this.transaction.amount,this.selectAsset.decimals), this.transaction.confirmations).then(result => {
-                  loader.hide();
-                if(!this.transaction.fee){
-                  this.transaction.fee = Number( _.sumBy(result, 'fee') / 100000000);
+              transaction.build(this.address, address, this.transaction.asset, this.transaction.amount, this.transaction.confirmations).then(result => {
+                loader.hide();
+                if (!this.transaction.fee) {
+                  this.transaction.fee = Number( _.sumBy(result, 'tx.fee'));
                 }
-                this.$router.push({ name: 'transfer-confirm', params: { account: this.account, transaction: this.transaction, rawData: result, assetAlias: this.selectAsset.symbol, type: this.$route.query.type } })
+                this.$router.push({name: 'transfer-confirm',
+                  params: {
+                    account: this.account,
+                    transaction: this.transaction,
+                    rawData: result,
+                    assetAlias: this.selectAsset.asset.symbol,
+                    type: this.$route.query.type
+                  }
+                })
               }).catch(error => {
-                  loader.hide();
-                  this.$dialog.show({
-                      body: getLang(error.message)
-                  });
+                loader.hide();
+                this.$dialog.show({
+                  body: getLang(error.message)
+                });
               });
-            }
+            })
+          }
 
+          // Vapor => Bytom
+          else {
+            const toAddress = this.account.address
+            account.setupNet(`${this.net}vapor`)
+            this.transaction.to = toAddress
+            transaction.buildCrossChain(this.address, toAddress, this.transaction.asset, this.transaction.amount, this.transaction.confirmations).then(result => {
+              loader.hide();
+              if (!this.transaction.fee) {
+                this.transaction.fee = Number( _.sumBy(result, 'tx.fee'));
+              }
+              this.$router.push({name: 'transfer-confirm',
+                params: {
+                  account: this.account,
+                  transaction: this.transaction,
+                  rawData: result,
+                  assetAlias: this.selectAsset.asset.symbol,
+                  type: this.$route.query.type
+                }
+              })
+            }).catch(error => {
+              loader.hide();
+              this.$dialog.show({
+                body: getLang(error.message)
+              });
+            });
+          }
         }
+
     }, mounted() {
         //detect injection
         if(this.$route.query.type === 'popup'){
@@ -410,10 +420,10 @@ export default {
               this.transaction.to = this.$route.query.to
           }
           if (this.$route.query.amount != undefined) {
-              this.transaction.amount = this.$route.query.amount /100000000
+              this.transaction.amount = this.$route.query.amount
           }
           if (this.$route.query.gas != undefined) {
-              this.transaction.fee = this.$route.query.gas /100000000
+              this.transaction.fee = this.$route.query.gas
           }
           if(this.$route.query.confirmations != undefined) {
               this.transaction.confirmations = this.$route.query.confirmations
@@ -422,13 +432,13 @@ export default {
           this.account = this.currentAccount
         }
 
-      const currentAsset = this.currentAccount.balances[0]
+        const currentAsset = this.currentAccount.balances[0]
 
-      if(currentAsset){
-        transaction.asset(currentAsset.asset).then(ret => {
-          this.selectAsset = Object.assign(ret,currentAsset)
-        });
-      }
+        if(currentAsset){
+          transaction.asset(currentAsset.asset.assetId).then(ret => {
+            this.selectAsset = Object.assign(ret,currentAsset)
+          });
+        }
     }
 };
 </script>

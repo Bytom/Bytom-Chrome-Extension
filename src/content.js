@@ -45,6 +45,7 @@ class Content {
       // Dispatching the loaded event to the web application.
       isReady = true
 
+      document.dispatchEvent(new CustomEvent('bytomLoaded'))
       document.dispatchEvent(new CustomEvent('chromeBytomLoaded'))
     })
 
@@ -103,6 +104,7 @@ class Content {
       case MsgTypes.SIGNTRANSACTION:
       case MsgTypes.ADVTRANSFER:
       case MsgTypes.SIGNMESSAGE:
+      case MsgTypes.SETCHAIN:
       case MsgTypes.SEND:
         this.transfer(msg.type, networkMessage)
         break

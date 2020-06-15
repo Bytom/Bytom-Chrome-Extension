@@ -6,7 +6,8 @@ export const ErrorCodes = {
   TIMED_OUT:408,
   LOCKED:423,
   TOO_MANY_REQUESTS:429,
-  TYPE_MISSED:411
+  TYPE_MISSED:411,
+  TYPE_DUPLICATE:405
 };
 
 export default class Error {
@@ -20,6 +21,10 @@ export default class Error {
 
   static locked(){
     return new Error(ErrorTypes.LOCKED, "The user's Bytom is locked. They have been notified and should unlock before continuing.")
+  }
+
+  static duplicate(_type){
+    return new Error(ErrorTypes.TYPE_DUPLICATED, `The current value has been set to '${_type}', please select another parameter.`, ErrorCodes.TYPE_DUPLICATE)
   }
 
   static promptClosedWithoutAction(){

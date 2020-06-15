@@ -10,9 +10,8 @@ export class Number {
     if(!exp){
       exp = dec
     }
-    let base = new BigNumber(10).exponentiatedBy(exp)
 
-    let result = n.dividedBy(base)
+    let result = n
 
     return result.toFormat(dec);
   }
@@ -48,10 +47,13 @@ export class Number {
   static formatCurrency(num, type) {
     let n = new BigNumber(num);
     switch(type){
+      case "inCny":
       case "in_cny":
         return `¥ ${n.toFormat(2)}`
+      case "inUsd":
       case "in_usd":
         return `$ ${n.toFormat()}`
+      case "inBtc":
       case "in_btc":
         return `₿ ${n.toFormat()}`
       default:

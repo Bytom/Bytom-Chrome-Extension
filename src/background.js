@@ -8,7 +8,7 @@ import * as PromptTypes from './prompts/PromptTypes'
 
 import _ from 'lodash'
 import Error from './utils/errors/Error'
-import { BTM } from './utils/constants'
+import { BTM, camelize } from './utils/constants'
 
 let prompt = null;
 
@@ -27,6 +27,9 @@ export default class Background {
 
   dispatchMessage(sendResponse, message) {
     switch (message.type) {
+      case MsgTypes.SETCHAIN:
+        Background.setChain(sendResponse, message.payload)
+        break
       case MsgTypes.TRANSFER:
         this.transfer(sendResponse, message.payload)
         break
@@ -89,7 +92,7 @@ export default class Background {
     }
 
     NotificationService.open(new Prompt(PromptTypes.REQUEST_SIGN, '', payload ,approved => {
-     sendResponse(approved);
+     sendResponse(camelize(approved));
     }));
   }
 
@@ -136,7 +139,7 @@ export default class Background {
             switch (request.method){
               case 'transfer':
                 if (request.action === 'success'){
-                  sendResponse(request.message);
+                  sendResponse(camelize(request.message));
                   return true;
                 } else if (request.action === 'reject'){
                   sendResponse(request.message);
@@ -172,16 +175,15 @@ export default class Background {
     }
 
     NotificationService.open(new Prompt(PromptTypes.REQUEST_ADVANCED_TRANSFER, '', payload ,approved => {
-      sendResponse(approved);
+      sendResponse(camelize(approved));
     }));
 
   }
 
   signTransaction(sendResponse, payload) {
     NotificationService.open(new Prompt(PromptTypes.REQUEST_SIGN_TRANSACTION, '', payload ,approved => {
-      sendResponse(approved);
+      sendResponse(camelize(approved));
     }));
-
   }
 
   requestCurrentAccount(sendResponse, payload){
@@ -191,37 +193,12 @@ export default class Background {
         const currentAccount =  bytom.currentAccount
         let account
         if(bytom.settings.netType === 'vapor'){
-          let vote
-          const votes = currentAccount.votes
-          if(votes && votes.length >0 ){
-            vote = _.sumBy(votes,'total')
-          }
-
-          let balances = currentAccount.vpBalances ||[]
-          balances = balances.map(({ in_btc, in_cny, in_usd, name, ...keepAttrs}) => {
-            if(keepAttrs.asset === BTM)
-              return {availableBalance: (keepAttrs.balance-vote),...keepAttrs}
-              else
-                return keepAttrs
-          })
-
           account = {
             address: currentAccount.vpAddress,
-            alias:currentAccount.alias,
-            balances: balances|| [],
-            accountId: currentAccount.guid,
-            rootXPub: currentAccount.rootXPub
           };
         }else{
-          let balances = currentAccount.balances ||[]
-          balances = balances.map(({ in_btc, in_cny, in_usd, name, ...keepAttrs}) => keepAttrs)
-
           account ={
             address: currentAccount.address,
-            alias:currentAccount.alias,
-            balances: balances|| [],
-            accountId: currentAccount.guid,
-            rootXPub: currentAccount.rootXPub
           };
         }
 
@@ -246,7 +223,6 @@ export default class Background {
       sendResponse(chain);
     })
   }
-
 
   send(sendResponse, payload) {
     const action = payload.action
@@ -289,6 +265,19 @@ export default class Background {
     })
   }
 
+  static setChain(sendResponse, newNetType) {
+    Background.load(bytom => {
+      const currentNet = bytom.settings.netType
+
+      if( newNetType !== currentNet){
+        bytom.settings.netType = newNetType;
+        this.update(() => sendResponse({status:'success'}), bytom);
+      }else{
+        sendResponse(Error.duplicate(newNetType));
+      }
+    })
+  }
+
   static authenticate(sendResponse, payload){
     Background.load(bytom => {
       const domain = payload.domain;
@@ -303,7 +292,7 @@ export default class Background {
         }
 
         let balances = currentAccount.vpBalances ||[]
-        balances = balances.map(({ in_btc, in_cny, in_usd, name, ...keepAttrs}) => {
+        balances = balances.map(({ inBtc, inCny, inUsd, name, ...keepAttrs}) => {
           if(keepAttrs.asset === BTM)
             return {availableBalance: (keepAttrs.balance-vote),...keepAttrs}
           else
@@ -320,7 +309,7 @@ export default class Background {
 
       }else{
         let balances = currentAccount.balances ||[]
-        balances = balances.map(({ in_btc, in_cny, in_usd, name, ...keepAttrs}) => keepAttrs)
+        balances = balances.map(({ inBtc, inCny, inUsd, name, ...keepAttrs}) => keepAttrs)
 
         account ={
           address: currentAccount.address,

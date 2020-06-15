@@ -169,6 +169,13 @@ export default {
         };
     },
     computed: {
+      address: function(){
+        if(this.netType === 'vapor'){
+          return this.currentAccount.vpAddress
+        }else{
+          return this.currentAccount.address
+        }
+      },
       ...mapGetters([
         'currentAccount',
         'net',
@@ -189,14 +196,14 @@ export default {
                 onCancel: this.onCancel
             });
 
-            transaction.buildTransaction(this.currentAccount.guid,  this.transaction.input, this.transaction.output, this.transaction.fee * 100000000, this.transaction.confirmations).then(async (result) => {
+            transaction.buildTransaction(this.address,  this.transaction.input, this.transaction.output, this.transaction.fee , this.transaction.confirmations).then(async (result) => {
 
               let arrayData
               if(this.transaction.args){
                 arrayData =  await transaction.convertArgument(this.transaction.args)
               }
 
-              return transaction.advancedTransfer(this.currentAccount.guid, result, this.password, arrayData)
+              return transaction.advancedTransfer(this.currentAccount.guid, result[0], this.password, arrayData, this.address)
                   .then((resp) => {
                       loader.hide();
                       this.prompt.responder(resp);
@@ -235,7 +242,7 @@ export default {
                  this.transaction.args = inout.args
               }
               if(inout.gas !== undefined){
-                 this.transaction.fee = inout.gas/100000000
+                 this.transaction.fee = inout.gas
               }
               if(inout.confirmations !== undefined){
                  this.transaction.confirmations = inout.confirmations
@@ -252,8 +259,8 @@ export default {
                     return this.queryAsset(key).then(resp =>{
                       return {
                         'asset': key,
-                        'alias':resp.alias,
-                        'amount':Num.formatNue( _.sumBy(objs, 'amount'), resp.decimals)
+                        'alias':resp.symbol,
+                        'amount': _.sumBy(objs, 'amount')
                       }
                     })
                   })
