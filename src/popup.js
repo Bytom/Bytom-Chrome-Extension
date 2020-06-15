@@ -24,7 +24,7 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
   Vue.use(VueI18n)
   const i18n = new VueI18n({
     fallbackLocale: 'en',
-    locale: lagetLanguage(store.getters.language),
+    locale: getLanguage(store.getters.language),
     messages
   })
   Vue.use(i18n)
