@@ -20,14 +20,16 @@ body,
 html {
   padding: 0;
   margin: 0;
-  font-family: 'Robot', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-  "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+  font-family: "PingFang SC", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+  "Helvetica Neue", Helvetica, "Hiragino Sans GB", "Microsoft YaHei",
   SimSun, sans-serif;;
 }
 body {
-  width: 360px;
-  height: 600px;
+  width: 100%;
   background-color: #ffffff;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
 }
 
 /*a,*/
@@ -54,16 +56,25 @@ a {
 
 #app,
 #welcome {
-  color: #fff;
+  color: rgba(0, 0, 0, 0.36);
   font-size: 18px;
   line-height: 25px;
   height: 600px;
   overflow: hidden;
+  width: 420px;
+}
+
+.inside-warp{
+  width: 320px;
+  margin-left: auto;
+  margin-right: auto;
 }
 .warp {
   position: absolute;
-  width: 360px;
+  width: 320px;
   height: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 .warp-chlid {
   position: absolute;
@@ -212,7 +223,7 @@ hr {
 /*}*/
 
 .color-black {
-  color: #010101;
+  color: rgba(0, 0, 0, 0.88);;
 }
 .color-green {
   color: #035BD4;
@@ -490,4 +501,14 @@ label{
 
 .uppercase{
   text-transform: uppercase;
+}
+
+.divider{
+  width: 32px;
+  height: 1px;
+  background: #EBEBEB;
+}
+
+.d-flex{
+  display:flex;
 }

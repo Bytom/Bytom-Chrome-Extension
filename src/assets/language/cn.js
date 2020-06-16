@@ -1,6 +1,11 @@
 const cn = {
   home:{
-    title:"比原链插件钱包"
+    welcome:"欢迎使用",
+    byone:" Byone 钱包",
+    create:"创建钱包",
+    createHint:"创建一个新的钱包来存储和交易您的 BTM 及侧链代币",
+    import:"导入钱包",
+    importHint:"如果您在其它网站或 App 上创建过钱包，可以在这里导入"
   },
   welcome: {
     title: '欢迎使用BYTOM精简Chrome钱包',

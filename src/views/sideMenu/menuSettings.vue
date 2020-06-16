@@ -78,6 +78,7 @@ export default {
             ],
             networks: [
               { label: this.$t('main.mainNet'), value: "mainnet" },
+              { label: this.$t('main.testNet'), value: "testnet" },
             ],
             selected: { label: "中文", value: "cn" },
             hashVersion: "",
@@ -179,6 +180,9 @@ export default {
             switch(this.net){
               case 'mainnet':
                 network = this.networks[0]
+                break;
+              case 'testnet':
+                network = this.networks[1]
                 break;
             }
             this.setupNetwork(network);

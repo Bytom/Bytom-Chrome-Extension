@@ -22,10 +22,13 @@ export const camelize = (object) => {
 
 export const networks = {
   mainnet:'https://bcapi.movapi.com',
+  testnet:'http://161.189.9.64'
 }
 
 export const networksJS = {
   mainnet: `${networks['mainnet']}/bytom/v3/`,
   mainnetvapor: `${networks['mainnet']}/vapor/v3/` ,
+  testnet: `${networks['testnet']}:4000/bytom/v3/`,
+  testnetvapor: `${networks['testnet']}:3000/vapor/v3/` ,
 }
 

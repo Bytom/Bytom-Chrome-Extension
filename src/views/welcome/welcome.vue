@@ -1,86 +1,27 @@
 <style scoped>
-/*.content {*/
-    /*margin-left: 135px;*/
-/*}*/
-/*.content-cn {*/
-    /*margin-left: 85px;*/
-/*}*/
-/*.form-item-label {*/
-    /*width: 135px;*/
-/*}*/
-/*.form-item-label-cn {*/
-    /*width: 85px;*/
-/*}*/
-  .bg-image{
-    height: 420px;
-    width: 360px;
-    background-size: contain;
-    -webkit-clip-path: polygon(0 0, 100% 0, 100% 75%, 0% 100%);
-    clip-path: polygon(0 0, 100% 0, 100% 75%, 0% 100%);
-    position: absolute;
-  }
   .header {
     position: relative;
-    text-align: center;
-    margin:15px 20px 25px;
+    margin:80px 0px 20px;
+    line-height: 37px;
   }
   .header p{
     font-size: 16px;
     color: rgba(255,255,255,0.5);
     padding-top: 5px;
   }
-  .panel{
-    position: relative;
-    padding: 10px;
-    margin-bottom : 15px;
-  }
   .container{
     position: relative;
-  }
-  .form-item{
-    margin: 10px 0;
-  }
-  .btn-group{
-    padding: 0 20px;
-  }
-  .topbar{
-    height: 45px;
-    padding-top: 10px;
-  }
-.topbar .topbar-middle {
-  text-align: center;
-}
-
-/*.topbar img{*/
-  /*position: relative;*/
-  /*bottom: 23px;*/
-  /*right: 65px*/
-/*}*/
-
-  .v-select{
-    height: 32px;
-    width: 100%;
-    background: rgba(247,247,247,1);
-    font-size: 14px;
-    margin: auto;
-    border-bottom: 1px solid #E0E0E0;
-    /*padding-left: 20px;*/
+    margin-top: 24px;
   }
 
-  .tabs{
-    color: rgba(255,255,255, 0.4);
-    text-align: center;
-  }
+
   .tabs a{
     margin: 0px 20px;
   }
   .tabs .active{
     color: rgba(255,255,255, 1);
   }
-  .form-checkbox{
-    font-size: 14px;
-    padding: 5px;
-  }
+
   .topbar a{
     position: fixed;
     top: 10px;
@@ -90,54 +31,57 @@
     font-size: 25px;
     color: white;
   }
-  .file-selection{
-    height: 50px;
-    vertical-align: middle;
+  .welcome-title{
+    font-weight: 100;
+  }
+  .widget{
     display: flex;
-    align-items: center;
-    border: 1px dashed #E0E0E0;
-    margin-top: 10px;
+    flex-direction: column;
     padding: 20px;
-    background: #F7F7F7;
   }
-  .recovery-btn{
-    position: fixed;
-    bottom: 20px;
-    width: 320px;
+  .widget h4{
+    font-weight: 600;
+    font-size: 15px;
   }
+
+  .widget p{
+    font-size: 13px;
+  }
+  .color-widget{
+    background: #FAFAFA;
+    border-radius: 8px;
+  }
+
 </style>
 
 <template>
-    <div class="warp bg-gray">
-      <div class="bg-image">
+  <div>
+    <div class="warp bg-white">
+      <div class="header color-black">
+        <h1>
+          <div class="welcome-title">{{ $t('home.welcome')}}</div>
+          <div>{{ $t('home.byone')}}</div>
+        </h1>
       </div>
-      <div class="topbar">
-        <!--<div v-if="activeTab === 'register'" class="topbar-middle">-->
-          <!--<v-select  class="v-select" v-bind:colorBlack="true" :clearable="false" v-model="selected" :options="nets"></v-select>-->
-        <!--</div>-->
-        <a href="http://github.com/bycoinio/Bystore" target="_blank"><i class="iconfont icon-github"></i></a>
+      <div class="divider"></div>
+
+      <div class="container">
+       <div class="widget color-widget">
+         <a @click="$router.push({ name: 'welcome-creation' })">
+           <h4 class="color-black">{{ $t('home.create')}}</h4>
+           <p>{{ $t('home.createHint')}}</p>
+         </a>
+       </div>
+        <div class="widget">
+          <a @click="$router.push({ name: 'welcome-import' })">
+            <h4 class="color-black">{{ $t('home.import')}}</h4>
+            <p>{{ $t('home.importHint')}}</p>
+          </a>
+        </div>
       </div>
-      <div class="header">
-        <h1>Byone</h1>
-        <p>{{ $t('home.title')}}</p>
-
-      </div>
-
-        <section class="container">
-         <div>
-
-           <h4>lip</h4>
-           <p>lip</p>
-           <a @click="$router.push({ name: 'welcome-creation' })">{{  $t('welcome.register')}}</a>
-         </div>
-          <div>
-            <h4>lip</h4>
-            <p>lip</p>
-            <a @click="$router.push({ name: 'welcome-import' })">{{  $t('welcome.restore')}}</a>
-          </div>
-        </section>
-      <Footer/>
     </div>
+    <Footer/>
+  </div>
 </template>
 
 <script>
