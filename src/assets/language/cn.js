@@ -2,6 +2,16 @@ const cn = {
   home:{
     title:"比原链插件钱包"
   },
+  common:{
+    veto: '取消投票',
+    cross_chain_in: '跨入Vapor',
+    spend : '花费',
+    coinbase: 'Coinbase',
+    control : '接受',
+    cross_chain_out: '跨出Vapor',
+    vote: '投票',
+    transfer:'转账'
+  },
   welcome: {
     title: '欢迎使用BYTOM精简Chrome钱包',
     use: '开始',
@@ -46,7 +56,8 @@ const cn = {
     view:'展开',
     hide:'隐藏',
     viewAll:'展示全部',
-    hideAll:'隐藏全部'
+    hideAll:'隐藏全部',
+    types:'交易类型'
   },
   crossChain:{
     title:'跨链',

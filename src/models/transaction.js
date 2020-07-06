@@ -116,6 +116,20 @@ transaction.signTransaction = function(guid, transaction, password) {
   return retPromise;
 };
 
+transaction.decodeTransaction = function(rawTx) {
+  let retPromise = new Promise((resolve, reject) => {
+    bytom.transaction
+      .decodeTransaction(rawTx)
+      .then(res => {
+        resolve(res);
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+  return retPromise;
+};
+
 transaction.transfer = function(guid, transaction, password, address) {
   let retPromise = new Promise((resolve, reject) => {
     bytom.transaction
