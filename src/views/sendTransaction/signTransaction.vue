@@ -154,6 +154,7 @@ import account from "@/models/account";
 import { camelize, removeFromArray } from "@/utils/utils";
 import { decimalsMap } from "@/utils/constants"
 import BigNumber from "bignumber.js"
+import bytomjslib from 'bytomjs-lib'
 
 
 export default {
@@ -237,64 +238,65 @@ export default {
           this.prompt = window.data || apis.extension.getBackgroundPage().notification || null;
           if(this.prompt.data !== undefined){
               const param = Array.isArray(this.prompt.data)? this.prompt.data[0] : this.prompt.data
-              const tx = camelize(param)
-              const rawTransaction = tx.rawTransaction
+              const _tx = camelize(param)
+              const rawTransaction = _tx.rawTransaction
               const currentAddress = this.netType === 'vapor'?
-                 this.currentAccount.vpAddress:
-                 this.currentAccount.address
+                  this.currentAccount.vpAddress:
+                  this.currentAccount.address
 
-                account.setupNet(`${this.net}${this.netType}`)
-                transaction.decodeTransaction(rawTransaction).then((tx)=>{
-                  this.transaction.fee = tx.fee/100000000
-                  this.transaction.input = tx.inputs
-                  this.transaction.output = tx.outputs
+              account.setupNet(`${this.net}${this.netType}`)
 
-                  const inputs = tx.inputs.filter(i => i.address === currentAddress)
-                  const outputs = tx.outputs.filter(i => i.address === currentAddress)
-                  const inputAsset = inputs.map(i => i.asset);
-                  const outputAsset = outputs.map(i => i.asset);
+              const tx = this.netType === 'vapor'?
+              bytomjslib.vapor.Transaction.decodeRawTransaction(rawTransaction):
+              bytomjslib.bytom.Transaction.decodeRawTransaction(rawTransaction)
+              this.transaction.fee = tx.fee/100000000
+              this.transaction.input = tx.inputs
+              this.transaction.output = tx.outputs
 
-                  const asset = _.union(inputAsset, outputAsset)
+              const inputs = tx.inputs.filter(i => i.address === currentAddress)
+              const outputs = tx.outputs.filter(i => i.address === currentAddress)
+              const inputAsset = inputs.map(i => i.assetID);
+              const outputAsset = outputs.map(i => i.assetID);
 
-                  let types = ["transfer"]
-                  const promise =
-                    asset
-                      .map((assetId) => {
-                        return this.queryAsset(assetId).then(resp =>{
-                          const assetInput = inputs.filter(i => i.asset ===assetId)
-                          const assetOutput = outputs.filter(o => o.asset ===assetId)
-                          const inputAmount = new BigNumber(_.sumBy(assetInput, 'amount'))
-                          const outputAmount = new BigNumber(_.sumBy(assetOutput, 'amount'))
+              const asset = _.union(inputAsset, outputAsset)
 
-                          const decimals = decimalsMap[this.net][assetId]
-                          const amount = inputAmount.minus(outputAmount).shiftedBy(-decimals)
+              let types = ["transfer"]
+              const promise =
+                asset
+                  .map((assetId) => {
+                    return this.queryAsset(assetId).then(resp =>{
+                      const assetInput = inputs.filter(i => i.assetID ===assetId)
+                      const assetOutput = outputs.filter(o => o.assetID ===assetId)
+                      const inputAmount = new BigNumber(_.sumBy(assetInput, 'amount'))
+                      const outputAmount = new BigNumber(_.sumBy(assetOutput, 'amount'))
 
-                          return {
-                            'asset': assetId,
-                            'alias': resp.symbol,
-                            'amount': amount.toString()
-                          }
-                        })
-                      })
+                      const decimals = decimalsMap[this.net][assetId]
+                      const amount = inputAmount.minus(outputAmount).shiftedBy(-decimals)
 
-                  let that = this;
-                  Promise.all(promise).then(function(output) {
-                    that.transaction.amounts = output
+                      return {
+                        'asset': assetId,
+                        'alias': resp.symbol,
+                        'amount': amount.toString()
+                      }
+                    })
                   })
 
-                  const inputType = inputs.map(i => i.type);
-                  const outputType = outputs.map(o => o.type);
-                  types = _.union(inputType, outputType, types);
+              let that = this;
+              Promise.all(promise).then(function(output) {
+                that.transaction.amounts = output
+              })
 
-                  const remove = ['spend','control'];
-                  types = removeFromArray(types, remove);
-                  types = types.map(ty => this.$t(`common.${ty}`)).join(', ');
+              const inputType = inputs.map(i => i.type);
+              const outputType = outputs.map(o => o.type);
+              types = _.union(inputType, outputType, types);
 
-                  this.transaction.types = types
+              const remove = ['spend','control'];
+              types = removeFromArray(types, remove);
+              types = types.map(ty => this.$t(`common.${ty}`)).join(', ');
 
-                })
+              this.transaction.types = types
 
-              }
+          }
       }
 };
 </script>

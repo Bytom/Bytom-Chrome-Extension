@@ -10,7 +10,9 @@ const cn = {
     control : '接受',
     cross_chain_out: '跨出Vapor',
     vote: '投票',
-    transfer:'转账'
+    transfer:'转账',
+    issue:'资产发行',
+    retire:'资产销毁',
   },
   welcome: {
     title: '欢迎使用BYTOM精简Chrome钱包',

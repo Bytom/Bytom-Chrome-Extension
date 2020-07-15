@@ -10,7 +10,9 @@ const en = {
     control : 'Received ',
     cross_chain_out: 'Cross Out Vapor',
     vote: 'Vote',
-    transfer:'Transfer'
+    transfer:'Transfer',
+    issue:'Issue',
+    retire:'Retire',
   },
   welcome: {
     title: 'Welcome to the BYTOM Chrome Wallet',
