@@ -107,6 +107,10 @@
           </tr>
 
           <div class="divider"></div>
+          <tr class="row">
+            <td class="col label">{{ $t('transfer.types') }}</td>
+            <td class="col value">{{transaction.types}}</td>
+          </tr>
 
           <tr v-for="(amountInput, index) in transaction.amounts" :key="index" class="row">
             <td class="col label">{{index ==0 && $t('transfer.transferAmount') }}</td>
@@ -142,14 +146,15 @@
 <script>
 import transaction from "@/models/transaction";
 import getLang from "@/assets/language/sdk";
-import { LocalStream } from 'extension-streams';
 import {apis} from '@/utils/BrowserApis';
 import NotificationService from '../../services/NotificationService'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import _ from 'lodash';
 import account from "@/models/account";
-import { Number as Num } from "@/utils/Number"
-
+import { camelize, removeFromArray } from "@/utils/utils";
+import { decimalsMap } from "@/utils/constants"
+import BigNumber from "bignumber.js"
+import bytomjslib from 'bytomjs-lib'
 
 
 export default {
@@ -162,7 +167,8 @@ export default {
                 args: "",
                 fee: "",
                 confirmations:1,
-                amounts: []
+                amounts: [],
+                types:[]
             },
             password:'',
             prompt:''
@@ -230,43 +236,65 @@ export default {
       }
     }, mounted() {
           this.prompt = window.data || apis.extension.getBackgroundPage().notification || null;
-
           if(this.prompt.data !== undefined){
-              const param = Array.isArray(this.prompt.data)? this.prompt.data[0].tx : this.prompt.data.tx
-              if(param.inputs !== undefined){
-                 this.transaction.input = param.inputs
-              }
-              if(param.outputs !== undefined){
-                  this.transaction.output = param.outputs
-              }
-              if(param.fee !== undefined){
-                 this.transaction.fee = param.fee
-              }
+              const param = Array.isArray(this.prompt.data)? this.prompt.data[0] : this.prompt.data
+              const _tx = camelize(param)
+              const rawTransaction = _tx.rawTransaction
+              const currentAddress = this.netType === 'vapor'?
+                  this.currentAccount.vpAddress:
+                  this.currentAccount.address
 
-              const array = param.inputs.filter(action => action.type ==='spend')
+              account.setupNet(`${this.net}${this.netType}`)
 
-              if(array.length>0){
-                account.setupNet(`${this.net}${this.netType}`)
+              const tx = this.netType === 'vapor'?
+              bytomjslib.vapor.Transaction.decodeRawTransaction(rawTransaction):
+              bytomjslib.bytom.Transaction.decodeRawTransaction(rawTransaction)
+              this.transaction.fee = tx.fee/100000000
+              this.transaction.input = tx.inputs
+              this.transaction.output = tx.outputs
+
+              const inputs = tx.inputs.filter(i => i.address === currentAddress)
+              const outputs = tx.outputs.filter(i => i.address === currentAddress)
+              const inputAsset = inputs.map(i => i.assetID);
+              const outputAsset = outputs.map(i => i.assetID);
+
+              const asset = _.union(inputAsset, outputAsset)
+
+              let types = ["transfer"]
               const promise =
-                _(array)
-                  .groupBy('asset')
-                  .map((objs, key) => {
-                    return this.queryAsset(key).then(resp =>{
+                asset
+                  .map((assetId) => {
+                    return this.queryAsset(assetId).then(resp =>{
+                      const assetInput = inputs.filter(i => i.assetID ===assetId)
+                      const assetOutput = outputs.filter(o => o.assetID ===assetId)
+                      const inputAmount = new BigNumber(_.sumBy(assetInput, 'amount'))
+                      const outputAmount = new BigNumber(_.sumBy(assetOutput, 'amount'))
+
+                      const decimals = decimalsMap[this.net][assetId]
+                      const amount = inputAmount.minus(outputAmount).shiftedBy(-decimals)
+
                       return {
-                        'asset': key,
-                        'alias':resp.alias,
-                        'amount':Num.formatNue( _.sumBy(objs, 'amount'), resp.decimals)
+                        'asset': assetId,
+                        'alias': resp.symbol,
+                        'amount': amount.toString()
                       }
                     })
                   })
 
-                let that = this;
-                Promise.all(promise).then(function(output) {
-                  that.transaction.amounts = output
-                })
+              let that = this;
+              Promise.all(promise).then(function(output) {
+                that.transaction.amounts = output
+              })
 
-              }
+              const inputType = inputs.map(i => i.type);
+              const outputType = outputs.map(o => o.type);
+              types = _.union(inputType, outputType, types);
 
+              const remove = ['spend','control'];
+              types = removeFromArray(types, remove);
+              types = types.map(ty => this.$t(`common.${ty}`)).join(', ');
+
+              this.transaction.types = types
 
           }
       }

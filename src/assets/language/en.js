@@ -2,6 +2,18 @@ const en = {
   home:{
     title:"Bytom Wallet for Chrome"
   },
+  common:{
+    veto: 'Veto',
+    cross_chain_in: 'Cross In Vapor',
+    spend : 'Spend ',
+    coinbase: 'Coinbase',
+    control : 'Received ',
+    cross_chain_out: 'Cross Out Vapor',
+    vote: 'Vote',
+    transfer:'Transfer',
+    issue:'Issue',
+    retire:'Retire',
+  },
   welcome: {
     title: 'Welcome to the BYTOM Chrome Wallet',
     use: 'Start',
@@ -46,7 +58,8 @@ const en = {
     view:'View',
     hide:'Hide',
     viewAll:'View All',
-    hideAll:'Hide All'
+    hideAll:'Hide All',
+    types:'Types'
   },
   crossChain:{
     title:'Cross Chain',

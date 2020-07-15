@@ -100,6 +100,10 @@ export default class Bytomdapp {
     return _send(MsgTypes.SIGNMESSAGE, params)
   }
 
+  signTransaction(params) {
+    return _send(MsgTypes.SIGNTRANSACTION, params)
+  }
+
 
   //v1.0.0
   send_transaction(params) {

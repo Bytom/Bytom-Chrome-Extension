@@ -1,8 +1,9 @@
 export default class Settings {
 
     constructor(){
+        const uiLang = (chrome.i18n.getUILanguage().split('_')[0]).split('-')[0]
         this.domains = [];
-        this.language = 'ENGLISH';
+        this.language = uiLang||'en';
     }
 
     static placeholder(){ return new Settings(); }
