@@ -51,6 +51,9 @@
     background: #FAFAFA;
     border-radius: 8px;
   }
+  .logo{
+    margin-left:16px;
+  }
 
 </style>
 
@@ -68,14 +71,24 @@
       <div class="container">
        <div class="widget color-widget">
          <a @click="$router.push({ name: 'welcome-creation' })">
-           <h4 class="color-black">{{ $t('home.create')}}</h4>
-           <p>{{ $t('home.createHint')}}</p>
+           <div class="d-flex">
+             <div>
+               <h4 class="color-black">{{ $t('home.create')}}</h4>
+               <p>{{ $t('home.createHint')}}</p>
+             </div>
+             <img class="logo" src="@/assets/img/icon/wallet-create.svg" alt="">
+           </div>
          </a>
        </div>
-        <div class="widget">
+        <div class="widget" style="margin-top: 16px;">
           <a @click="$router.push({ name: 'welcome-import' })">
-            <h4 class="color-black">{{ $t('home.import')}}</h4>
-            <p>{{ $t('home.importHint')}}</p>
+            <div class="d-flex">
+              <div>
+                <h4 class="color-black">{{ $t('home.import')}}</h4>
+                <p>{{ $t('home.importHint')}}</p>
+              </div>
+              <img class="logo" src="@/assets/img/icon/wallet-import.svg" alt="">
+            </div>
           </a>
         </div>
       </div>
