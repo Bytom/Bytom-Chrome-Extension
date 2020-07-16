@@ -20,6 +20,21 @@
     justify-content: space-between;
     padding: 22.5px 0;
   }
+
+  .a-tag{
+    font-size: 12px;
+    line-height: 160%;
+    text-align: right;
+    letter-spacing: 0.2px;
+    color: #5A5A5A;
+  }
+
+  .a-tag.active{
+    color: #004EE4;
+  }
+  .font-12{
+    font-size: 12px;
+  }
 </style>
 <template>
   <section class="footer">
@@ -30,12 +45,13 @@
         <div class="text">Byone Wallet for Chrome</div>
       </div>
       <div>
-        <button @click="changeLanguage('zh')">
+        <a class="a-tag" v-bind:class="{ active: (language =='zh'||language =='cn') }"  @click="changeLanguage('cn')">
           中
-        </button>
-        <button @click="changeLanguage('en')">
+        </a>
+        <span class="font-12">/</span>
+        <a class="a-tag" v-bind:class="{ active: language =='en'  }" @click="changeLanguage('en')">
           En
-        </button>
+        </a>
       </div>
     </div>
   </section>
@@ -43,7 +59,7 @@
 
 <script>
   import * as Actions from '@/store/constants';
-  import {  mapGetters, mapState } from 'vuex'
+  import {  mapActions, mapGetters, mapState } from 'vuex'
 export default {
   computed: {
     ...mapState([
@@ -63,6 +79,9 @@ export default {
         this[Actions.UPDATE_STORED_BYTOM](bytom)
       }
     },
+    ...mapActions([
+      Actions.UPDATE_STORED_BYTOM,
+    ])
   }
 }
 </script>
