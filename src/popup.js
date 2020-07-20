@@ -11,9 +11,11 @@ import Routers from './router'
 import ViewBase from '@/views/viewBase'
 import Dialog from '@/components/dialog'
 import vSelect from '@/components/select'
+import Toast from '@/components/toast'
 import MenuPage from '@/components/menu-page'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
+import BackButton from '@/components/backButton'
 import messages, { getLanguage } from '@/assets/language'
 import '@/assets/style.css'
 import {store} from "./store/store";
@@ -34,7 +36,9 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
   Vue.use(Header)
   Vue.use(Footer)
   Vue.use(Loading)
+  Vue.use(BackButton)
   Vue.use(Dialog, i18n)
+  Vue.use(Toast, i18n)
   Vue.component('v-select', vSelect)
 
   Vue.prototype.$vuescrollConfig = {

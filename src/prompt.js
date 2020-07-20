@@ -12,7 +12,11 @@ import * as Actions from './store/constants'
 import Routers from './router'
 import ViewBase from '@/views/viewBase'
 import Dialog from '@/components/dialog'
+import Header from '@/components/header'
+import Footer from '@/components/footer'
 import vSelect from '@/components/select'
+import BackButton from '@/components/backButton'
+import Toast from '@/components/toast'
 import messages, { getLanguage } from '@/assets/language'
 import '@/assets/style.css'
 
@@ -29,6 +33,12 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
   Vue.use(VueRouter)
   Vue.use(Loading)
   Vue.use(Dialog, i18n)
+  Vue.use(Header)
+  Vue.use(Footer)
+  Vue.use(BackButton)
+  Vue.use(Toast, i18n)
+
+
   Vue.component('v-select', vSelect)
   Vue.filter('moment', function(value, formatString) {
     formatString = formatString || 'YYYY-MM-DD HH:mm:ss'
