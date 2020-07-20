@@ -171,11 +171,15 @@ const cn = {
     setting: '设置'
   },
   createAccount: {
-    title: '创建账户',
+    title: '创建钱包',
+    walletName:'请输入钱包名称',
+    password:'请设置密码',
+    confirmPassword: '请重复输入密码',
+
+
     accountAlias: '账户别名',
     keyAlias: '秘钥别名',
     keyPassword: '秘钥密码',
-    confirmPassword: '重复密码',
     create: '创建',
     select: '选择网络',
     file: '备份文件',

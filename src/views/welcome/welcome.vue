@@ -47,7 +47,7 @@
   .widget p{
     font-size: 13px;
   }
-  .color-widget{
+  .widget:hover, .widget:focus{
     background: #FAFAFA;
     border-radius: 8px;
   }
@@ -69,7 +69,7 @@
       <div class="divider"></div>
 
       <div class="container">
-       <div class="widget color-widget">
+       <div class="widget">
          <a @click="$router.push({ name: 'welcome-creation' })">
            <div class="d-flex">
              <div>

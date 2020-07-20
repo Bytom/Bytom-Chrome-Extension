@@ -1,35 +1,21 @@
 <style scoped>
-/*.content {*/
-    /*margin-left: 135px;*/
-/*}*/
-/*.content-cn {*/
-    /*margin-left: 85px;*/
-/*}*/
-/*.form-item-label {*/
-    /*width: 135px;*/
-/*}*/
-/*.form-item-label-cn {*/
-    /*width: 85px;*/
-/*}*/
-  .bg-image{
-    height: 420px;
-    width: 360px;
-    background-size: contain;
-    -webkit-clip-path: polygon(0 0, 100% 0, 100% 75%, 0% 100%);
-    clip-path: polygon(0 0, 100% 0, 100% 75%, 0% 100%);
-    position: absolute;
-  }
-  .header {
-    position: relative;
-    text-align: center;
-    margin:15px 20px 25px;
-  }
-  .header p{
-    font-size: 16px;
-    color: rgba(255,255,255,0.5);
-    padding-top: 5px;
-  }
-  .panel{
+
+.header {
+  position: relative;
+  margin:40px 0px 20px;
+  line-height: 37px;
+}
+.header p{
+  font-size: 16px;
+  color: rgba(255,255,255,0.5);
+  padding-top: 5px;
+}
+.container{
+  position: relative;
+  margin-top: 24px;
+}
+
+.panel{
     position: relative;
     padding: 10px;
     margin-bottom : 15px;
@@ -79,7 +65,10 @@
   }
   .form-checkbox{
     font-size: 14px;
-    padding: 5px;
+    padding: 5px 0;
+  }
+  .form-checkbox input{
+    margin-left:0px;
   }
   .topbar a{
     position: fixed;
@@ -105,29 +94,39 @@
     bottom: 20px;
     width: 320px;
   }
+  .welcome-title{
+    margin-top: 20px;
+  }
+  .btn-round{
+    padding: 15px 2px;
+  }
 </style>
 
 <template>
-    <div class="warp bg-gray">
-      <Header :title="$t('welcome.register')"></Header>
-
-          <div class="form panel">
+  <div>
+    <div class="warp bg-white">
+      <div class="header color-black">
+        <BackButton/>
+        <h1>
+          <div class="welcome-title">{{ $t('createAccount.title')}}</div>
+        </h1>
+      </div>
+      <div class="divider"></div>
+      <div class="container">
+          <div class="form">
             <div class="form-item">
-                  <label :class="formItemLabel">{{ $t('createAccount.accountAlias') }}</label>
                   <div :class="formItemContent">
-                      <input type="text" v-model="formItem.accAlias" autofocus>
+                      <input type="text" v-model="formItem.accAlias"  :placeholder="$t('createAccount.walletName')" autofocus>
                   </div>
               </div>
               <div class="form-item">
-                  <label :class="formItemLabel">{{ $t('createAccount.keyPassword') }}</label>
                   <div :class="formItemContent">
-                      <input type="password" v-model="formItem.passwd1">
+                      <input type="password" v-model="formItem.passwd1" :placeholder="$t('createAccount.password')" >
                   </div>
               </div>
               <div class="form-item">
-                  <label :class="formItemLabel">{{ $t('createAccount.confirmPassword') }}</label>
                   <div :class="formItemContent">
-                      <input type="password" v-model="formItem.passwd2">
+                      <input type="password" v-model="formItem.passwd2" :placeholder="$t('createAccount.confirmPassword')" >
                   </div>
               </div>
             <div class="form-checkbox">
@@ -137,11 +136,13 @@
               </label>
             </div>
           </div>
-          <div class="btn-group">
-              <div class="btn btn-primary" @click="create">{{ $t('createAccount.create') }}</div>
+          <div>
+            <div class="btn btn-primary btn-round float-right" @click="create"><i class="iconfont icon-right-arrow"></i></div>
           </div>
+        </div>
+     </div>
       <Footer/>
-    </div>
+  </div>
 </template>
 
 <script>
@@ -163,7 +164,7 @@ export default {
                 // keyAlias: "",
                 passwd1: "",
                 passwd2: "",
-                checked: false
+                checked: true
             },
             restore:{
                 fileTxt:"",
@@ -207,27 +208,27 @@ export default {
     methods: {
         create: function () {
             if (this.formItem.accAlias == "") {
-                this.$dialog.show({
-                    body: this.$t("createAccount.inputAlias")
-                });
+                this.$toast.error(
+                     this.$t("createAccount.inputAlias")
+                );
                 return;
             }
             if (this.formItem.passwd1 == "") {
-                this.$dialog.show({
-                    body: this.$t("createAccount.inputPass")
-                });
+                this.$toast.error(
+                     this.$t("createAccount.inputPass")
+                );
                 return;
             }
             if (this.formItem.passwd1 != this.formItem.passwd2) {
-                this.$dialog.show({
-                    body: this.$t('createAccount.passwordAgain'),
-                });
+                this.$toast.error(
+                     this.$t('createAccount.passwordAgain'),
+                );
                 return;
             }
             if (!this.formItem.checked) {
-                this.$dialog.show({
-                    body: this.$t('createAccount.agreeService'),
-                });
+                this.$toast.error(
+                     this.$t('createAccount.agreeService'),
+                );
                 return;
             }
             let loader = this.$loading.show({
@@ -243,9 +244,9 @@ export default {
               });
             }).catch(err => {
                 loader.hide();
-                this.$dialog.show({
-                    body: err.message,
-                });
+                this.$toast.error(
+                   err.message
+                )
             });
         },
         tirggerFile: function (event) {
@@ -259,9 +260,9 @@ export default {
         },
         recovery: function () {
           if (!this.restore.checked) {
-            this.$dialog.show({
-              body: this.$t('createAccount.agreeService'),
-            });
+            this.$toast.error(
+               this.$t('createAccount.agreeService'),
+            );
             return;
           }
           account.restore(this.restore.fileTxt).then(res => {
@@ -269,9 +270,9 @@ export default {
               this.$router.push('/');
             });
           }).catch(error => {
-            this.$dialog.show({
-              body: getLang(error.message, this.language)
-            });
+            this.$toast.error(
+               getLang(error.message, this.language)
+            );
           });
         },
         ...mapActions([

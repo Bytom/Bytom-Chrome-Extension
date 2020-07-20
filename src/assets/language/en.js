@@ -1,6 +1,11 @@
 const en = {
   home:{
-    title:"Bytom Wallet for Chrome"
+    welcome:"Welcome",
+    byone:" Byone Wallet",
+    create:"Create",
+    createHint:"创建一个新的钱包来存储和交易您的 BTM 及侧链代币",
+    import:"Import",
+    importHint:"如果您在其它网站或 App 上创建过钱包，可以在这里导入"
   },
   common:{
     veto: 'Veto',
@@ -168,11 +173,14 @@ const en = {
     setting: 'Setting'
   },
   createAccount: {
-    title: 'Create Account',
+    title: 'Create A Wallet',
+    walletName:'Please enter wallet\'s name',
+    password:'Please enter your password',
+    confirmPassword: 'Please repeat your password',
+
     accountAlias: 'Account Alias',
     keyAlias: 'Key Alias',
     keyPassword: 'Key Password',
-    confirmPassword: 'Confirm Password',
     create: 'Create an account',
     select: 'Select network',
     file: 'Backup file',

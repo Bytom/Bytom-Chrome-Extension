@@ -94,7 +94,7 @@ module.exports = {
   },
   plugins: [
     page({
-      title: 'popup title',
+      title: 'Byone',
       name: 'popup',
       chunks: ['popup']
     }),
