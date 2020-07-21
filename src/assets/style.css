@@ -574,7 +574,7 @@ select {
 
 .form-item-content {
   position: relative;
-  margin-bottom: 5px;
+  margin-bottom: 17px;
 }
 
 .form-item-content input,
@@ -582,7 +582,6 @@ input.form-item-content{
   height: 52px;
   background: #FAFAFA;
   border-radius: 8px;
-  margin-bottom: 12px;
   border: 0px;
   padding: 0 10px;
   width: calc(100% - 20px);
@@ -597,6 +596,22 @@ input.form-item-content:focus
   padding: 0 9px;
   width: calc(100% - 18px);
 
+}
+
+
+.form-item-content.error input:focus,
+input.form-item-content.error:focus
+{
+  height:50px;
+  border: 1px solid #FE1919;
+  padding: 0 9px;
+  width: calc(100% - 18px);
+  color:  #FE1919;
+}
+
+.error-text{
+  color:  #FE1919;
+  font-size: 12px;
 }
 
 .form-item-content input::placeholder,

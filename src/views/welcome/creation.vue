@@ -115,22 +115,43 @@
       <div class="container">
           <div class="form">
             <div class="form-item">
-                  <div :class="formItemContent">
-                      <input type="text" v-model="formItem.accAlias"  :placeholder="$t('createAccount.walletName')" autofocus>
+                  <div :class="[formItemContent, { 'error': $v.formItem.accAlias.$error }]">
+                      <input type="text"
+                             :placeholder="$t('createAccount.walletName')"
+                             id="accAlias"
+                             name="accAlias"
+                             ref="accAlias"
+                             v-model="$v.formItem.accAlias.$model"
+                             autofocus />
                   </div>
               </div>
               <div class="form-item">
-                  <div :class="formItemContent">
-                      <input type="password" v-model="formItem.passwd1" :placeholder="$t('createAccount.password')" >
+                  <div :class="[formItemContent, { 'error': $v.formItem.passwd1.$error }]">
+                      <input type="password"
+                             :placeholder="$t('createAccount.password')"
+                             id="passwd1"
+                             name="passwd1"
+                             ref="passwd1"
+                             v-model="$v.formItem.passwd1.$model"
+                      >
                   </div>
               </div>
               <div class="form-item">
-                  <div :class="formItemContent">
-                      <input type="password" v-model="formItem.passwd2" :placeholder="$t('createAccount.confirmPassword')" >
+                  <div :class="[formItemContent, { 'error': $v.formItem.passwd2.$error }]">
+                      <input type="password"
+                             :placeholder="$t('createAccount.confirmPassword')"
+                             id="passwd2"
+                             name="passwd2"
+                             ref="passwd2"
+                             v-model="$v.formItem.passwd2.$model"
+                      >
                   </div>
               </div>
             <div class="form-checkbox">
-              <input type="checkbox" id="checkbox1" v-model="formItem.checked">
+              <input type="checkbox"
+                     id="checkbox1"
+                     v-model="formItem.checked"
+              >
               <label for="checkbox1">
                 {{ $t('welcome.term1') }}<a class="color-green" @click="$router.push({ name: 'welcome-protocol' })">{{  $t('welcome.term2')}}</a>
               </label>
@@ -151,6 +172,8 @@ import { getLanguage } from '@/assets/language'
 import getLang from "../../assets/language/sdk";
 import { mapActions, mapGetters, mapState } from 'vuex'
 import * as Actions from '@/store/constants';
+import { required, sameAs } from "vuelidate/lib/validators";
+
 
 let mainNet = null;
 export default {
@@ -161,18 +184,30 @@ export default {
             selected: mainNet,
             formItem: {
                 accAlias: "",
-                // keyAlias: "",
                 passwd1: "",
                 passwd2: "",
                 checked: true
             },
-            restore:{
-                fileTxt:"",
-                checked: false
-            },
             activeTab: 'register'
         };
     },
+  validations: {
+    formItem: {
+      accAlias:{
+        required
+      },
+      passwd1:{
+        required
+      },
+      passwd2:{
+        required,
+        sameAsPassword: sameAs('passwd1')
+      },
+      checked:{
+        required
+      }
+    }
+  },
     computed: {
         formItemLabel: function () {
             if (this.i18n == "cn") {
@@ -207,47 +242,69 @@ export default {
     },
     methods: {
         create: function () {
-            if (this.formItem.accAlias == "") {
-                this.$toast.error(
-                     this.$t("createAccount.inputAlias")
-                );
-                return;
+          this.$v.$touch();
+          if (this.$v.$invalid) {
+            const formItem = this.$v.formItem
+            for (let key in Object.keys(formItem)) {
+              const input = Object.keys(formItem)[key];
+              if (input.includes("$")) return false;
+
+              if (formItem[input].$error) {
+                switch(input){
+                  case 'accAlias':
+                    this.$toast.error(
+                      this.$t("createAccount.inputAlias")
+                    );
+                    break;
+                  case 'passwd1':
+                    this.$toast.error(
+                      this.$t("createAccount.inputPass")
+                    );
+                    break;
+                  case 'passwd2':{
+                    if(!formItem[input].required){
+                      this.$toast.error(
+                        this.$t("createAccount.inputPass")
+                      );
+                      break;
+                    }else if(!formItem[input].sameAsPassword){
+                      this.$toast.error(
+                        this.$t('createAccount.passwordAgain'),
+                      );
+                      break;
+                    }
+                  }
+
+                }
+                this.$refs[input].focus();
+                break;
+              }
             }
-            if (this.formItem.passwd1 == "") {
-                this.$toast.error(
-                     this.$t("createAccount.inputPass")
-                );
-                return;
-            }
-            if (this.formItem.passwd1 != this.formItem.passwd2) {
-                this.$toast.error(
-                     this.$t('createAccount.passwordAgain'),
-                );
-                return;
-            }
+          } else {
             if (!this.formItem.checked) {
-                this.$toast.error(
-                     this.$t('createAccount.agreeService'),
-                );
-                return;
+              this.$toast.error(
+                this.$t('createAccount.agreeService'),
+              );
+              return;
             }
             let loader = this.$loading.show({
-                container: null,
-                canCancel: true,
-                onCancel: this.onCancel
+              container: null,
+              canCancel: true,
+              onCancel: this.onCancel
             });
             account.create(this.formItem.accAlias, null, this.formItem.passwd1).then(currentAccount => {
-              this[Actions.CREATE_NEW_BYTOM](this.selected.value).then(() =>{
+              this[Actions.CREATE_NEW_BYTOM](this.selected.value).then(() => {
                 loader.hide();
                 this.formItem = {};
                 this.$router.push('/');
               });
             }).catch(err => {
-                loader.hide();
-                this.$toast.error(
-                   err.message
-                )
+              loader.hide();
+              this.$toast.error(
+                err.message
+              )
             });
+          }
         },
         tirggerFile: function (event) {
           var reader = new FileReader();

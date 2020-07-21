@@ -3,9 +3,9 @@
 $toast-colors: () !default;
 $toast-colors: map-merge(
     (
-      "success": #28a745,
-      "info": #17a2b8,
-      "error": #dc3545,
+      "success": #06BE85,
+      "info": #004EE4,
+      "error": #FE1919,
     ),
     $toast-colors
 );

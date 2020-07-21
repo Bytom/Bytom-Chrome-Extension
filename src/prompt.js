@@ -19,6 +19,7 @@ import BackButton from '@/components/backButton'
 import Toast from '@/components/toast'
 import messages, { getLanguage } from '@/assets/language'
 import '@/assets/style.css'
+import Vuelidate from "vuelidate";
 
 
 store.dispatch(Actions.LOAD_BYTOM).then(() => {
@@ -33,6 +34,7 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
   Vue.use(VueRouter)
   Vue.use(Loading)
   Vue.use(Dialog, i18n)
+  Vue.use(Vuelidate)
   Vue.use(Header)
   Vue.use(Footer)
   Vue.use(BackButton)

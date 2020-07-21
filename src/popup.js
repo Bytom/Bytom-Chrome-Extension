@@ -20,7 +20,7 @@ import messages, { getLanguage } from '@/assets/language'
 import '@/assets/style.css'
 import {store} from "./store/store";
 import * as Actions from "./store/constants";
-
+import Vuelidate from 'vuelidate'
 
 store.dispatch(Actions.LOAD_BYTOM).then(() => {
   Vue.use(VueI18n)
@@ -29,6 +29,7 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
     locale: getLanguage(store.getters.language),
     messages
   })
+  Vue.use(Vuelidate)
   Vue.use(i18n)
   Vue.use(vuescroll)
   Vue.use(VueRouter)

@@ -191,6 +191,9 @@ const cn = {
     inputPass: '请输入密码',
     agreeService:'请阅读并同意使用条款。'
   },
+  error:{
+    BTM0000: '必填项'
+  },
   help: {
     title: '帮助',
     page: '帮助与信息'

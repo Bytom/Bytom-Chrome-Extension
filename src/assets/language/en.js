@@ -193,6 +193,9 @@ const en = {
     inputPass: 'Please enter your password.',
     agreeService:'Please read and agree the service term.'
   },
+  error:{
+    BTM0000: 'This field is required.'
+  },
   help: {
     title: 'Help',
     page: 'Info'
