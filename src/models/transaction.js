@@ -204,7 +204,7 @@ transaction.advancedTransfer = function(guid, transaction, password, arrayData, 
 
 
 function signTx(guid, transaction, password, context){
-  return bytom.accounts.getAccountXpub(guid).then((xpub)=>{
+  return bytom.accounts.getAccountXpubById(guid).then((xpub)=>{
     const keyArray = context.bytom.keychain.findIdentity(xpub);
     if(!keyArray){
       throw 'xpub not found'
