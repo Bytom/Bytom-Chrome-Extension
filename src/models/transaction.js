@@ -102,10 +102,14 @@ transaction.buildTransaction = function(address, inputs, outputs, gas, confirmat
   return retPromise;
 };
 
-transaction.signTransaction = function(guid, transaction, password) {
+transaction.signTransaction = function(guid, transaction, password, context) {
   let retPromise = new Promise((resolve, reject) => {
-    bytom.transaction
-      .signTransaction(guid, JSON.stringify(snakeize(transaction)), password)
+      signTx(
+        guid,
+        JSON.stringify(snakeize(transaction)),
+        password,
+        context
+      )
       .then(res => {
         resolve(res);
       })
@@ -130,10 +134,14 @@ transaction.decodeTransaction = function(rawTx) {
   return retPromise;
 };
 
-transaction.transfer = function(guid, transaction, password, address) {
+transaction.transfer = function(guid, transaction, password, address, context) {
   let retPromise = new Promise((resolve, reject) => {
-    bytom.transaction
-      .signTransaction(guid, JSON.stringify(snakeize(transaction)), password)
+      signTx(
+        guid,
+        JSON.stringify(snakeize(transaction)),
+        password,
+        context
+      )
       .then(ret => {
         bytom.transaction
           .submitPayment(address, ret.raw_transaction, ret.signatures)
@@ -160,10 +168,14 @@ transaction.signMessage = function(message, password, address) {
   return bytom.keys.signMessage(message, password,address);
 };
 
-transaction.advancedTransfer = function(guid, transaction, password, arrayData, address) {
+transaction.advancedTransfer = function(guid, transaction, password, arrayData, address, context) {
   let retPromise = new Promise((resolve, reject) => {
-    bytom.transaction
-      .signTransaction(guid, JSON.stringify(snakeize(transaction)), password)
+      signTx(
+        guid,
+        JSON.stringify(snakeize(transaction)),
+        password,
+        context
+      )
       .then(ret => {
         let signatures = ret.signatures
         if(arrayData){
@@ -188,5 +200,24 @@ transaction.advancedTransfer = function(guid, transaction, password, arrayData, 
 
   return retPromise;
 };
+
+
+
+function signTx(guid, transaction, password, context){
+  return bytom.accounts.getAccountXpub(guid).then((xpub)=>{
+    const keyArray = context.bytom.keychain.findIdentity(xpub);
+    if(!keyArray){
+      throw 'xpub not found'
+    }else{
+      const key = keyArray.key
+      return bytom.transaction
+        ._signTransaction(
+          transaction,
+          password,
+          key
+        )
+    }
+  })
+}
 
 export default transaction;

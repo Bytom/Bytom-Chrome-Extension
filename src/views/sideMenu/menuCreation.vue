@@ -108,7 +108,7 @@ export default {
 
             account.setupNet(`${this.net}`);
             if(this.netType === 'vapor'){
-              account.create(this.formItem.accAlias, null, this.formItem.passwd1).then((resp) => {
+              account.create(this.formItem.accAlias, null, this.formItem.passwd1, this).then((resp) => {
                 account.setupNet(`${this.net}vapor`);
                 return account.copy(resp.guid).then((currentRespAccount)=>{
                   this[Actions.CREATE_NEW_BYTOM_ACCOUNT](currentRespAccount).then(()=>{
@@ -124,7 +124,7 @@ export default {
                 });
               });
             }else{
-              account.create(this.formItem.accAlias, null, this.formItem.passwd1).then(account => {
+              account.create(this.formItem.accAlias, null, this.formItem.passwd1,this).then(account => {
                 this[Actions.CREATE_NEW_BYTOM_ACCOUNT](account).then(()=>{
                   loader.hide();
                   this.$router.push('/');
@@ -141,6 +141,7 @@ export default {
         },
         ...mapActions([
           Actions.CREATE_NEW_BYTOM_ACCOUNT,
+          Actions.UPDATE_STORED_BYTOM
         ])
     },
     mounted() { }
