@@ -292,8 +292,8 @@ export default {
               canCancel: true,
               onCancel: this.onCancel
             });
-            account.create(this.formItem.accAlias, null, this.formItem.passwd1).then(currentAccount => {
-              this[Actions.CREATE_NEW_BYTOM](this.selected.value).then(() => {
+            account.create(this.formItem.accAlias, null, this.formItem.passwd1, this).then(currentAccount => {
+              this[Actions.CREATE_NEW_BYTOM](this.selected.value).then(() =>{
                 loader.hide();
                 this.formItem = {};
                 this.$router.push('/');
@@ -335,6 +335,7 @@ export default {
         ...mapActions([
           Actions.CREATE_NEW_BYTOM,
           Actions.IMPORT_BYTOM,
+          Actions.UPDATE_STORED_BYTOM
         ])
     },
     watch: {

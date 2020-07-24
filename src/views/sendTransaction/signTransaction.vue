@@ -175,6 +175,9 @@ export default {
         };
     },
     computed: {
+      ...mapState([
+        'bytom'
+      ]),
       ...mapGetters([
         'currentAccount',
         'net',
@@ -196,7 +199,7 @@ export default {
             });
 
             if(Array.isArray(this.prompt.data)){
-                Promise.all(this.prompt.data.map( (rawdata) => transaction.signTransaction(this.currentAccount.guid, rawdata, this.password)))
+                Promise.all(this.prompt.data.map( (rawdata) => transaction.signTransaction(this.currentAccount.guid, rawdata, this.password, this)))
                     .then( (result) => {
                         loader.hide();
                         this.prompt.responder(result);
@@ -213,7 +216,7 @@ export default {
                         });
                     });
             }else{
-                transaction.signTransaction(this.currentAccount.guid,  this.prompt.data,  this.password).then( (result) => {
+                transaction.signTransaction(this.currentAccount.guid,  this.prompt.data,  this.password, this).then( (result) => {
                     loader.hide();
                     this.prompt.responder(result);
                     this.$dialog.show({
