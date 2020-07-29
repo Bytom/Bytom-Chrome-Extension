@@ -14,11 +14,20 @@ account.create = function(accountAlias, keyAlias, passwd, context) {
     }
 
     const _bytom = context.bytom.clone();
+
+    const accountObject = _bytom.keychain.pairs[accountAlias]
+    if(accountObject && accountObject.vMnemonic){
+      reject('Alias already exist, please use another alias.')
+    }
+
+    _bytom.keychain.removeUnverifyIdentity();
+
     const res = bytom.keys.createKey(keyAlias, passwd)
     bytom.accounts.createNewAccount(res.xpub).then(ret => {
       let resultObj =  Object.assign(res, ret)
       resultObj.alias = accountAlias
       resultObj.keyAlias = keyAlias
+      resultObj.vMnemonic = false
 
       _bytom.keychain.pairs[accountAlias] = resultObj
       _bytom.currentAccount = resultObj

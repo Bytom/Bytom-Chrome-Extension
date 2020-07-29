@@ -1,15 +1,19 @@
 <template>
     <div>
-        <i class="iconfont icon-back" @click="$router.go(-1)"></i>
+        <i class="iconfont icon-back" @click="goBack()"></i>
     </div>
 </template>
 
 <script>
 export default {
     props: {
-      msg:null,
+      des:null,
     },
     methods: {
+      goBack:function () {
+        this.des?
+          this.$router.push({name: this.des}): this.$router.go(-1)
+      }
     }
 };
 </script>

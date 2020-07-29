@@ -106,7 +106,7 @@
   <div>
     <div class="warp bg-white">
       <div class="header color-black">
-        <BackButton/>
+        <BackButton des="welcome"/>
         <h1>
           <div class="welcome-title">{{ $t('createAccount.title')}}</div>
         </h1>
@@ -293,11 +293,9 @@ export default {
               onCancel: this.onCancel
             });
             account.create(this.formItem.accAlias, null, this.formItem.passwd1, this).then(currentAccount => {
-              this[Actions.CREATE_NEW_BYTOM](this.selected.value).then(() =>{
                 loader.hide();
                 this.formItem = {};
                 this.$router.push('/mnemonic');
-              });
             }).catch(err => {
               loader.hide();
               this.$toast.error(

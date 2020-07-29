@@ -65,7 +65,7 @@
   <div>
     <div class="warp bg-white">
       <div class="header color-black">
-        <BackButton/>
+        <BackButton des="welcome-creation"/>
         <h1>
           <div class="welcome-title">{{ $t('mnemonic.title')}}</div>
         </h1>
@@ -75,7 +75,7 @@
           <div>
             <p class="hint">{{ $t('mnemonic.hint')}}</p>
             <div class="mnemnonic-box">
-                <span class="mnemonic" v-for="n in mnemonic">{{ n }}</span>
+                <span class="mnemonic" v-for="n in mnemonic">{{ n }}&nbsp;</span>
             </div>
           </div>
           <div>

@@ -42,7 +42,6 @@ export const actions = {
                   bytom.currentAccount={}
                 }
 
-                bytom.settings.login = true
                 bytom.settings.currency = "inCny"
                 bytom.settings.netType = ''
                 dispatch(Actions.UPDATE_STORED_BYTOM, bytom).then(_bytom => {
@@ -59,10 +58,9 @@ export const actions = {
             const bytom = Bytom.fromJson(state.bytom);
             bytom.settings.network = network;
             account.setupNet(`${network}`)
-            bytom.settings.login = true
 
             const language = bytom.settings.language
-          
+
             bytom.settings.currency = language ==='en'?'inUsd':"inCny"
             bytom.settings.netType = ''
             dispatch(Actions.UPDATE_STORED_BYTOM, bytom).then(_bytom => {

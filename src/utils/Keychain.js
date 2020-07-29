@@ -12,4 +12,11 @@ export default class Keychain {
   }
 
   findIdentity(publicKey){ return Object.values(this.pairs).find(id => id.xpub === publicKey); }
+
+  removeUnverifyIdentity(){
+    const pairObject = Object.values(this.pairs).filter(id => !id.vMnemonic );
+    for(let o of pairObject){
+      delete this.pairs[o.alias];
+    }
+  }
 }

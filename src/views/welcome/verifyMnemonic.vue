@@ -51,7 +51,7 @@
   <div>
     <div class="warp bg-white">
       <div class="header color-black">
-        <BackButton/>
+        <BackButton :des="'welcome-mnemonic'"/>
         <h1>
           <div class="welcome-title">{{ $t('verifyMnemonic.title')}}</div>
         </h1>
@@ -153,12 +153,15 @@ export default {
               return;
             }
 
-            this.$router.push('/');
+            const bytom = this.bytom.clone();
+            bytom.currentAccount.vMnemonic = true;
+            bytom.keychain.pairs[bytom.currentAccount.alias].vMnemonic = true;
+            this[Actions.UPDATE_STORED_BYTOM](bytom).then(()=>{
+              this.$router.push('/')
+            })
           }
         },
         ...mapActions([
-          Actions.CREATE_NEW_BYTOM,
-          Actions.IMPORT_BYTOM,
           Actions.UPDATE_STORED_BYTOM
         ])
     }

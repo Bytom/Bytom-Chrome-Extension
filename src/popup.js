@@ -63,12 +63,16 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
   const router = new VueRouter(RouterConfig)
   router.beforeEach((to, from, next) => {
     // wallet init
-    if (store.getters.login == undefined && to.name == 'home') {
+
+    if (!(store.getters.currentAccount) && to.name == 'home') {
       next({ name: 'welcome' })
+      return
+    }else if (!(store.getters.currentAccount && store.getters.vMnemonic)  && to.name == 'home') {
+      next({ name: 'welcome-verify-mnemonic' })
       return
     }
 
-    next()
+      next()
   })
   new Vue({
     el: '#app',
