@@ -21,7 +21,6 @@ import messages, { getLanguage } from '@/assets/language'
 import '@/assets/style.css'
 import Vuelidate from "vuelidate";
 
-
 store.dispatch(Actions.LOAD_BYTOM).then(() => {
   Vue.use(VueI18n)
   const i18n = new VueI18n({

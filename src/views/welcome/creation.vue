@@ -175,13 +175,13 @@ import * as Actions from '@/store/constants';
 import { required, sameAs } from "vuelidate/lib/validators";
 
 
-let mainNet = null;
+let testNet = null;
 export default {
     name: "",
     data() {
         return {
             nets: [],
-            selected: mainNet,
+            selected: testNet,
             formItem: {
                 accAlias: "",
                 passwd1: "",
@@ -296,7 +296,7 @@ export default {
               this[Actions.CREATE_NEW_BYTOM](this.selected.value).then(() =>{
                 loader.hide();
                 this.formItem = {};
-                this.$router.push('/');
+                this.$router.push('/mnemonic');
               });
             }).catch(err => {
               loader.hide();
@@ -344,14 +344,14 @@ export default {
         }
     },
     mounted() {
-        mainNet = { label: this.$t('main.mainNet'), value: "mainnet" };
-        this.nets = [mainNet];
+        testNet = { label: this.$t('main.testNet'), value: "testnet" };
+        this.nets = [testNet];
         if (this.net != undefined) {
-            if (this.net == "mainnet") {
-                this.selected = mainNet;
+            if (this.net == "testnet") {
+                this.selected = testNet;
             }
         } else {
-            this.selected = mainNet;
+            this.selected = testNet;
         }
         account.setupNet(`${this.selected.value}`);
         this.i18n = getLanguage(this.language);

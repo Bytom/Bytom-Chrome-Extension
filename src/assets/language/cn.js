@@ -191,8 +191,18 @@ const cn = {
     inputPass: '请输入密码',
     agreeService:'请阅读并同意使用条款。'
   },
+  mnemonic:{
+    "title":"备份助记词",
+    "hint":"请牢记助记词，一旦丢失您的资产将无法找回！"
+  },
+  verifyMnemonic:{
+    "title":"验证助记词",
+    "hint":"请按顺序输入助记词，单词中间用空格隔开",
+  },
   error:{
-    BTM0000: '必填项'
+    BTM0000: '必填项',
+    BTM0001:'请输入助记词',
+    BTM0002:'助记词验证失败，请输入正确助记词。',
   },
   help: {
     title: '帮助',

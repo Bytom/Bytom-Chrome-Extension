@@ -9,31 +9,28 @@ let account = {
 
 account.create = function(accountAlias, keyAlias, passwd, context) {
   let retPromise = new Promise((resolve, reject) => {
-    if(!keyAlias){
+    if (!keyAlias) {
       keyAlias = `${accountAlias}-key-${uuid.v4()}`
     }
 
     const _bytom = context.bytom.clone();
-    bytom.keys
-      .createKey(keyAlias, passwd)
-      .then(res => {
-        _bytom.keychain.keys[keyAlias] = res
-        context[Actions.UPDATE_STORED_BYTOM](_bytom).then(() => {
-            bytom.accounts
-              .createAccountUseServer(res.xpub, accountAlias)
-              .then(ret => {
-                resolve(ret)
-              })
-              .catch(error => {
-                reject(error)
-              })
-          })
-          .catch(error => {
-            reject(error)
-          })
+    const res = bytom.keys.createKey(keyAlias, passwd)
+    bytom.accounts.createNewAccount(res.xpub).then(ret => {
+      let resultObj =  Object.assign(res, ret)
+      resultObj.alias = accountAlias
+      resultObj.keyAlias = keyAlias
 
-        });
+      _bytom.keychain.pairs[accountAlias] = resultObj
+      _bytom.currentAccount = resultObj
 
+      context[Actions.UPDATE_STORED_BYTOM](_bytom).then(() => {
+        resolve(ret)
+      })
+        .catch(error => {
+          reject(error)
+        })
+
+    })
   })
   return retPromise
 }

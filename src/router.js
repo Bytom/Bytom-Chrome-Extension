@@ -214,6 +214,22 @@ const routers = [
     }
   },
   {
+    path: '/mnemonic',
+    name: 'welcome-mnemonic',
+    meta: { title: '备份助记词' },
+    component: resolve => {
+      require(['@/views/welcome/mnemonic.vue'], resolve)
+    }
+  },
+  {
+    path: '/verify-mnemonic',
+    name: 'welcome-verify-mnemonic',
+    meta: { title: '验证助记词' },
+    component: resolve => {
+      require(['@/views/welcome/verifyMnemonic.vue'], resolve)
+    }
+  },
+  {
     path: '/import',
     name: 'welcome-import',
     meta: { title: '创建账户' },

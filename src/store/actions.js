@@ -59,19 +59,15 @@ export const actions = {
             const bytom = Bytom.fromJson(state.bytom);
             bytom.settings.network = network;
             account.setupNet(`${network}`)
-            account.list().then(accounts => {
-              bytom.accountList = accounts;
-              if (accounts.length > 0) {
-                bytom.currentAccount = accounts[0];
-              }
+            bytom.settings.login = true
 
-              bytom.settings.login = true
-              bytom.settings.currency = "inCny"
-              bytom.settings.netType = ''
-              dispatch(Actions.UPDATE_STORED_BYTOM, bytom).then(_bytom => {
-                  dispatch(Actions.SET_BYTOM, Bytom.fromJson(_bytom));
-                  resolve();
-              })
+            const language = bytom.settings.language
+          
+            bytom.settings.currency = language ==='en'?'inUsd':"inCny"
+            bytom.settings.netType = ''
+            dispatch(Actions.UPDATE_STORED_BYTOM, bytom).then(_bytom => {
+                dispatch(Actions.SET_BYTOM, Bytom.fromJson(_bytom));
+                resolve();
             })
 
         })

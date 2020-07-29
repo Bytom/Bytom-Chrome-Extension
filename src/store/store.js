@@ -26,7 +26,7 @@ const getters = {
     language:state => state.bytom.settings.language,
     login:state => state.bytom.settings.login,
     currency:state => state.bytom.settings.currency,
-    keys: state => state.bytom.keychain.keys,
+    pairs: state => state.bytom.keychain.pairs,
 
     // FOR PROMPTS ONLY
     messages:state => state.prompt.data.messages || [],
