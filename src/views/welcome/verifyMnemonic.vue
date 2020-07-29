@@ -157,12 +157,13 @@ export default {
             bytom.currentAccount.vMnemonic = true;
             bytom.keychain.pairs[bytom.currentAccount.alias].vMnemonic = true;
             this[Actions.UPDATE_STORED_BYTOM](bytom).then(()=>{
-              this.$router.push('/')
+              this[Actions.PUSH_ALERT](this.$t("successMsg.createWallet"))
             })
           }
         },
         ...mapActions([
-          Actions.UPDATE_STORED_BYTOM
+          Actions.UPDATE_STORED_BYTOM,
+          Actions.PUSH_ALERT
         ])
     }
 };

@@ -31,6 +31,7 @@
 <template>
     <section id="app">
         <router-view></router-view>
+        <success></success>
     </section>
 </template>
 

@@ -17,9 +17,10 @@ const cn = {
     vote: '投票',
     transfer:'转账',
     issue:'资产发行',
-    retire:'资产销毁',
+    retire:'资产销毁'
   },
   welcome: {
+    enterMain:'进入主界面',
     title: '欢迎使用BYTOM精简Chrome钱包',
     use: '开始',
     terms: '使用条款',
@@ -203,6 +204,20 @@ const cn = {
     BTM0000: '必填项',
     BTM0001:'请输入助记词',
     BTM0002:'助记词验证失败，请输入正确助记词。',
+  },
+  successMsg:{
+    createWallet:{
+      header: '创建成功',
+      description:'请妥善保管好助记词。Enjoy it!'
+    },
+    restoreWallet:{
+      header: '导入成功',
+      description:'请妥善保管 Keystore 备份问文件，牢记验证密码。Enjoy it!'
+    },
+    transaction:{
+      header: '确认成功',
+      description:'交易已发送。Enjoy it!'
+    }
   },
   help: {
     title: '帮助',

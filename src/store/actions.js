@@ -86,23 +86,9 @@ export const actions = {
     },
 
 
-    // [Actions.PUSH_ALERT]:({state, commit}, error) => {
-    //     function waitForErrorResult(resolve){
-    //         if(state.alertResult) {
-    //             const alertResult = Object.assign({}, state.alertResult);
-    //             commit(Actions.CLEAR_ALERT_RESULT);
-    //             resolve(alertResult)
-    //         } else setTimeout(() => {
-    //             waitForErrorResult(resolve);
-    //         }, 100)
-    //     }
-    //
-    //     return new Promise((resolve, reject) => {
-    //         commit(Actions.PUSH_ALERT, error);
-    //         waitForErrorResult(resolve);
-    //     })
-    // },
-    // [Actions.PULL_ALERT]:({commit}) => commit(Actions.PULL_ALERT),
+    [Actions.PUSH_ALERT]:({commit}, error) => commit(Actions.PUSH_ALERT, error),
+
+    [Actions.PULL_ALERT]:({commit}) => commit(Actions.PULL_ALERT),
     // [Actions.PUSH_ALERT_RESULT]:({commit}, alertResult) => commit(Actions.PUSH_ALERT_RESULT, alertResult),
     // [Actions.CLEAR_ALERT_RESULT]:({commit}) => commit(Actions.CLEAR_ALERT_RESULT),
     //
