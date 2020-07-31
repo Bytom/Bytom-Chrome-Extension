@@ -30,8 +30,8 @@
         },
         methods: {
             cancel(){
-                this[Actions.PULL_ALERT]();
                 this.$router.push('/');
+                this[Actions.PULL_ALERT]();
             },
             ...mapActions([
                 Actions.PULL_ALERT,

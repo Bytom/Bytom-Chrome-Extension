@@ -75,7 +75,7 @@
           <div>
             <p class="hint">{{ $t('mnemonic.hint')}}</p>
             <div class="mnemnonic-box">
-                <span class="mnemonic" v-for="n in mnemonic">{{ n }}&nbsp;</span>
+                <span class="mnemonic" v-for="n in mnemonic">{{ n }} </span>
             </div>
           </div>
           <div>

@@ -87,8 +87,10 @@ export const actions = {
 
 
     [Actions.PUSH_ALERT]:({commit}, error) => commit(Actions.PUSH_ALERT, error),
-
     [Actions.PULL_ALERT]:({commit}) => commit(Actions.PULL_ALERT),
+
+    [Actions.SET_DATA]:({commit}, data) => commit(Actions.SET_DATA, data),
+    [Actions.CLEAR_DATA]:({commit}) => commit(Actions.CLEAR_DATA),
     // [Actions.PUSH_ALERT_RESULT]:({commit}, alertResult) => commit(Actions.PUSH_ALERT_RESULT, alertResult),
     // [Actions.CLEAR_ALERT_RESULT]:({commit}) => commit(Actions.CLEAR_ALERT_RESULT),
     //

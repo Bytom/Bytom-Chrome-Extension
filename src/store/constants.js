@@ -13,6 +13,9 @@ export const SET_SELECTED_VOTE = 'setSelectVote';
 export const LOCK = 'lock';
 export const DESTROY = 'destroy';
 
+export const SET_DATA = 'setData';
+export const CLEAR_DATA = 'clearData';
+
 export const PUSH_ALERT = 'pushAlert';
 export const PULL_ALERT = 'pullAlert';
 export const PUSH_ALERT_RESULT = 'pushAlertResult';

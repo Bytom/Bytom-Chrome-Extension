@@ -9,6 +9,8 @@ Vue.use(Vuex);
 const state = {
     bytom:null,
 
+    data:null,
+
     alerts:[],
     alertResult:null,
 

@@ -14,54 +14,11 @@
   position: relative;
   margin-top: 24px;
 }
-
-.panel{
-    position: relative;
-    padding: 10px;
-    margin-bottom : 15px;
-  }
   .container{
     position: relative;
   }
   .form-item{
     margin: 10px 0;
-  }
-  .btn-group{
-    padding: 0 20px;
-  }
-  .topbar{
-    height: 45px;
-    padding-top: 10px;
-  }
-.topbar .topbar-middle {
-  text-align: center;
-}
-
-/*.topbar img{*/
-  /*position: relative;*/
-  /*bottom: 23px;*/
-  /*right: 65px*/
-/*}*/
-
-  .v-select{
-    height: 32px;
-    width: 100%;
-    background: rgba(247,247,247,1);
-    font-size: 14px;
-    margin: auto;
-    border-bottom: 1px solid #E0E0E0;
-    /*padding-left: 20px;*/
-  }
-
-  .tabs{
-    color: rgba(255,255,255, 0.4);
-    text-align: center;
-  }
-  .tabs a{
-    margin: 0px 20px;
-  }
-  .tabs .active{
-    color: rgba(255,255,255, 1);
   }
   .form-checkbox{
     font-size: 14px;
@@ -78,21 +35,6 @@
   .topbar a i{
     font-size: 25px;
     color: white;
-  }
-  .file-selection{
-    height: 50px;
-    vertical-align: middle;
-    display: flex;
-    align-items: center;
-    border: 1px dashed #E0E0E0;
-    margin-top: 10px;
-    padding: 20px;
-    background: #F7F7F7;
-  }
-  .recovery-btn{
-    position: fixed;
-    bottom: 20px;
-    width: 320px;
   }
   .welcome-title{
     margin-top: 20px;
@@ -303,32 +245,6 @@ export default {
               )
             });
           }
-        },
-        tirggerFile: function (event) {
-          var reader = new FileReader();
-          reader.onload = e => {
-            this.restore.fileTxt = e.target.result;
-          };
-
-          var file = event.target.files[0];
-          reader.readAsText(file);
-        },
-        recovery: function () {
-          if (!this.restore.checked) {
-            this.$toast.error(
-               this.$t('createAccount.agreeService'),
-            );
-            return;
-          }
-          account.restore(this.restore.fileTxt).then(res => {
-            this[Actions.IMPORT_BYTOM]().then(() =>{
-              this.$router.push('/');
-            });
-          }).catch(error => {
-            this.$toast.error(
-               getLang(error.message, this.language)
-            );
-          });
         },
         ...mapActions([
           Actions.CREATE_NEW_BYTOM,

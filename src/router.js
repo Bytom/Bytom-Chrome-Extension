@@ -236,6 +236,14 @@ const routers = [
     component: resolve => {
       require(['@/views/welcome/import.vue'], resolve)
     }
+  },
+  {
+    path: '/restore-password',
+    name: 'welcome-password',
+    meta: { title: '密码' },
+    component: resolve => {
+      require(['@/views/welcome/password/setting.vue'], resolve)
+    }
   }
 ]
 export default routers

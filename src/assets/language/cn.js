@@ -31,6 +31,20 @@ const cn = {
     term1:'我同意',
     term2:'使用条款'
   },
+  restore:{
+    title:'导入钱包',
+    mnemonic:'助记词',
+    mHint:'请按顺序输入助记词，单词中间用空格隔开',
+    kFile:'Keystore 文件',
+    kFHint:'备份上传',
+    kText:'Keystore 纯文本',
+    kSHint:'请输入完整的 Keystore 纯文本',
+    sPassword:'设置密码',
+    vPassword:'验证密码',
+    passwordHint:'请牢记密码，交易、备份等操作需要验证密码！',
+    p1text:'请设置密码',
+    p2text:'请重复输入密码'
+  },
   dialog: {
     header: '提示',
     copy: {
@@ -204,6 +218,8 @@ const cn = {
     BTM0000: '必填项',
     BTM0001:'请输入助记词',
     BTM0002:'助记词验证失败，请输入正确助记词。',
+    BTM0003:'请选择Keystore文件。',
+    BTM0004:'请输入Keystore。',
   },
   successMsg:{
     createWallet:{
