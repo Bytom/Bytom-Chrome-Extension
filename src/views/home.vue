@@ -140,7 +140,7 @@
 </style>
 
 <template>
-    <div class="warp">
+    <div class="warp-menu">
         <section class="bg-image">
             <div class="topbar">
                 <div class="topbar-left">

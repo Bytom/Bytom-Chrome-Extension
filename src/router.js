@@ -1,9 +1,56 @@
 // import Pormpt from './views/prompt'
+export const RouteNames = {
+  HOME:'home',
+  ASSET:'asset',
+  ENTRY:'welcome',
+  CREATE_ACCOUNT:'welcome-creation',
+  MNEMONIC: 'welcome-mnemonic',
+  VERIFY_MNEMONIC: 'welcome-verify-mnemonic',
+  RESTORE_ACCOUNT:  'welcome-import',
+  SETTING_PASSWORD: 'welcome-password',
+  PROTOCOL: 'welcome-protocol',
+
+
+
+
+
+
+  // LOAD_FROM_BACKUP:'loadFromBackup',
+  // ONBOARDING:'onboarding',
+  // SHOW_MNEMONIC:'showMnemonic',
+  // MAIN_MENU:'mainMenu',
+  // SETTINGS:'settings',
+  //
+  TRANSFER:'transfer',
+  RECEIVE:'received',
+  // IDENTITIES:'identities',
+  // IDENTITY:'identity',
+  // KEYS:'keys',
+  // PERMISSIONS:'permissions',
+  // DOMAIN_PERMISSIONS:'domainPermissions',
+  // HISTORY:'history',
+  //
+  // NETWORKS:'networks',
+  // NETWORK:'network',
+  // CHANGE_PASSWORD:'changePassword',
+  // BACKUP:'backup',
+  // DESTROY:'destroy',
+  // AUTO_LOCK:'autoLock',
+  // LANGUAGE:'language',
+  // KEYPAIRS:'keypairs',
+  //
+  // PROMPT_REQUEST_IDENTITY:`${promptPrefix}${PromptTypes.REQUEST_IDENTITY}`,
+  // PROMPT_REQUEST_SIGNATURE:`${promptPrefix}${PromptTypes.REQUEST_SIGNATURE}`,
+  // PROMPT_REQUEST_ARBITRARY_SIGNATURE:`${promptPrefix}${PromptTypes.REQUEST_ARBITRARY_SIGNATURE}`,
+  // PROMPT_REQUEST_ADD_NETWORK:`${promptPrefix}${PromptTypes.REQUEST_ADD_NETWORK}`,
+  // PROMPT_REQUEST_UNLOCK:`${promptPrefix}${PromptTypes.REQUEST_UNLOCK}`,
+  // PROMPT_UPDATE_VERSION:`${promptPrefix}${PromptTypes.UPDATE_VERSION}`,
+};
 
 const routers = [
   {
     path: '/',
-    name: 'home',
+    name: RouteNames.HOME,
     meta: { title: '首页' },
     component: resolve => {
       require(['@/views/home.vue'], resolve)
@@ -11,7 +58,7 @@ const routers = [
     children: [
       {
         path: '/transfer',
-        name: 'transfer',
+        name: RouteNames.TRANSFER,
         meta: { title: '转账' },
         component: resolve => {
           require(['@/views/sendTransaction/transfer.vue'], resolve)
@@ -19,7 +66,7 @@ const routers = [
       },
       {
         path: '/asset',
-        name: 'asset',
+        name: RouteNames.ASSET,
         meta: { title: '资产' },
         component: resolve => {
           require(['@/views/assetList.vue'], resolve)
@@ -99,7 +146,7 @@ const routers = [
       },
       {
         path: '/received',
-        name: 'received',
+        name: RouteNames.RECEIVE,
         meta: { title: '接收' },
         component: resolve => {
           require(['@/views/received.vue'], resolve)
@@ -191,7 +238,7 @@ const routers = [
   },
   {
     path: '/protocol',
-    name: 'welcome-protocol',
+    name: RouteNames.PROTOCOL,
     meta: { title: '用户协议' },
     component: resolve => {
       require(['@/views/welcome/protocol.vue'], resolve)
@@ -199,7 +246,7 @@ const routers = [
   },
   {
     path: '/welcome',
-    name: 'welcome',
+    name: RouteNames.ENTRY,
     meta: { title: '创建账户' },
     component: resolve => {
       require(['@/views/welcome/welcome.vue'], resolve)
@@ -207,7 +254,7 @@ const routers = [
   },
   {
     path: '/creation',
-    name: 'welcome-creation',
+    name: RouteNames.CREATE_ACCOUNT,
     meta: { title: '创建账户' },
     component: resolve => {
       require(['@/views/welcome/creation.vue'], resolve)
@@ -215,7 +262,7 @@ const routers = [
   },
   {
     path: '/mnemonic',
-    name: 'welcome-mnemonic',
+    name: RouteNames.MNEMONIC,
     meta: { title: '备份助记词' },
     component: resolve => {
       require(['@/views/welcome/mnemonic.vue'], resolve)
@@ -223,7 +270,7 @@ const routers = [
   },
   {
     path: '/verify-mnemonic',
-    name: 'welcome-verify-mnemonic',
+    name: RouteNames.VERIFY_MNEMONIC,
     meta: { title: '验证助记词' },
     component: resolve => {
       require(['@/views/welcome/verifyMnemonic.vue'], resolve)
@@ -231,7 +278,7 @@ const routers = [
   },
   {
     path: '/import',
-    name: 'welcome-import',
+    name: RouteNames.RESTORE_ACCOUNT,
     meta: { title: '创建账户' },
     component: resolve => {
       require(['@/views/welcome/import.vue'], resolve)
@@ -239,7 +286,7 @@ const routers = [
   },
   {
     path: '/restore-password',
-    name: 'welcome-password',
+    name: RouteNames.SETTING_PASSWORD,
     meta: { title: '密码' },
     component: resolve => {
       require(['@/views/welcome/password/setting.vue'], resolve)

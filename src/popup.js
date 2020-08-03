@@ -17,6 +17,7 @@ import Header from '@/components/header'
 import Footer from '@/components/footer'
 import BackButton from '@/components/backButton'
 import Success from '@/components/Success.vue'
+import Menubar from '@/components/MenubarComponent.vue'
 import messages, { getLanguage } from '@/assets/language'
 import '@/assets/style.css'
 import {store} from "./store/store";
@@ -42,6 +43,7 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
   Vue.use(Dialog, i18n)
   Vue.use(Toast, i18n)
   Vue.component('success', Success)
+  Vue.component('menu-bar', Menubar)
   Vue.component('v-select', vSelect)
 
   Vue.prototype.$vuescrollConfig = {
