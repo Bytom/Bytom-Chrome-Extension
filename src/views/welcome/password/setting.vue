@@ -57,7 +57,7 @@
       <div class="header color-black">
         <BackButton/>
         <h1>
-          <div class="welcome-title">{{ data.mnemonic? $t('restore.sPassword'):$t('restore.vPassword')}}</div>
+          <div class="welcome-title">{{ (data && data.mnemonic)? $t('restore.sPassword'):$t('restore.vPassword')}}</div>
         </h1>
       </div>
       <div class="divider"></div>
@@ -235,7 +235,7 @@
             }).catch(err => {
               loader.hide();
               this.$toast.error(
-                err.message
+                err.message || err
               )
             });
           }else if(keystore){
@@ -248,7 +248,7 @@
             }).catch(err => {
               loader.hide();
               this.$toast.error(
-                err.message
+                err.message || err
               )
             });
 

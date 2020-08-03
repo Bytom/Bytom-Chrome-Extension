@@ -60,7 +60,7 @@ account.restoreByMnemonic = function(accountAlias, mnemonic, passwd, context) {
 
     const res = bytom.keys.restoreFromMnemonic(keyAlias, passwd, mnemonic)
 
-    bytom.wallet.list(res.xPub).then(wallet =>{
+    bytom.wallet.list(res.xpub).then(wallet =>{
       let walletInfo
       if(wallet.length>0){
         let ret = {
@@ -109,7 +109,7 @@ account.restoreByKeystore = function(accountAlias, keystore, password, context) 
 
     const res = bytom.keys.restoreFromKeystore(password, keystore)
 
-    bytom.wallet.list(res.xPub).then(wallet =>{
+    bytom.wallet.list(res.xpub).then(wallet =>{
       let walletInfo
       if(wallet.length>0){
         let ret = {
@@ -123,10 +123,12 @@ account.restoreByKeystore = function(accountAlias, keystore, password, context) 
       }
 
       walletInfo.then(ret => {
-        let resultObj =  Object.assign(res, ret)
+        let resultObj =  Object.assign(ret, {})
         resultObj.alias = accountAlias
         resultObj.keyAlias = res.keyAlias
         resultObj.vMnemonic = true
+        resultObj.keystore = keystore
+        resultObj.xpub = res.xpub
 
         _bytom.keychain.pairs[accountAlias] = resultObj
         _bytom.currentAccount = resultObj
@@ -225,6 +227,10 @@ account.backup = function() {
 
 account.isValidMnemonic = function(mnemonic) {
   return bytom.keys.isValidMnemonic(mnemonic)
+}
+
+account.isValidKeystore = function(keystore) {
+  return bytom.keys.isValidKeystore(keystore)
 }
 
 

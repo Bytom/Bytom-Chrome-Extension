@@ -344,11 +344,21 @@
               );
               return
             }
-            this[Actions.SET_DATA]({
-              keystore: this.formItem.keystoreF
-            }).then(() => {
-              this.$router.push('/restore-password');
-            });
+
+            try{
+              const keystore = account.isValidKeystore(this.formItem.keystoreF)
+              this[Actions.SET_DATA]({
+                keystore: keystore
+              }).then(() => {
+                this.$router.push('/restore-password');
+              });
+            }catch (e){
+              this.$toast.error(
+                e.message || e
+              );
+              return
+            }
+
             break;
           }
           case 'ktext':
@@ -360,11 +370,20 @@
               return
             }
 
-            this[Actions.SET_DATA]({
-              keystore: this.formItem.keystore
-            }).then(() => {
-              this.$router.push('/restore-password');
-            });
+            try{
+              const keystore = account.isValidKeystore(this.formItem.keystore)
+              this[Actions.SET_DATA]({
+                keystore: keystore
+              }).then(() => {
+                this.$router.push('/restore-password');
+              });
+            }catch (e){
+              this.$toast.error(
+                e.message || e
+              );
+              return
+            }
+
             break;
           }
         }

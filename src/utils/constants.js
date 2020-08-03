@@ -26,9 +26,9 @@ export const networks = {
 }
 
 export const networksJS = {
-  mainnet: `${networks['mainnet']}/bytom/v3/`,
+  mainnetbytom: `${networks['mainnet']}/bytom/v3/`,
   mainnetvapor: `${networks['mainnet']}/vapor/v3/` ,
-  testnet: `${networks['testnet']}:4000/bytom/v3/`,
+  testnetbytom: `${networks['testnet']}:4000/bytom/v3/`,
   testnetvapor: `${networks['testnet']}:3000/vapor/v3/` ,
 }
 
