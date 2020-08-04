@@ -1,4 +1,4 @@
-<style lang="" scoped>
+<style lang="scss" scoped>
 .warp {
     z-index: 1;
 }
@@ -43,7 +43,7 @@
 .content {
     margin-top: 25px;
     text-align: center;
-    padding: 0 30px 10px;
+    padding: 20px;
 }
 
 .content .amount {
@@ -58,18 +58,21 @@
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  text-align:center;
-  position: absolute;
-  width: 320px;
+  text-align: center;
+  max-width: 300px;
   height: 102px;
-  left: 20px;
-  top: 165px;
-  background: #FFFFFF;
-  box-shadow: 0px 2px 16px rgba(0, 0, 0, 0.08);
   border-radius: 4px;
-  color: black;
+  color: white;
   font-size: 12px;
+  margin-left: auto;
+  margin-right: auto;
+
+  a:hover .icon, a:focus .icon, a:active .icon{
+    background: rgba(255, 255, 255, 0.2);
+  }
 }
+
+
 
 .transaction-title{
   margin-top: 55px;
@@ -116,37 +119,32 @@
   display: block;
 }
 
-  .bg-image{
-    height: 216px;
-  }
 
 .icon{
   width: 40px;
   height: 40px;
-}
-.icon-crosschain-svg{
-  background-image: url('../assets/img/icon/crosschain.svg');
-}
-.icon-vote-svg{
-  background-image: url('../assets/img/icon/vote.svg');
-}
-.icon-receive-svg{
-  background-image: url('../assets/img/icon/receive.svg');
-}
-.icon-send-svg{
-  background-image: url('../assets/img/icon/send.svg');
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 5px;
 }
 
+  .balance-bg{
+    height: 168px;
+
+    background: linear-gradient(228.34deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.1) 100%), #1A1A1A;
+    border-radius: 8px;
+  }
 </style>
 
 <template>
     <div class="warp-menu">
-        <section class="bg-image">
+        <section>
             <div class="topbar">
-                <div class="topbar-left">
-                    <a class="btn-menu" @click="openMenu">
-                        <i class="iconfont icon-menu"></i>
-                    </a>
+                <div v-if="address!=undefined" >
+                  <span class="alias color-grey">{{currentAccount.alias}}</span>
                 </div>
                 <div class="topbar-middle bg-secondary">
                     <select class="network-select" :value="netType||'bytom'" @change="netTypeToggle">
@@ -155,47 +153,30 @@
                     </select>
                 </div>
             </div>
-            <div class="content">
-                <div v-if="address!=undefined" class="amount color-white">
-                    <span class="alias color-grey">{{currentAccount.alias}}</span>
+            <div class="content balance-bg">
+                <div class="amount color-white">
+                    <div>{{ $t('main.totalAsset') }}</div>
                     <div class="token-amount">
                         {{accountBalance}}
                     </div>
                 </div>
-                <div v-else>
-                  <p style="width: 250px; margin: 45px auto; text-align: center;">{{ $t('main.noAccount') }}</p>
+              <div class="btn-send-transfer">
 
-                </div>
-            </div>
-            <div v-if="netType =='vapor' && address!=undefined" class="btn-send-transfer">
-
-                <a @click="listVoteOpen">
-                  <div class="icon icon-vote-svg"></div>
-                  <div>{{ $t('main.vote') }}</div>
-                </a>
-                <a @click="crossChainOpen">
-                  <div class="icon icon-crosschain-svg"></div>
-                  <div>{{ $t('main.crossChain') }}</div>
+                <a  @click="transferOpen">
+                  <i class="icon iconfont iconsend"></i>
+                  <div>{{ $t('main.send') }}</div>
                 </a>
                 <a  @click="showQrcode">
-                  <div class="icon icon-receive-svg"></div>
+                  <i class="icon iconfont iconrecvice"></i>
                   <div>{{ $t('main.receive') }}</div>
                 </a>
-                <a  @click="transferOpen">
-                  <div class="icon icon-send-svg"></div>
-                  <div>{{ $t('main.send') }}</div>
+                <a @click="crossChainOpen">
+                  <i class="icon iconfont iconcross"></i>
+                  <div>{{ $t('main.crossChain') }}</div>
                 </a>
+              </div>
             </div>
-            <div v-else-if="address!=undefined" class="btn-send-transfer">
-                <a @click="showQrcode">
-                  <div class="icon icon-receive-svg"></div>
-                  <div>{{ $t('main.receive') }}</div>
-                </a>
-                <a @click="transferOpen">
-                  <div class="icon icon-send-svg"></div>
-                  <div>{{ $t('main.send') }}</div>
-                </a>
-            </div>
+
         </section>
       <section v-if="address!=undefined" class="transaction-title">
       <h3 class="color-black">{{ $t('main.asset') }}</h3>

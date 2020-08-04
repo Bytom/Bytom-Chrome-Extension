@@ -160,7 +160,8 @@ const cn = {
     unconfirmed :'未确认交易',
     noRecord:"没有交易记录",
     noAssetRecord:"没有资产记录",
-    network:'网络'
+    network:'网络',
+    totalAsset:'总资产'
   },
   transactionDetail: {
     title: '交易详情',
