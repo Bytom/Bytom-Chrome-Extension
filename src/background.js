@@ -57,6 +57,9 @@ export default class Background {
       case MsgTypes.ENABLE:
         Background.authenticate(sendResponse, message.payload)
         break
+      case MsgTypes.DISABLE:
+        Background.disauthenticate(sendResponse, message.payload)
+        break
       case MsgTypes.SET_PROMPT:
         Background.setPrompt(sendResponse, message.payload);
         break;
@@ -334,6 +337,29 @@ export default class Background {
             }
           }
         }));
+      }
+    })
+  }
+
+  static disauthenticate(sendResponse, payload){
+    Background.load(bytom => {
+      const domain = payload.domain;
+
+      var index = bytom.settings.domains.indexOf(domain);
+      if(index !== -1) {
+        NotificationService.open(new Prompt(PromptTypes.REQUEST_AUTH, payload.domain, {type:'dis'}, approved => {
+          if(approved === false || approved.hasOwnProperty('isError')) sendResponse(approved);
+          else {
+            bytom.settings.domains.splice(index, 1);
+            if(approved === true){
+              this.update(() => sendResponse({status:'success'}), bytom);
+            }else{
+              this.update(() => sendResponse(approved), bytom);
+            }
+          }
+        }));
+      } else{
+        sendResponse(Error.disauth());
       }
     })
   }

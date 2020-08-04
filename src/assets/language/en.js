@@ -115,6 +115,13 @@ const en = {
     cancel:'Cancel',
     confirm:'Connect'
   },
+  disable:{
+    title:'Disable Request',
+    domain: 'Domain',
+    message: 'would like to diable your connection',
+    cancel:'Cancel',
+    confirm:'Disable'
+  },
   receive:{
     address: 'Address',
     tips:'Tips: Click address to copy directly.',

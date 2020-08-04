@@ -65,14 +65,14 @@
   <div class="warp bg-gray">
     <section class="header bg-header">
       <i class="iconfont icon-back" @click="denied"></i>
-      <p>{{$t('enable.title')}}</p>
+      <p>{{ isDisAuth? $t('disable.title'): $t('enable.title')}}</p>
     </section>
 
     <section class="content bg-white">
       <table>
         <tbody>
           <tr class="row">
-            <td class="col label">{{$t('enable.domain')}}</td>
+            <td class="col label">{{ isDisAuth? $t('disable.domain'): $t('enable.domain') }}</td>
             <td  class="col value">{{prompt.domain}}</td>
           </tr>
         </tbody>
@@ -80,12 +80,12 @@
     </section>
 
     <section class="content bg-white">
-      <div class="message">{{$t('enable.message')}}</div>
+      <div class="message">{{ isDisAuth? $t('disable.message'): $t('enable.message') }}</div>
     </section>
 
     <div class="row btn-container" style="bottom: 20px; left: 20px; position: absolute;">
-      <div class="btn" @click="denied">{{$t('enable.cancel')}}</div>
-      <div class="btn bg-green" @click="accepted">{{$t('enable.confirm')}}</div>
+      <div class="btn" @click="denied">{{ isDisAuth? $t('disable.cancel'): $t('enable.cancel') }}</div>
+      <div class="btn bg-green" @click="accepted">{{ isDisAuth? $t('disable.confirm'): $t('enable.confirm') }}</div>
     </div>
 
   </div>
@@ -100,7 +100,8 @@ import NotificationService from '../../services/NotificationService'
 export default {
     data() {
         return {
-            prompt:''
+            prompt:'',
+            isDisAuth: false
         };
     },
     computed: {
@@ -118,6 +119,7 @@ export default {
       }
     }, mounted() {
         this.prompt = window.data || apis.extension.getBackgroundPage().notification || null;
+        this.isDisAuth = (this.prompt.data.type == 'dis')
       }
 };
 </script>
