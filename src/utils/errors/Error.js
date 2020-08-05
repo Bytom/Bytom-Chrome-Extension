@@ -49,7 +49,7 @@ export default class Error {
   }
 
   static signatureAccountMissing(){
-    return this.signatureError("account_missing", "Missing required accounts, repull the identity");
+    return this.signatureError("account_missing", "Missing required accounts, please create an account");
   }
 
   static malformedRequiredFields(){
