@@ -109,6 +109,7 @@ class Content {
         this.transfer(msg.type, networkMessage)
         break
       case MsgTypes.ENABLE:
+      case MsgTypes.DISABLE:
         this.enable(msg.type, networkMessage)
         break
       default:

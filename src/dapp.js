@@ -83,6 +83,15 @@ export default class Bytomdapp {
       })
   }
 
+  disable(){
+    return _send(MsgTypes.DISABLE)
+      .then(async (res) =>{
+        this.default_account = '';
+        this.defaultAccount = '';
+        return res;
+      })
+  }
+
   //v1.4.0
   setChain(params) {
     return _send(MsgTypes.SETCHAIN, params)
@@ -98,6 +107,10 @@ export default class Bytomdapp {
 
   signMessage(params) {
     return _send(MsgTypes.SIGNMESSAGE, params)
+  }
+
+  signTransaction(params) {
+    return _send(MsgTypes.SIGNTRANSACTION, params)
   }
 
 

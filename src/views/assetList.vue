@@ -339,7 +339,7 @@ export default {
                 formattedTransactions.push(transaction);
               }else{
                 transaction.val =  0
-                transaction.address = address.short(this.currentAccount.address)
+                transaction.address = address.short(this.address)
 
                 formattedTransactions.push(transaction);
               }

@@ -89,9 +89,21 @@
   }
   .btn-container .btn{
     height: 48px;
-    bottom: 20px;
+    top: 20px;
     position: absolute;
     width: 320px;
+  }
+  .hide{
+    width: 175px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .view-link{
+    font-size: 14px;
+    color: #035BD4;
+    width: 275px;
+    display: block;
   }
 </style>
 
@@ -129,7 +141,14 @@
 
           <tr class="row">
             <td class="col label">{{ $t('signMessage.message') }}</td>
-            <td class="col value">{{message}}</td>
+            <td class="col value" v-bind:class="{ hide: !full }" >{{message}}</td>
+          </tr>
+          <tr class="row">
+            <td colspan="2" class="center-text">
+              <a v-on:click="full = !full"  class="view-link">
+                {{ full? $t('transfer.hideAll'): $t('transfer.viewAll') }} >>
+              </a>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -145,7 +164,7 @@
       </div>
     </section>
 
-    <div class="row btn-container" style="margin: 20px; position: static;">
+    <div class="row btn-container" style="margin: 20px; position: relative; height:80px;">
       <div class="btn bg-green" @click="sign">{{ $t('signMessage.confirmSignature') }}</div>
     </div>
 
@@ -159,6 +178,8 @@ import getLang from "@/assets/language/sdk";
 import { BTM } from "@/utils/constants";
 import {apis} from '@/utils/BrowserApis';
 import NotificationService from '../../services/NotificationService'
+import { mapGetters } from 'vuex'
+
 
 export default {
     data() {
@@ -174,6 +195,11 @@ export default {
         };
     },
     computed: {
+      ...mapGetters([
+        'net',
+        'netType',
+        'accountList'
+      ])
     },
     watch: {
     },
@@ -215,20 +241,17 @@ export default {
             this.message = object.message
         }
 
-        account.setupNet(localStorage.bytomNet);
-        account.list().then(accounts => {
-          const account = accounts.filter(a => a.address === this.address)[0]
+        const account = this.accountList.filter(a => (a.address === this.address || a.vpAddress === this.address) )[0]
+        this.account = account
 
-          const balances = account.balances
-          let balance = 0
-          if(balances.length > 0){
-            const balanceObject = balances.filter(b => b.asset === BTM)[0]
-            balance = balanceObject.balance/Math.pow(10,balanceObject.decimals)
-          }
-          this.accountBalance = balance
+        const balances = this.netType ==='vapor'? account.vpBalances : account.balances
+        let balance = 0
+        if(balances.length > 0){
+          const balanceObject = balances.filter(b => b.asset.assetId === BTM)[0]
+          balance = balanceObject.availableBalance
+        }
 
-          this.account = account
-        });
+        this.accountBalance = balance
       }
 };
 </script>

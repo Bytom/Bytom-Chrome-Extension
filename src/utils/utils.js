@@ -46,3 +46,7 @@ export const snakeize = (object) => {
 
   return object
 }
+
+export function removeFromArray(original, remove) {
+  return original.filter(value => !remove.includes(value));
+}

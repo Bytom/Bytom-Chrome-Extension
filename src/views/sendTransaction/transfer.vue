@@ -331,8 +331,9 @@ export default {
         //detect injection
         if(this.$route.query.type === 'popup'){
           if (this.$route.query.from != undefined) {
-              this.guid = this.$route.query.from
-              this.account = this.accountList.filter(e => e.guid === this.guid)[0]
+              this.address = this.$route.query.from
+              this.guid = this.currentAccount.guid
+              this.account = this.currentAccount
           }
 
           if (this.$route.query.asset != undefined) {
@@ -341,9 +342,7 @@ export default {
             this.transaction.asset= currentAssetId
 
             const assets = this.assets
-            this.selectAsset = assets.filter(b => b.asset === currentAssetId.toLowerCase())[0]
-
-
+            this.selectAsset = assets.filter(b => b.assetId === currentAssetId.toLowerCase())[0]
           }
           if (this.$route.query.to != undefined) {
               this.transaction.to = this.$route.query.to
