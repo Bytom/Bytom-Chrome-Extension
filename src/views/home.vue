@@ -76,8 +76,8 @@
 }
 .transactions {
   font-size: 15px;
-  height: 283px;
   overflow: auto;
+  flex-grow: 1;
 }
 .list-item {
   position: relative;
@@ -88,6 +88,7 @@
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.04);
   border-radius: 8px;
   padding: 14px;
+  margin-bottom: 12px;
 
   &:hover, &:focus, &:active{
     border: 1px solid #004EE4;
@@ -135,6 +136,10 @@
 
     background: linear-gradient(228.34deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.1) 100%), #1A1A1A;
     border-radius: 8px;
+  }
+
+  .vapor-bg{
+    background: linear-gradient(228.34deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.16) 100%), #0A42D0;
   }
 
   .total-asset{
@@ -230,6 +235,11 @@ input:checked + .slider:before {
     display: flex;
     align-items: center;
   }
+
+  .warp-menu{
+    display: flex;
+    flex-direction: column;
+  }
 </style>
 
 <template>
@@ -250,7 +260,7 @@ input:checked + .slider:before {
                   </label>
                 </div>
             </div>
-            <div class="content balance-bg">
+            <div :class="['content balance-bg',{ 'vapor-bg': isVapor }]">
                 <div class="amount color-white">
                     <div class="total-asset">{{ $t('main.totalAsset') }}</div>
                     <div class="token-amount">
@@ -350,7 +360,6 @@ input:checked + .slider:before {
 <script>
 import address from "@/utils/address";
 import account from "@/models/account";
-import transaction from "@/models/transaction";
 import { camelize } from "@/utils/utils";
 import { BTM } from "@/utils/constants";
 import { mapActions, mapGetters, mapState } from 'vuex'
@@ -365,11 +374,8 @@ export default {
     name: "",
     data() {
         return {
-            isVapor: (this.netType == 'vapor'),
-            transactions: [],
+            isVapor: false,
             maskShow: false,
-            start: 0,
-            limit: 10,
             enterActive: EnterActive,
             leaveActive: LeaveActive,
             defaultBalances: [
@@ -378,10 +384,9 @@ export default {
                   assetId: BTM,
                   name: "Bytom",
                   symbol: "BTM",
-
+                  decimals: 8
                 } ,
                 availableBalance: 0,
-                decimals: 8,
                 inBtc: "0",
                 inCny: "0",
                 inUsd: "0"
@@ -419,6 +424,7 @@ export default {
             }else{
               addr = newVal.address
             }
+            this.refreshBalance(addr)
         },
     },
     computed: {
@@ -480,7 +486,7 @@ export default {
         if(asset.assetId === BTM){
           return Num.formatNue(assetObj.availableBalance,8)
         }else{
-          return assetObj.availableBalance
+          return Num.formatNue(assetObj.availableBalance, assetObj.asset.decimals)
         }
       },
         setupRefreshTimer() {
@@ -551,6 +557,9 @@ export default {
     mounted() {
         this.setupRefreshTimer();
         this.refreshBalance(this.address)
+      if (this.netType){
+        this.isVapor = this.netType =='vapor'
+      }
     },
   };
 </script>

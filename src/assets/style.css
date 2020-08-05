@@ -85,13 +85,13 @@ a {
 .warp-menu {
   position: absolute;
   width: calc( 100% - 120px);
-  min-height: 600px;
-  height: 100%;
+  min-height: 580px;
+  height: calc( 100% - 20px);
   left: 80px;
   top: 0;
   bottom: 0;
   background: #FAFAFA;
-  padding:20px;
+  padding: 20px 20px 0;
 }
 .warp-chlid {
   position: absolute;

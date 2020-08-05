@@ -193,7 +193,7 @@ account.balance = function(address , context) {
           //update AccountList
 
           if (balanceNotEqual) {
-            if (this.netType === 'vapor') {
+            if (isVapor) {
               _bytom.currentAccount.vpBalances = balances;
               _bytom.keychain.pairs[_bytom.currentAccount.alias].vpBalances =balances
             } else {
@@ -204,7 +204,7 @@ account.balance = function(address , context) {
 
           if (voteNotEqual) {
             _bytom.currentAccount.votes = votes;
-            _bytom.accountList[_bytom.currentAccount.alias].votes = votes
+            _bytom.keychain.pairs[_bytom.currentAccount.alias].votes = votes
           }
 
           context[Actions.UPDATE_STORED_BYTOM](_bytom)
