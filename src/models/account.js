@@ -1,7 +1,7 @@
 import bytom from './bytom'
 import uuid from 'uuid'
 import * as Actions from '../store/constants';
-
+import _ from 'lodash'
 
 let account = {
   setupNet: bytom.setupNet
@@ -174,18 +174,43 @@ account.listVapor = function(guid) {
   return retPromise
 }
 
-account.balance = function(address) {
+account.balance = function(address , context) {
   let retPromise = new Promise((resolve, reject) => {
     bytom.accounts
       .listAddressUseServer(address)
       .then(address => {
         let balances = address.balances || []
         let votes = address.votes || []
+        const _bytom = context.bytom.clone();
 
-        resolve({
-            balances,
-            votes
-          })
+        const isVapor = _bytom.settings.netType === 'vapor'
+        const _currentBalance = isVapor? _bytom.currentAccount.vpBalances : _bytom.currentAccount.balances
+
+        const balanceNotEqual = !_.isEqual(_currentBalance, balances)
+        const voteNotEqual = ( isVapor && !_.isEqual(_bytom.currentAccount.votes, votes))
+
+        if(balanceNotEqual || voteNotEqual) {
+          //update AccountList
+
+          if (balanceNotEqual) {
+            if (this.netType === 'vapor') {
+              _bytom.currentAccount.vpBalances = balances;
+              _bytom.keychain.pairs[_bytom.currentAccount.alias].vpBalances =balances
+            } else {
+              _bytom.currentAccount.balances = balances;
+              _bytom.keychain.pairs[_bytom.currentAccount.alias].balances = balances
+            }
+          }
+
+          if (voteNotEqual) {
+            _bytom.currentAccount.votes = votes;
+            _bytom.accountList[_bytom.currentAccount.alias].votes = votes
+          }
+
+          context[Actions.UPDATE_STORED_BYTOM](_bytom)
+        }
+
+        resolve()
       })
       .catch(error => {
         reject(error)

@@ -141,6 +141,8 @@ const cn = {
     vpWarning:'Vapor钱包地址请勿用于交易所充值提现'
   },
   main: {
+    bytom:'主链',
+    vapor:'侧链',
     mainNet: '主网络',
     testNet: '测试网络',
     soloNet: '单机网络',
@@ -154,7 +156,7 @@ const cn = {
     vote:'投票',
     crossChain:'跨链',
     record: '交易记录',
-    asset:'资产',
+    asset:'我的资产',
     noAccount: '当前网络无账户信息',
     create: '创建账户',
     unconfirmed :'未确认交易',

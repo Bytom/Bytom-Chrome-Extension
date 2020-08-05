@@ -19,6 +19,9 @@ import BackButton from '@/components/backButton'
 import Success from '@/components/Success.vue'
 import Menubar from '@/components/MenubarComponent.vue'
 import messages, { getLanguage } from '@/assets/language'
+
+import account from "@/models/account";
+
 import '@/assets/style.css'
 import {store} from "./store/store";
 import * as Actions from "./store/constants";
@@ -55,6 +58,8 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
       background: '#c9c9c9'
     }
   }
+
+  account.setupNet(`${store.getters.net}${store.getters.netType}`)
 
   Vue.filter('moment', function(value, formatString) {
     formatString = formatString || 'YYYY-MM-DD HH:mm:ss'

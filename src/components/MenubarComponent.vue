@@ -74,7 +74,7 @@
         z-index: 2;
         width: 80px;
         text-align: center;
-        min-height: 550px;
+        min-height: 585px;
 
         .logo {
             width: 26px;
@@ -100,7 +100,7 @@
 
         figure.setting{
           position: absolute;
-          bottom: 30px;
+          bottom: 0px;
           left: 0;
           right: 0;
           text-align: center;

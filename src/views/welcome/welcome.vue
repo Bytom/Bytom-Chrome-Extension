@@ -98,31 +98,14 @@
 </template>
 
 <script>
-import account from "../../models/account";
 import { getLanguage } from '@/assets/language'
-import getLang from "../../assets/language/sdk";
 import { mapActions, mapGetters, mapState } from 'vuex'
-import * as Actions from '@/store/constants';
 
 let mainNet = null;
 export default {
     name: "",
     data() {
         return {
-            nets: [],
-            selected: mainNet,
-            formItem: {
-                accAlias: "",
-                // keyAlias: "",
-                passwd1: "",
-                passwd2: "",
-                checked: false
-            },
-            restore:{
-                fileTxt:"",
-                checked: false
-            },
-            activeTab: 'register'
         };
     },
     computed: {
@@ -157,97 +140,7 @@ export default {
             default: 'cn',
         }
     },
-    methods: {
-        create: function () {
-            if (this.formItem.accAlias == "") {
-                this.$dialog.show({
-                    body: this.$t("createAccount.inputAlias")
-                });
-                return;
-            }
-            if (this.formItem.passwd1 == "") {
-                this.$dialog.show({
-                    body: this.$t("createAccount.inputPass")
-                });
-                return;
-            }
-            if (this.formItem.passwd1 != this.formItem.passwd2) {
-                this.$dialog.show({
-                    body: this.$t('createAccount.passwordAgain'),
-                });
-                return;
-            }
-            if (!this.formItem.checked) {
-                this.$dialog.show({
-                    body: this.$t('createAccount.agreeService'),
-                });
-                return;
-            }
-            let loader = this.$loading.show({
-                container: null,
-                canCancel: true,
-                onCancel: this.onCancel
-            });
-            account.create(this.formItem.accAlias, null, this.formItem.passwd1).then(currentAccount => {
-              this[Actions.CREATE_NEW_BYTOM](this.selected.value).then(() =>{
-                loader.hide();
-                this.formItem = {};
-                this.$router.push('/');
-              });
-            }).catch(err => {
-                loader.hide();
-                this.$dialog.show({
-                    body: err.message,
-                });
-            });
-        },
-        tirggerFile: function (event) {
-          var reader = new FileReader();
-          reader.onload = e => {
-            this.restore.fileTxt = e.target.result;
-          };
-
-          var file = event.target.files[0];
-          reader.readAsText(file);
-        },
-        recovery: function () {
-          if (!this.restore.checked) {
-            this.$dialog.show({
-              body: this.$t('createAccount.agreeService'),
-            });
-            return;
-          }
-          account.restore(this.restore.fileTxt).then(res => {
-            this[Actions.IMPORT_BYTOM]().then(() =>{
-              this.$router.push('/');
-            });
-          }).catch(error => {
-            this.$dialog.show({
-              body: getLang(error.message, this.language)
-            });
-          });
-        },
-        ...mapActions([
-          Actions.CREATE_NEW_BYTOM,
-          Actions.IMPORT_BYTOM,
-        ])
-    },
-    watch: {
-        selected: function (value) {
-            account.setupNet(`${value.value}`);
-        }
-    },
     mounted() {
-        mainNet = { label: this.$t('main.mainNet'), value: "mainnet" };
-        this.nets = [mainNet];
-        if (this.net != undefined) {
-            if (this.net == "mainnet") {
-                this.selected = mainNet;
-            }
-        } else {
-            this.selected = mainNet;
-        }
-        account.setupNet(`${this.selected.value}`);
         this.i18n = getLanguage(this.language);
     }
 };

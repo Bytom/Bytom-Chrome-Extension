@@ -252,22 +252,7 @@ export default {
           Actions.UPDATE_STORED_BYTOM
         ])
     },
-    watch: {
-        selected: function (value) {
-            account.setupNet(`${value.value}`);
-        }
-    },
     mounted() {
-        testNet = { label: this.$t('main.testNet'), value: "testnet" };
-        this.nets = [testNet];
-        if (this.net != undefined) {
-            if (this.net == "testnet") {
-                this.selected = testNet;
-            }
-        } else {
-            this.selected = testNet;
-        }
-        account.setupNet(`${this.selected.value}`);
         this.i18n = getLanguage(this.language);
     }
 };

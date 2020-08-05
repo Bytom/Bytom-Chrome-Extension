@@ -56,13 +56,7 @@ export const actions = {
     [Actions.CREATE_NEW_BYTOM]:({state, commit, dispatch}, network) => {
         return new Promise(async (resolve, reject) => {
             const bytom = Bytom.fromJson(state.bytom);
-            bytom.settings.network = network;
-            account.setupNet(`${network}`)
 
-            const language = bytom.settings.language
-
-            bytom.settings.currency = language ==='en'?'inUsd':"inCny"
-            bytom.settings.netType = ''
             dispatch(Actions.UPDATE_STORED_BYTOM, bytom).then(_bytom => {
                 dispatch(Actions.SET_BYTOM, Bytom.fromJson(_bytom));
                 resolve();

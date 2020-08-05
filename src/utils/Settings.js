@@ -5,7 +5,8 @@ export default class Settings {
         this.domains = [];
         this.language = uiLang||'en';
         this.netType ='bytom';
-        this.net ='testnet';
+        this.network ='testnet';
+        this.currency = uiLang ==='en'?'inUsd':"inCny"
     }
 
     static placeholder(){ return new Settings(); }
