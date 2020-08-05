@@ -17,7 +17,10 @@ const cn = {
     vote: '投票',
     transfer:'转账',
     issue:'资产发行',
-    retire:'资产销毁'
+    retire:'资产销毁',
+    transfer_in:'收款',
+    transfer_out:'转账',
+    cross_chain:'跨链'
   },
   welcome: {
     enterMain:'进入主界面',
@@ -80,6 +83,10 @@ const cn = {
     viewAll:'展示全部',
     hideAll:'隐藏全部',
     types:'交易类型'
+  },
+  listAsset: {
+    all:'全部',
+    fail:'失败'
   },
   crossChain:{
     title:'跨链',
@@ -164,6 +171,9 @@ const cn = {
     noAssetRecord:"没有资产记录",
     network:'网络',
     totalAsset:'总资产'
+  },
+  asset:{
+    title:'资产'
   },
   transactionDetail: {
     title: '交易详情',

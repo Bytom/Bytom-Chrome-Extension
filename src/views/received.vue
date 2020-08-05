@@ -37,7 +37,7 @@
 </style>
 
 <template>
-  <div class="warp-chlid bg-gray">
+  <div class="warp-child bg-gray">
     <section class="header bg-header">
       <i class="iconfont icon-back" @click="close"></i>
       <p>{{ $t('main.receive') }}</p>

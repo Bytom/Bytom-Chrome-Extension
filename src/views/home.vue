@@ -79,22 +79,7 @@
   overflow: auto;
   flex-grow: 1;
 }
-.list-item {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  height: 49px;
-  background: #FFFFFF;
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.04);
-  border-radius: 8px;
-  padding: 14px;
-  margin-bottom: 12px;
 
-  &:hover, &:focus, &:active{
-    border: 1px solid #004EE4;
-    padding: 13px;
-  }
-}
 
 .network-select{
   text-transform: capitalize;
@@ -226,10 +211,7 @@ input:checked + .slider:before {
   color: rgba(0, 0, 0, 0.64);
 }
 
-  .c-icon{
-    height: 36px;
-    padding-right: 12px;
-  }
+
 
   .symbol{
     display: flex;

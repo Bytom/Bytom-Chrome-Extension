@@ -76,7 +76,7 @@
 </style>
 
 <template>
-    <div class="bg-sideBar menu-panel warp-chlid">
+    <div class="bg-sideBar menu-panel warp-child">
         <div>
             <i class="iconfont btn-close" @click="$router.go(-1)">&#xe614;</i>
             <div class="menu-title">{{$t('menu.title')}}</div>

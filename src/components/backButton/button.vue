@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <i class="iconfont icon-back" @click="goBack()"></i>
+    <div >
+        <i :class="['iconfont icon-back',{small: small}]" @click="goBack()"></i>
     </div>
 </template>
 
@@ -8,6 +8,7 @@
 export default {
     props: {
       des:null,
+      small:false
     },
     methods: {
       goBack:function () {
@@ -28,5 +29,13 @@ export default {
 }
 .iconfont:hover {
   background: #F5F5F5;
+}
+
+.small{
+  width: 56px;
+  height: 12px;
+  background: #EEEEEE;
+  border-radius: 20px;
+  padding: 2px 16px;
 }
 </style>

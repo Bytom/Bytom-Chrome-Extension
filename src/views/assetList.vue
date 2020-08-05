@@ -1,4 +1,4 @@
-<style lang="" scoped>
+<style lang="scss" scoped>
   .topbar {
     font-size: 19px;
     display:flex;
@@ -35,33 +35,32 @@
     line-height: 45px;
 }
 
-.transaction-title h3 {
-    font-size: 16px;
-    font-weight: inherit;
-    padding: 10px 0 10px 20px;
-}
 .transactions {
   font-size: 15px;
   height: 340px;
 }
-.list-item {
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    position: relative;
-}
+/*.list-item {*/
+    /*padding: 10px 20px;*/
+    /*display: flex;*/
+    /*justify-content: space-between;*/
+    /*position: relative;*/
+/*}*/
 
-.list-item:after {
-    content:"";
-    background: #e0e0e0;
-    position: absolute;
-    bottom: 0;
-    left: 20px;
-    height: 1px;
-    width: 90%;
+/*.list-item:after {*/
+    /*content:"";*/
+    /*background: #e0e0e0;*/
+    /*position: absolute;*/
+    /*bottom: 0;*/
+    /*left: 20px;*/
+    /*height: 1px;*/
+    /*width: 90%;*/
+/*}*/
+.value{
+font-size: 15px;
 }
 .addr{
   font-size: 12px;
+  color: rgba(0, 0, 0, 0.36);
 }
 
 
@@ -70,70 +69,108 @@
 }
 
   .symbol{
-    margin-bottom: -8px;
-    font-size:15px;
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    font-size: 15px;
+  }
+
+  .currency-banner{
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    align-items: center;
+  }
+
+  .back{
+      width: 56px;
+      height: 28px;
+
+      background: #EEEEEE;
+      border-radius: 20px;
+  }
+
+  .header{
+    display: flex;
+    margin-bottom: 20px;
+    h1{
+      margin-left: 12px;
+      font-size: 20px;
+    }
+  }
+
+  .list-item a{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    color: rgba(0, 0, 0, 0.88);
   }
 
 </style>
 
 <template>
-    <div class="warp-chlid bg-white">
-        <section class="bg-image">
-          <div class="topbar">
-            <div class="topbar-left">
-              <i class="iconfont icon-back" @click="close"></i>
+    <div class="warp-child bg-grey">
+        <section class="header">
+          <BackButton :small="true" :des="'home'"/>
+          <h1 class="color-black">
+            <div class="welcome-title">{{ $t('asset.title')}}</div>
+          </h1>
+        </section>
+        <section class="bg-shadow-white currency-banner">
+            <div class="color-black symbol" v-if="currentAsset && currentAsset.asset.symbol!=='Asset'">
+                <img :src="img(currentAsset.asset.symbol)" alt="" class="c-icon">
+
+                <div class="uppercase">
+                  {{currentAsset.asset.symbol}}
+                </div>
             </div>
-            <div class="topbar-middle">
-              <div v-if="currentAsset!=undefined" class="amount color-white">
-                <div v-if="currentAsset.asset.symbol!=='Asset'">
-                  <div class="symbol">
-                    {{currentAsset.asset.symbol}}
-                  </div>
 
-                  <div class="alias color-grey">{{currentAsset.asset.name}}</div>
-                </div>
-                <div v-else>
-                  <div class="symbol">
-                    Asset
-                  </div>
-
-                  <div class="alias color-grey">{{shortAddress(currentAsset.asset.asset)}}</div>
-                </div>
+            <div class="color-black" v-else-if="currentAsset">
+              <div class="symbol">
+                Asset
               </div>
+
+              <div class="alias color-grey">{{shortAddress(currentAsset.asset.asset)}}</div>
             </div>
-          </div>
-            <div class="content">
-                <div v-if="currentAsset!=undefined" class="amount color-white">
-                    <div class="token-amount">
-                        {{itemBalance(currentAsset)}}
-                    </div>
-                    <div>{{formatCurrency(currentAsset[ camelize(currency) ])}}</div>
-                </div>
+
+            <div v-if="currentAsset!=undefined" class="amount text-align-right">
+                <div class="value color-black">{{ itemBalance(currentAsset) }}</div>
+                <div class="addr color-grey">≈{{ formatCurrency(currentAsset[ camelize(currency) ]) }}</div>
             </div>
         </section>
             <section class="transaction-title">
-                <h3 class="bg-gray color-grey">{{ $t('main.record') }}</h3>
+                <div class="bg-gray color-grey">{{ $t('listAsset.all') }}</div>
+                <div class="bg-gray color-grey">{{ $t('common.transfer_in') }}</div>
+                <div class="bg-gray color-grey">{{ $t('common.transfer_out') }}</div>
             </section>
+
             <section class="transactions">
                   <div class="transactions" v-if="transactions.length != 0">
                       <vue-scroll ref="vs" @handle-scroll="handleScroll">
                       <ul class="list">
-                          <li class="list-item" v-for="(transaction, index) in transactions" :key="index" @click="$router.push({name: 'transfer-info', params: {transaction: transaction, address: currentAccount.address}})">
+                          <li class="list-item" v-for="(transaction, index) in transactions" :key="index" >
+                            <a :href="blockmeta(transaction.hash)" target="_blank">
                               <div>
-                                  <div>{{transaction.address}}</div>
-                                  <div class="addr color-grey" v-if="transaction.hasOwnProperty('blockTimestamp')">
-                                    {{transaction.submissionTimestamp | moment}}
-                                  </div>
-                                  <div class="addr color-grey" v-else>
-                                    {{ $t('main.unconfirmed') }}
-                                  </div>
+                                <div >
+                                  {{transaction.type}}
+                                </div>
+                                  <div class="addr color-grey" >{{transaction.address}}</div>
+
                               </div>
                               <div class="text-align-right">
                                 <div class="value">{{transaction.direct}} {{transaction.val}}</div>
-                                <div v-if="transaction.type == 'vote'" class="addr color-grey">{{ $t('listVote.vote')}} {{transaction.vAmount}}</div>
-                                <div v-else-if="transaction.type == 'veto'" class="addr color-grey">{{ $t('listVote.cancelVote')}}  {{transaction.vAmount}}</div>
-                                <div v-else-if="transaction.type == 'crossChain'" class="addr color-grey">{{ $t('crossChain.title')}}</div>
+
+                                <div class="addr color-grey" v-if="!transaction.status">
+                                  {{ $t('listAsset.fail') }}
+                                </div>
+                                <div class="addr color-grey" v-if="transaction.hasOwnProperty('blockTimestamp')">
+                                  {{transaction.submissionTimestamp | moment}}
+                                </div>
+                                <div class="addr color-grey" v-else>
+                                  {{ $t('main.unconfirmed') }}
+                                </div>
                               </div>
+                            </a>
                           </li>
                       </ul>
                   </vue-scroll>
@@ -222,6 +259,21 @@ export default {
         ])
     },
     methods: {
+      img:function (symbol) {
+        const _symbol = symbol.toLowerCase();
+        if(this.netType === 'vapor'){
+          return `https://cdn.blockmeta.com/resources/logo/vapor/${_symbol}.png`
+        }else{
+          return `https://cdn.blockmeta.com/resources/logo/bytom/${_symbol}.png`
+        }
+      },
+      blockmeta:function (txid) {
+        if(this.netType === 'vapor'){
+          return `https://vapor.blockmeta.com/tx/${txid}`
+        }else{
+          return `https://blockmeta.com/tx/${txid}`
+        }
+      },
       camelize: function (object) {
         return camelize(object)
       },
@@ -235,10 +287,10 @@ export default {
         return Num.formatCurrency(num, this.currency)
       },
       itemBalance: function(asset){
-        if(asset.asset === BTM){
+        if(asset.asset.assetId === BTM){
           return Num.formatNue(asset.availableBalance,8)
         }else{
-          return Num.formatNue(asset.availableBalance,asset.decimals)
+          return Num.formatNue(asset.availableBalance,asset.asset.decimals)
         }
 
       },
@@ -262,7 +314,7 @@ export default {
         },
         refreshTransactions: function (start, limit) {
             return new Promise((resolve, reject) => {
-                transaction.list(this.address, this.currentAsset.asset.assetId, start, limit).then(transactions => {
+                transaction.list(this.address, this.currentAsset.asset.assetId, start, limit, ['out_crosschain','in_crosschain',"ordinary"]).then(transactions => {
                   if (transactions == null) {
                         return;
                     }
@@ -283,36 +335,6 @@ export default {
             const balanceObject = transaction.balances
               .filter(b => b.asset.assetId === assetID);
 
-            const filterInput = _.find(transaction.inputs, function(o) { return o.type =='veto'; })
-            const filterOutput = _.find(transaction.outputs, function(o) { return o.type =='vote'; })
-
-            if(filterInput){
-              transaction.type = 'veto'
-              const inAmount = _.sumBy((transaction.inputs.filter(i => i.type ==='veto')), 'amount')
-              const outAmount = _.sumBy((transaction.outputs.filter(i => i.type ==='vote')), 'amount')
-              transaction.pubkey = filterInput.vote
-              transaction.vAmount =  Num.formatNue(inAmount-outAmount,8)
-            }else if(filterOutput){
-              const outAmount = _.sumBy((transaction.outputs.filter(i => i.type ==='vote')), 'amount')
-              transaction.pubkey = filterOutput.vote
-              transaction.vAmount =  Num.formatNue(outAmount,8)
-              transaction.type = 'vote'
-            }else if(transaction.types.includes('out_crosschain')){
-              transaction.type = 'crossChain'
-              if(this.netType === 'vapor'){
-                transaction.cDirection ='Vapor -> Bytom'
-              }else{
-                transaction.cDirection ='Bytom -> Vapor'
-              }
-            }else  if(transaction.types.includes('in_crosschain')){
-              transaction.type = 'crossChain'
-              if(this.netType === 'vapor'){
-                transaction.cDirection ='Bytom -> Vapor'
-              }else{
-                transaction.cDirection ='Vapor -> Bytom'
-              }
-            }
-
             const inputAddresses = transaction.inputs
               .filter(input => input.asset.assetId === assetID && input.address !== this.currentAccount.address)
               .map(input => input.address)
@@ -325,10 +347,18 @@ export default {
                 let val = Math.abs(balanceObject[0].amount)
 
                 if (Number(balanceObject[0].amount) > 0) {
+                    if(!transaction.type){
+                      transaction.type = this.$t("common.transfer_in");
+                    }
+
                     transaction.direct = "+";
                     const resultAddr = inputAddresses.pop()
                     transaction.address = (resultAddr && resultAddr.includes(' '))?resultAddr:address.short(resultAddr);
                 } else {
+                    if(!transaction.type) {
+                      transaction.type = this.$t("common.transfer_out");
+                    }
+
                     transaction.direct = "-";
                     const resultAddr = outputAddresses.pop()
                     transaction.address = (resultAddr && resultAddr.includes(' '))?resultAddr:address.short(resultAddr);
