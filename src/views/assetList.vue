@@ -106,6 +106,17 @@ font-size: 15px;
     color: rgba(0, 0, 0, 0.88);
   }
 
+  .transaction-title{
+    display: flex;
+    font-weight: 600;
+    font-size: 15px;
+    margin: 16px 0;
+    color: rgba(0, 0, 0, 0.24);
+    div:not(:first-child) {
+      margin-left: 25px;
+    }
+
+  }
 </style>
 
 <template>
@@ -139,9 +150,9 @@ font-size: 15px;
             </div>
         </section>
             <section class="transaction-title">
-                <div class="bg-gray color-grey">{{ $t('listAsset.all') }}</div>
-                <div class="bg-gray color-grey">{{ $t('common.transfer_in') }}</div>
-                <div class="bg-gray color-grey">{{ $t('common.transfer_out') }}</div>
+                <div >{{ $t('listAsset.all') }}</div>
+                <div >{{ $t('common.transfer_in') }}</div>
+                <div >{{ $t('common.transfer_out') }}</div>
             </section>
 
             <section class="transactions">
