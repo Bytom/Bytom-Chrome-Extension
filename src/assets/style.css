@@ -353,7 +353,7 @@ hr {
   color: #e0e0e0;
 }
 .color-red {
-  color: #d84c4c;
+  color:#FE1919;
 }
 
 .bg-red {
@@ -402,6 +402,10 @@ hr {
 
 .font-medium{
   font-weight: 500;
+}
+
+.font-bold{
+  font-weight: 600;
 }
 
 .mask {

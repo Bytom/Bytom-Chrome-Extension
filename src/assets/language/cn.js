@@ -166,7 +166,7 @@ const cn = {
     asset:'我的资产',
     noAccount: '当前网络无账户信息',
     create: '创建账户',
-    unconfirmed :'未确认交易',
+    unconfirmed :'正在确认中',
     noRecord:"没有交易记录",
     noAssetRecord:"没有资产记录",
     network:'网络',
