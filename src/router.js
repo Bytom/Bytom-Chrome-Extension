@@ -22,6 +22,7 @@ export const RouteNames = {
   // SETTINGS:'settings',
   //
   TRANSFER:'transfer',
+  ASSET_SELECTION:'asset-selection',
   RECEIVE:'received',
   // IDENTITIES:'identities',
   // IDENTITY:'identity',
@@ -158,6 +159,14 @@ const routers = [
         meta: { title: '高级转账' },
         component: resolve => {
           require(['@/views/sendTransaction/advancedTransfer.vue'], resolve)
+        }
+      },
+      {
+        path: '/assetSelection',
+        name: RouteNames.ASSET_SELECTION,
+        meta: { title: '选择资产' },
+        component: resolve => {
+          require(['@/views/sendTransaction/assetSelection.vue'], resolve)
         }
       },
       {

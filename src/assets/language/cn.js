@@ -20,7 +20,9 @@ const cn = {
     retire:'资产销毁',
     transfer_in:'收款',
     transfer_out:'转账',
-    cross_chain:'跨链'
+    cross_chain:'跨链',
+    confirm: '确认',
+    cancel: '取消'
   },
   welcome: {
     enterMain:'进入主界面',
@@ -56,9 +58,12 @@ const cn = {
     }
   },
   transfer: {
-    address: '地址',
+    address: '接收地址',
+    bytomAddress:'主链地址(bm开头）',
+    vaporAddress:'侧链地址(vp开头）',
     quantity: '数量',
-    fee: '矿工费用',
+    fee: '手续费',
+    available:'可用',
     feeType: '标准',
     send: '发送交易',
     confirmPassword: '密码',
@@ -66,7 +71,7 @@ const cn = {
     cancel: '取消',
     emptyPassword: '密码不能为空',
     unit: '单位',
-    asset:'资产',
+    asset:'选择资产',
     assetId:'资产Id',
     emptyTo: '地址不能为空',
     noneBTM: '错误的BTM数量',

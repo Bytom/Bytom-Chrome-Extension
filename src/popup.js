@@ -13,11 +13,13 @@ import Dialog from '@/components/dialog'
 import vSelect from '@/components/select'
 import Toast from '@/components/toast'
 import MenuPage from '@/components/menu-page'
+import SelectionPage from '@/components/selection-page'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
 import BackButton from '@/components/backButton'
 import Success from '@/components/Success.vue'
 import Menubar from '@/components/MenubarComponent.vue'
+import ModalPasswd from '@/components/modal-passwd.vue'
 import messages, { getLanguage } from '@/assets/language'
 
 import account from "@/models/account";
@@ -39,6 +41,7 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
   Vue.use(vuescroll)
   Vue.use(VueRouter)
   Vue.use(MenuPage)
+  Vue.use(SelectionPage)
   Vue.use(Header)
   Vue.use(Footer)
   Vue.use(Loading)
@@ -48,6 +51,7 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
   Vue.component('success', Success)
   Vue.component('menu-bar', Menubar)
   Vue.component('v-select', vSelect)
+  Vue.component('modal-passwd', ModalPasswd)
 
   Vue.prototype.$vuescrollConfig = {
     mode: 'native',

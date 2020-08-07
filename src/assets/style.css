@@ -383,6 +383,13 @@ hr {
 .bg-green {
   background-color: #035BD4 !important;
 }
+.bg-vapor{
+  background: #004EE4 !important;
+}
+
+.bg-bytom{
+  background: #000000 !important;
+}
 
 .bg-shadow-white{
   background: #FFFFFF;
@@ -486,7 +493,7 @@ hr {
   padding: 12px 20px;
   height: 48px;
   line-height: 24px;
-  border-radius: 0.2rem;
+  border-radius: 22px;
   white-space: nowrap;
   text-overflow: ellipsis;
   vertical-align: middle;
@@ -494,6 +501,7 @@ hr {
   box-sizing: border-box;
   -webkit-user-select: none;
   user-select: none;
+  border: 0;
 }
 .btn:hover {
   cursor: pointer;
@@ -506,15 +514,36 @@ hr {
   width: 50%;
   height: 50%;
 }
-.btn-primary {
+
+.btn-primary,
+.btn-vapor
+{
   color: #ffffff;
   background-color: #004EE4;;
 }
+
 .btn-primary:active,
 .btn-primary:hover,
-.btn-primary:focus {
+.btn-primary:focus,
+.btn-vapor:active,
+.btn-vapor:hover,
+.btn-vapor:focus {
   color: #ffffff;
   background-color: #044BAF;
+  border: none;
+}
+
+.btn-bytom
+{
+  color: #ffffff;
+  background-color: #000000;;
+}
+
+.btn-bytom:active,
+.btn-bytom:hover,
+.btn-bytom:focus {
+  color: #ffffff;
+  background-color: #1d1d1d;
   border: none;
 }
 

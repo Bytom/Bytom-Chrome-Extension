@@ -1,12 +1,12 @@
-<style lang="" scoped>
-.header {
-  display: flex;
-}
-.header p{
-  text-align: center;
-  width: 270px;
-  padding-top: 17px;
-}
+<style lang="scss" scoped>
+.header{
+    display: flex;
+    margin-bottom: 20px;
+    h1{
+      margin-left: 12px;
+      font-size: 20px;
+    }
+  }
 .balance {
   width: 280px;
   height: 40px;
@@ -80,13 +80,15 @@
 </style>
 
 <template>
-    <div class="warp-child bg-gray">
-        <section class="header bg-header">
-            <i class="iconfont icon-back" @click="close"></i>
-            <p>{{ $t('main.send') }}</p>
-        </section>
+    <div class="warp-child bg-grey">
+      <section class="header">
+        <BackButton :small="true" :des="'home'"/>
+        <h1 class="color-black">
+          <div class="welcome-title">{{ $t('main.send') }}</div>
+        </h1>
+      </section>
 
-        <section class="balance transfer-header">
+        <section class="bg-shadow-white ">
           <div class="wallet">
             <i class="iconfont icon-wallet"></i>
           </div>
@@ -99,9 +101,7 @@
               {{currentAccount.alias}}
             </div>
           </div>
-        </section>
-
-        <section class="form-container">
+          
           <div class="form bg-white">
               <div class="form-item">
                   <label class="form-item-label">{{ $t('transfer.asset') }}</label>

@@ -33,6 +33,7 @@
         <menu-bar></menu-bar>
         <router-view></router-view>
         <success></success>
+        <modal-passwd></modal-passwd>
     </section>
 </template>
 
