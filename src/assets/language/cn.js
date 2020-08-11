@@ -87,7 +87,8 @@ const cn = {
     hide:'隐藏',
     viewAll:'展示全部',
     hideAll:'隐藏全部',
-    types:'交易类型'
+    types:'交易类型',
+    password:'请输入密码'
   },
   listAsset: {
     all:'全部',
@@ -238,6 +239,8 @@ const cn = {
     BTM0002:'助记词验证失败，请输入正确助记词。',
     BTM0003:'请选择Keystore文件。',
     BTM0004:'请输入Keystore。',
+    BTM0005:'输入数量大于可用余额。',
+    BTM0006:'输入有效的地址格式。',
   },
   successMsg:{
     createWallet:{

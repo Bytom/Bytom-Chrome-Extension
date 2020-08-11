@@ -13,6 +13,8 @@ export default class Keychain {
 
   findIdentity(publicKey){ return Object.values(this.pairs).find(id => id.xpub === publicKey); }
   findByGuid(guid){ return Object.values(this.pairs).find(id => id.guid === guid); }
+  findByAddress(address){ return Object.values(this.pairs).find(id => id.address === address || id.vpAddress=== address); }
+
 
   removeUnverifyIdentity(){
     const pairObject = Object.values(this.pairs).filter(id => !id.vMnemonic );

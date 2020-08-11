@@ -3,7 +3,7 @@
         <label class="select-item font-bold" v-for="option in options"  :for="option.label">
           {{option.label}}
           <input type="radio" :id="option.label" :name="option.label" :value="option.value" @change="onChange" :checked="(option.value == value)">
-        </label><br>
+        </label>
     </div>
 </template>
 
@@ -39,8 +39,11 @@ export default {
   align-items: center;
   justify-content: space-between;
   padding: 16px;
-  margin-bottom: 20px;
   color: rgba(0, 0, 0, 0.88);
   font-size:15px;
+}
+.select-item:not(:last-child){
+  margin-bottom: 20px;
+
 }
 </style>

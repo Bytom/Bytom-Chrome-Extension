@@ -8,12 +8,19 @@
 export default {
     props: {
       des:null,
-      small:false
+      small:false,
+      back:{
+        type: Function
+      }
     },
     methods: {
       goBack:function () {
-        this.des?
-          this.$router.push({name: this.des}): this.$router.go(-1)
+        if(this.back){
+          this.back()
+        }else{
+          this.des?
+            this.$router.push({name: this.des}): this.$router.go(-1)
+        }
       }
     }
 };

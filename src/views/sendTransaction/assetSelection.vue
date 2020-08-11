@@ -7,6 +7,17 @@
       font-size: 20px;
     }
   }
+  .button-section{
+    position: fixed;
+    width: calc( 100% - 120px);
+    bottom: 0;
+    padding-bottom: 30px;
+  }
+
+  .selction-section{
+    height: calc( 100% - 149px );
+    overflow: scroll;
+  }
 
 </style>
 
@@ -18,10 +29,10 @@
             <div class="welcome-title">{{ $t('transfer.asset')}}</div>
           </h1>
         </section>
-        <section>
+        <section class="selction-section">
           <SelectionPage :value="asset" :options="assets" :onChange="assetToggle"></SelectionPage>
         </section>
-        <section>
+        <section class="button-section">
           <button :class="['btn', netType ==='vapor'?'btn-vapor':'btn-bytom']" @click="setAsset(asset)">
             {{$t('common.confirm')}}
           </button>
@@ -53,6 +64,9 @@ export default {
         }
 
       },
+      ...mapState([
+        'currentAsset'
+      ]),
         ...mapGetters([
           'currentAccount',
           'netType'
@@ -62,15 +76,26 @@ export default {
       assetToggle: function(event){
         this.asset = event.target.value
       },
+      setAsset(asset){
+        let balance
+        if(this.netType === 'vapor'){
+          balance = this.currentAccount.vpBalances.find(b => b.asset.symbol ==asset)
+        }else{
+          balance = this.currentAccount.balances.find(b => b.asset.symbol ==asset)
+        }
+        if(balance){
+            this[Actions.SET_CURRENT_ASSET](balance.asset)
+          }
+        this.$router.go(-1)
+      },
       ...mapActions([
         Actions.SET_CURRENT_ASSET,
-      ]),
-      setAsset(asset){
-        this[Actions.SET_CURRENT_ASSET](asset)
-        this.$router.go(-1)
-      }
+      ])
     },
     mounted() {
+      if(this.currentAsset){
+        this.asset = this.currentAsset.symbol
+      }
     },
   };
 </script>

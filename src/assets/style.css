@@ -429,7 +429,7 @@ hr {
   bottom: 0;
   opacity: 1;
   visibility: visible;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .menu-title {
@@ -545,6 +545,20 @@ hr {
   color: #ffffff;
   background-color: #1d1d1d;
   border: none;
+}
+
+.btn-outlined
+{
+  border: 1px solid #D6D6D6;
+  background: white;
+  color: #D6D6D6;
+}
+
+.btn-outlined:active,
+.btn-outlined:hover,
+.btn-outlined:focus {
+  color: #ffffff;
+  background-color: #D6D6D6;
 }
 
 .btn-warning {

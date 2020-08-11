@@ -1,31 +1,29 @@
 <style scoped>
 .mask {
     z-index: 3 !important;
-    top: 60px !important;
 }
 
 .confirm {
-    padding: 10px 20px;
-    position: fixed;
-    width: 310px;
+    padding: 20px 16px;
+    position: absolute;
+    width: 260px;
     left: 0;
     bottom: 0;
     right: 0;
     z-index: 4;
+    margin: auto;
+    top: 0;
+    height: 131px;
+    border-radius: 8px;
 }
 
 .btn-inline {
     display: flex;
     padding: 0;
+    justify-content: space-between;
 }
 .btn-inline .btn {
-    margin: 10px 15px;
-}
-.form-item-content-en {
-    margin-left: 145px;
-}
-.form-item-content-cn {
-    margin-left: 85px;
+    width:47%;
 }
 </style>
 
@@ -33,16 +31,15 @@
     <div>
         <section v-show="show" class="mask"></section>
         <transition name="page-transfer" <!-- enter-active-class="animated slideInUp faster" leave-active-class="animated slideOutDown faster"> -->
-            <div v-show="show" class="confirm form bg-gray">
+            <div v-show="show" class="confirm form bg-white">
                 <div class="form-item">
-                    <label class="form-item-label">{{ $t('transfer.confirmPassword') }}</label>
-                    <div :class="passwdStyle">
-                        <input type="password" v-model="passwd" autofocus>
+                    <div class="form-item-content">
+                        <input type="password" v-model="passwd" :placeholder="$t('transfer.password')" autofocus>
                     </div>
                 </div>
                 <div class="btn-group btn-inline">
-                    <div class="btn bg-green" @click="confirm">{{ $t('welcome.confirm') }}</div>
-                    <div class="btn bg-red" @click="close">{{ $t('welcome.cancel') }}</div>
+                    <div class="btn btn-outlined" @click="close">{{ $t('welcome.cancel') }}</div>
+                    <div :class="['btn', netType ==='vapor'?'btn-vapor':'btn-bytom']"  @click="confirm">{{ $t('welcome.confirm') }}</div>
                 </div>
             </div>
         </transition>
@@ -53,8 +50,6 @@
 import { getLanguage } from "@/assets/language"
 import { mapGetters } from 'vuex'
 
-const CLASS_CN = "form-item-content form-item-content-cn";
-const CLASS_EN = "form-item-content form-item-content-en"
 export default {
     data() {
         return {
@@ -69,16 +64,9 @@ export default {
         }
     },
     computed: {
-        passwdStyle: function () {
-            if (this.i18n == "cn") {
-                return CLASS_CN;
-            } else if (this.i18n == "en") {
-                return CLASS_EN;
-            }
-            return CLASS_CN;
-        },
         ...mapGetters([
-          'language'
+          'language',
+          'netType'
         ])
     },
     methods: {
@@ -92,9 +80,9 @@ export default {
         },
         confirm() {
             if (this.passwd == "") {
-                this.$dialog.show({
-                    body: this.$t("transfer.emptyPassword")
-                });
+                this.$toast.error(
+                    this.$t("transfer.emptyPassword")
+                );
                 return;
             }
 

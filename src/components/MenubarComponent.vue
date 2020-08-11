@@ -31,7 +31,8 @@
                 RouteNames.HOME,
                 RouteNames.ASSET,
                 RouteNames.TRANSFER,
-                RouteNames.RECEIVE
+                RouteNames.RECEIVE,
+                RouteNames.ASSET_SELECTION
               ]
               switch(name){
                 case 'HOME':{
