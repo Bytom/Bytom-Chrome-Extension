@@ -34,7 +34,8 @@
             <div v-show="show" class="confirm form bg-white">
                 <div class="form-item">
                     <div class="form-item-content">
-                        <input type="password" v-model="passwd" :placeholder="$t('transfer.password')" autofocus>
+                        <input v-if="text_placeholder" type="text" v-model="passwd" :placeholder="text_placeholder" autofocus>
+                        <input v-else type="password" v-model="passwd" :placeholder="$t('transfer.password')" autofocus>
                     </div>
                 </div>
                 <div class="btn-group btn-inline">
@@ -58,6 +59,12 @@ export default {
         };
     },
     props: {
+        text_placeholder:{
+            type: String,
+        },
+        text_error_hint:{
+            type: String,
+        },
         i18n: {
             type: String,
             default: 'cn',
@@ -81,7 +88,7 @@ export default {
         confirm() {
             if (this.passwd == "") {
                 this.$toast.error(
-                    this.$t("transfer.emptyPassword")
+                    this.text_error_hint || this.$t("transfer.emptyPassword")
                 );
                 return;
             }

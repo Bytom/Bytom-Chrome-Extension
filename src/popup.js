@@ -65,6 +65,15 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
 
   account.setupNet(`${store.getters.net}${store.getters.netType}`)
 
+  store.watch(
+    (state, getters) => getters.netType,
+    (newValue, oldValue) => {
+      if(newValue !== oldValue){
+        account.setupNet(`${store.getters.net}${store.getters.netType}`)
+      }
+    },
+  );
+
   Vue.filter('moment', function(value, formatString) {
     formatString = formatString || 'YYYY-MM-DD HH:mm:ss'
     return moment(value * 1000).format(formatString)
@@ -95,3 +104,5 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
     render: h => h(ViewBase)
   })
 });
+
+

@@ -202,7 +202,7 @@ const cn = {
     createAccount: '创建账户',
     backup: '备份',
     help: '帮助',
-    setting: '设置'
+    setting: '设置',
   },
   createAccount: {
     title: '创建钱包',
@@ -241,6 +241,7 @@ const cn = {
     BTM0004:'请输入Keystore。',
     BTM0005:'输入数量大于可用余额。',
     BTM0006:'输入有效的地址格式。',
+    BTM0007:'钱包名称错误，请输入正确钱包名称。',
   },
   successMsg:{
     createWallet:{
@@ -261,11 +262,14 @@ const cn = {
     page: '帮助与信息'
   },
   setting: {
-    title: '设置',
-    version: '钱包版本',
-    lang: '语言',
-    unit: 'BTM数量单位',
-    currency:'货币'
+    lang: '显示语言',
+    currency:'货币单位',
+    deleteWallet:'删除钱包',
+    deleteHint:'执行删除钱包操作前请确认您已备份好keystore文件，否则将无法找回！',
+    deleteBack:'返回备份',
+    deleteConfirm:'确认删除',
+    deleteConfirmHint:'请输入钱包名称以确认删除',
+    emptyWallet:'钱包名称不能为空'
   },
   backup: {
     title: '备份',

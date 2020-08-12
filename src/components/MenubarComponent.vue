@@ -8,8 +8,8 @@
           <figure  v-on:click=""><i class="iconfont iconwallet_filled"></i></figure>
           <figure  v-on:click=""><i class="iconfont iconbackup_filled"></i></figure>
         </section>
-        <figure class="setting" v-on:click="">
-          <i class="iconfont iconSetting_fiiled" @click="$router.go(-1)"></i>
+        <figure class="setting" :class="active('SETTINGS')" v-on:click="toggleTab('SETTINGS')">
+          <i class="iconfont iconSetting_fiiled" ></i>
         </figure>
     </nav>
 </template>
@@ -34,11 +34,25 @@
                 RouteNames.RECEIVE,
                 RouteNames.ASSET_SELECTION
               ]
+
+              const setting_tab = [
+                RouteNames.SETTINGS,
+                RouteNames.SETTINGS_CURRENCY,
+                RouteNames.SETTINGS_LANG,
+                RouteNames.SETTINGS_DELETE,
+              ]
               switch(name){
                 case 'HOME':{
                   if(home_tab.includes(this.$route.name)){
                     return "active";
                   }
+                  break;
+                }
+                case 'SETTINGS':{
+                  if(setting_tab.includes(this.$route.name)){
+                    return "active";
+                  }
+                  break;
                 }
 
                 default:
@@ -95,8 +109,19 @@
         }
 
         i.iconfont {
-            cursor: pointer;
-            color: #d6d6d6;
+          cursor: pointer;
+          color: #d6d6d6;
+          transition: color 0.2s ease;
+          width: 40px;
+          height: 40px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+
+          &:hover {
+            color:rgba(0,0,0,0.3);
+          }
+
         }
 
         figure.setting{
@@ -107,32 +132,16 @@
           text-align: center;
         }
 
+        figure.active{
+          .iconfont {
+            background: #F5F5F5;
+            border-radius: 20px;
+            color: #333333;
+          }
+        }
+
         .breadcrumb {
             padding-top: 15px;
-
-            figure.active{
-              .iconfont {
-                background: #F5F5F5;
-                border-radius: 20px;
-                color: #333333;
-              }
-            }
-
-            .iconfont {
-                cursor: pointer;
-                color:#dbdbdb;
-                transition: color 0.2s ease;
-                width: 40px;
-                height: 40px;
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-
-                &:hover {
-                    color:rgba(0,0,0,0.3);
-                }
-
-            }
         }
 
         &.no-chain {

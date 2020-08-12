@@ -15,7 +15,11 @@ export default class Keychain {
   findByGuid(guid){ return Object.values(this.pairs).find(id => id.guid === guid); }
   findByAddress(address){ return Object.values(this.pairs).find(id => id.address === address || id.vpAddress=== address); }
 
-
+  removeByAlias(alias){
+    if(this.pairs[alias]){
+      delete(this.pairs[alias])
+    }
+  }
   removeUnverifyIdentity(){
     const pairObject = Object.values(this.pairs).filter(id => !id.vMnemonic );
     for(let o of pairObject){

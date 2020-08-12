@@ -19,7 +19,10 @@ export const RouteNames = {
   // ONBOARDING:'onboarding',
   // SHOW_MNEMONIC:'showMnemonic',
   // MAIN_MENU:'mainMenu',
-  // SETTINGS:'settings',
+  SETTINGS:'settings',
+  SETTINGS_LANG:'settings-language',
+  SETTINGS_CURRENCY:'settings-currency',
+  SETTINGS_DELETE:'settings-delete',
   //
   TRANSFER:'transfer',
   ASSET_SELECTION:'asset-selection',
@@ -233,17 +236,42 @@ const routers = [
               require(['@/views/sideMenu/menuHelp.vue'], resolve)
             }
           },
-          {
-            path: '/menu/settings',
-            name: 'menu-settings',
-            meta: { title: '设置' },
-            component: resolve => {
-              require(['@/views/sideMenu/menuSettings.vue'], resolve)
-            }
-          }
+
         ]
       }
     ]
+  },
+  {
+    path: '/settings',
+    name: RouteNames.SETTINGS,
+    meta: { title: '设置' },
+    component: resolve => {
+      require(['@/views/settings/settings.vue'], resolve)
+    }
+  },
+  {
+    path: '/settings-lang',
+    name: RouteNames.SETTINGS_LANG,
+    meta: { title: '设置语言' },
+    component: resolve => {
+      require(['@/views/settings/languageSelection.vue'], resolve)
+    }
+  },
+  {
+    path: '/settings-currency',
+    name: RouteNames.SETTINGS_CURRENCY,
+    meta: { title: '设置货币' },
+    component: resolve => {
+      require(['@/views/settings/currencySelection.vue'], resolve)
+    }
+  },
+  {
+    path: '/settings-delete',
+    name: RouteNames.SETTINGS_DELETE,
+    meta: { title: '删除钱包' },
+    component: resolve => {
+      require(['@/views/settings/deleteWallet.vue'], resolve)
+    }
   },
   {
     path: '/protocol',

@@ -348,6 +348,7 @@ import { mapActions, mapGetters, mapState } from 'vuex'
 import * as Actions from '@/store/constants';
 import _ from 'lodash';
 import { Number as Num } from "@/utils/Number"
+import BigNumber from "bignumber.js"
 
 
 const EnterActive = 'animated faster fadeInLeft';
@@ -374,6 +375,7 @@ export default {
                 inUsd: "0"
               }
             ],
+            t: null
         };
     },
     watch: {
@@ -416,7 +418,8 @@ export default {
 
             if(balances && balances.length >0 ){
                 const currency = camelize(this.currency)
-                balance = _.sumBy(balances, function(o) { return Number(o[currency]); })
+                const arr = balances.map(o => o[currency])
+                balance = BigNumber.sum.apply(null, arr)
             }
             return  Num.formatCurrency( (balance != null && balance != 0)? balance : '0.00', this.currency)
         },
@@ -472,7 +475,10 @@ export default {
         }
       },
         setupRefreshTimer() {
-            setInterval(() => {
+          if(this.t){
+             clearInterval(this.t)
+          }
+          this.t = setInterval(() => {
                 this.refreshBalance(this.address)
             }, 10000)
         },
@@ -537,11 +543,16 @@ export default {
       ])
     },
     mounted() {
-        this.setupRefreshTimer();
-        this.refreshBalance(this.address)
+      this.setupRefreshTimer();
+      this.refreshBalance(this.address)
       if (this.netType){
         this.isVapor = this.netType =='vapor'
       }
     },
+    beforeDestroy() {
+      if(this.t){
+        clearInterval(this.t)        
+      }
+    }
   };
 </script>

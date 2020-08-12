@@ -338,7 +338,7 @@ hr {
 /*}*/
 
 .color-black {
-  color: rgba(0, 0, 0, 0.88);;
+  color: rgba(0, 0, 0, 0.88) !important;
 }
 .color-green {
   color: #035BD4;
