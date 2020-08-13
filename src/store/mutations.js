@@ -13,6 +13,7 @@ export const mutations = {
     [Mutations.SET_LIST_VOTE]:(state, listVote) => state.listVote = listVote,
     [Mutations.SET_SELECTED_VOTE]:(state, selectVote) => state.selectVote = selectVote,
     [Mutations.SET_CURRENT_ASSET]:(state, currentAsset) => state.currentAsset = currentAsset,
+    [Mutations.SET_MNEMONIC]:(state, mnemonic) => state.mnemonic = mnemonic,
 
   // [Mutations.SET_AUTO_LOCK]:(state, inactivityInterval) =>
     //     state.bytom.settings.inactivityInterval = TimingHelpers.minutes(inactivityInterval),

@@ -258,6 +258,9 @@ account.isValidKeystore = function(keystore) {
   return bytom.keys.isValidKeystore(keystore)
 }
 
-
+account.decryptMnemonic = function(vault,password, context) {
+  const keystore = context.bytom.currentAccount.keystore;
+  return bytom.keys.decryptMnemonic(vault, password, keystore)
+}
 
 export default account

@@ -273,7 +273,11 @@ const cn = {
   },
   backup: {
     title: '备份',
-    button: '备份'
+    button: '备份',
+    mnemonic:'备份助记词',
+    keystore:'备份Keystore',
+    mnemonicHint:'请抄写助记词，并妥善保管',
+    ok:'已完成'
   },
   protocol: {
     title: 'Bytom Chrome Wallet服务协议',

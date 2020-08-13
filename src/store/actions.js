@@ -8,6 +8,7 @@ export const actions = {
     [Actions.SET_BYTOM]:({commit}, bytom) => commit(Actions.SET_BYTOM, bytom),
     [Actions.SET_LIST_VOTE]:({commit}, listVote) => commit(Actions.SET_LIST_VOTE, listVote),
     [Actions.SET_CURRENT_ASSET]:({commit}, currentAsset) => commit(Actions.SET_CURRENT_ASSET, currentAsset),
+    [Actions.SET_MNEMONIC]:({commit}, mnemonic) => commit(Actions.SET_MNEMONIC, mnemonic),
     [Actions.SET_SELECTED_VOTE]:({commit}, selectVote) => commit(Actions.SET_SELECTED_VOTE, selectVote),
 
 

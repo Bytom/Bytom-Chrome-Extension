@@ -18,6 +18,7 @@ const state = {
     listVote:[],
     selectVote: null,
     currentAsset: null,
+    mnemonic:null,
 };
 
 const getters = {

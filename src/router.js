@@ -37,7 +37,8 @@ export const RouteNames = {
   // NETWORKS:'networks',
   // NETWORK:'network',
   // CHANGE_PASSWORD:'changePassword',
-  // BACKUP:'backup',
+  BACKUP:'backup',
+  BACKUP_MNEMONIC:'backup-mnemonic',
   // DESTROY:'destroy',
   // AUTO_LOCK:'autoLock',
   // LANGUAGE:'language',
@@ -221,14 +222,6 @@ const routers = [
             }
           },
           {
-            path: '/menu/backup',
-            name: 'menu-backup',
-            meta: { title: '备份' },
-            component: resolve => {
-              require(['@/views/sideMenu/menuBackup.vue'], resolve)
-            }
-          },
-          {
             path: '/menu/help',
             name: 'menu-help',
             meta: { title: '帮助' },
@@ -241,6 +234,25 @@ const routers = [
       }
     ]
   },
+  {
+    path: '/backup',
+    name: RouteNames.BACKUP,
+    meta: { title: '备份' },
+    component: resolve => {
+      require(['@/views/backup/backup.vue'], resolve)
+    },
+    children: [
+      {
+        path: '/backup/mnemonic',
+        name: 'backup-mnemonic',
+        meta: { title: '备份助记词' },
+        component: resolve => {
+          require(['@/views/backup/backupMnemonic.vue'], resolve)
+        }
+      }
+    ]
+  },
+
   {
     path: '/settings',
     name: RouteNames.SETTINGS,

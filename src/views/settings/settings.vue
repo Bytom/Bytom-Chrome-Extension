@@ -77,7 +77,7 @@ export default {
     },
     computed: {
       currentLanguage(){
-        if(this.language === 'cn'){
+        if(this.language === 'cn' || this.language === 'zh'){
           return '中文'
         }else{
           return 'English'
