@@ -5,7 +5,7 @@
           <div class="logo_divider"></div>
           <figure  :class="active('HOME')" v-on:click="toggleTab('HOME')"><i class="iconfont iconhome_filled"></i></figure>
           <figure  v-on:click=""><i class="iconfont iconbapp_filled"></i></figure>
-          <figure  v-on:click=""><i class="iconfont iconwallet_filled"></i></figure>
+          <figure :class="active('WALLETS')" v-on:click="toggleTab('WALLETS')"><i class="iconfont iconwallet_filled"></i></figure>
           <figure :class="active('BACKUP')" v-on:click="toggleTab('BACKUP')"><i class="iconfont iconbackup_filled"></i></figure>
         </section>
         <figure class="setting" :class="active('SETTINGS')" v-on:click="toggleTab('SETTINGS')">
@@ -46,6 +46,10 @@
                 RouteNames.BACKUP,
                 RouteNames.BACKUP_MNEMONIC,
               ]
+
+              const wallet_tab = [
+                RouteNames.WALLETS,
+              ]
               switch(name){
                 case 'HOME':{
                   if(home_tab.includes(this.$route.name)){
@@ -61,6 +65,12 @@
                 }
                 case 'BACKUP':{
                   if(backup_tab.includes(this.$route.name)){
+                    return "active";
+                  }
+                  break;
+                }
+                case 'WALLETS':{
+                  if(wallet_tab.includes(this.$route.name)){
                     return "active";
                   }
                   break;

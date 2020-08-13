@@ -29,16 +29,21 @@ account.create = function(accountAlias, keyAlias, passwd, context) {
       resultObj.keyAlias = keyAlias
       resultObj.vMnemonic = false
 
-      _bytom.keychain.pairs[accountAlias] = resultObj
-      _bytom.currentAccount = resultObj
 
-      context[Actions.UPDATE_STORED_BYTOM](_bytom).then(() => {
-        resolve(ret)
+   
+
+      context[Actions.SET_MNEMONIC](resultObj['mnemonic']).then(()=>{
+        delete resultObj['mnemonic']
+
+        _bytom.keychain.pairs[accountAlias] = resultObj
+        _bytom.currentAccount = resultObj
+        context[Actions.UPDATE_STORED_BYTOM](_bytom).then(() => {
+          resolve(resultObj)
+        }).catch(e => { throw e })
       })
-        .catch(error => {
-          reject(error)
-        })
-
+      .catch(error => {
+        reject(error)
+      })
     })
   })
   return retPromise

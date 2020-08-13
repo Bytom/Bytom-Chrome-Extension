@@ -227,7 +227,8 @@ const cn = {
   },
   mnemonic:{
     "title":"备份助记词",
-    "hint":"请牢记助记词，一旦丢失您的资产将无法找回！"
+    "hint":"请牢记助记词，一旦丢失您的资产将无法找回！",
+    "passwordHint":"请输入密码展示助记词"
   },
   verifyMnemonic:{
     "title":"验证助记词",
@@ -242,6 +243,7 @@ const cn = {
     BTM0005:'输入数量大于可用余额。',
     BTM0006:'输入有效的地址格式。',
     BTM0007:'钱包名称错误，请输入正确钱包名称。',
+    BTM0008:'密码不能为空'
   },
   successMsg:{
     createWallet:{

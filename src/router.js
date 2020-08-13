@@ -39,7 +39,7 @@ export const RouteNames = {
   // CHANGE_PASSWORD:'changePassword',
   BACKUP:'backup',
   BACKUP_MNEMONIC:'backup-mnemonic',
-  // DESTROY:'destroy',
+  WALLETS:'wallets',
   // AUTO_LOCK:'autoLock',
   // LANGUAGE:'language',
   // KEYPAIRS:'keypairs',
@@ -213,14 +213,7 @@ const routers = [
           require(['@/views/sideMenu/homeMenu.vue'], resolve)
         },
         children: [
-          {
-            path: '/menu/account/create',
-            name: 'menu-account-creation',
-            meta: { title: '创建账户' },
-            component: resolve => {
-              require(['@/views/sideMenu/menuCreation.vue'], resolve)
-            }
-          },
+
           {
             path: '/menu/help',
             name: 'menu-help',
@@ -233,6 +226,14 @@ const routers = [
         ]
       }
     ]
+  },
+  {
+    path: '/wallets',
+    name: RouteNames.WALLETS,
+    meta: { title: '钱包' },
+    component: resolve => {
+      require(['@/views/wallets.vue'], resolve)
+    }
   },
   {
     path: '/backup',

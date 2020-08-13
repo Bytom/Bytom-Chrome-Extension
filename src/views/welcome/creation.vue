@@ -249,7 +249,8 @@ export default {
         ...mapActions([
           Actions.CREATE_NEW_BYTOM,
           Actions.IMPORT_BYTOM,
-          Actions.UPDATE_STORED_BYTOM
+          Actions.UPDATE_STORED_BYTOM,
+          Actions.SET_MNEMONIC
         ])
     },
     mounted() {

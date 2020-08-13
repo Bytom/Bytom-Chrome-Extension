@@ -47,7 +47,7 @@
                 <span class="mnemonic" v-for="n in inputMnemonic">{{ n }} </span>
             </div>
             <p class="hint">{{ $t('backup.mnemonicHint') }}</p>
-            <button class="btn btn-primary">{{ $t("backup.ok") }}</button>
+            <button class="btn btn-primary" @click="back">{{ $t("backup.ok") }}</button>
         </section>
     </div>
 </template>
@@ -72,13 +72,16 @@ export default {
         ])
     },
     methods: {
+        back(){
+           this.$router.push({ name: RouteNames.BACKUP });
+        },
         ...mapActions([
         Actions.SET_MNEMONIC
       ])
     },
     mounted() {
       if (!this.mnemonic){
-        this.$router.push({ name: RouteNames.BACKUP })
+        this.back();
       }
     },
     beforeDestroy() {

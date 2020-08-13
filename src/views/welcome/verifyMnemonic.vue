@@ -87,6 +87,7 @@ import { getLanguage } from '@/assets/language'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import * as Actions from '@/store/constants';
 import { required } from "vuelidate/lib/validators";
+import {RouteNames} from '@/router'
 
 
 export default {
@@ -119,7 +120,8 @@ export default {
             return "form-item-label form-item-label-cn";
         },
       ...mapState([
-        'bytom'
+        'bytom',
+        'mnemonic'
       ]),
       ...mapGetters([
         'currentAccount'
@@ -146,7 +148,7 @@ export default {
           } else {
             const formMnemonic = this.inputMnemonic.trim()
 
-            if (formMnemonic !== this.currentAccount.mnemonic) {
+            if (formMnemonic !== this.mnemonic) {
               this.$toast.error(
                 this.$t("error.BTM0002")
               );
@@ -165,6 +167,11 @@ export default {
           Actions.UPDATE_STORED_BYTOM,
           Actions.PUSH_ALERT
         ])
+    },
+    mounted() {
+      if (!this.mnemonic){
+        this.$router.push({ name: RouteNames.MNEMONIC })
+      }
     }
 };
 </script>

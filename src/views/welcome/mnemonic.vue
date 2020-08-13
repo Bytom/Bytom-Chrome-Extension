@@ -71,37 +71,94 @@
         </h1>
       </div>
       <div class="divider"></div>
-      <div class="container">
-          <div>
-            <p class="hint">{{ $t('mnemonic.hint')}}</p>
-            <div class="mnemnonic-box">
-                <span class="mnemonic" v-for="n in mnemonic">{{ n }} </span>
-            </div>
-          </div>
-          <div>
-            <div class="btn btn-primary btn-round float-right" @click="$router.push({ name: 'welcome-verify-mnemonic' })"><i class="iconfont icon-right-arrow"></i></div>
+
+      <div v-if="mnemonic" class="container">
+        <div>
+          <p class="hint">{{ $t('mnemonic.hint')}}</p>
+          <div class="mnemnonic-box">
+            <span class="mnemonic" v-for="n in inputMnemonic">{{ n }} </span>
           </div>
         </div>
-     </div>
-      <Footer/>
+        <div>
+          <div class="btn btn-primary btn-round float-right" @click="$router.push({ name: 'welcome-verify-mnemonic' })">
+            <i class="iconfont icon-right-arrow"></i></div>
+        </div>
+      </div>
+      <div  class="container" v-else>
+        <div>
+          <div class="form">
+            <div class="form-item">
+              <div class="form-item-content">
+                <input type="password"
+                       id="passwd1"
+                       :placeholder="$t('mnemonic.passwordHint')"
+                       name="passwd1"
+                       ref="passwd1"
+                       v-model="passwd"
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="btn btn-primary btn-round float-right" @click="showMnemonic">
+            <i class="iconfont icon-right-arrow"></i></div>
+        </div>
+
+      </div>
+    </div>
+    <Footer/>
   </div>
 </template>
 
 <script>
 import { getLanguage } from '@/assets/language'
 import { mapActions, mapGetters, mapState } from 'vuex'
+import account from "@/models/account";
+import {RouteNames} from '@/router'
+import * as Actions from '@/store/constants';
 
 export default {
     name: "",
+    data() {
+      return {
+        passwd:''
+      };
+    },
     computed: {
-        mnemonic: function () {
-            return this.currentAccount.mnemonic.split(' ')
+        inputMnemonic: function () {
+            return this.mnemonic? this.mnemonic.split(' '): null;
         },
       ...mapState([
-        'bytom'
+        'bytom',
+        'mnemonic'
       ]),
       ...mapGetters([
         'currentAccount'
+      ])
+    },
+    methods: {
+      showMnemonic: function () {
+          if (! this.passwd) {
+            this.$toast.error(
+              this.$t("error.BTM0008")
+            );
+            return;
+          }
+
+          const vault = this.currentAccount.vault;
+          try{
+            const mnemonic = account.decryptMnemonic(vault, this.passwd, this)
+            this[Actions.SET_MNEMONIC](mnemonic)
+          }
+          catch (e){
+            this.$toast.error(
+              e.message || e
+            );
+          }
+      },
+      ...mapActions([
+        Actions.SET_MNEMONIC
       ])
     },
 };
