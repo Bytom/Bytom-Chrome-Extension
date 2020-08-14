@@ -204,7 +204,7 @@
             <div class="file-selection form-item-content">
               <div class="box">
                 <input type="file" id="file" class="inputfile inputfile-1" @change="tirggerFile($event)">
-                <label for="file"> <i class="iconfont iconupload"/> <span> {{ uploadPlaceHolder }}</span></label>
+                <label for="file"> <i class="iconfont icon_upload"/> <span> {{ uploadPlaceHolder }}</span></label>
               </div>
             </div>
           </div>

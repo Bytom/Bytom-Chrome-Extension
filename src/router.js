@@ -40,6 +40,7 @@ export const RouteNames = {
   BACKUP:'backup',
   BACKUP_MNEMONIC:'backup-mnemonic',
   WALLETS:'wallets',
+  BAPP:'bapp',
   // AUTO_LOCK:'autoLock',
   // LANGUAGE:'language',
   // KEYPAIRS:'keypairs',
@@ -233,6 +234,14 @@ const routers = [
     meta: { title: '钱包' },
     component: resolve => {
       require(['@/views/wallets.vue'], resolve)
+    }
+  },
+  {
+    path: '/bapp',
+    name: RouteNames.BAPP,
+    meta: { title: 'Bapp' },
+    component: resolve => {
+      require(['@/views/bapp.vue'], resolve)
     }
   },
   {

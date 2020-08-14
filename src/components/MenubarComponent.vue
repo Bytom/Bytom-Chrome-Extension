@@ -3,13 +3,13 @@
         <section class="breadcrumb">
           <figure><img class="logo" src="@/assets/logo_pure.png" alt=""></figure>
           <div class="logo_divider"></div>
-          <figure  :class="active('HOME')" v-on:click="toggleTab('HOME')"><i class="iconfont iconhome_filled"></i></figure>
-          <figure  v-on:click=""><i class="iconfont iconbapp_filled"></i></figure>
-          <figure :class="active('WALLETS')" v-on:click="toggleTab('WALLETS')"><i class="iconfont iconwallet_filled"></i></figure>
-          <figure :class="active('BACKUP')" v-on:click="toggleTab('BACKUP')"><i class="iconfont iconbackup_filled"></i></figure>
+          <figure  :class="active('HOME')" v-on:click="toggleTab('HOME')"><i class="iconfont icon_home_filled"></i></figure>
+          <figure  :class="active('BAPP')" v-on:click="toggleTab('BAPP')"><i class="iconfont icon_bapp_filled"></i></figure>
+          <figure :class="active('WALLETS')" v-on:click="toggleTab('WALLETS')"><i class="iconfont icon_wallet_filled"></i></figure>
+          <figure :class="active('BACKUP')" v-on:click="toggleTab('BACKUP')"><i class="iconfont icon_backup_filled"></i></figure>
         </section>
         <figure class="setting" :class="active('SETTINGS')" v-on:click="toggleTab('SETTINGS')">
-          <i class="iconfont iconSetting_fiiled" ></i>
+          <i class="iconfont icon_setting_fiiled" ></i>
         </figure>
     </nav>
 </template>
@@ -22,6 +22,9 @@
         computed: {
             ...mapState([
                 'bytom'
+            ]),
+            ...mapGetters([
+              'currentAccount',
             ])
         },
         methods: {
@@ -50,6 +53,10 @@
               const wallet_tab = [
                 RouteNames.WALLETS,
               ]
+
+              const bapp_tab = [
+                RouteNames.BAPP,
+              ]
               switch(name){
                 case 'HOME':{
                   if(home_tab.includes(this.$route.name)){
@@ -75,12 +82,21 @@
                   }
                   break;
                 }
+                case 'BAPP':{
+                  if(bapp_tab.includes(this.$route.name)){
+                    return "active";
+                  }
+                  break;
+                }
 
                 default:
                   return ""
               }
             },
             showNav(){
+              if(this.bytom && this.bytom.currentAccount && this.bytom.currentAccount.alias){
+                return true
+              }else{
                 switch(this.$route.name){
                     case RouteNames.ENTRY:
                     case RouteNames.CREATE_ACCOUNT:
@@ -90,7 +106,9 @@
                     case RouteNames.SETTING_PASSWORD:
                     case RouteNames.PROTOCOL: return false;
                     default: return true;
-                }
+                }                
+              }
+
             },
 
             toggleTab(name){

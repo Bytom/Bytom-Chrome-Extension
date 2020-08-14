@@ -1,33 +1,78 @@
-<style scoped>
+<style lang="scss" scoped>
+  .item-block{
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.2px;
+  i{
+    width: 24px;
+    height: 24px;
+    background: #F5F5F5;
+    font-weight: normal;
+    border-radius: 24px;
+    text-align: center;
+    padding: 10px;
+  }
+  }
 
+  .disable{
+    cursor: not-allowed;
+    color: grey;
+    pointer-events: none;
+
+  &:hover{
+     border:none;
+     padding:14px;
+   }
+  }
+
+  .create{
+    background: #FAFAFA;
+    /* Neutral-2 / Grey-3 */
+
+    border: 1px dashed #EBEBEB;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 15px;
+
+    letter-spacing: 0.2px;
+
+
+    color: rgba(0, 0, 0, 0.88);
+    padding: 25px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+
+    i{
+      font-size:22px;
+      margin-right: 6px;
+    }
+    
+    &:hover, &:focus, &:active {
+      border: 1px solid #004EE4;
+      cursor:pointer;
+    }
+  }
 </style>
 
 <template>
-    <MenuPage :title="$t('createAccount.title')">
-        <div class="form">
-            <div class="form-item">
-                <label class="form-item-label">{{ $t('createAccount.accountAlias') }}</label>
-                <div class="form-item-content">
-                    <input type="text" v-model="formItem.accAlias">
-                </div>
-            </div>
-
-            <div class="form-item">
-                <label class="form-item-label">{{ $t('createAccount.keyPassword') }}</label>
-                <div class="form-item-content">
-                    <input type="password" v-model="formItem.passwd1">
-                </div>
-            </div>
-            <div class="form-item">
-                <label class="form-item-label">{{ $t('createAccount.confirmPassword') }}</label>
-                <div class="form-item-content">
-                    <input type="password" v-model="formItem.passwd2">
-                </div>
-            </div>
-            <div class="tips">{{tips}}</div>
+  <div class="warp-menu bg-grey">
+    <div class="list menu-list">
+      <div v-for="(alias, index) in walletList" class="list-item" @click="setCurrentAccount(alias)">
+        <div class="item-block">
+          <i class="iconfont icon_backup_line"></i>{{ alias }}
         </div>
-        <a class="btn btn-primary submit" @click="create">{{ $t('createAccount.create') }}</a>
-    </MenuPage>
+      </div>
+    </div>
+    <div class="create" @click="$router.push('creation')">
+      <i class="iconfont icon_wallet_add"></i>{{ $t('wallet.create') }}
+    </div>
+
+    <!-- child menu -->
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
@@ -50,20 +95,40 @@ export default {
         };
     },
     computed: {
+      walletList(){
+        const walletsObject = this.bytom.keychain.pairs
+        if(walletsObject){
+           return Object.values(walletsObject).map(w => w.alias);
+        }
+
+        return [];
+      },
       ...mapState([
         'bytom'
       ]),
       ...mapGetters([
-        'net',
-        'netType'
+        'currentAccount',
       ])
     },
     methods: {
-        create: function () {
+        setCurrentAccount: function (alias) {
+          if(this.currentAccount.alias !== alias){
+            const bytom = this.bytom.clone();
 
+            bytom.currentAccount = bytom.keychain.pairs[alias];
+            this[Actions.UPDATE_STORED_BYTOM](bytom).then(()=>{
+              this.$router.push('/')
+              this.$toast.success(
+                this.$t('wallet.success')+alias
+              );
+            })
+          }else{
+            this.$toast.error(
+              this.$t('error.BTM0009')+alias
+            );
+          }
         },
         ...mapActions([
-          Actions.CREATE_NEW_BYTOM_ACCOUNT,
           Actions.UPDATE_STORED_BYTOM
         ])
     },

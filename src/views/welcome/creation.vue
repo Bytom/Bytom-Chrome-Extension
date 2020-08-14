@@ -42,13 +42,17 @@
   .btn-round{
     padding: 15px 2px;
   }
+  .warp-container{
+    border-left: 2px solid #FAFAFA;
+    width: calc( 100% - 122px);
+  }
 </style>
 
 <template>
-  <div>
-    <div class="warp bg-white">
+  <div :class="[isCurrentAccoutExist?'warp-menu warp-container':'warp' , 'bg-white' ]">
+    <div class="" >
       <div class="header color-black">
-        <BackButton des="welcome"/>
+        <BackButton/>
         <h1>
           <div class="welcome-title">{{ $t('createAccount.title')}}</div>
         </h1>
@@ -104,7 +108,7 @@
           </div>
         </div>
      </div>
-      <Footer/>
+      <Footer v-if="!isCurrentAccoutExist"/>
   </div>
 </template>
 
@@ -151,6 +155,9 @@ export default {
     }
   },
     computed: {
+      isCurrentAccoutExist(){
+        return this.currentAccount && this.currentAccount.alias
+      },
         formItemLabel: function () {
             if (this.i18n == "cn") {
                 return "form-item-label form-item-label-cn";
@@ -173,7 +180,8 @@ export default {
       ...mapGetters([
         'net',
         'language',
-        'netType'
+        'netType',
+        'currentAccount'
       ])
     },
     props: {

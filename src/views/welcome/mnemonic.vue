@@ -62,8 +62,8 @@
 </style>
 
 <template>
-  <div>
-    <div class="warp bg-white">
+  <div  :class="[isCurrentAccoutExist?'warp-menu warp-container':'warp' , 'bg-white' ]">
+    <div>
       <div class="header color-black">
         <BackButton des="welcome-creation"/>
         <h1>
@@ -107,7 +107,7 @@
 
       </div>
     </div>
-    <Footer/>
+    <Footer v-if="!isCurrentAccoutExist"/>
   </div>
 </template>
 
@@ -126,6 +126,9 @@ export default {
       };
     },
     computed: {
+        isCurrentAccoutExist(){
+        return this.currentAccount && this.currentAccount.alias
+      },
         inputMnemonic: function () {
             return this.mnemonic? this.mnemonic.split(' '): null;
         },

@@ -42,7 +42,7 @@
     font-size: 12px
   }
 
-  .iconCopy{
+  .icon_copy{
     font-size: 14px;
   }
 
@@ -89,7 +89,7 @@
         <img :src="img(currentCoin)" alt="" class="c-icon">
         <div id="qrcode"></div>
       </div>
-      <div class="color-grey-36 address-text"  :title="addressTitle" :data-clipboard-text="addr">{{addr}}<i class="iconfont iconCopy"></i></div>
+      <div class="color-grey-36 address-text"  :title="addressTitle" :data-clipboard-text="addr">{{addr}}<i class="iconfont icon_copy"></i></div>
     </div>
     <div v-if="netType === 'vapor'" class="vp-warning color-red"> {{$t('receive.vpWarning')}}</div>
   </div>

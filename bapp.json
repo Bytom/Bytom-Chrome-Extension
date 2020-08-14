@@ -1,0 +1,23 @@
+{
+  "en":[],
+  "cn":[
+    {
+      "title":"MOV",
+      "description":"下一代稳定金融体系",
+      "icon":"src/assets/img/bapp/mov.jpg",
+      "color":"linear-gradient(274.27deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%), #EB4232;"
+    },
+    {
+      "title":"投票",
+      "description":"节点投票 高额年化",
+      "icon":"src/assets/img/bapp/vote.jpg",
+      "color":"linear-gradient(94.25deg, rgba(255, 255, 255, 0) 21.9%, rgba(255, 255, 255, 0.1) 81.37%), #0A57EB;"
+    },
+    {
+      "title":"红包",
+      "description":"比原侧链-多币种红包",
+      "icon":"src/assets/img/bapp/red-packet.jpg",
+      "color":"linear-gradient(274.27deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%), #EB4232;"
+    }
+  ]
+}

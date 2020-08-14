@@ -35,12 +35,12 @@
     <div class="list menu-list">
       <div :class="['list-item', {disable: !vault}]" @click="$refs.modalPasswd.open()" >
         <div class="item-block">
-          <i class="iconfont iconbackup_line"></i>{{ $t('backup.mnemonic') }}
+          <i class="iconfont icon_backup_line"></i>{{ $t('backup.mnemonic') }}
         </div>
       </div>
       <div class="list-item" @click="backupKeystore">
         <div class="item-block">
-          <i class="iconfont iconbackup_line"></i>{{ $t('backup.keystore') }}
+          <i class="iconfont icon_backup_line"></i>{{ $t('backup.keystore') }}
         </div>
       </div>
     </div>

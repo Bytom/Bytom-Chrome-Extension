@@ -252,15 +252,15 @@ input:checked + .slider:before {
               <div class="btn-send-transfer">
 
                 <a  @click="transferOpen">
-                  <i class="icon iconfont iconsend"></i>
+                  <i class="icon iconfont icon_send"></i>
                   <div>{{ $t('main.send') }}</div>
                 </a>
                 <a  @click="showQrcode">
-                  <i class="icon iconfont iconrecvice"></i>
+                  <i class="icon iconfont icon_recvice"></i>
                   <div>{{ $t('main.receive') }}</div>
                 </a>
                 <a @click="crossChainOpen">
-                  <i class="icon iconfont iconcross"></i>
+                  <i class="icon iconfont icon_cross"></i>
                   <div>{{ $t('main.crossChain') }}</div>
                 </a>
               </div>

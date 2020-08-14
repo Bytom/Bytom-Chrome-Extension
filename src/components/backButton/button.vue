@@ -1,6 +1,6 @@
 <template>
     <div >
-        <i :class="['iconfont icon-back',{small: small}]" @click="goBack()"></i>
+        <i :class="['iconfont icon_arrow_left',{small: small}]" @click="goBack()"></i>
     </div>
 </template>
 

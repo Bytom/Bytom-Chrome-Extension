@@ -64,7 +64,7 @@
 <template>
   <div class="warp bg-gray">
     <section class="header bg-header">
-      <i class="iconfont icon-back" @click="denied"></i>
+      <i class="iconfont icon_arrow_left" @click="denied"></i>
       <p>{{$t('enable.title')}}</p>
     </section>
 

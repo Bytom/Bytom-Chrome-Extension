@@ -121,7 +121,7 @@ input.form-item-content:active
                   </div>
 
                   <div class=" text-align-right">
-                    <div class="color-grey-36 uppercase assetId">{{ shortAddress(selectAsset.assetId) }} <i class="iconfont iconarrow_1"></i></div>
+                    <div class="color-grey-36 uppercase assetId">{{ shortAddress(selectAsset.assetId) }} <i class="iconfont icon_arrow_1"></i></div>
                   </div>
 
 

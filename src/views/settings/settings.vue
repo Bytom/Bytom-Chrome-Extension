@@ -44,7 +44,7 @@
                 <p>{{ $t("setting.lang") }}</p>
             </div>
             <div class="value">
-                {{ currentLanguage }} <i class="iconfont iconarrow_1"></i>
+                {{ currentLanguage }} <i class="iconfont icon_arrow_1"></i>
             </div>
         </div>
         <div class="row" @click="$router.push({ name: 'settings-currency'})">
@@ -52,7 +52,7 @@
                 <p>{{ $t("setting.currency") }}</p>
             </div>
             <div class="value">
-                {{ currentCurrency }} <i class="iconfont iconarrow_1"></i>
+                {{ currentCurrency }} <i class="iconfont icon_arrow_1"></i>
             </div>
         </div>
         <div class="row" @click="$router.push({ name: 'settings-delete'})">
@@ -60,7 +60,7 @@
                 <p>{{ $t("setting.deleteWallet") }}</p>
             </div>
             <div class="value">
-                <i class="iconfont iconarrow_1"></i>
+                <i class="iconfont icon_arrow_1"></i>
             </div>
         </div>
     </div>

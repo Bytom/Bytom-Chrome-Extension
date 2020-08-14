@@ -74,7 +74,7 @@
 <template>
   <div class="warp bg-gray">
     <section class="header bg-header">
-      <i class="iconfont icon-back" @click="close"></i>
+      <i class="iconfont icon_arrow_left" @click="close"></i>
       <p>{{ $t('transfer.confirmTransaction') }}</p>
     </section>
 
