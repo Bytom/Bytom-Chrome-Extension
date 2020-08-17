@@ -2,9 +2,26 @@ import bytom from './bytom'
 import uuid from 'uuid'
 import * as Actions from '../store/constants';
 import _ from 'lodash'
+import bappData from '@/assets/bapp/bapp.json'
+import {bappRequestUrl} from '@/utils/constants.js'
 
 let account = {
   setupNet: bytom.setupNet
+}
+
+function getDomains(){
+  let domains = bappData.list.filter( l => l.link!== undefined).map(a => a.link.split('/')[2]);
+
+  return fetch(bappRequestUrl)
+      .then(response => response.json())
+      .then(json => {
+        if(!_.isEqual(json, bappData)){
+          domains = json.list.filter( l => l.link!== undefined).map(a => a.link.split('/')[2]);
+        }
+        return domains;
+      }).catch((e)=>{
+        return domains;
+      });
 }
 
 account.create = function(accountAlias, keyAlias, passwd, context) {
@@ -26,14 +43,15 @@ account.create = function(accountAlias, keyAlias, passwd, context) {
     const res = bytom.keys.createKey(keyAlias, passwd)
 
     bytom.setupNet(`${context.net}bytom`)
-    bytom.accounts.createNewAccount(res.xpub).then(ret => {
+    bytom.accounts.createNewAccount(res.xpub).then( async (ret) => {
       let resultObj =  Object.assign(res, ret)
       resultObj.alias = accountAlias
       resultObj.keyAlias = keyAlias
       resultObj.vMnemonic = false
 
+      const domains = await getDomains();
+      _bytom.settings.domains = Array.from(new Set(_bytom.settings.domains.concat(domains)))
 
-   
 
       context[Actions.SET_MNEMONIC](resultObj['mnemonic']).then(()=>{
         delete resultObj['mnemonic']
@@ -68,7 +86,7 @@ account.restoreByMnemonic = function(accountAlias, mnemonic, passwd, context) {
 
     const res = bytom.keys.restoreFromMnemonic(keyAlias, passwd, mnemonic)
 
-    bytom.wallet.list(res.xpub).then(wallet =>{
+    bytom.wallet.list(res.xpub).then(async (wallet) =>{
       let walletInfo
       if(wallet.length>0){
         let ret = {
@@ -80,6 +98,9 @@ account.restoreByMnemonic = function(accountAlias, mnemonic, passwd, context) {
       }else{
         walletInfo = bytom.accounts.createNewAccount(res.xpub)
       }
+
+      const domains = await getDomains();
+      _bytom.settings.domains = Array.from(new Set(_bytom.settings.domains.concat(domains)))
 
       walletInfo.then(ret => {
         let resultObj =  Object.assign(res, ret)
@@ -117,7 +138,7 @@ account.restoreByKeystore = function(accountAlias, keystore, password, context) 
 
     const res = bytom.keys.restoreFromKeystore(password, keystore)
 
-    bytom.wallet.list(res.xpub).then(wallet =>{
+    bytom.wallet.list(res.xpub).then(async (wallet) =>{
       let walletInfo
       if(wallet.length>0){
         let ret = {
@@ -129,6 +150,10 @@ account.restoreByKeystore = function(accountAlias, keystore, password, context) 
       }else{
         walletInfo = bytom.accounts.createNewAccount(res.xpub)
       }
+
+
+      const domains = await getDomains();
+      _bytom.settings.domains = Array.from(new Set(_bytom.settings.domains.concat(domains)))
 
       walletInfo.then(ret => {
         let resultObj =  Object.assign(ret, {})

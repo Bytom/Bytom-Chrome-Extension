@@ -1,72 +1,91 @@
-<style scoped>
+<style lang="scss" scoped>
+.bapp_list{
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.04);
+  border-radius: 8px;
+  padding: 16px;
+  .title{
+    color: white;
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 7px;
+  }
+
+  .description{
+    font-weight: 300;
+    font-size: 13px;
+
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  img{
+    border-radius: 32px;
+  }
+}
 
 </style>
 
 <template>
-    <MenuPage :title="$t('createAccount.title')">
-        <div class="form">
-            <div class="form-item">
-                <label class="form-item-label">{{ $t('createAccount.accountAlias') }}</label>
-                <div class="form-item-content">
-                    <input type="text" v-model="formItem.accAlias">
-                </div>
-            </div>
-
-            <div class="form-item">
-                <label class="form-item-label">{{ $t('createAccount.keyPassword') }}</label>
-                <div class="form-item-content">
-                    <input type="password" v-model="formItem.passwd1">
-                </div>
-            </div>
-            <div class="form-item">
-                <label class="form-item-label">{{ $t('createAccount.confirmPassword') }}</label>
-                <div class="form-item-content">
-                    <input type="password" v-model="formItem.passwd2">
-                </div>
-            </div>
-            <div class="tips">{{tips}}</div>
+  <div class="warp-menu bg-grey">
+    <div class="bapp_lists">
+      <a class="bapp_list" :href="bapp.link" target="_blanket" v-for="(bapp, index) in dataList"  :style="{ background: bapp.color }">
+        <div>
+          <div class="title">{{bapp.title}}</div>
+          <div class="description">{{bapp.description}}</div>
         </div>
-        <a class="btn btn-primary submit" @click="create">{{ $t('createAccount.create') }}</a>
-    </MenuPage>
+        <img :src="require(`@/assets/img/bapp/${bapp.icon}`)" :alt="bapp.icon" v-on:error="onImgError($event, bapp.icon)"/>
+
+      </a>
+
+    </div>
+  </div>
 </template>
 
 <script>
-import account from "@/models/account";
-import * as Actions from '@/store/constants';
-import { mapActions, mapState, mapGetters } from 'vuex'
+import bappData from '@/assets/bapp/bapp.json'
+import _ from 'lodash';
+import { bappImgUrl, bappRequestUrl } from '@/utils/constants.js'
+
 
 export default {
     name: "",
     components: {},
     data() {
         return {
-            formItem: {
-                accAlias: "",
-                keyAlias: "",
-                passwd1: "",
-                passwd2: ""
-            },
-            tips: ""
+            jsonData: bappData
         };
     },
     computed: {
-      ...mapState([
-        'bytom'
-      ]),
-      ...mapGetters([
-        'net',
-        'netType'
-      ])
+      dataList(){
+        const lng = this.$i18n.locale
+        let list = this.jsonData.list
+        if(lng ==='zh' ||lng ==='cn' ){
+          list = list.map((l , index)=> Object.assign(l, this.jsonData['cn'][index]))
+        }else{
+          list = list.map((l , index)=> Object.assign(l, this.jsonData['en'][index]))
+        }
+
+        console.log(list)
+
+        return list;
+      },
     },
     methods: {
-        create: function () {
-
-        },
-        ...mapActions([
-          Actions.CREATE_NEW_BYTOM_ACCOUNT,
-          Actions.UPDATE_STORED_BYTOM
-        ])
+      onImgError: function(event, name) {
+        event.target.src = `${bappImgUrl}${name}`
+      }
     },
-    mounted() { }
+    mounted() {
+        //  Todo: update to production before publish
+      fetch(bappRequestUrl)
+        .then(response => response.json())
+        .then(json => {
+          if(!_.isEqual(json, bappData)){
+            this.jsonData = json
+          }
+        });
+    }
 };
 </script>
