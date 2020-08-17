@@ -48,8 +48,8 @@
 </style>
 
 <template>
-  <div :class="[isCurrentAccoutExist?'warp-menu warp-container':'warp' , 'bg-white' ]">
-    <div >
+   <div>
+    <div class="warp bg-white">
       <div class="header color-black">
         <BackButton :des="'welcome-mnemonic'"/>
         <h1>
@@ -77,7 +77,7 @@
           </div>
         </div>
      </div>
-      <Footer v-if="!isCurrentAccoutExist"/>
+      <Footer/>
   </div>
 </template>
 
@@ -103,9 +103,6 @@ export default {
     }
   },
     computed: {
-      isCurrentAccoutExist(){
-        return this.currentAccount && this.currentAccount.alias
-      },
         formItemLabel: function () {
             if (this.i18n == "cn") {
                 return "form-item-label form-item-label-cn";

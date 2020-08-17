@@ -21,8 +21,11 @@ account.create = function(accountAlias, keyAlias, passwd, context) {
     }
 
     _bytom.keychain.removeUnverifyIdentity();
+    _bytom.settings.netType = 'bytom';
 
     const res = bytom.keys.createKey(keyAlias, passwd)
+
+    bytom.setupNet(`${context.net}bytom`)
     bytom.accounts.createNewAccount(res.xpub).then(ret => {
       let resultObj =  Object.assign(res, ret)
       resultObj.alias = accountAlias

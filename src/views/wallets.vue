@@ -55,20 +55,29 @@
       cursor:pointer;
     }
   }
+
+  .account_list{
+    overflow: scroll;
+    height: calc( 100% - 20px);
+    padding-bottom: 20px;
+  }
 </style>
 
 <template>
   <div class="warp-menu bg-grey">
-    <div class="list menu-list">
-      <div v-for="(alias, index) in walletList" class="list-item" @click="setCurrentAccount(alias)">
-        <div class="item-block">
-          <i class="iconfont icon_backup_line"></i>{{ alias }}
+    <div class="account_list">
+      <div class="list menu-list">
+        <div v-for="(alias, index) in walletList" class="list-item" @click="setCurrentAccount(alias)">
+          <div class="item-block">
+            <i class="iconfont icon_backup_line"></i>{{ alias }}
+          </div>
         </div>
       </div>
+      <div class="create" @click="$router.push('welcome')">
+        <i class="iconfont icon_wallet_add"></i>{{ $t('wallet.create') }}
+      </div>  
     </div>
-    <div class="create" @click="$router.push('creation')">
-      <i class="iconfont icon_wallet_add"></i>{{ $t('wallet.create') }}
-    </div>
+    
 
     <!-- child menu -->
     <router-view></router-view>

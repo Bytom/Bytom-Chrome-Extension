@@ -49,10 +49,10 @@
 </style>
 
 <template>
-  <div :class="[isCurrentAccoutExist?'warp-menu warp-container':'warp' , 'bg-white' ]">
-    <div class="" >
+  <div>
+    <div class="warp bg-white">
       <div class="header color-black">
-        <BackButton/>
+        <BackButton des="welcome"/>
         <h1>
           <div class="welcome-title">{{ $t('createAccount.title')}}</div>
         </h1>
@@ -108,7 +108,7 @@
           </div>
         </div>
      </div>
-      <Footer v-if="!isCurrentAccoutExist"/>
+      <Footer/>
   </div>
 </template>
 
@@ -155,9 +155,6 @@ export default {
     }
   },
     computed: {
-      isCurrentAccoutExist(){
-        return this.currentAccount && this.currentAccount.alias
-      },
         formItemLabel: function () {
             if (this.i18n == "cn") {
                 return "form-item-label form-item-label-cn";
@@ -180,8 +177,7 @@ export default {
       ...mapGetters([
         'net',
         'language',
-        'netType',
-        'currentAccount'
+        'netType'
       ])
     },
     props: {
@@ -242,6 +238,7 @@ export default {
               canCancel: true,
               onCancel: this.onCancel
             });
+
             account.create(this.formItem.accAlias, null, this.formItem.passwd1, this).then(currentAccount => {
                 loader.hide();
                 this.formItem = {};

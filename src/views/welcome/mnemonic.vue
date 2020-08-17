@@ -62,8 +62,8 @@
 </style>
 
 <template>
-  <div  :class="[isCurrentAccoutExist?'warp-menu warp-container':'warp' , 'bg-white' ]">
-    <div>
+   <div>
+    <div class="warp bg-white">
       <div class="header color-black">
         <BackButton des="welcome-creation"/>
         <h1>
@@ -107,7 +107,7 @@
 
       </div>
     </div>
-    <Footer v-if="!isCurrentAccoutExist"/>
+    <Footer/>
   </div>
 </template>
 

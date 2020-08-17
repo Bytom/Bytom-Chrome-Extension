@@ -58,13 +58,14 @@
 </style>
 
 <template>
-  <div>
+ <div>
     <div class="warp bg-white">
       <div class="header color-black">
-        <h1>
+        <h1 v-if="!this.currentAccount">
           <div class="welcome-title">{{ $t('home.welcome')}}</div>
           <div>{{ $t('home.byone')}}</div>
         </h1>
+        <BackButton v-else des="wallets"/>
       </div>
       <div class="divider"></div>
 
@@ -131,7 +132,8 @@ export default {
       ...mapGetters([
         'net',
         'language',
-        'netType'
+        'netType',
+        'currentAccount'
       ])
     },
     props: {

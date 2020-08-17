@@ -52,6 +52,10 @@
 
               const wallet_tab = [
                 RouteNames.WALLETS,
+                RouteNames.CREATE_ACCOUNT,
+                RouteNames.MNEMONIC,
+                RouteNames.VERIFY_MNEMONIC,
+                RouteNames.ENTRY
               ]
 
               const bapp_tab = [
@@ -94,21 +98,16 @@
               }
             },
             showNav(){
-              if(this.bytom && this.bytom.currentAccount && this.bytom.currentAccount.alias){
-                return true
-              }else{
-                switch(this.$route.name){
-                    case RouteNames.ENTRY:
-                    case RouteNames.CREATE_ACCOUNT:
-                    case RouteNames.MNEMONIC:
-                    case RouteNames.VERIFY_MNEMONIC:
-                    case RouteNames.RESTORE_ACCOUNT:
-                    case RouteNames.SETTING_PASSWORD:
-                    case RouteNames.PROTOCOL: return false;
-                    default: return true;
-                }                
-              }
-
+              switch(this.$route.name){
+                  case RouteNames.ENTRY:
+                  case RouteNames.CREATE_ACCOUNT:
+                  case RouteNames.MNEMONIC:
+                  case RouteNames.VERIFY_MNEMONIC:
+                  case RouteNames.RESTORE_ACCOUNT:
+                  case RouteNames.SETTING_PASSWORD:
+                  case RouteNames.PROTOCOL: return false;
+                  default: return true;
+              }                
             },
 
             toggleTab(name){
