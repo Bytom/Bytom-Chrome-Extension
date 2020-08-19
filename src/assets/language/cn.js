@@ -142,11 +142,11 @@ const cn = {
     confirmSignature:'确认签名'
   },
   enable:{
-    title:'请求授权',
+    title:'应用授权',
     domain: '域名',
-    message: '请求获取你的钱包地址，是否同意？',
-    cancel:'取消',
-    confirm:'确认授权'
+    message: '正在尝试连接到您的 Byone 上并调用相关 API，请仔细检查此站点的安全性并确认是否连接。',
+    cancel:'拒绝',
+    confirm:'连接'
   },
   receive:{
     address: '地址',
@@ -156,9 +156,9 @@ const cn = {
   main: {
     bytom:'主链',
     vapor:'侧链',
-    mainNet: '主网络',
-    testNet: '测试网络',
-    soloNet: '单机网络',
+    mainnet: '主网络',
+    testnet: '测试网络',
+    solonet: '单机网络',
     mainNetShort: 'Bytom主网络',
     testNetShort: 'Bytom测试网络',
     soloNetShort: 'Bytom单机网络',

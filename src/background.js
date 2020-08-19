@@ -128,7 +128,7 @@ export default class Background {
       {
         url: `${promptURL}#transfer?${queryString}`,
         type: 'popup',
-        width: 360,
+        width: 420,
         height: 623,
         top: 0,
         left: 0
@@ -323,7 +323,7 @@ export default class Background {
       if(bytom.settings.domains.find(_domain => _domain === domain)) {
         sendResponse(account);
       } else{
-        NotificationService.open(new Prompt(PromptTypes.REQUEST_AUTH, payload.domain, {}, approved => {
+        NotificationService.open(new Prompt(PromptTypes.REQUEST_AUTH, payload.domain, payload, approved => {
           if(approved === false || approved.hasOwnProperty('isError')) sendResponse(approved);
           else {
             bytom.settings.domains.unshift(domain);

@@ -15,7 +15,11 @@ import Dialog from '@/components/dialog'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
 import vSelect from '@/components/select'
+import SelectionPage from '@/components/selection-page'
 import BackButton from '@/components/backButton'
+import Success from '@/components/Success.vue'
+import Menubar from '@/components/MenubarComponent.vue'
+import ModalPasswd from '@/components/modal-passwd.vue'
 import Toast from '@/components/toast'
 import messages, { getLanguage } from '@/assets/language'
 import '@/assets/style.css'
@@ -28,19 +32,23 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
     locale: getLanguage(store.getters.language),
     messages
   })
+  Vue.use(Vuelidate)
   Vue.use(i18n)
   Vue.use(vuescroll)
   Vue.use(VueRouter)
-  Vue.use(Loading)
-  Vue.use(Dialog, i18n)
-  Vue.use(Vuelidate)
+  Vue.use(SelectionPage)
   Vue.use(Header)
   Vue.use(Footer)
+  Vue.use(Loading)
   Vue.use(BackButton)
+  Vue.use(Dialog, i18n)
   Vue.use(Toast, i18n)
-
-
+  Vue.component('success', Success)
+  Vue.component('menu-bar', Menubar)
   Vue.component('v-select', vSelect)
+  Vue.component('modal-passwd', ModalPasswd)
+
+
   Vue.filter('moment', function(value, formatString) {
     formatString = formatString || 'YYYY-MM-DD HH:mm:ss'
     return moment(value * 1000).format(formatString)

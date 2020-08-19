@@ -4,7 +4,7 @@ import NetworkMessage from '@/messages/network'
 import InternalMessage from '@/messages/internal'
 import * as MsgTypes from './messages/types'
 import * as EventNames from '@/messages/event'
-import {strippedHost} from '@/utils/GenericTools'
+import { strippedHost, strippedFavicon } from '@/utils/GenericTools'
 import _ from 'lodash';
 
 
@@ -161,7 +161,9 @@ class Content {
 
   enable(type, networkMessage) {
     networkMessage.payload ={
-      domain: strippedHost()
+      domain: strippedHost(),
+      title: document.title,
+      icon: strippedFavicon()
     }
 
     this.transfer(type, networkMessage)

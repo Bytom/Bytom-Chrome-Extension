@@ -115,8 +115,8 @@ const en = {
   },
   enable:{
     title:'Connect Request',
-    domain: 'Domain',
-    message: 'would like to connect your account',
+    domain: 'Domain:',
+    message: ' is trying to connect to your byone and use the relevant API request, please make sure the site is secure. Would you like to connect?',
     cancel:'Cancel',
     confirm:'Connect'
   },
@@ -126,11 +126,11 @@ const en = {
     vpWarning:'Please don\'t use Vapor address in the real transaction.'
   },
   main: {
-    mainNet: 'Mainnet',
-    testNet: 'Testnet',
+    mainnet: 'Mainnet',
+    testnet: 'Testnet',
     vapor: 'Vapor',
     bytom: 'Bytom',
-    soloNet: 'Solonet',
+    solonet: 'Solonet',
     mainNetShort: 'Mainnet',
     testNetShort: 'Testnet',
     vaporTestNetShort: 'Vapor Testnet',

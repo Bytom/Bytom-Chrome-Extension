@@ -105,6 +105,7 @@
                   case RouteNames.VERIFY_MNEMONIC:
                   case RouteNames.RESTORE_ACCOUNT:
                   case RouteNames.SETTING_PASSWORD:
+                  case RouteNames.ENABLE:
                   case RouteNames.PROTOCOL: return false;
                   default: return true;
               }                

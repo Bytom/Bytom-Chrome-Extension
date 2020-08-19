@@ -31,7 +31,7 @@ export default class NotificationService {
 
 
         const height = 623;
-        const width = 360;
+        const width = 420;
         let middleX = window.screen.availWidth/2 - (width/2);
         let middleY = window.screen.availHeight/2 - (height/2);
 

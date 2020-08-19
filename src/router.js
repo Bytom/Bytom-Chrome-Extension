@@ -36,7 +36,7 @@ export const RouteNames = {
   //
   // NETWORKS:'networks',
   // NETWORK:'network',
-  // CHANGE_PASSWORD:'changePassword',
+  ENABLE:'enable',
   BACKUP:'backup',
   BACKUP_MNEMONIC:'backup-mnemonic',
   WALLETS:'wallets',
@@ -182,14 +182,7 @@ const routers = [
           require(['@/views/sendTransaction/signTransaction.vue'], resolve)
         }
       },
-      {
-        path: '/enable',
-        name: 'enable',
-        meta: { title: '授权' },
-        component: resolve => {
-          require(['@/views/prompts/authentication.vue'], resolve)
-        }
-      },
+      
       {
         path: '/transfer/info',
         name: 'transfer-info',
@@ -228,6 +221,14 @@ const routers = [
       }
     ]
   },
+  {
+        path: '/enable',
+        name: RouteNames.ENABLE,
+        meta: { title: '授权' },
+        component: resolve => {
+          require(['@/views/prompts/authentication.vue'], resolve)
+        }
+      },
   {
     path: '/wallets',
     name: RouteNames.WALLETS,
