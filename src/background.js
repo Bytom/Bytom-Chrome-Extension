@@ -344,10 +344,13 @@ export default class Background {
 
       var index = bytom.settings.domains.indexOf(domain);
       if(index !== -1) {
-        NotificationService.open(new Prompt(PromptTypes.REQUEST_AUTH, payload.domain, {type:'dis'}, approved => {
+        payload.type = 'dis'
+        NotificationService.open(new Prompt(PromptTypes.REQUEST_AUTH, payload.domain, payload, approved => {
           if(approved === false || approved.hasOwnProperty('isError')) sendResponse(approved);
           else {
             bytom.settings.domains.splice(index, 1);
+            delete bytom.settings.domainsMeta[domain];
+
             if(approved === true){
               this.update(() => sendResponse({status:'success'}), bytom);
             }else{
