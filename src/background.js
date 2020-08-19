@@ -283,7 +283,8 @@ export default class Background {
 
   static authenticate(sendResponse, payload){
     Background.load(bytom => {
-      const domain = payload.domain;
+      const {domain,  ...domainAttrs} = payload;
+
       const currentAccount =  bytom.currentAccount
 
       if(!currentAccount){
@@ -291,26 +292,16 @@ export default class Background {
       }else{
         let account
         if(bytom.settings.netType === 'vapor'){
-          let vote = 0
-          const votes = currentAccount.votes
-          if(votes && votes.length >0 ){
-            vote = _.sumBy(votes,'total')
-          }
 
           let balances = currentAccount.vpBalances ||[]
-          balances = balances.map(({ inBtc, inCny, inUsd, name, ...keepAttrs}) => {
-            if(keepAttrs.asset === BTM)
-              return {availableBalance: (keepAttrs.balance-vote),...keepAttrs}
-            else
-              return keepAttrs
-          })
+          balances = balances.map(({ inBtc, inCny, inUsd, name, ...keepAttrs}) => keepAttrs)
 
           account ={
             address: currentAccount.vpAddress,
             alias:currentAccount.alias,
             balances: balances || [],
             accountId: currentAccount.guid,
-            rootXPub: currentAccount.rootXPub
+            rootXPub: currentAccount.xpub
           };
 
         }else{
@@ -322,17 +313,19 @@ export default class Background {
             alias:currentAccount.alias,
             balances: balances|| [],
             accountId: currentAccount.guid,
-            rootXPub: currentAccount.rootXPub
+            rootXPub: currentAccount.xpub
           };
         }
 
         if(bytom.settings.domains.find(_domain => _domain === domain)) {
           sendResponse(account);
         } else{
-          NotificationService.open(new Prompt(PromptTypes.REQUEST_AUTH, payload.domain, {}, approved => {
+          NotificationService.open(new Prompt(PromptTypes.REQUEST_AUTH, payload.domain, payload, approved => {
             if(approved === false || approved.hasOwnProperty('isError')) sendResponse(approved);
             else {
               bytom.settings.domains.unshift(domain);
+              bytom.settings.domainsMeta[domain] = domainAttrs;
+
               if(approved === true){
                 this.update(() => sendResponse(account), bytom);
               }else{

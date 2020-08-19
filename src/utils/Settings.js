@@ -7,6 +7,7 @@ export default class Settings {
         this.netType ='bytom';
         this.network ='testnet';
         this.currency = uiLang ==='en'?'inUsd':"inCny"
+        this.domainsMeta ={}
     }
 
 
