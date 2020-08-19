@@ -7,7 +7,8 @@ export const ErrorCodes = {
   LOCKED:423,
   TOO_MANY_REQUESTS:429,
   TYPE_MISSED:411,
-  TYPE_DUPLICATE:405
+  TYPE_DUPLICATE:405,
+  TYPE_DISAUTH:401
 };
 
 export default class Error {
@@ -27,6 +28,10 @@ export default class Error {
     return new Error(ErrorTypes.TYPE_DUPLICATED, `The current value has been set to '${_type}', please select another parameter.`, ErrorCodes.TYPE_DUPLICATE)
   }
 
+  static disauth(){
+    return new Error(ErrorTypes.TYPE_DISAUTH, `The current domain is no auth, it can't be disauth`, ErrorCodes.TYPE_DISAUTH)
+  }
+
   static promptClosedWithoutAction(){
     return new Error(ErrorTypes.PROMPT_CLOSED, "The user closed the prompt without any action.", ErrorCodes.TIMED_OUT)
   }
@@ -44,7 +49,7 @@ export default class Error {
   }
 
   static signatureAccountMissing(){
-    return this.signatureError("account_missing", "Missing required accounts, repull the identity");
+    return this.signatureError("account_missing", "Missing required accounts, please create an account");
   }
 
   static malformedRequiredFields(){

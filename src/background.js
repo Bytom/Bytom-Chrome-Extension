@@ -57,6 +57,9 @@ export default class Background {
       case MsgTypes.ENABLE:
         Background.authenticate(sendResponse, message.payload)
         break
+      case MsgTypes.DISABLE:
+        Background.disauthenticate(sendResponse, message.payload)
+        break
       case MsgTypes.SET_PROMPT:
         Background.setPrompt(sendResponse, message.payload);
         break;
@@ -283,57 +286,84 @@ export default class Background {
       const domain = payload.domain;
       const currentAccount =  bytom.currentAccount
 
-      let account
-      if(bytom.settings.netType === 'vapor'){
-        let vote = 0
-        const votes = currentAccount.votes
-        if(votes && votes.length >0 ){
-          vote = _.sumBy(votes,'total')
+      if(!currentAccount){
+        sendResponse(Error.signatureAccountMissing())
+      }else{
+        let account
+        if(bytom.settings.netType === 'vapor'){
+          let vote = 0
+          const votes = currentAccount.votes
+          if(votes && votes.length >0 ){
+            vote = _.sumBy(votes,'total')
+          }
+
+          let balances = currentAccount.vpBalances ||[]
+          balances = balances.map(({ inBtc, inCny, inUsd, name, ...keepAttrs}) => {
+            if(keepAttrs.asset === BTM)
+              return {availableBalance: (keepAttrs.balance-vote),...keepAttrs}
+            else
+              return keepAttrs
+          })
+
+          account ={
+            address: currentAccount.vpAddress,
+            alias:currentAccount.alias,
+            balances: balances || [],
+            accountId: currentAccount.guid,
+            rootXPub: currentAccount.rootXPub
+          };
+
+        }else{
+          let balances = currentAccount.balances ||[]
+          balances = balances.map(({ inBtc, inCny, inUsd, name, ...keepAttrs}) => keepAttrs)
+
+          account ={
+            address: currentAccount.address,
+            alias:currentAccount.alias,
+            balances: balances|| [],
+            accountId: currentAccount.guid,
+            rootXPub: currentAccount.rootXPub
+          };
         }
 
-        let balances = currentAccount.vpBalances ||[]
-        balances = balances.map(({ inBtc, inCny, inUsd, name, ...keepAttrs}) => {
-          if(keepAttrs.asset === BTM)
-            return {availableBalance: (keepAttrs.balance-vote),...keepAttrs}
-          else
-            return keepAttrs
-        })
-
-        account ={
-          address: currentAccount.vpAddress,
-          alias:currentAccount.alias,
-          balances: balances || [],
-          accountId: currentAccount.guid,
-          rootXPub: currentAccount.rootXPub
-        };
-
-      }else{
-        let balances = currentAccount.balances ||[]
-        balances = balances.map(({ inBtc, inCny, inUsd, name, ...keepAttrs}) => keepAttrs)
-
-        account ={
-          address: currentAccount.address,
-          alias:currentAccount.alias,
-          balances: balances|| [],
-          accountId: currentAccount.guid,
-          rootXPub: currentAccount.rootXPub
-        };
+        if(bytom.settings.domains.find(_domain => _domain === domain)) {
+          sendResponse(account);
+        } else{
+          NotificationService.open(new Prompt(PromptTypes.REQUEST_AUTH, payload.domain, {}, approved => {
+            if(approved === false || approved.hasOwnProperty('isError')) sendResponse(approved);
+            else {
+              bytom.settings.domains.unshift(domain);
+              if(approved === true){
+                this.update(() => sendResponse(account), bytom);
+              }else{
+                this.update(() => sendResponse(approved), bytom);
+              }
+            }
+          }));
+        }
       }
+    })
+  }
 
-      if(bytom.settings.domains.find(_domain => _domain === domain)) {
-        sendResponse(account);
-      } else{
-        NotificationService.open(new Prompt(PromptTypes.REQUEST_AUTH, payload.domain, payload, approved => {
+  static disauthenticate(sendResponse, payload){
+    Background.load(bytom => {
+      const domain = payload.domain;
+
+      var index = bytom.settings.domains.indexOf(domain);
+      if(index !== -1) {
+        NotificationService.open(new Prompt(PromptTypes.REQUEST_AUTH, payload.domain, {type:'dis'}, approved => {
           if(approved === false || approved.hasOwnProperty('isError')) sendResponse(approved);
           else {
-            bytom.settings.domains.unshift(domain);
+            bytom.settings.domains.splice(index, 1);
             if(approved === true){
-              this.update(() => sendResponse(account), bytom);
+              this.update(() => sendResponse({status:'success'}), bytom);
             }else{
               this.update(() => sendResponse(approved), bytom);
             }
           }
         }));
+      } else{
+        sendResponse(Error.disauth());
       }
     })
   }

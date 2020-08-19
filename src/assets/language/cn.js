@@ -148,6 +148,13 @@ const cn = {
     cancel:'拒绝',
     confirm:'连接'
   },
+  disable:{
+    title:'取消授权',
+    domain: '域名',
+    message: '取消授权用户信息。',
+    cancel:'取消',
+    confirm:'取消授权'
+  },
   receive:{
     address: '地址',
     tips:'提示：点击地址进行拷贝。',

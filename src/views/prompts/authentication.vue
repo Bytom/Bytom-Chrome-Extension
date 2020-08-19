@@ -117,7 +117,7 @@
   <div>
     <div class="warp bg-white">
       <section class="header">
-        <h1>{{$t('enable.title')}}</h1>
+        <h1>{{ isDisAuth? $t('disable.title'): $t('enable.title')}}</h1>
         <div class="network light-tag">
           <i></i>
           <div>{{netType}} {{$t(`main.${net}`)}}</div>
@@ -135,16 +135,16 @@
       </section>
 
       <section >
-        <div class="message"><span class="color-black">{{prompt.data ? prompt.data.title : prompt.domain}}</span>{{$t('enable.message')}}</div>
+        <div class="message"><span class="color-black">{{prompt.data ? prompt.data.title : prompt.domain}}</span>{{ isDisAuth? $t('disable.message'): $t('enable.message') }}</div>
         <div class="center-text">
           <span class="light-tag">
-            {{$t('enable.domain')}} {{prompt.domain}}
+            {{ isDisAuth? $t('disable.domain'): $t('enable.domain') }} {{prompt.domain}}
           </span>
 
         </div>
         <div class="row btn-container">
-          <div class="btn btn-primary" @click="accepted">{{$t('enable.confirm')}}</div>
-          <div class="btn btn-outlined color-black" @click="denied">{{$t('enable.cancel')}}</div>
+          <div class="btn btn-primary" @click="accepted">{{ isDisAuth? $t('disable.confirm'): $t('enable.confirm') }}</div>
+          <div class="btn btn-outlined color-black" @click="denied">{{ isDisAuth? $t('disable.cancel'): $t('enable.cancel') }}</div>
         </div>
       </section>
     </div>
@@ -163,7 +163,8 @@ import { mapActions, mapGetters, mapState } from 'vuex'
 export default {
     data() {
         return {
-            prompt:''
+            prompt:'',
+            isDisAuth: false
         };
     },
     computed: {
@@ -192,6 +193,7 @@ export default {
       }
     }, mounted() {
         this.prompt = window.data || apis.extension.getBackgroundPage().notification || null;
+        this.isDisAuth = (this.prompt.data.type == 'dis')
       }
 };
 </script>
