@@ -101,10 +101,6 @@ export default class Background {
     NotificationService.open(new Prompt(PromptTypes.REQUEST_PROMPT, domain, txAttrs ,approved => {
       sendResponse(camelize(approved));
     }));
-
-    // NotificationService.open(new Prompt(PromptTypes.REQUEST_SIGN, '', payload ,approved => {
-    //  sendResponse(camelize(approved));
-    // }));
   }
 
   transfer(sendResponse, payload) {
@@ -176,15 +172,14 @@ export default class Background {
       const domain = payload.domain;
       if(bytom.settings.domains.find(_domain => _domain === domain)) {
         const currentAccount =  bytom.currentAccount
-        let account
+        const {vpAddress, address} = currentAccount
+        let account = {
+          addresses: [vpAddress, address]
+        }
         if(bytom.settings.netType === 'vapor'){
-          account = {
-            address: currentAccount.vpAddress,
-          };
+          account.address = vpAddress;
         }else{
-          account ={
-            address: currentAccount.address,
-          };
+          account.address = address;
         }
 
         sendResponse(account)
@@ -272,32 +267,18 @@ export default class Background {
       if(!currentAccount){
         sendResponse(Error.signatureAccountMissing())
       }else{
-        let account
-        if(bytom.settings.netType === 'vapor'){
 
-          let balances = currentAccount.vpBalances ||[]
-          balances = balances.map(({ inBtc, inCny, inUsd, name, ...keepAttrs}) => keepAttrs)
-
-          account ={
-            address: currentAccount.vpAddress,
-            alias:currentAccount.alias,
-            balances: balances || [],
-            accountId: currentAccount.guid,
-            rootXPub: currentAccount.xpub
-          };
-
-        }else{
-          let balances = currentAccount.balances ||[]
-          balances = balances.map(({ inBtc, inCny, inUsd, name, ...keepAttrs}) => keepAttrs)
-
-          account ={
-            address: currentAccount.address,
-            alias:currentAccount.alias,
-            balances: balances|| [],
-            accountId: currentAccount.guid,
-            rootXPub: currentAccount.xpub
-          };
+        const {vpAddress, address} = currentAccount
+        let account = {
+          addresses: [vpAddress, address],
+          rootXPub: currentAccount.xpub
         }
+        if(bytom.settings.netType === 'vapor'){
+          account.address = vpAddress;
+        }else{
+          account.address = address;
+        }
+
 
         if(bytom.settings.domains.find(_domain => _domain === domain)) {
           sendResponse(account);
