@@ -102,10 +102,10 @@ transaction.buildTransaction = function(address, inputs, outputs, gas, confirmat
   return retPromise;
 };
 
-transaction.signTransaction = function(guid, transaction, password, context) {
+transaction.signTransaction = function(address, transaction, password, context) {
   let retPromise = new Promise((resolve, reject) => {
       signTx(
-        guid,
+        address,
         JSON.stringify(snakeize(transaction)),
         password,
         context

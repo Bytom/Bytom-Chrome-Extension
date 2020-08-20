@@ -91,7 +91,9 @@ const cn = {
     password:'请输入密码',
     detail:'交易详情',
     requestDetail:'请求详情',
-    amount:'交易金额'
+    amount:'交易金额',
+    signComfirm:' 签名交易',
+    signMessage:' 签名信息'
   },
   listAsset: {
     all:'全部',

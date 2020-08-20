@@ -152,7 +152,9 @@
   <div>
     <div class="warp">
       <section class="header">
-        <h1>{{ $t('transfer.confirmTransaction') }}</h1>
+        <h1 v-if="prompt.data && prompt.data.type ==='signTransaction'" >{{ $t('transfer.signComfirm') }}</h1>
+        <h1 v-else-if="prompt.data && prompt.data.type ==='message'" >{{ $t('transfer.signMessage') }}</h1>
+        <h1 v-else>{{ $t('transfer.confirmTransaction') }}</h1>
       </section>
 
       <section v-if="dataReady">
@@ -164,6 +166,7 @@
         </div>
 
         <div v-if="tab ==='details'" class="content">
+          <!--Info-->
           <div class="info">
             <div class="row">
               <div class="col">
@@ -200,6 +203,13 @@
             </div>
           </div>
 
+          <!--types-->
+          <div v-if="prompt.data && prompt.data.type ==='signTransaction'" class="amount-list">
+            <div >{{ $t('transfer.types') }}</div>
+            <div class="color-black font-bold">{{transaction.types}}</div>
+          </div>
+
+          <!--amounts-->
           <div v-if="prompt.data && prompt.data.type ==='transfer'" class="amount-list">
             <div>{{ $t('transfer.amount') }}</div>
             <div class="color-black font-bold">{{transaction.amount}}<span class="uint uppercase">{{unit || short(transaction.asset) }}</span>
@@ -211,6 +221,7 @@
             </div>
           </div>
 
+          <!--fee-->
           <div v-if="transaction.fee" class="amount-list">
             <div>{{ $t('transfer.fee') }}</div>
             <div class="color-black font-bold">{{transaction.fee}}<span class="uint">BTM</span></div>
@@ -252,6 +263,9 @@
   import _ from 'lodash';
   import account from "@/models/account";
   import add from "@/utils/address";
+  import { camelize, removeFromArray } from "@/utils/utils";
+  import bytomjslib from 'bytomjs-lib'
+
 
   export default {
     add,
@@ -294,7 +308,19 @@
         }
       },
       detail(){
-        return JSON.stringify(this.transaction, null, 2);
+        if(this.prompt.data && this.prompt.data.type ==='signTransaction'){
+          const param = this.prompt.data[0] || this.prompt.data
+          const _tx = camelize(param)
+          const { rawTransaction, signingInstructions } = _tx
+          const obj = {
+            tx: this.transaction,
+            rawTransaction,
+            signingInstructions
+          }
+          return JSON.stringify(obj, null, 2);
+        }else{
+          return JSON.stringify(this.transaction, null, 2);
+        }
       },
       currentWallet(){
         if(this.prompt.data && this.prompt.data.type ==='transfer'){
@@ -371,7 +397,19 @@
               getLang(error.message) || error.message || error
             );
           });
+        } else if(this.prompt.data.type ==='signTransaction'){
+          transaction.signTransaction(this.address,  this.prompt.data,  this.password, this).then( (result) => {
+            loader.hide();
+            this.prompt.responder(result);
+            this.$toast.success(this.$t("transfer.success"));
+            NotificationService.close();
+          }).catch(error => {
+            loader.hide();
 
+            this.$toast.error(
+              getLang(error.message) || error.message || error
+            );
+          });
         }
         else{
           loader.hide();
@@ -471,6 +509,69 @@
               this.dataReady = true
             })
             break;
+          }
+          case "signTransaction":{
+            const param = data[0] || data
+            const _tx = camelize(param)
+            const rawTransaction = _tx.rawTransaction
+
+            const tx = this.netType === 'vapor'?
+              bytomjslib.vapor.Transaction.decodeRawTransaction(rawTransaction):
+              bytomjslib.bytom.Transaction.decodeRawTransaction(rawTransaction)
+
+            this.transaction.fee = tx.fee/100000000
+            this.transaction.input = tx.inputs
+            this.transaction.output = tx.outputs
+
+            const inputs = tx.inputs.filter(i => i.address === this.address)
+            const outputs = tx.outputs.filter(i => i.address === this.address)
+            const inputAsset = inputs.map(i => i.assetID);
+            const outputAsset = outputs.map(i => i.assetID);
+
+            const asset = _.union(inputAsset, outputAsset)
+
+            let types = ["transfer"]
+            const promise =
+              asset
+                .map((assetId) => {
+                  return this.queryAsset(assetId).then(resp =>{
+                    const assetInput = inputs.filter(i => i.assetID ===assetId)
+                    const assetOutput = outputs.filter(o => o.assetID ===assetId)
+                    const inputAmount = new BigNumber(_.sumBy(assetInput, 'amount'))
+                    const outputAmount = new BigNumber(_.sumBy(assetOutput, 'amount'))
+
+                    const decimals = decimalsMap[this.net][assetId]
+                    const amount = inputAmount.minus(outputAmount).shiftedBy(-decimals)
+
+                    return {
+                      'asset': assetId,
+                      'alias': resp.symbol,
+                      'amount': amount.toString()
+                    }
+                  })
+                })
+
+            let that = this;
+            const inputType = inputs.map(i => i.type);
+            const outputType = outputs.map(o => o.type);
+            types = _.union(inputType, outputType, types);
+
+            const remove = ['spend','control'];
+            types = removeFromArray(types, remove);
+            types = types.map(ty => this.$t(`common.${ty}`)).join(', ');
+
+            this.transaction.types = types
+
+            Promise.all(promise).then(function(output) {
+              that.transaction.amounts = output
+              that.dataReady = true
+            }).catch(()=>{
+              that.dataReady = true
+            })
+
+
+
+            break
           }
         }
       }
