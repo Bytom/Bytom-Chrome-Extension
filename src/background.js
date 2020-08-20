@@ -94,17 +94,25 @@ export default class Background {
       return false;
     }
 
-    NotificationService.open(new Prompt(PromptTypes.REQUEST_SIGN, '', payload ,approved => {
-     sendResponse(camelize(approved));
+    const {domain,  ...txAttrs} = payload;
+
+    txAttrs.type = 'message'
+
+    NotificationService.open(new Prompt(PromptTypes.REQUEST_PROMPT, domain, txAttrs ,approved => {
+      sendResponse(camelize(approved));
     }));
+
+    // NotificationService.open(new Prompt(PromptTypes.REQUEST_SIGN, '', payload ,approved => {
+    //  sendResponse(camelize(approved));
+    // }));
   }
 
   transfer(sendResponse, payload) {
-    var promptURL = chrome.extension.getURL('pages/prompt.html')
+    // var promptURL = chrome.extension.getURL('pages/prompt.html')
     var requestBody = payload
-    requestBody.type = "popup"
-    var queryString = new URLSearchParams(requestBody).toString()
-    console.log(promptURL, queryString)
+    // requestBody.type = "popup"
+    // var queryString = new URLSearchParams(requestBody).toString()
+    // console.log(promptURL, queryString)
 
     if(requestBody.from === undefined){
       sendResponse(Error.typeMissed('from'));
@@ -123,43 +131,51 @@ export default class Background {
       return false;
     }
 
+    const {domain,  ...txAttrs} = payload;
+
+    txAttrs.type = 'transfer'
+
+    NotificationService.open(new Prompt(PromptTypes.REQUEST_PROMPT, domain, txAttrs ,approved => {
+      sendResponse(camelize(approved));
+    }));
+
     // NotificationService.open(new Prompt(PromptTypes.REQUEST_TRANSFER, '', payload ,approved => {
     //   sendResponse(approved);
     // }));
 
-      chrome.windows.create(
-      {
-        url: `${promptURL}#transfer?${queryString}`,
-        type: 'popup',
-        width: 420,
-        height: 623,
-        top: 0,
-        left: 0
-      },
-      (window) => {
-        chrome.runtime.onMessage.addListener(function(request, sender) {
-          if(sender.tab.windowId === window.id){
-            switch (request.method){
-              case 'transfer':
-                if (request.action === 'success'){
-                  sendResponse(camelize(request.message));
-                  return true;
-                } else if (request.action === 'reject'){
-                  sendResponse(request.message);
-                  return false;
-                }
-            }
-          }
-        });
-
-        chrome.windows.onRemoved.addListener(function(windowId){
-          if(windowId === window.id) {
-            sendResponse(Error.promptClosedWithoutAction());
-            return false;
-          }
-        });
-      }
-    )
+    //   chrome.windows.create(
+    //   {
+    //     url: `${promptURL}#transfer?${queryString}`,
+    //     type: 'popup',
+    //     width: 420,
+    //     height: 623,
+    //     top: 0,
+    //     left: 0
+    //   },
+    //   (window) => {
+    //     chrome.runtime.onMessage.addListener(function(request, sender) {
+    //       if(sender.tab.windowId === window.id){
+    //         switch (request.method){
+    //           case 'transfer':
+    //             if (request.action === 'success'){
+    //               sendResponse(camelize(request.message));
+    //               return true;
+    //             } else if (request.action === 'reject'){
+    //               sendResponse(request.message);
+    //               return false;
+    //             }
+    //         }
+    //       }
+    //     });
+    //
+    //     chrome.windows.onRemoved.addListener(function(windowId){
+    //       if(windowId === window.id) {
+    //         sendResponse(Error.promptClosedWithoutAction());
+    //         return false;
+    //       }
+    //     });
+    //   }
+    // )
   }
 
   advancedTransfer(sendResponse, payload) {
@@ -177,16 +193,27 @@ export default class Background {
       return false;
     }
 
-    NotificationService.open(new Prompt(PromptTypes.REQUEST_ADVANCED_TRANSFER, '', payload ,approved => {
+    const {domain,  ...txAttrs} = payload;
+
+    txAttrs.type = 'advTransfer'
+
+    NotificationService.open(new Prompt(PromptTypes.REQUEST_PROMPT, domain, txAttrs ,approved => {
       sendResponse(camelize(approved));
     }));
 
   }
 
   signTransaction(sendResponse, payload) {
-    NotificationService.open(new Prompt(PromptTypes.REQUEST_SIGN_TRANSACTION, '', payload ,approved => {
+    const {domain,  ...txAttrs} = payload;
+
+    txAttrs.type = 'signTransaction'
+
+    NotificationService.open(new Prompt(PromptTypes.REQUEST_PROMPT, domain, txAttrs ,approved => {
       sendResponse(camelize(approved));
     }));
+    // NotificationService.open(new Prompt(PromptTypes.REQUEST_SIGN_TRANSACTION, '', payload ,approved => {
+    //   sendResponse(camelize(approved));
+    // }));
   }
 
   requestCurrentAccount(sendResponse, payload){

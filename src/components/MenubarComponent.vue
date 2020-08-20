@@ -106,9 +106,10 @@
                   case RouteNames.RESTORE_ACCOUNT:
                   case RouteNames.SETTING_PASSWORD:
                   case RouteNames.ENABLE:
+                  case RouteNames.BAPP_PROMPT:
                   case RouteNames.PROTOCOL: return false;
                   default: return true;
-              }                
+              }
             },
 
             toggleTab(name){

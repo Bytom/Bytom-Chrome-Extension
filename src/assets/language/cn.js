@@ -78,7 +78,7 @@ const cn = {
     transferAmount: '转账金额',
     transferCost: '当前价值',
     total: '总计',
-    confirmTransaction:'确认发送交易',
+    confirmTransaction:'交易确认',
     totalTip: '转账金额+矿工费用',
     success: '交易发送成功',
     from:'发送账户',
@@ -88,7 +88,10 @@ const cn = {
     viewAll:'展示全部',
     hideAll:'隐藏全部',
     types:'交易类型',
-    password:'请输入密码'
+    password:'请输入密码',
+    detail:'交易详情',
+    requestDetail:'请求详情',
+    amount:'交易金额'
   },
   listAsset: {
     all:'全部',

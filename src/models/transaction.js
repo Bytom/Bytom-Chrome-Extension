@@ -141,7 +141,7 @@ transaction.transfer = function(transaction, password, address, context) {
     bytom.transaction
       .buildPayment(address, to, asset, amount.toString(), confirmations)
       .then(result => {
-        Promise.all(result.map( (data) => 
+        return Promise.all(result.map( (data) =>
           signSubmit( data, password, address, context)))
             .then((ret )=>{
               resolve(ret)
@@ -191,10 +191,10 @@ transaction.signMessage = function(message, password, address) {
   return bytom.keys.signMessage(message, password,address);
 };
 
-transaction.advancedTransfer = function(guid, transaction, password, arrayData, address, context) {
+transaction.advancedTransfer = function(address, transaction, password, arrayData, context) {
   let retPromise = new Promise((resolve, reject) => {
       signTx(
-        guid,
+        address,
         JSON.stringify(snakeize(transaction)),
         password,
         context

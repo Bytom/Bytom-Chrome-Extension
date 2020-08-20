@@ -41,6 +41,7 @@ export const RouteNames = {
   BACKUP_MNEMONIC:'backup-mnemonic',
   WALLETS:'wallets',
   BAPP:'bapp',
+  BAPP_PROMPT:'bapp-prompt',
   // AUTO_LOCK:'autoLock',
   // LANGUAGE:'language',
   // KEYPAIRS:'keypairs',
@@ -158,14 +159,7 @@ const routers = [
           require(['@/views/received.vue'], resolve)
         }
       },
-      {
-        path: '/advancedTransfer',
-        name: 'advanced-transfer',
-        meta: { title: '高级转账' },
-        component: resolve => {
-          require(['@/views/sendTransaction/advancedTransfer.vue'], resolve)
-        }
-      },
+
       {
         path: '/assetSelection',
         name: RouteNames.ASSET_SELECTION,
@@ -182,7 +176,7 @@ const routers = [
           require(['@/views/sendTransaction/signTransaction.vue'], resolve)
         }
       },
-      
+
       {
         path: '/transfer/info',
         name: 'transfer-info',
@@ -222,13 +216,21 @@ const routers = [
     ]
   },
   {
-        path: '/enable',
-        name: RouteNames.ENABLE,
-        meta: { title: '授权' },
-        component: resolve => {
-          require(['@/views/prompts/authentication.vue'], resolve)
-        }
-      },
+    path: '/enable',
+    name: RouteNames.ENABLE,
+    meta: { title: '授权' },
+    component: resolve => {
+      require(['@/views/prompts/authentication.vue'], resolve)
+    }
+  },
+  {
+    path: '/bappPrompt',
+    name: RouteNames.BAPP_PROMPT,
+    meta: { title: 'Bapp请求' },
+    component: resolve => {
+      require(['@/views/prompts/bappPrompt.vue'], resolve)
+    }
+  },
   {
     path: '/wallets',
     name: RouteNames.WALLETS,
@@ -255,7 +257,7 @@ const routers = [
     children: [
       {
         path: '/backup/mnemonic',
-        name: 'backup-mnemonic',
+        name: RouteNames.BACKUP_MNEMONIC,
         meta: { title: '备份助记词' },
         component: resolve => {
           require(['@/views/backup/backupMnemonic.vue'], resolve)

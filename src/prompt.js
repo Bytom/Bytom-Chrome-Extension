@@ -25,6 +25,8 @@ import messages, { getLanguage } from '@/assets/language'
 import '@/assets/style.css'
 import Vuelidate from "vuelidate";
 
+import account from "@/models/account";
+
 store.dispatch(Actions.LOAD_BYTOM).then(() => {
   Vue.use(VueI18n)
   const i18n = new VueI18n({
@@ -62,6 +64,17 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
       background: '#c9c9c9'
     }
   }
+
+  account.setupNet(`${store.getters.net}${store.getters.netType}`)
+
+  store.watch(
+    (state, getters) => getters.netType,
+    (newValue, oldValue) => {
+      if(newValue !== oldValue){
+        account.setupNet(`${store.getters.net}${store.getters.netType}`)
+      }
+    },
+  );
 
   const RouterConfig = {
     routes: Routers
