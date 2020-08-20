@@ -343,11 +343,11 @@ export default {
               .filter(b => b.asset.assetId === assetID);
 
             const inputAddresses = transaction.inputs
-              .filter(input => input.asset.assetId === assetID && input.address !== this.currentAccount.address)
+              .filter(input => input.asset.assetId === assetID && input.address !== this.address)
               .map(input => input.address)
 
             const outputAddresses = transaction.outputs
-              .filter(output => output.asset.assetId === assetID && output.address !== this.currentAccount.address)
+              .filter(output => output.asset.assetId === assetID && output.address !== this.address)
               .map(output => output.address)
 
             if(balanceObject.length ===1 ){
