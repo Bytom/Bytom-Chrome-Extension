@@ -187,8 +187,11 @@ function signSubmit (txObject, password, address, context) {
 };
 
 
-transaction.signMessage = function(message, password, address) {
-  return bytom.keys.signMessage(message, password,address);
+transaction.signMessage = function(message, password, address, context) {
+  const keyArray = context.bytom.keychain.findByAddress(address);
+  const key = JSON.stringify(keyArray.keystore)
+
+  return bytom.keys.signMessage(message, password,key);
 };
 
 transaction.advancedTransfer = function(address, transaction, password, arrayData, context) {

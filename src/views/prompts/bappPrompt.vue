@@ -26,6 +26,7 @@
     border-radius: 8px;
     margin-bottom: 12px;
     font-size: 14px;
+    word-break: break-all;
   }
 
   .content-black{
@@ -79,8 +80,8 @@
     }
 
     .logo {
-      width: 32px;
-      height: 32px;
+      width: 26px;
+      height: 26px;
       -webkit-border-radius: 16px;
       -moz-border-radius: 16px;
       border-radius: 16px;
@@ -91,6 +92,7 @@
       font-size: 16px;
       text-transform: uppercase;
       color: black;
+      padding: 3px;
     }
   }
 
@@ -203,10 +205,16 @@
             </div>
           </div>
 
-          <!--types-->
+          <!--transaction types-->
           <div v-if="prompt.data && prompt.data.type ==='signTransaction'" class="amount-list">
             <div >{{ $t('transfer.types') }}</div>
             <div class="color-black font-bold">{{transaction.types}}</div>
+          </div>
+
+          <!--sign message-->
+          <div v-if="prompt.data && prompt.data.type ==='message'" class="amount-list">
+            <div style="min-width: 78px;" >{{ $t('signMessage.message') }}</div>
+            <div class="color-black font-bold">{{transaction.message}}</div>
           </div>
 
           <!--amounts-->
@@ -299,6 +307,8 @@
       shortAddress: function () {
         if(this.prompt.data && this.prompt.data.type ==='transfer') {
           return add.short(this.transaction.from);
+        }else if(this.prompt.data && this.prompt.data.type ==='message'){
+          return add.short(this.transaction.address);
         }else{
           if (this.netType === 'vapor') {
             return add.short(this.currentAccount.vpAddress);
@@ -318,6 +328,9 @@
             signingInstructions
           }
           return JSON.stringify(obj, null, 2);
+        }else if(this.prompt.data && this.prompt.data.type ==='message'){
+          const {confirmations, ...Attr} = this.transaction
+          return JSON.stringify(Attr, null, 2);
         }else{
           return JSON.stringify(this.transaction, null, 2);
         }
@@ -325,6 +338,8 @@
       currentWallet(){
         if(this.prompt.data && this.prompt.data.type ==='transfer'){
           return this.bytom.keychain.findByAddress(this.transaction.from);
+        }else if(this.prompt.data && this.prompt.data.type ==='message'){
+          return this.bytom.keychain.findByAddress(this.transaction.address);
         }else{
           return this.currentAccount
         }
@@ -409,6 +424,19 @@
             this.$toast.error(
               getLang(error.message) || error.message || error
             );
+          });
+        } else if(this.prompt.data.type ==='message'){
+          transaction.signMessage(this.transaction.message, this.password, this.address, this).then((resp) => {
+            loader.hide();
+            this.prompt.responder(resp);
+            this.$toast.success(
+              this.$t("transfer.success")
+            );
+            NotificationService.close();
+          }).catch(error => {
+            loader.hide();
+
+            this.$toast.error( getLang(error.message));
           });
         }
         else{
@@ -570,6 +598,17 @@
             })
 
 
+            break
+          }
+          case "message":{
+            if(data.address !== undefined){
+              this.transaction.address = data.address;
+            }
+            if(data.message !== undefined){
+              this.transaction.message = data.message
+            }
+
+            this.dataReady = true
 
             break
           }
