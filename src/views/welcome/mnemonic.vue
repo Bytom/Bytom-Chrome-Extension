@@ -1,4 +1,4 @@
-<style scoped>
+<style lang="scss" scoped>
 
 .header {
   position: relative;
@@ -35,7 +35,7 @@
 
   .mnemonic{
     font-size: 16px;
-    width: 33%;
+    width: 25%;
     display: inline-block;
     font-family: Roboto;
     font-style: normal;
@@ -43,11 +43,24 @@
     text-align: center;
     color: rgba(0, 0, 0, 0.88);
     margin: 10px 0;
+    min-width: 110px;
+
+    div{
+      background: #FFFFFF;
+      border: 1px solid #EBEBEB;
+      box-sizing: border-box;
+      border-radius: 4px;
+      padding: 5px 20px;
+      width: 80%;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      min-width: 110px;
+    }
   }
 
   .mnemnonic-box{
     background: #FAFAFA;
-    border: 1px solid #EBEBEB;
     box-sizing: border-box;
     border-radius: 8px;
     word-break: break-all;
@@ -76,7 +89,7 @@
         <div>
           <p class="hint">{{ $t('mnemonic.hint')}}</p>
           <div class="mnemnonic-box">
-            <span class="mnemonic" v-for="n in inputMnemonic">{{ n }} </span>
+            <div class="mnemonic" v-for="n in inputMnemonic"><div>{{ n }}</div></div>
           </div>
         </div>
         <div>

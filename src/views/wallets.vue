@@ -49,7 +49,7 @@
       font-size:22px;
       margin-right: 6px;
     }
-    
+
     &:hover, &:focus, &:active {
       border: 1px solid #004EE4;
       cursor:pointer;
@@ -73,11 +73,11 @@
           </div>
         </div>
       </div>
-      <div class="create" @click="$router.push('welcome')">
+      <a class="create" :href="link" target="_blank">
         <i class="iconfont icon_wallet_add"></i>{{ $t('wallet.create') }}
-      </div>  
+      </a>
     </div>
-    
+
 
     <!-- child menu -->
     <router-view></router-view>
@@ -88,6 +88,7 @@
 import account from "@/models/account";
 import * as Actions from '@/store/constants';
 import { mapActions, mapState, mapGetters } from 'vuex'
+import {apis} from '@/utils/BrowserApis';
 
 export default {
     name: "",
@@ -111,6 +112,11 @@ export default {
         }
 
         return [];
+      },
+      link(){
+        return `${apis.runtime.getURL('pages/prompt.html')}#/welcome`;
+
+
       },
       ...mapState([
         'bytom'

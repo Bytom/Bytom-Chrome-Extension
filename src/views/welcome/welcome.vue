@@ -1,4 +1,4 @@
-<style scoped>
+<style lang="scss" scoped>
   .header {
     position: relative;
     margin:80px 0px 20px;
@@ -38,6 +38,9 @@
     display: flex;
     flex-direction: column;
     padding: 20px;
+    .d-flex{
+      justify-content: space-between;
+    }
   }
   .widget h4{
     font-weight: 600;

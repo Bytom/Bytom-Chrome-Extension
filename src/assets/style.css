@@ -70,13 +70,15 @@ a {
 }
 
 .inside-warp{
-  width: 320px;
+  min-width: 320px;
+  width: 60%;
   margin-left: auto;
   margin-right: auto;
 }
 .warp {
   position: absolute;
-  width: 320px;
+  min-width: 320px;
+  width: 60%;
   height: 600px;
   margin-left: auto;
   margin-right: auto;
@@ -435,6 +437,7 @@ hr {
   user-select: none;
   border: 0;
 }
+
 .btn:hover {
   cursor: pointer;
 }
@@ -518,6 +521,11 @@ hr {
   width: 56px;
   height: 56px;
   border-radius: 28px;
+}
+
+.btn.disable{
+  cursor: not-allowed;
+  background: #D6D6D6;
 }
 
 .list {
