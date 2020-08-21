@@ -259,7 +259,7 @@ input:checked + .slider:before {
                   <i class="icon iconfont icon_recvice"></i>
                   <div>{{ $t('main.receive') }}</div>
                 </a>
-                <a @click="crossChainOpen">
+                <a class="color-white" href="http://crosschain.bymov.io/" target="_blank">
                   <i class="icon iconfont icon_cross"></i>
                   <div>{{ $t('main.crossChain') }}</div>
                 </a>
@@ -551,7 +551,7 @@ export default {
     },
     beforeDestroy() {
       if(this.t){
-        clearInterval(this.t)        
+        clearInterval(this.t)
       }
     }
   };

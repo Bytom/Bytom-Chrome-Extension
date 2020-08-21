@@ -246,7 +246,7 @@ export default {
             }).catch(err => {
               loader.hide();
               this.$toast.error(
-                err.message
+                err.message || err
               )
             });
           }
