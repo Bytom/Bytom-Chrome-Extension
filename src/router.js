@@ -1,4 +1,3 @@
-// import Pormpt from './views/prompt'
 export const RouteNames = {
   HOME:'home',
   ASSET:'asset',
@@ -11,47 +10,21 @@ export const RouteNames = {
   PROTOCOL: 'welcome-protocol',
 
 
-
-
-
-
-  // LOAD_FROM_BACKUP:'loadFromBackup',
-  // ONBOARDING:'onboarding',
-  // SHOW_MNEMONIC:'showMnemonic',
-  // MAIN_MENU:'mainMenu',
   SETTINGS:'settings',
   SETTINGS_LANG:'settings-language',
   SETTINGS_CURRENCY:'settings-currency',
   SETTINGS_DELETE:'settings-delete',
-  //
+
   TRANSFER:'transfer',
   ASSET_SELECTION:'asset-selection',
   RECEIVE:'received',
-  // IDENTITIES:'identities',
-  // IDENTITY:'identity',
-  // KEYS:'keys',
-  // PERMISSIONS:'permissions',
-  // DOMAIN_PERMISSIONS:'domainPermissions',
-  // HISTORY:'history',
-  //
-  // NETWORKS:'networks',
-  // NETWORK:'network',
+
   ENABLE:'enable',
   BACKUP:'backup',
   BACKUP_MNEMONIC:'backup-mnemonic',
   WALLETS:'wallets',
   BAPP:'bapp',
   BAPP_PROMPT:'bapp-prompt',
-  // AUTO_LOCK:'autoLock',
-  // LANGUAGE:'language',
-  // KEYPAIRS:'keypairs',
-  //
-  // PROMPT_REQUEST_IDENTITY:`${promptPrefix}${PromptTypes.REQUEST_IDENTITY}`,
-  // PROMPT_REQUEST_SIGNATURE:`${promptPrefix}${PromptTypes.REQUEST_SIGNATURE}`,
-  // PROMPT_REQUEST_ARBITRARY_SIGNATURE:`${promptPrefix}${PromptTypes.REQUEST_ARBITRARY_SIGNATURE}`,
-  // PROMPT_REQUEST_ADD_NETWORK:`${promptPrefix}${PromptTypes.REQUEST_ADD_NETWORK}`,
-  // PROMPT_REQUEST_UNLOCK:`${promptPrefix}${PromptTypes.REQUEST_UNLOCK}`,
-  // PROMPT_UPDATE_VERSION:`${promptPrefix}${PromptTypes.UPDATE_VERSION}`,
 };
 
 const routers = [
@@ -80,78 +53,6 @@ const routers = [
         }
       },
       {
-        path: '/listVote',
-        name: 'listVote',
-        meta: { title: '节点展示' },
-        component: resolve => {
-          require(['@/views/vote/listVote.vue'], resolve)
-        }
-      },
-      {
-        path: '/listCancel',
-        name: 'listCancel',
-        meta: { title: '选择节点' },
-        component: resolve => {
-          require(['@/views/vote/listCancel.vue'], resolve)
-        }
-      },
-      {
-        path: '/voteRecord',
-        name: 'voteRecord',
-        meta: { title: '投票记录' },
-        component: resolve => {
-          require(['@/views/vote/voteRecord.vue'], resolve)
-        }
-      },
-      {
-        path: '/voteRegulation',
-        name: 'voteRegulation',
-        meta: { title: '投票规则' },
-        component: resolve => {
-          require(['@/views/vote/voteRegulation.vue'], resolve)
-        }
-      },
-      {
-        path: '/vote',
-        name: 'vote',
-        meta: { title: '投票' },
-        component: resolve => {
-          require(['@/views/vote/vote.vue'], resolve)
-        }
-      },
-      {
-        path: '/veto',
-        name: 'veto',
-        meta: { title: '取消投票' },
-        component: resolve => {
-          require(['@/views/vote/veto.vue'], resolve)
-        }
-      },
-      {
-        path: '/vote/confirm',
-        name: 'vote-confirm',
-        meta: { title: '投票确认' },
-        component: resolve => {
-          require(['@/views/vote/voteConfirm.vue'], resolve)
-        }
-      },
-      {
-        path: '/crossChain',
-        name: 'cross-chain',
-        meta: { title: '跨链' },
-        component: resolve => {
-          require(['@/views/sendTransaction/crossChainTransaction.vue'], resolve)
-        }
-      },
-      {
-        path: '/signMessage',
-        name: 'sign-message',
-        meta: { title: '请求签名' },
-        component: resolve => {
-          require(['@/views/sendTransaction/signMessage.vue'], resolve)
-        }
-      },
-      {
         path: '/received',
         name: RouteNames.RECEIVE,
         meta: { title: '接收' },
@@ -168,51 +69,6 @@ const routers = [
           require(['@/views/sendTransaction/assetSelection.vue'], resolve)
         }
       },
-      {
-        path: '/signTransaction',
-        name: 'sign-transaction',
-        meta: { title: '签名交易' },
-        component: resolve => {
-          require(['@/views/sendTransaction/signTransaction.vue'], resolve)
-        }
-      },
-
-      {
-        path: '/transfer/info',
-        name: 'transfer-info',
-        meta: { title: '交易详情' },
-        component: resolve => {
-          require(['@/views/transferDetail.vue'], resolve)
-        }
-      },
-      {
-        path: '/transfer/confirm',
-        name: 'transfer-confirm',
-        meta: { title: '交易确认' },
-        component: resolve => {
-          require(['@/views/sendTransaction/transferConfirm.vue'], resolve)
-        }
-      },
-      {
-        path: '/menu',
-        name: 'menu',
-        meta: { title: '切换账户' },
-        component: resolve => {
-          require(['@/views/sideMenu/homeMenu.vue'], resolve)
-        },
-        children: [
-
-          {
-            path: '/menu/help',
-            name: 'menu-help',
-            meta: { title: '帮助' },
-            component: resolve => {
-              require(['@/views/sideMenu/menuHelp.vue'], resolve)
-            }
-          },
-
-        ]
-      }
     ]
   },
   {

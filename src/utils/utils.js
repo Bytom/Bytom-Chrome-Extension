@@ -56,6 +56,7 @@ export function removeFromArray(original, remove) {
 
 export function getDomains(){
   let domains = bappData.list.filter( l => l.link!== undefined).map(a => a.link.split('/')[2]);
+  const crossChainLink = "crosschain.bymov.io"
 
   return fetch(bappRequestUrl)
     .then(response => response.json())
@@ -63,8 +64,11 @@ export function getDomains(){
       if(!_.isEqual(json, bappData)){
         domains = json.list.filter( l => l.link!== undefined).map(a => a.link.split('/')[2]);
       }
+
+      domains.push(crossChainLink)
       return domains;
     }).catch((e)=>{
+      domains.push(crossChainLink)
       return domains;
     });
 }
