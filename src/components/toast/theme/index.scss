@@ -1,0 +1,98 @@
+@import "animations";
+
+$toast-colors: () !default;
+$toast-colors: map-merge(
+    (
+      "success": #06BE85,
+      "info": #004EE4,
+      "error": #FE1919,
+    ),
+    $toast-colors
+);
+
+.notices {
+  position: fixed;
+  display: flex;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 3em;
+  overflow: hidden;
+  z-index: 1052;
+  pointer-events: none;
+
+  .toast {
+    display: inline-flex;
+    align-items: center;
+    animation-duration: 150ms;
+    margin: 0.2em 0;
+    min-width: 118px;
+    min-height: 40px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
+    border-radius: 20px;
+    pointer-events: auto;
+    opacity: 0.92;
+    cursor: pointer;
+    text-align: center;
+    letter-spacing: 0.2px;
+    padding: 0 25px;
+
+    /* Text / Dark-Routine */
+
+    color: rgba(0, 0, 0, 0.64);
+
+    .toast-text {
+      margin: 0;
+      padding: 0.5em 1em;
+      word-break: break-word;
+    }
+
+    .toast-icon {
+      display: block;
+      height: 6px;
+      width: 6px;
+      border-radius:3px;
+    }
+  }
+
+  // Colors
+  @each $color, $value in $toast-colors {
+    .toast-#{$color} .toast-icon{
+      background-color: $value;
+    }
+  }
+
+  // Individual toast position
+  .toast {
+    &.is-top, &.is-bottom {
+      align-self: center;
+    }
+
+    &.is-top-right, &.is-bottom-right {
+      align-self: flex-end;
+    }
+
+    &.is-top-left, &.is-bottom-left {
+      align-self: flex-start;
+    }
+  }
+
+  // Notice container positions
+  &.is-top {
+    flex-direction: column;
+  }
+
+  &.is-bottom {
+    flex-direction: column-reverse;
+  }
+
+  &.is-custom-parent {
+    position: absolute;
+  }
+
+  @media screen and (max-width: 768px) {
+    position: fixed !important;
+  }
+}

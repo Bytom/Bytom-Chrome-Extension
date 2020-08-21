@@ -1,30 +1,38 @@
-<style lang="" scoped>
-  .header {
+<style lang="scss" scoped>
+  .header{
     display: flex;
-  }
-  .header p{
-    text-align: center;
-    width: 280px;
-    padding-top: 17px;
+    margin-bottom: 20px;
+    h1{
+      margin-left: 12px;
+      font-size: 20px;
+    }
   }
   .panel{
     text-align: center;
-    padding: 38px;
+    padding: 17px 0;
+    margin: 0;
   }
   #qrcode {
     width: 150px;
     height: 150px;
-    margin: 30px auto;
+    margin: 10px auto;
   }
 
   .vp-warning {
     text-align: center;
     width: 100%;
     font-size: 12px;
+    margin-top: 12px;
   }
 
   .address-text{
     cursor: pointer;
+    font-size: 12px;
+    max-width: 150px;
+    word-break: break-all;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 18px;
   }
   .footer{
     text-align: center;
@@ -34,22 +42,56 @@
     font-size: 12px
   }
 
+  .icon_copy{
+    font-size: 14px;
+  }
+
+  .select{
+    height: 32px;
+    width: 100px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .c-icon{
+    position: absolute;
+    top: 40%;
+    left: 42%;
+    height: 20px;
+    background: white;
+    border: 0.5px solid rgba(0, 0, 0, 0.24);
+    padding: 2px;
+    border-radius: 15px;
+  }
+
+  .qr-box{
+    position: relative;
+    width: 150px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 </style>
 
 <template>
-  <div class="warp-chlid bg-gray">
-    <section class="header bg-header">
-      <i class="iconfont icon-back" @click="close"></i>
-      <p>{{ $t('main.receive') }}</p>
+  <div class="warp-child bg-grey">
+    <section class="header">
+      <BackButton :small="true" :des="'home'"/>
+      <h1 class="color-black">
+        <div class="welcome-title">{{ $t('main.receive')}}</div>
+      </h1>
     </section>
 
-    <div class="panel">
-      <div id="qrcode"></div>
-      <p>{{$t('receive.address')}}</p>
-      <span class="color-black font-medium address-text"  :title="addressTitle" :data-clipboard-text="addr">{{addr}}</span>
+    <div class="bg-shadow-white panel">
+      <div>
+        <v-select class="select" v-bind:colorBlack="true"  :value="currentCoin" :clearable="false" :options="coins" :onChange="coinToggle"></v-select>
+      </div>
+      <div class="qr-box">
+        <img :src="img(currentCoin)" alt="" class="c-icon">
+        <div id="qrcode"></div>
+      </div>
+      <div class="color-grey-36 address-text"  :title="addressTitle" :data-clipboard-text="addr">{{addr}}<i class="iconfont icon_copy"></i></div>
     </div>
     <div v-if="netType === 'vapor'" class="vp-warning color-red"> {{$t('receive.vpWarning')}}</div>
-    <div class="footer color-grey"> {{$t('receive.tips')}}</div>
   </div>
 </template>
 
@@ -64,32 +106,56 @@
       addr: "111",
       qrcode: Object,
       clipboard: new ClipboardJS(".address-text"),
-      addressTitle: this.$t("main.copy")
+      addressTitle: this.$t("main.copy"),
+      currentCoin:'BTM'
     };
   },
     computed: {
+      coins: function(){
+        let symbols
+        if(this.netType === 'vapor'){
+          symbols = this.currentAccount.vpBalances.map(a => a.asset.symbol)
+        }else{
+          symbols = this.currentAccount.balances.map(a => a.asset.symbol)
+        }
+        if(symbols.length >1){
+          const index = symbols.indexOf("BTM")
+          symbols.splice(index,1)
+          symbols.unshift("BTM")
+        }
+
+        return symbols || []
+      },
       ...mapGetters([
         'currentAccount',
         'netType'
       ])
     },
   methods: {
+    img:function (symbol) {
+        const _symbol = symbol.toLowerCase();
+        if(this.netType === 'vapor'){
+          return `https://cdn.blockmeta.com/resources/logo/vapor/${_symbol}.png`
+        }else{
+          return `https://cdn.blockmeta.com/resources/logo/bytom/${_symbol}.png`
+        }
+      },
     close: function () {
       this.$router.go(-1)
     },
+    coinToggle: function(symbols){
+      this.currentCoin = symbols
+    },
     setupClipboard() {
       this.clipboard.on("success", e => {
-        this.$dialog.show({
-          type: 'success',
-          header: this.$t("dialog.header"),
-          body: this.$t("dialog.copy.success")
-        });
+        this.$toast.success(
+          this.$t("dialog.copy.success")
+        );
       });
       this.clipboard.on("error", e => {
-        this.$dialog.show({
-          header: this.$t("dialog.header"),
-          body: this.$t("dialog.copy.fail")
-        });
+        this.$toast.error(
+          this.$t("dialog.copy.fail")
+        );
       });
     },
   },

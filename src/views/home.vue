@@ -1,4 +1,4 @@
-<style lang="" scoped>
+<style lang="scss" scoped>
 .warp {
     z-index: 1;
 }
@@ -6,6 +6,7 @@
 .topbar {
     font-size: 19px;
     display:flex;
+    justify-content: space-between;
 }
 .topbar .topbar-left {
     width: 85px;
@@ -23,75 +24,62 @@
     font-size: 100%;
 }
 .alias {
-    height: 25px;
-    font-size: 16px;
-    line-height: 28px;
+  height: 25px;
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 600;
 }
 
-.topbar .topbar-middle {
-    margin-top: 20px;
-    margin-right: 20px;
-    border: 2px solid #fff;
-    border-radius: 18px;
-    padding: 0 20px;
-    font: 12px system-ui;
-    text-align: center;
-    display: flex;
-    align-items: center;
+.topbar .topbar-right {
+  font-size: 13px;
 }
 
 .content {
-    margin-top: 25px;
+    margin-top: 10px;
     text-align: center;
-    padding: 0 30px 10px;
+    padding: 20px;
 }
 
-.content .amount {
-    padding-bottom: 10px;
-}
 .content .token-amount {
-    font-size: 32px;
-    line-height: 45px;
+    font-size: 24px;
+    line-height: 35px;
+    padding-right: 17px;
 }
-
+.token-amount:first-letter {
+  color: rgba(255, 255, 255, 0.56);
+  font-size: 20px;
+}
 .btn-send-transfer {
   display: flex;
-  align-items: center;
   justify-content: space-evenly;
-  text-align:center;
-  position: absolute;
-  width: 320px;
+  text-align: center;
+  max-width: 300px;
   height: 102px;
-  left: 20px;
-  top: 165px;
-  background: #FFFFFF;
-  box-shadow: 0px 2px 16px rgba(0, 0, 0, 0.08);
   border-radius: 4px;
-  color: black;
+  color: white;
   font-size: 12px;
+  margin-left: auto;
+  margin-right: auto;
+
+  a:hover .icon, a:focus .icon, a:active .icon{
+    background: rgba(255, 255, 255, 0.2);
+  }
 }
 
-.transaction-title{
-  margin-top: 55px;
-}
+
+
 
 .transaction-title h3 {
-    font-size: 14px;
-    font-weight: inherit;
-    padding: 10px 0 10px 20px;
+  font-size: 15px;
+  padding: 12px 0 16px 0px;
+  font-weight: 600;
 }
 .transactions {
   font-size: 15px;
-  height: 283px;
   overflow: auto;
+  flex-grow: 1;
 }
-.list-item {
-    position: relative;
-    display: block;
-    padding: 10px 20px;
-    height: 52px;
-     border-bottom: solid 1px rgba(0, 0, 0, 0.04)
-}
+
 
 .network-select{
   text-transform: capitalize;
@@ -116,105 +104,182 @@
   display: block;
 }
 
-  .bg-image{
-    height: 216px;
-  }
 
 .icon{
   width: 40px;
   height: 40px;
-}
-.icon-crosschain-svg{
-  background-image: url('../assets/img/icon/crosschain.svg');
-}
-.icon-vote-svg{
-  background-image: url('../assets/img/icon/vote.svg');
-}
-.icon-receive-svg{
-  background-image: url('../assets/img/icon/receive.svg');
-}
-.icon-send-svg{
-  background-image: url('../assets/img/icon/send.svg');
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 5px;
 }
 
+  .balance-bg{
+    height: 128px;
+
+    background: linear-gradient(228.34deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.1) 100%), #1A1A1A;
+    border-radius: 8px;
+  }
+
+  .vapor-bg{
+    background: linear-gradient(228.34deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.16) 100%), #0A42D0;
+  }
+
+  .total-asset{
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 12px;
+  }
+
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 142px;
+  height: 36px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #F5F5F5;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 28px;
+  width: 67px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.04);
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+/*input:checked + .slider {*/
+  /*background-color: #2196F3;*/
+/*}*/
+
+/*input:focus + .slider {*/
+  /*box-shadow: 0 0 1px #2196F3;*/
+/*}*/
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(67px);
+  -ms-transform: translateX(67px);
+  transform: translateX(67px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 34px;
+}
+
+.slider-label{
+  position: absolute;
+  justify-content: space-around;
+  width: 141px;
+  height: 36px;
+  align-items: center;
+  top: 0;
+  color: rgba(0, 0, 0, 0.24);
+}
+
+.slider-label>div.active{
+  color: rgba(0, 0, 0, 0.64);
+}
+
+
+
+  .symbol{
+    display: flex;
+    align-items: center;
+  }
+
+  .warp-menu{
+    display: flex;
+    flex-direction: column;
+  }
 </style>
 
 <template>
-    <div class="warp">
-        <section class="bg-image">
+    <div class="warp-menu">
+        <section>
             <div class="topbar">
-                <div class="topbar-left">
-                    <a class="btn-menu" @click="openMenu">
-                        <i class="iconfont icon-menu"></i>
-                    </a>
+                <div v-if="address!=undefined" >
+                  <span class="alias color-black">{{currentAccount.alias}}</span>
                 </div>
-                <div class="topbar-middle bg-secondary">
-                    <select class="network-select" :value="netType||'bytom'" @change="netTypeToggle">
-                        <option value="bytom">{{ $t('main.bytom') }} {{net}}</option>
-                        <option value="vapor">{{ $t('main.vapor') }} {{net}}</option>
-                    </select>
+                <div class="topbar-right">
+                  <label class="switch">
+                    <input type="checkbox" v-model="isVapor" @change="netTypeToggle">
+                    <span class="slider round"></span>
+                    <div class="d-flex slider-label">
+                      <div :class="{ active: !isVapor }" >{{ $t('main.bytom') }}</div>
+                      <div :class="{ active: isVapor }">{{ $t('main.vapor') }}</div>
+                    </div>
+                  </label>
                 </div>
             </div>
-            <div class="content">
-                <div v-if="address!=undefined" class="amount color-white">
-                    <span class="alias color-grey">{{currentAccount.alias}}</span>
+            <div :class="['content balance-bg',{ 'vapor-bg': isVapor }]">
+                <div class="amount color-white">
+                    <div class="total-asset">{{ $t('main.totalAsset') }}</div>
                     <div class="token-amount">
                         {{accountBalance}}
                     </div>
                 </div>
-                <div v-else>
-                  <p style="width: 250px; margin: 45px auto; text-align: center;">{{ $t('main.noAccount') }}</p>
+              <div class="btn-send-transfer">
 
-                </div>
-            </div>
-            <div v-if="netType =='vapor' && address!=undefined" class="btn-send-transfer">
-
-                <a @click="listVoteOpen">
-                  <div class="icon icon-vote-svg"></div>
-                  <div>{{ $t('main.vote') }}</div>
-                </a>
-                <a @click="crossChainOpen">
-                  <div class="icon icon-crosschain-svg"></div>
-                  <div>{{ $t('main.crossChain') }}</div>
+                <a  @click="transferOpen">
+                  <i class="icon iconfont icon_send"></i>
+                  <div>{{ $t('main.send') }}</div>
                 </a>
                 <a  @click="showQrcode">
-                  <div class="icon icon-receive-svg"></div>
+                  <i class="icon iconfont icon_recvice"></i>
                   <div>{{ $t('main.receive') }}</div>
                 </a>
-                <a  @click="transferOpen">
-                  <div class="icon icon-send-svg"></div>
-                  <div>{{ $t('main.send') }}</div>
+                <a class="color-white" href="http://crosschain.bymov.io/" target="_blank">
+                  <i class="icon iconfont icon_cross"></i>
+                  <div>{{ $t('main.crossChain') }}</div>
                 </a>
+              </div>
             </div>
-            <div v-else-if="address!=undefined" class="btn-send-transfer">
-                <a @click="showQrcode">
-                  <div class="icon icon-receive-svg"></div>
-                  <div>{{ $t('main.receive') }}</div>
-                </a>
-                <a @click="transferOpen">
-                  <div class="icon icon-send-svg"></div>
-                  <div>{{ $t('main.send') }}</div>
-                </a>
-            </div>
+
         </section>
       <section v-if="address!=undefined" class="transaction-title">
       <h3 class="color-black">{{ $t('main.asset') }}</h3>
       </section>
       <section class="transactions">
         <div v-if="address!=undefined">
-        <div v-if="balances && balances.length > 0">
+        <div v-if=" balances && balances.length > 0">
           <ul class="list">
             <li class="list-item" v-for="(balance, index) in balances" :key="index" @click="assetOpen(balance)">
-              <div class="float-right text-align-right">
-                <div class="value">{{ itemBalance(balance) }}</div>
-                <div class="addr color-grey">{{ formatCurrency(currentBalanceAmount(balance)) }}</div>
-              </div>
-              <div v-if="balance.asset.symbol!== 'Asset'">
+              <div class="symbol" v-if="balance.asset.symbol!== 'Asset'">
+                <img :src="img(balance.asset.symbol)" alt="" class="c-icon">
                 <div class="uppercase">
                   {{balance.asset.symbol}}
                 </div>
-
-                <div class="addr color-grey">{{balance.asset.name}}</div>
               </div>
               <div v-else>
                 <div>
@@ -224,29 +289,30 @@
                 <div class="addr color-grey uppercase">{{ shortAddress(balance.asset.assetId) }}</div>
               </div>
 
+              <div class="text-align-right">
+                <div class="value">{{ itemBalance(balance) }}</div>
+                <div class="addr color-grey">{{ formatCurrency(currentBalanceAmount(balance)) }}</div>
+              </div>
+
             </li>
           </ul>
         </div>
           <div v-else>
             <ul class="list">
               <li class="list-item" v-for="(asset, index) in defaultBalances" :key="index" @click="assetOpen(asset)">
-                <div class="float-right text-align-right">
-                  <div class="value">{{ itemBalance(asset) }}</div>
-                  <div class="addr color-grey">{{ formatCurrency(asset[ currency ]) }}</div>
-                </div>
-                <div v-if="asset.asset.symbol!== 'Asset'">
+
+                <div class="symbol">
+                  <img :src="img(asset.asset.symbol)" alt="" class="c-icon">
+
                   <div class="uppercase">
                     {{asset.asset.symbol}}
                   </div>
 
-                  <div class="addr color-grey">{{asset.asset.name}}</div>
                 </div>
-                <div v-else>
-                  <div>
-                    Asset
-                  </div>
 
-                  <div class="addr color-grey uppercase">{{shortAddress(asset.asset.assetId)}}</div>
+                <div class=" text-align-right">
+                  <div class="value">{{ itemBalance(asset) }}</div>
+                  <div class="addr color-grey">{{ formatCurrency(asset[ currency ]) }}</div>
                 </div>
 
               </li>
@@ -276,13 +342,13 @@
 <script>
 import address from "@/utils/address";
 import account from "@/models/account";
-import transaction from "@/models/transaction";
 import { camelize } from "@/utils/utils";
 import { BTM } from "@/utils/constants";
 import { mapActions, mapGetters, mapState } from 'vuex'
 import * as Actions from '@/store/constants';
 import _ from 'lodash';
 import { Number as Num } from "@/utils/Number"
+import BigNumber from "bignumber.js"
 
 
 const EnterActive = 'animated faster fadeInLeft';
@@ -291,10 +357,8 @@ export default {
     name: "",
     data() {
         return {
-            transactions: [],
+            isVapor: false,
             maskShow: false,
-            start: 0,
-            limit: 10,
             enterActive: EnterActive,
             leaveActive: LeaveActive,
             defaultBalances: [
@@ -303,15 +367,15 @@ export default {
                   assetId: BTM,
                   name: "Bytom",
                   symbol: "BTM",
-
+                  decimals: 8
                 } ,
                 availableBalance: 0,
-                decimals: 8,
                 inBtc: "0",
                 inCny: "0",
                 inUsd: "0"
               }
             ],
+            t: null
         };
     },
     watch: {
@@ -344,6 +408,7 @@ export default {
             }else{
               addr = newVal.address
             }
+            this.refreshBalance(addr)
         },
     },
     computed: {
@@ -353,7 +418,8 @@ export default {
 
             if(balances && balances.length >0 ){
                 const currency = camelize(this.currency)
-                balance = _.sumBy(balances, function(o) { return Number(o[currency]); })
+                const arr = balances.map(o => o[currency])
+                balance = BigNumber.sum.apply(null, arr)
             }
             return  Num.formatCurrency( (balance != null && balance != 0)? balance : '0.00', this.currency)
         },
@@ -383,6 +449,14 @@ export default {
         ])
     },
     methods: {
+      img:function (symbol) {
+        const _symbol = symbol.toLowerCase();
+        if(this.netType === 'vapor'){
+          return `https://cdn.blockmeta.com/resources/logo/vapor/${_symbol}.png`
+        }else{
+          return `https://cdn.blockmeta.com/resources/logo/bytom/${_symbol}.png`
+        }
+      },
       currentBalanceAmount: function (balance) {
         return balance[ camelize(this.currency) ]
       },
@@ -397,60 +471,44 @@ export default {
         if(asset.assetId === BTM){
           return Num.formatNue(assetObj.availableBalance,8)
         }else{
-          return assetObj.availableBalance
+          return Num.formatNue(assetObj.availableBalance, assetObj.asset.decimals)
         }
       },
         setupRefreshTimer() {
-            setInterval(() => {
+          if(this.t){
+             clearInterval(this.t)
+          }
+          this.t = setInterval(() => {
                 this.refreshBalance(this.address)
             }, 10000)
         },
-        setupNetwork() {
-            account.setupNet(`${this.net}${this.netType}`);
-        },
-        netTypeToggle: function (event) {
-            const newNetType = event.target.value  ==='bytom'? '' :event.target.value;
+        netTypeToggle: function () {
+          const bytom = this.bytom.clone();
+          const newNetType = this.isVapor? 'vapor':'bytom'
 
-            if( newNetType !== this.netType){
-              const bytom = this.bytom.clone();
+          bytom.settings.netType = newNetType;
 
-              bytom.settings.netType = newNetType;
+          account.setupNet(`${this.net}${newNetType}`)
+          if(this.isVapor && !this.currentAccount.vpAddress){
+            account.copy(this.currentAccount.guid).then(accounts => {
+              //update currentAccount
+              bytom.currentAccount.vpAddress = accounts.address
+              //update AccountList
+              bytom.keychain.pairs[bytom.currentAccount.alias].vpAddress = accounts.address
 
-              account.setupNet(`${this.net}${newNetType}`)
-              if(newNetType === 'vapor'&& !this.currentAccount.vpAddress){
-                account.copy(this.currentAccount.guid).then(accounts => {
-                  //update currentAccount
-                  bytom.currentAccount = accounts
-
-                  //update AccountList
-                  const objectIndex = bytom.accountList.findIndex(a => a.guid == this.currentAccount.guid)
-                  bytom.accountList[objectIndex].vpAddress = accounts.vpAddress
-
-                  this[Actions.UPDATE_STORED_BYTOM](bytom).then(()=>{
-                    this.refreshBalance(this.currentAccount.vpAddress)
-                  })
-                }).catch(e =>{
-                  if(e.message == 'Error: wallet has exist'){
-                    account.listVapor(this.currentAccount.guid).then(accounts => {
-                      //update currentAccount
-                      bytom.currentAccount = accounts
-
-                      const objectIndex = bytom.accountList.findIndex(a => a.guid == this.currentAccount.guid)
-                      bytom.accountList[objectIndex].vpAddress = accounts.vpAddress
-
-                      this[Actions.UPDATE_STORED_BYTOM](bytom).then(()=>{
-                        this.refreshBalance(this.currentAccount.vpAddress)
-                      })
-                    })
-
-                  }
-                })
-              }else{
-                this[Actions.UPDATE_STORED_BYTOM](bytom).then(()=>{
-                  this.refreshBalance(this.currentAccount.address)
-                })
-              }
-            }
+              this[Actions.UPDATE_STORED_BYTOM](bytom).then(()=>{
+                this.setupRefreshTimer()
+              })
+            }).catch(e =>{
+              this.$toast.error(
+                e.message ||e
+              );
+            })
+          }else{
+            this[Actions.UPDATE_STORED_BYTOM](bytom).then(()=>{
+              this.setupRefreshTimer()
+            })
+          }
         },
         showQrcode: function () {
           this.$router.push('received')
@@ -473,39 +531,7 @@ export default {
         },
         refreshBalance: function (address) {
           if(address){
-            account.balance(address)
-              .then((obj)=>{
-                const balances = obj.balances
-                const votes = obj.votes
-
-                const balanceNotEqual = !_.isEqual(this.balances, balances)
-
-                const voteNotEqual = (this.netType === 'vapor' && !_.isEqual(this.currentAccount.votes, votes))
-
-                if(balanceNotEqual || voteNotEqual){
-                    //update AccountList
-
-                    const bytom = this.bytom.clone();
-                    const objectIndex = bytom.accountList.findIndex(a => a.guid == this.currentAccount.guid)
-
-                    if(balanceNotEqual){
-                      if(this.netType === 'vapor'){
-                        bytom.currentAccount.vpBalances = balances;
-                        bytom.accountList[objectIndex].vpBalances = balances
-                      }else{
-                        bytom.currentAccount.balances = balances;
-                        bytom.accountList[objectIndex].balances = balances
-                      }
-                    }
-
-                    if(voteNotEqual){
-                      bytom.currentAccount.votes = votes;
-                      bytom.accountList[objectIndex].votes = votes
-                    }
-
-                    this[Actions.UPDATE_STORED_BYTOM](bytom)
-                }
-              })
+            account.balance(address, this)
               .catch(error => {
                 console.log(error);
             });
@@ -517,9 +543,16 @@ export default {
       ])
     },
     mounted() {
-        this.setupNetwork();
-        this.setupRefreshTimer();
-        this.refreshBalance(this.address)
+      this.setupRefreshTimer();
+      this.refreshBalance(this.address)
+      if (this.netType){
+        this.isVapor = this.netType =='vapor'
+      }
     },
+    beforeDestroy() {
+      if(this.t){
+        clearInterval(this.t)
+      }
+    }
   };
 </script>

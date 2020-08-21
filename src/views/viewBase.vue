@@ -30,7 +30,9 @@
 
 <template>
     <section id="app">
+        <menu-bar></menu-bar>
         <router-view></router-view>
+        <success></success>
     </section>
 </template>
 

@@ -113,9 +113,9 @@
 </style>
 
 <template>
-    <div class="warp-chlid bg-white">
+    <div class="warp-child bg-white">
         <section class="header bg-header">
-            <i class="iconfont icon-back" @click="close"></i>
+            <i class="iconfont icon_arrow_left" @click="close"></i>
             <p>{{ $t('crossChain.title') }}</p>
         </section>
 

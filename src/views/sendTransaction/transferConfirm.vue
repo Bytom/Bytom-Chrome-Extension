@@ -110,7 +110,7 @@
 <template>
     <div class="warp bg-gray">
         <section class="header bg-header">
-            <i class="iconfont icon-back" @click="$router.go(-1)"></i>
+            <i class="iconfont icon_arrow_left" @click="$router.go(-1)"></i>
             <p>{{ title || $t('transfer.confirmTransaction') }}</p>
         </section>
 
@@ -185,7 +185,7 @@
 import modalPasswd from "@/components/modal-passwd";
 import getLang from "@/assets/language/sdk";
 import { LocalStream } from 'extension-streams';
-import { mapGetters } from 'vuex'
+import { mapGetters , mapState} from 'vuex'
 
 export default {
     components: {
@@ -225,6 +225,9 @@ export default {
           return Number(this.transaction.amount)
         }
       },
+      ...mapState([
+        'bytom'
+      ]),
       ...mapGetters([
         'language',
         'net',
@@ -258,7 +261,7 @@ export default {
             address = this.netType === 'vapor'?  this.account.vpAddress: this.account.address;
           }
 
-          Promise.all(this.rawData.map( (rawdata) => transaction.transfer(this.account.guid, rawdata, this.password, address)))
+          Promise.all(this.rawData.map( (rawdata) => transaction.transfer(this.account.guid, rawdata, this.password, address, this)))
                 .then(ret => {
                     loader.hide();
                     if(this.$route.params.type == 'popup'){

@@ -97,7 +97,7 @@
 </style>
 
 <template>
-    <div class="bg-gray warp-chlid">
+    <div class="bg-gray warp-child">
         <section class="header bg-header">
             <i class="iconfont icon-back" @click="$router.go(-1)"></i>
             <p >{{ $t('transactionDetail.title') }}</p>

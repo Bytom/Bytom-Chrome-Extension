@@ -174,7 +174,7 @@
 </style>
 
 <template>
-    <div class="warp-chlid bg-white">
+    <div class="warp-child bg-white">
 
         <section class="bg-image">
           <div class="header">

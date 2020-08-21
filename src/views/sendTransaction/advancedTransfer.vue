@@ -74,7 +74,7 @@
 <template>
   <div class="warp bg-gray">
     <section class="header bg-header">
-      <i class="iconfont icon-back" @click="close"></i>
+      <i class="iconfont icon_arrow_left" @click="close"></i>
       <p>{{ $t('transfer.confirmTransaction') }}</p>
     </section>
 
@@ -176,6 +176,9 @@ export default {
           return this.currentAccount.address
         }
       },
+      ...mapState([
+        'bytom'
+      ]),
       ...mapGetters([
         'currentAccount',
         'net',
@@ -203,7 +206,7 @@ export default {
                 arrayData =  await transaction.convertArgument(this.transaction.args)
               }
 
-              return transaction.advancedTransfer(this.currentAccount.guid, result[0], this.password, arrayData, this.address)
+              return transaction.advancedTransfer(this.currentAccount.guid, result[0], this.password, arrayData, this.address, this)
                   .then((resp) => {
                       loader.hide();
                       this.prompt.responder(resp);

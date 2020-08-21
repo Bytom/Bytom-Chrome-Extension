@@ -11,27 +11,48 @@ import Routers from './router'
 import ViewBase from '@/views/viewBase'
 import Dialog from '@/components/dialog'
 import vSelect from '@/components/select'
+import Toast from '@/components/toast'
 import MenuPage from '@/components/menu-page'
+import SelectionPage from '@/components/selection-page'
+import Header from '@/components/header'
+import Footer from '@/components/footer'
+import BackButton from '@/components/backButton'
+import Success from '@/components/Success.vue'
+import Menubar from '@/components/MenubarComponent.vue'
+import ModalPasswd from '@/components/modal-passwd.vue'
 import messages, { getLanguage } from '@/assets/language'
+
+import account from "@/models/account";
+
 import '@/assets/style.css'
 import {store} from "./store/store";
+import {getDomains} from '@/utils/utils.js'
 import * as Actions from "./store/constants";
+import Vuelidate from 'vuelidate'
 
-
-store.dispatch(Actions.LOAD_BYTOM).then(() => {
+store.dispatch(Actions.LOAD_BYTOM).then(async () => {
   Vue.use(VueI18n)
   const i18n = new VueI18n({
     fallbackLocale: 'en',
     locale: getLanguage(store.getters.language),
     messages
   })
+  Vue.use(Vuelidate)
   Vue.use(i18n)
   Vue.use(vuescroll)
   Vue.use(VueRouter)
   Vue.use(MenuPage)
+  Vue.use(SelectionPage)
+  Vue.use(Header)
+  Vue.use(Footer)
   Vue.use(Loading)
+  Vue.use(BackButton)
   Vue.use(Dialog, i18n)
+  Vue.use(Toast, i18n)
+  Vue.component('success', Success)
+  Vue.component('menu-bar', Menubar)
   Vue.component('v-select', vSelect)
+  Vue.component('modal-passwd', ModalPasswd)
 
   Vue.prototype.$vuescrollConfig = {
     mode: 'native',
@@ -41,6 +62,25 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
       keepShow: true,
       background: '#c9c9c9'
     }
+  }
+
+  account.setupNet(`${store.getters.net}${store.getters.netType}`)
+
+  store.watch(
+    (state, getters) => getters.netType,
+    (newValue, oldValue) => {
+      if(newValue !== oldValue){
+        account.setupNet(`${store.getters.net}${store.getters.netType}`)
+      }
+    },
+  );
+
+  const domains = await getDomains();
+  const _bytom = store.state.bytom.clone()
+
+  if(!domains.every(v => _bytom.settings.domains.includes(v))){
+    _bytom.settings.domains = Array.from(new Set(_bytom.settings.domains.concat(domains)))
+    store.dispatch(Actions.UPDATE_STORED_BYTOM, _bytom)
   }
 
   Vue.filter('moment', function(value, formatString) {
@@ -54,12 +94,16 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
   const router = new VueRouter(RouterConfig)
   router.beforeEach((to, from, next) => {
     // wallet init
-    if (store.getters.login == undefined && to.name == 'home') {
-      next({ name: 'welcome-creation' })
+
+    if (!(store.getters.currentAccount) && to.name == 'home') {
+      next({ name: 'welcome' })
+      return
+    }else if (!(store.getters.currentAccount && store.getters.vMnemonic)  && to.name == 'home') {
+      next({ name: 'welcome-verify-mnemonic' })
       return
     }
 
-    next()
+      next()
   })
   new Vue({
     el: '#app',
@@ -69,3 +113,5 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
     render: h => h(ViewBase)
   })
 });
+
+

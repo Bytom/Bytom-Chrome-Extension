@@ -2,7 +2,7 @@ module.exports = {
   manifest_version: 2,
   name: 'Byone',
   description: 'Bytom Wallet Chrome extension.',
-  version: '2.2.3',
+  version: '3.0.0',
   author: 'Bytom frontend, zhitinglin',
   web_accessible_resources: ['js/inject.js', 'wasm/main.wasm'],
   browser_action: {

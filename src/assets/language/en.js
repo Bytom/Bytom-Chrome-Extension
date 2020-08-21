@@ -1,6 +1,11 @@
 const en = {
   home:{
-    title:"Bytom Wallet for Chrome"
+    welcome:"Welcome",
+    byone:" Byone Wallet",
+    create:"Create",
+    createHint:"创建一个新的钱包来存储和交易您的 BTM 及侧链代币",
+    import:"Import",
+    importHint:"如果您在其它网站或 App 上创建过钱包，可以在这里导入"
   },
   common:{
     veto: 'Veto',
@@ -110,8 +115,8 @@ const en = {
   },
   enable:{
     title:'Connect Request',
-    domain: 'Domain',
-    message: 'would like to connect your account',
+    domain: 'Domain:',
+    message: ' is trying to connect to your byone and use the relevant API request, please make sure the site is secure. Would you like to connect?',
     cancel:'Cancel',
     confirm:'Connect'
   },
@@ -128,11 +133,11 @@ const en = {
     vpWarning:'Please don\'t use Vapor address in the real transaction.'
   },
   main: {
-    mainNet: 'Mainnet',
-    testNet: 'Testnet',
+    mainnet: 'Mainnet',
+    testnet: 'Testnet',
     vapor: 'Vapor',
     bytom: 'Bytom',
-    soloNet: 'Solonet',
+    solonet: 'Solonet',
     mainNetShort: 'Mainnet',
     testNetShort: 'Testnet',
     vaporTestNetShort: 'Vapor Testnet',
@@ -175,11 +180,14 @@ const en = {
     setting: 'Setting'
   },
   createAccount: {
-    title: 'Create Account',
+    title: 'Create A Wallet',
+    walletName:'Please enter wallet\'s name',
+    password:'Please enter your password',
+    confirmPassword: 'Please repeat your password',
+
     accountAlias: 'Account Alias',
     keyAlias: 'Key Alias',
     keyPassword: 'Key Password',
-    confirmPassword: 'Confirm Password',
     create: 'Create an account',
     select: 'Select network',
     file: 'Backup file',
@@ -191,6 +199,9 @@ const en = {
     inputKey: 'Please enter the key alias.',
     inputPass: 'Please enter your password.',
     agreeService:'Please read and agree the service term.'
+  },
+  error:{
+    BTM0000: 'This field is required.'
   },
   help: {
     title: 'Help',

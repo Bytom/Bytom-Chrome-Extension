@@ -1,6 +1,11 @@
 const cn = {
   home:{
-    title:"比原链插件钱包"
+    welcome:"欢迎使用",
+    byone:" Byone 钱包",
+    create:"创建钱包",
+    createHint:"创建一个新的钱包来存储和交易您的 BTM 及侧链代币",
+    import:"导入钱包",
+    importHint:"如果您在其它网站或 App 上创建过钱包，可以在这里导入"
   },
   common:{
     veto: '取消投票',
@@ -13,8 +18,14 @@ const cn = {
     transfer:'转账',
     issue:'资产发行',
     retire:'资产销毁',
+    transfer_in:'收款',
+    transfer_out:'转账',
+    cross_chain:'跨链',
+    confirm: '确认',
+    cancel: '取消'
   },
   welcome: {
+    enterMain:'进入主界面',
     title: '欢迎使用BYTOM精简Chrome钱包',
     use: '开始',
     terms: '使用条款',
@@ -25,6 +36,20 @@ const cn = {
     term1:'我同意',
     term2:'使用条款'
   },
+  restore:{
+    title:'导入钱包',
+    mnemonic:'助记词',
+    mHint:'请按顺序输入助记词，单词中间用空格隔开',
+    kFile:'Keystore 文件',
+    kFHint:'备份上传',
+    kText:'Keystore 纯文本',
+    kSHint:'请输入完整的 Keystore 纯文本',
+    sPassword:'设置密码',
+    vPassword:'验证密码',
+    passwordHint:'请牢记密码，交易、备份等操作需要验证密码！',
+    p1text:'请设置密码',
+    p2text:'请重复输入密码'
+  },
   dialog: {
     header: '提示',
     copy: {
@@ -33,9 +58,12 @@ const cn = {
     }
   },
   transfer: {
-    address: '地址',
+    address: '接收地址',
+    bytomAddress:'主链地址(bm开头）',
+    vaporAddress:'侧链地址(vp开头）',
     quantity: '数量',
-    fee: '矿工费用',
+    fee: '手续费',
+    available:'可用',
     feeType: '标准',
     send: '发送交易',
     confirmPassword: '密码',
@@ -43,14 +71,14 @@ const cn = {
     cancel: '取消',
     emptyPassword: '密码不能为空',
     unit: '单位',
-    asset:'资产',
+    asset:'选择资产',
     assetId:'资产Id',
     emptyTo: '地址不能为空',
     noneBTM: '错误的BTM数量',
     transferAmount: '转账金额',
     transferCost: '当前价值',
     total: '总计',
-    confirmTransaction:'确认发送交易',
+    confirmTransaction:'交易确认',
     totalTip: '转账金额+矿工费用',
     success: '交易发送成功',
     from:'发送账户',
@@ -59,7 +87,17 @@ const cn = {
     hide:'隐藏',
     viewAll:'展示全部',
     hideAll:'隐藏全部',
-    types:'交易类型'
+    types:'交易类型',
+    password:'请输入密码',
+    detail:'交易详情',
+    requestDetail:'请求详情',
+    amount:'交易金额',
+    signComfirm:' 签名交易',
+    signMessage:' 签名信息'
+  },
+  listAsset: {
+    all:'全部',
+    fail:'失败'
   },
   crossChain:{
     title:'跨链',
@@ -109,11 +147,11 @@ const cn = {
     confirmSignature:'确认签名'
   },
   enable:{
-    title:'请求授权',
+    title:'应用授权',
     domain: '域名',
-    message: '请求获取你的钱包地址，是否同意？',
-    cancel:'取消',
-    confirm:'确认授权'
+    message: '正在尝试连接到您的 Byone 上并调用相关 API，请仔细检查此站点的安全性并确认是否连接。',
+    cancel:'拒绝',
+    confirm:'连接'
   },
   disable:{
     title:'取消授权',
@@ -128,9 +166,11 @@ const cn = {
     vpWarning:'Vapor钱包地址请勿用于交易所充值提现'
   },
   main: {
-    mainNet: '主网络',
-    testNet: '测试网络',
-    soloNet: '单机网络',
+    bytom:'主链',
+    vapor:'侧链',
+    mainnet: '主网络',
+    testnet: '测试网络',
+    solonet: '单机网络',
     mainNetShort: 'Bytom主网络',
     testNetShort: 'Bytom测试网络',
     soloNetShort: 'Bytom单机网络',
@@ -141,13 +181,17 @@ const cn = {
     vote:'投票',
     crossChain:'跨链',
     record: '交易记录',
-    asset:'资产',
+    asset:'我的资产',
     noAccount: '当前网络无账户信息',
     create: '创建账户',
-    unconfirmed :'未确认交易',
+    unconfirmed :'正在确认中',
     noRecord:"没有交易记录",
     noAssetRecord:"没有资产记录",
-    network:'网络'
+    network:'网络',
+    totalAsset:'总资产'
+  },
+  asset:{
+    title:'资产'
   },
   transactionDetail: {
     title: '交易详情',
@@ -170,14 +214,18 @@ const cn = {
     createAccount: '创建账户',
     backup: '备份',
     help: '帮助',
-    setting: '设置'
+    setting: '设置',
   },
   createAccount: {
-    title: '创建账户',
+    title: '创建钱包',
+    walletName:'请输入钱包名称',
+    password:'请设置密码',
+    confirmPassword: '请重复输入密码',
+
+
     accountAlias: '账户别名',
     keyAlias: '秘钥别名',
     keyPassword: '秘钥密码',
-    confirmPassword: '重复密码',
     create: '创建',
     select: '选择网络',
     file: '备份文件',
@@ -189,23 +237,69 @@ const cn = {
     inputPass: '请输入密码',
     agreeService:'请阅读并同意使用条款。'
   },
+  mnemonic:{
+    "title":"备份助记词",
+    "hint":"请牢记助记词，一旦丢失您的资产将无法找回！",
+    "passwordHint":"请输入密码展示助记词"
+  },
+  verifyMnemonic:{
+    "title":"验证助记词",
+    "hint":"请按顺序输入助记词，单词中间用空格隔开",
+  },
+  error:{
+    BTM0000: '必填项',
+    BTM0001:'请输入助记词',
+    BTM0002:'助记词验证失败，请输入正确助记词。',
+    BTM0003:'请选择Keystore文件。',
+    BTM0004:'请输入Keystore。',
+    BTM0005:'输入数量大于可用余额。',
+    BTM0006:'输入有效的地址格式。',
+    BTM0007:'钱包名称错误，请输入正确钱包名称。',
+    BTM0008:'密码不能为空',
+    BTM0009:'目前钱包已为账户'
+  },
+  successMsg:{
+    createWallet:{
+      header: '创建成功',
+      description:'请妥善保管好助记词。Enjoy it!'
+    },
+    restoreWallet:{
+      header: '导入成功',
+      description:'请妥善保管 Keystore 备份问文件，牢记验证密码。Enjoy it!'
+    },
+    transaction:{
+      header: '确认成功',
+      description:'交易已发送。Enjoy it!'
+    }
+  },
+  wallet:{
+    create:"创建钱包",
+    success:'已成功切换至账户'
+  },
   help: {
     title: '帮助',
     page: '帮助与信息'
   },
   setting: {
-    title: '设置',
-    version: '钱包版本',
-    lang: '语言',
-    unit: 'BTM数量单位',
-    currency:'货币'
+    lang: '显示语言',
+    currency:'货币单位',
+    deleteWallet:'删除钱包',
+    deleteHint:'执行删除钱包操作前请确认您已备份好keystore文件，否则将无法找回！',
+    deleteBack:'返回备份',
+    deleteConfirm:'确认删除',
+    deleteConfirmHint:'请输入钱包名称以确认删除',
+    emptyWallet:'钱包名称不能为空'
   },
   backup: {
     title: '备份',
-    button: '备份'
+    button: '备份',
+    mnemonic:'备份助记词',
+    keystore:'备份Keystore',
+    mnemonicHint:'请抄写助记词，并妥善保管',
+    ok:'已完成'
   },
   protocol: {
-    title: 'Bytom Chrome Wallet服务协议',
+    title: '用户服务协议',
     content: `尊敬的用户：
     感谢您选择Bytom Chrome Wallet服务。《Bytom Chrome Wallet服务协议》（以下简称“本协议”）由Bytom和用户（以下简称“您”或“用户”）签订，本协议在您与Bytom之间具有合同上的法律效力。
     Bytom在此特别提醒您在使用Bytom Chrome Wallet（以下简称“Bytom Chrome Wallet” 或“本软件”）之前，请认真阅读《Bytom Chrome Wallet服务协议》及后文提到的相关协议，尤其是本协议规定的“免责及责任限制”等条款将以加粗的形式体现，确保您充分理解本协议中各条款，并自主考虑风险。

@@ -214,7 +214,8 @@ export default {
         }
       },
       ...mapState([
-        'selectVote'
+        'selectVote',
+        'bytom'
       ]),
       ...mapGetters([
         'language',
@@ -239,7 +240,7 @@ export default {
                 onCancel: this.onCancel
             });
 
-          Promise.all(this.rawData.map( (rawdata) => transaction.transfer(this.account.guid, rawdata, this.password, this.account.vpAddress)))
+          Promise.all(this.rawData.map( (rawdata) => transaction.transfer(this.account.guid, rawdata, this.password, this.account.vpAddress, this)))
             .then(ret => {
               loader.hide();
               if(this.$route.params.type == 'popup'){

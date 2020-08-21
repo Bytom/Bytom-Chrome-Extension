@@ -8,6 +8,7 @@ export const actions = {
     [Actions.SET_BYTOM]:({commit}, bytom) => commit(Actions.SET_BYTOM, bytom),
     [Actions.SET_LIST_VOTE]:({commit}, listVote) => commit(Actions.SET_LIST_VOTE, listVote),
     [Actions.SET_CURRENT_ASSET]:({commit}, currentAsset) => commit(Actions.SET_CURRENT_ASSET, currentAsset),
+    [Actions.SET_MNEMONIC]:({commit}, mnemonic) => commit(Actions.SET_MNEMONIC, mnemonic),
     [Actions.SET_SELECTED_VOTE]:({commit}, selectVote) => commit(Actions.SET_SELECTED_VOTE, selectVote),
 
 
@@ -42,7 +43,6 @@ export const actions = {
                   bytom.currentAccount={}
                 }
 
-                bytom.settings.login = true
                 bytom.settings.currency = "inCny"
                 bytom.settings.netType = ''
                 dispatch(Actions.UPDATE_STORED_BYTOM, bytom).then(_bytom => {
@@ -57,21 +57,10 @@ export const actions = {
     [Actions.CREATE_NEW_BYTOM]:({state, commit, dispatch}, network) => {
         return new Promise(async (resolve, reject) => {
             const bytom = Bytom.fromJson(state.bytom);
-            bytom.settings.network = network;
-            account.setupNet(`${network}`)
-            account.list().then(accounts => {
-              bytom.accountList = accounts;
-              if (accounts.length > 0) {
-                bytom.currentAccount = accounts[0];
-              }
 
-              bytom.settings.login = true
-              bytom.settings.currency = "inCny"
-              bytom.settings.netType = ''
-              dispatch(Actions.UPDATE_STORED_BYTOM, bytom).then(_bytom => {
-                  dispatch(Actions.SET_BYTOM, Bytom.fromJson(_bytom));
-                  resolve();
-              })
+            dispatch(Actions.UPDATE_STORED_BYTOM, bytom).then(_bytom => {
+                dispatch(Actions.SET_BYTOM, Bytom.fromJson(_bytom));
+                resolve();
             })
 
         })
@@ -92,23 +81,11 @@ export const actions = {
     },
 
 
-    // [Actions.PUSH_ALERT]:({state, commit}, error) => {
-    //     function waitForErrorResult(resolve){
-    //         if(state.alertResult) {
-    //             const alertResult = Object.assign({}, state.alertResult);
-    //             commit(Actions.CLEAR_ALERT_RESULT);
-    //             resolve(alertResult)
-    //         } else setTimeout(() => {
-    //             waitForErrorResult(resolve);
-    //         }, 100)
-    //     }
-    //
-    //     return new Promise((resolve, reject) => {
-    //         commit(Actions.PUSH_ALERT, error);
-    //         waitForErrorResult(resolve);
-    //     })
-    // },
-    // [Actions.PULL_ALERT]:({commit}) => commit(Actions.PULL_ALERT),
+    [Actions.PUSH_ALERT]:({commit}, error) => commit(Actions.PUSH_ALERT, error),
+    [Actions.PULL_ALERT]:({commit}) => commit(Actions.PULL_ALERT),
+
+    [Actions.SET_DATA]:({commit}, data) => commit(Actions.SET_DATA, data),
+    [Actions.CLEAR_DATA]:({commit}) => commit(Actions.CLEAR_DATA),
     // [Actions.PUSH_ALERT_RESULT]:({commit}, alertResult) => commit(Actions.PUSH_ALERT_RESULT, alertResult),
     // [Actions.CLEAR_ALERT_RESULT]:({commit}) => commit(Actions.CLEAR_ALERT_RESULT),
     //

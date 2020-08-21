@@ -35,7 +35,7 @@ transaction.asset = function(asset_id) {
 transaction.build = function(address, to, asset, amount, fee, confirmations) {
   let retPromise = new Promise((resolve, reject) => {
     bytom.transaction
-      .buildPayment(address, to, asset, amount.toString(), fee, confirmations)
+      .buildPayment(address, to, asset, amount.toString(), confirmations)
       .then(res => {
         resolve(res);
       })
@@ -102,10 +102,14 @@ transaction.buildTransaction = function(address, inputs, outputs, gas, confirmat
   return retPromise;
 };
 
-transaction.signTransaction = function(guid, transaction, password) {
+transaction.signTransaction = function(address, transaction, password, context) {
   let retPromise = new Promise((resolve, reject) => {
-    bytom.transaction
-      .signTransaction(guid, JSON.stringify(snakeize(transaction)), password)
+      signTx(
+        address,
+        JSON.stringify(snakeize(transaction)),
+        password,
+        context
+      )
       .then(res => {
         resolve(res);
       })
@@ -130,40 +134,74 @@ transaction.decodeTransaction = function(rawTx) {
   return retPromise;
 };
 
-transaction.transfer = function(guid, transaction, password, address) {
+transaction.transfer = function(transaction, password, address, context) {
   let retPromise = new Promise((resolve, reject) => {
+
+    const {to, asset, amount, confirmations} = transaction
     bytom.transaction
-      .signTransaction(guid, JSON.stringify(snakeize(transaction)), password)
-      .then(ret => {
-        bytom.transaction
-          .submitPayment(address, ret.raw_transaction, ret.signatures)
-          .then(res3 => {
-            const object ={
-              transactionHash: res3.txHash
-            }
-            resolve(object);
-          })
-          .catch(error => {
-            reject(error);
-          });
+      .buildPayment(address, to, asset, amount.toString(), confirmations)
+      .then(result => {
+        return Promise.all(result.map( (data) =>
+          signSubmit( data, password, address, context)))
+            .then((ret )=>{
+              resolve(ret)
+            })
+            .catch(error => {
+              throw error
+            });
       })
       .catch(error => {
         reject(error);
       });
-  });
+  })
 
   return retPromise;
 };
 
-
-transaction.signMessage = function(message, password, address) {
-  return bytom.keys.signMessage(message, password,address);
+function signSubmit (txObject, password, address, context) {
+  let retPromise = new Promise((resolve, reject) => {
+        signTx(
+          address,
+          JSON.stringify(snakeize(txObject)),
+          password,
+          context
+        )
+          .then(ret => {
+            bytom.transaction
+              .submitPayment(address, ret.raw_transaction, ret.signatures)
+              .then(res3 => {
+                const object = {
+                  transactionHash: res3.txHash
+                }
+                resolve(object);
+              })
+              .catch(error => {
+                throw error
+              });
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
+  return retPromise;
 };
 
-transaction.advancedTransfer = function(guid, transaction, password, arrayData, address) {
+
+transaction.signMessage = function(message, password, address, context) {
+  const keyArray = context.bytom.keychain.findByAddress(address);
+  const key = JSON.stringify(keyArray.keystore)
+
+  return bytom.keys.signMessage(message, password,key);
+};
+
+transaction.advancedTransfer = function(address, transaction, password, arrayData, context) {
   let retPromise = new Promise((resolve, reject) => {
-    bytom.transaction
-      .signTransaction(guid, JSON.stringify(snakeize(transaction)), password)
+      signTx(
+        address,
+        JSON.stringify(snakeize(transaction)),
+        password,
+        context
+      )
       .then(ret => {
         let signatures = ret.signatures
         if(arrayData){
@@ -188,5 +226,26 @@ transaction.advancedTransfer = function(guid, transaction, password, arrayData, 
 
   return retPromise;
 };
+
+
+
+function signTx(address, transaction, password, context){
+  const keyArray = context.bytom.keychain.findByAddress(address);
+  if(!keyArray){
+    throw 'Account not found.'
+  }else{
+    const key = JSON.stringify(keyArray.keystore)
+    return bytom.transaction
+      ._signTransaction(
+        transaction,
+        password,
+        key
+      )
+  }
+}
+
+transaction.estimateFee = function(address, asset_amounts, confirmations){
+  return bytom.transaction.estimateFee(address, asset_amounts, confirmations)
+}
 
 export default transaction;

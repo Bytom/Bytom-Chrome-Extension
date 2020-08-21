@@ -4,7 +4,7 @@ import NetworkMessage from '@/messages/network'
 import InternalMessage from '@/messages/internal'
 import * as MsgTypes from './messages/types'
 import * as EventNames from '@/messages/event'
-import {strippedHost} from '@/utils/GenericTools'
+import { strippedHost, strippedFavicon } from '@/utils/GenericTools'
 import _ from 'lodash';
 
 
@@ -104,9 +104,11 @@ class Content {
       case MsgTypes.SIGNTRANSACTION:
       case MsgTypes.ADVTRANSFER:
       case MsgTypes.SIGNMESSAGE:
+        this.prompt(msg.type, networkMessage)
+        break
       case MsgTypes.SETCHAIN:
       case MsgTypes.SEND:
-        this.transfer(msg.type, networkMessage)
+        this.send(msg.type, networkMessage)
         break
       case MsgTypes.ENABLE:
       case MsgTypes.DISABLE:
@@ -152,7 +154,7 @@ class Content {
     stream.synced = true
   }
 
-  transfer(type, message) {
+  send(type, message) {
     if (!isReady) return
 
     InternalMessage.payload(type, message.payload)
@@ -160,12 +162,23 @@ class Content {
       .then(res => this.respond(message, res))
   }
 
+  prompt(type, message) {
+    if (!isReady) return
+
+    const payload = Object.assign(message.payload, {domain: strippedHost()})
+    InternalMessage.payload(type,payload)
+      .send()
+      .then(res => this.respond(message, res))
+  }
+
   enable(type, networkMessage) {
     networkMessage.payload ={
-      domain: strippedHost()
+      domain: strippedHost(),
+      title: document.title,
+      icon: strippedFavicon()
     }
 
-    this.transfer(type, networkMessage)
+    this.send(type, networkMessage)
   }
 
 }

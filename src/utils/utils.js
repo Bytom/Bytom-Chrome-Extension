@@ -1,3 +1,6 @@
+import bappData from '@/assets/bapp/bapp.json'
+import {bappRequestUrl} from '@/utils/constants.js'
+
 export const camelize = (object) => {
   if ( typeof object == 'object'){
     for (let key in object) {
@@ -49,4 +52,23 @@ export const snakeize = (object) => {
 
 export function removeFromArray(original, remove) {
   return original.filter(value => !remove.includes(value));
+}
+
+export function getDomains(){
+  let domains = bappData.list.filter( l => l.link!== undefined).map(a => a.link.split('/')[2]);
+  const crossChainLink = "crosschain.bymov.io"
+
+  return fetch(bappRequestUrl)
+    .then(response => response.json())
+    .then(json => {
+      if(!_.isEqual(json, bappData)){
+        domains = json.list.filter( l => l.link!== undefined).map(a => a.link.split('/')[2]);
+      }
+
+      domains.push(crossChainLink)
+      return domains;
+    }).catch((e)=>{
+      domains.push(crossChainLink)
+      return domains;
+    });
 }

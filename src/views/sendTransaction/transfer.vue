@@ -1,166 +1,197 @@
-<style lang="" scoped>
+<style lang="scss" scoped>
 .header {
   display: flex;
-}
-.header p{
-  text-align: center;
-  width: 270px;
-  padding-top: 17px;
-}
-.balance {
-  width: 280px;
-  height: 40px;
-    margin: 20px;
-    padding: 20px;
-  display: flex;
-}
-.balance .token-icon {
-    height: 38px;
-    width: 38px;
-    margin-right: 5px;
-}
-.balance .token-amount {
-    display: inline-block;
-}
-.balance .token-amount .asset {
-    font-size: 18px;
-    margin-left: 2px;
-    text-transform: uppercase;
-}
-.form-container{
-  margin: 20px;
-}
-.form {
-    margin-bottom: 20px;
-    padding: 10px 15px;
-    border-radius:4px;
-}
-.form-container .btn{
-    height: 48px;
-    bottom: 20px;
-    position: absolute;
-    width: 320px;
-}
-  .small{
-    font-size: 12px;
+  margin-bottom: 20px;
+  h1 {
+    margin-left: 12px;
+    font-size: 20px;
   }
-.transfer-header{
-  background-image: url("../../assets/img/backgroundHead/transfer.svg");
-  background-size: 320px 80px;
 }
-.wallet{
-  width: 40px;
-  height: 40px;
-  background: rgba(255,255,255,0.1);
-  border-radius: 50%;
-  color: white;
-  margin-right: 20px;
-  line-height: 40px;
-  text-align: center;
+.form{
+  padding: 16px;
+}
+.form-item-content input, input.form-item-content {
+    background: none;
+    border-radius: 0;
+    border-bottom: 0.5px solid #EBEBEB;
+    padding: 0;
+    width:100%
+  }
+
+.form-item-content input:focus,
+input.form-item-content:focus,
+input.form-item-content:active
+{
+  border: 0;
+  border-bottom: 0.5px solid #004EE4;
+
 }
 
-.asset-option{
-  font-size: 15px;
-  text-transform: uppercase;
+.currency{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+    padding-bottom: 17px;
+    border-bottom: 0.5px solid #EBEBEB;
+      cursor: pointer;
+
+
+    .symbol{
+      display:flex;
+      font-weight: 600;
+      font-size: 15px;
+    align-items: center;
+    }
+
+    .assetId{
+      font-size:13px;
+      align-items: center;
+      display: flex;
+    }
 }
 
-.asset-option  .asset-id{
-  font-size: 13px;
+.hint{
+    font-size: 13px;
+    position: absolute;
+    right: 5px;
+    display: flex;
+    align-items:center;
 }
 
-.v-select{
-  height: 50px;
-  width: 100%;
-  background: rgba(247,247,247,1);
-  font-size: 14px;
-  margin: auto;
-  border-bottom: 1px solid #E0E0E0;
+.amount-input{
+  display: flex;
+  align-items: center;
+  input{
+    font-size: 28px;
+    font-weight: 600;
+  }
 }
 
+.form{
+  margin-bottom: 20px;
+  label{
+    color: rgba(0, 0, 0, 0.36);
+  }
+}
+
+.tx-fee{
+  font-size: 12px;
+  display: flex;
+
+  div{
+    margin-left: 7px;
+    color: #5C5C5C;
+  }
+}
+
+.max{
+  padding: 2px 12px;
+  background: #EEF4FF;
+  margin-right: 8px;
+  border-radius: 15px;
+  color: #004EE4;
+  font-size: 12px;
+  cursor: pointer;
+}
 </style>
 
 <template>
-    <div class="warp-chlid bg-gray">
-        <section class="header bg-header">
-            <i class="iconfont icon-back" @click="close"></i>
-            <p>{{ $t('main.send') }}</p>
-        </section>
+    <div class="warp-child bg-grey">
+      <section class="header">
+        <BackButton :small="true" :back="close"/>
+        <h1 class="color-black">
+          <div class="welcome-title">{{ $t('main.send') }}</div>
+        </h1>
+      </section>
 
-        <section class="balance transfer-header">
-          <div class="wallet">
-            <i class="iconfont icon-wallet"></i>
-          </div>
-          <div>
-            <div class="token-amount">
-                {{accountBalance}}
-                <span v-if="selectAsset.symbol" class="asset">{{selectAsset.symbol}}</span>
+      <section class="bg-shadow-white form">
+
+        <div>
+            <div class="form-item">
+                <label class="form-item-label">{{ $t('transfer.asset') }}</label>
+                <div class="form-item-content currency"  @click="$router.push({ name: 'asset-selection' })">
+                  <div class="symbol color-black">
+                    <img :src="img(unit)" alt="" class="c-icon">
+
+                    <div class="uppercase">
+                      {{ unit }}
+                    </div>
+
+                  </div>
+
+                  <div class=" text-align-right">
+                    <div class="color-grey-36 uppercase assetId">{{ shortAddress(selectAsset.assetId) }} <i class="iconfont icon_arrow_1"></i></div>
+                  </div>
+
+
+                </div>
             </div>
-            <div class="small color-grey">
-              {{currentAccount.alias}}
+            <div class="form-item">
+              <label class="form-item-label">{{ $t('transfer.address') }}</label>
+              <input class="form-item-content"
+              :placeholder="netType=='vapor'? $t('transfer.vaporAddress'): $t('transfer.bytomAddress')"
+              type="text"
+              id="to"
+              name="to"
+              ref="to"
+              v-model="$v.transaction.to.$model"
+              >
             </div>
-          </div>
-        </section>
+            <div class="form-item">
+                <label class="form-item-label" for="tx-amount">
+                  {{ unit+$t('transfer.quantity') }}
 
-        <section class="form-container">
-          <div class="form bg-white">
-              <div class="form-item">
-                  <label class="form-item-label">{{ $t('transfer.asset') }}</label>
-                  <div class="form-item-content" >
-                    <v-select :options="assets" v-bind:colorBlack="true" :clearable="false" :value="selectAsset" :onChange="assetChange" label="assetId">
-                      <template slot="selected-option" slot-scope="asset">
-                        <div class="asset-option">
-                          <div>{{asset.symbol || 'Asset'}}</div>
-                          <div  class="color-grey asset-id">{{shortAddress(asset.assetId)}}</div>
-                        </div>
-                      </template>
-                      <template slot="option" slot-scope="asset">
-                        <div class="asset-option">
-                          <div>{{asset.symbol || 'Asset'}}</div>
-                          <div class="color-grey  asset-id">{{shortAddress(asset.assetId)}}</div>
-                        </div>
-                      </template>
-                    </v-select>
-                  </div>
-              </div>
-              <div class="form-item">
-                <label class="form-item-label">{{ $t('transfer.address') }}</label>
-                <input class="form-item-content"  type="text" v-model="transaction.to">
-              </div>
-              <div class="form-item">
-                  <label class="form-item-label" for="tx-amount">
-                    {{ $t('transfer.quantity') }}
+                  <small class="float-right color-grey-36" style="margin-right: 8px; margin-top: 8px;">
+                    {{ `${$t('transfer.available')} ${currentBalance} ${unit}` }}
 
-                    <small class="float-right" style="margin-right: 8px;">{{formatCurrency(transaction.cost||0)}}</small>
-                  </label>
-                  <div class="form-item-content" style=" display: flex;">
-                    <input type="number" id="tx-amount" v-model="transaction.amount" placeholder="0" @keypress="limitAmount">
-                      <span class="color-grey" style="font-size: 15px;position: absolute;right: 0;text-transform: uppercase;">{{unit}}</span>
+                  </small>
+                </label>
+                <div class="form-item-content amount-input">
+                  <input
+                    type="number"
+                    id="tx-amount"
+                    placeholder="0"
+                    name="amount"
+                    ref="amount"
+                    v-model="$v.transaction.amount.$model"
+                    @keypress="limitAmount"
+                  >
+                  <div class="hint">
+                    <div class="max" @click="max()">Max</div>
+                    <span class="color-grey-36">≈ {{formatCurrency(transaction.cost||0)}}</span>
                   </div>
-              </div>
-              <div class="form-item">
-                  <label class="form-item-label">{{ $t('transfer.fee') }}</label>
-                  <div class="form-item-content" >
-                      <!--<v-select :clearable="false" v-model="fee" style="height: 32px;" :options="feeTypeOptions"></v-select>-->
-                    <input type="text"  v-model="fee" disabled >
-                  </div>
-              </div>
-          </div>
-          <a class="btn btn-primary" @click="send">{{ $t('transfer.send') }}</a>
-        </section>
+
+                </div>
+            </div>
+
+            <div class="tx-fee">
+                <label >{{ $t('transfer.fee') }}</label>
+                <div>{{ transaction.fee }} BTM</div>
+            </div>
+        </div>
+      </section>
+      <section>
+          <a :class="['btn', netType ==='vapor'?'btn-vapor':'btn-bytom']" @click="validate">{{ $t('transfer.send') }}</a>
+      </section>
+
+      <modal-passwd ref="modalPasswd" @confirm="send"></modal-passwd>
     </div>
 </template>
 
 <script>
   import address from "@/utils/address";
-  import account from "@/models/account";
 import transaction from "@/models/transaction";
 import getLang from "@/assets/language/sdk";
 import Confirm from "./transferConfirm";
 import { BTM } from "@/utils/constants";
-  import { Number as Num } from "@/utils/Number"
+import { Number as Num } from "@/utils/Number"
 import { mapActions, mapGetters, mapState } from 'vuex'
 import * as Actions from '@/store/constants';
-  import _ from 'lodash'
+import _ from 'lodash'
+import { required } from "vuelidate/lib/validators";
+import BigNumber from "bignumber.js"
+
 
   const currencyInPrice = {
     in_cny: 'cnyPrice',
@@ -177,28 +208,35 @@ export default {
     },
     data() {
         return {
-            selectAsset: {
-                assetId: BTM,
-                symbol: "BTM",
-                decimals:8
-            },
             show: false,
-            address: null,
+            address: '',
             guid: null,
             account: {},
-            accountBalance: 0.00,
-            fee: this.$t("transfer.feeType"),
-            feeTypeOptions: [this.$t("transfer.feeType")],
             transaction: {
                 to: "",
                 asset: BTM,
                 amount: "",
-                fee: null,
+                fee: '0.00000000',
                 cost: "",
                 confirmations: 1
+            },
+            selectAsset:{
+              assetId: "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+              name: "Bytom",
+              symbol: "BTM"
             }
         };
     },
+    validations: {
+      transaction: {
+        to:{
+          required
+        },
+        amount:{
+          required
+        }
+      }
+  },
     computed: {
         assets(){
           if(this.netType === 'vapor'){
@@ -215,11 +253,25 @@ export default {
             }
           }
         },
+        currentBalance(){
+          const assetId = this.selectAsset.assetId
+          let balances
+
+          if(this.netType === 'vapor'){
+            balances = this.currentAccount.vpBalances
+          }else{
+            balances = this.currentAccount.balances
+          }
+
+          const balance = balances.find(b => b.asset.assetId === assetId)
+          return balance? balance.availableBalance:0;
+        },
         unit() {
-            return this.selectAsset.symbol;
+          return this.selectAsset.symbol;
         },
       ...mapState([
-        'bytom'
+        'bytom',
+        'currentAsset'
       ]),
       ...mapGetters([
         'currentAccount',
@@ -232,26 +284,39 @@ export default {
         "transaction.amount": function (newAmount) {
             const singlePrice = this.selectAsset[currencyInPrice[this.currency]]||this.selectAsset[this.currency]||0
             this.transaction.cost = Number( singlePrice * newAmount).toFixed(2);
+
+            if(newAmount){
+              this.estimateFee()
+            }else{
+              this.transaction.fee = '0.00000000'
+            }
         },
         account: function (newAccount) {
+            if (newAccount.guid == undefined){
+                return;
+              }
+
             this.guid = newAccount.guid;
             this.address = this.netType === 'vapor'?  newAccount.vpAddress: newAccount.address;
-        },
-        address: function (newAddress) {
-            account.balance(newAddress).then(obj => {
-              const balances = obj.balances
-              let balance = 0.00
-              if(balances.length >0 ) {
-                const balanceObject = balances.filter(b => b.asset.assetId === this.selectAsset.assetId)[0]
-                balance = Num.formatNue(balanceObject.balance, balanceObject.decimals)
-              }
-                this.accountBalance = balance;
-            }).catch(error => {
-                console.log(error);
-            });
         }
     },
     methods: {
+        estimateFee: function(){
+          const asset_amount={}
+          asset_amount[this.selectAsset.assetId] = this.transaction.amount || 0;
+
+          transaction.estimateFee(this.address, asset_amount).then( (resp) =>{
+            this.transaction.fee = resp.fee
+          })
+        },
+        img:function (symbol) {
+          const _symbol = symbol.toLowerCase();
+          if(this.netType === 'vapor'){
+            return `https://cdn.blockmeta.com/resources/logo/vapor/${_symbol}.png`
+          }else{
+            return `https://cdn.blockmeta.com/resources/logo/bytom/${_symbol}.png`
+          }
+        },
         shortAddress: function (add) {
           return address.short(add)
         },
@@ -260,52 +325,72 @@ export default {
         },
         limitAmount ($event) {
           // restrict to 2 decimal places
+          const n = new BigNumber(this.transaction.amount)
+
           if(this.transaction.amount!=null && this.transaction.amount.indexOf(".")>-1 && (this.transaction.amount.split('.')[1].length > (this.selectAsset.decimals-1))){
             $event.preventDefault();
           }
         },
-        assetChange: function (val) {
-          console.log(val)
-          if(val.assetId !== this.selectAsset.assetId){
-            this.transaction.asset = val.assetId;
-            const balances = this.netType === 'vapor'?this.currentAccount.vpBalances:this.currentAccount.balances
-            let balance = 0.00
-            if(balances.length >0 ) {
-              console.log(balances)
-              const balanceObject = balances.filter(b => b.asset.assetId === val.assetId)[0]
-              balance = balanceObject.balance
-            }
-            this.accountBalance = balance;
-
-            transaction.asset(val.assetId).then(ret => {
-              console.log(ret)
-              this.selectAsset = Object.assign(ret,val)
-              this.transaction.cost = Number(ret[currencyInPrice[this.currency]] * this.transaction.amount).toFixed(2);
-            });
-          }
-        },
         close: function () {
-            this.$router.go(-1)
+            this.$router.push({name: 'home'});
+            this[Actions.SET_CURRENT_ASSET](undefined)
+
             this.transaction.to = "";
             this.transaction.amount = "";
             if(this.$route.query.type == 'popup'){
                window.close();
             }
         },
-        send: function () {
-            if (this.transaction.to == "") {
-                this.$dialog.show({
-                    body: this.$t("transfer.emptyTo")
-                });
+        max: function () {
+            this.transaction.amount = this.currentBalance;
+        },
+        validate: function () {
+          this.$v.$touch();
+          if (this.$v.$invalid) {
+            const transaction = this.$v.transaction
+            for (let key in Object.keys(transaction)) {
+              const input = Object.keys(transaction)[key];
+              if (input.includes("$")) return false;
+
+              if (transaction[input].$error) {
+                switch(input){
+                  case 'to':
+                    this.$toast.error(
+                      this.$t("transfer.emptyTo")
+                    );
+                    break;
+                  case 'amount':
+                    this.$toast.error(
+                      this.$t("transfer.noneBTM")
+                    );
+                    break;
+                }
+                this.$refs[input].focus();
+                break;
+              }
+            }
+          } else {
+            const n = new BigNumber(this.transaction.amount)
+            const to  = this.transaction.to
+            if(!address.isValid(to, this.netType)){
+                this.$toast.error(
+                    this.$t("error.BTM0006")
+                );
+                this.$refs['to'].focus();
+                return
+            }
+            else if (n.gt(this.currentBalance)) {
+                this.$toast.error(
+                    this.$t("error.BTM0005")
+                );
+                this.$refs['amount'].focus();
                 return;
             }
 
-            if (this.transaction.amount <= 0) {
-                this.$dialog.show({
-                    body: this.$t("transfer.noneBTM")
-                });
-                return;
-            }
+            this.$refs.modalPasswd.open();
+        }
+      },
+      send: function (password) {
 
             let loader = this.$loading.show({
                 // Optional parameters
@@ -313,22 +398,25 @@ export default {
                 canCancel: true,
                 onCancel: this.onCancel
             });
-            transaction.build(this.address, this.transaction.to, this.transaction.asset, this.transaction.amount, this.transaction.fee, this.transaction.confirmations).then(result => {
-                console.log(result)
+
+            this.transaction.asset = this.selectAsset.assetId;
+            transaction.transfer(this.transaction, password, this.address, this).then(result => {
                 loader.hide();
-                if(!this.transaction.fee){
-                    this.transaction.fee = Number( _.sumBy(result, 'tx.fee'));
-                }
-                this.$router.push({ name: 'transfer-confirm', params: { account: this.account, transaction: this.transaction, rawData: result, assetAlias: this.selectAsset.symbol, type: this.$route.query.type } })
+                this.$router.push('/')
+
             }).catch(error => {
                 loader.hide();
-                this.$dialog.show({
-                    body: getLang(error.message)
-                });
+                this.$toast.error(
+                   getLang(error.message)
+                );
             });
-        }
+      },
+      ...mapActions([
+        Actions.SET_CURRENT_ASSET,
+      ])
     }, mounted() {
         //detect injection
+        let currentAssetId
         if(this.$route.query.type === 'popup'){
           if (this.$route.query.from != undefined) {
               this.address = this.$route.query.from
@@ -337,7 +425,7 @@ export default {
           }
 
           if (this.$route.query.asset != undefined) {
-            const currentAssetId = this.$route.query.asset
+            currentAssetId = this.$route.query.asset
 
             this.transaction.asset= currentAssetId
 
@@ -359,14 +447,19 @@ export default {
         }else{
           this.account = this.currentAccount
 
-          const currentAsset = this.netType === 'vapor'? this.currentAccount.vpBalances[0]: this.currentAccount.balances[0]
+          const currentAsset = this.currentAsset || this.selectAsset
+          currentAssetId = currentAsset.assetId
 
-          if(currentAsset){
-            transaction.asset(currentAsset.asset.assetId).then(ret => {
-                this.selectAsset = Object.assign(ret,currentAsset)
-            });
-          }
         }
+
+        const that = this
+
+        transaction.asset(currentAssetId).then(ret => {
+            that.selectAsset = ret
+            if(that.transaction.amount){
+              that.transaction.cost = Number(ret[currencyInPrice[that.currency]] * that.transaction.amount).toFixed(2);
+            }
+          });
 
     }
 };

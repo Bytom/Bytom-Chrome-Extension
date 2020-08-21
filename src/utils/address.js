@@ -12,4 +12,14 @@ export default class address {
     let endSome = rawAddress.substr(rawAddress.length - length, length)
     return startSome + '...' + endSome
   }
+
+  static isValid(address, netType) {
+    if (netType == 'vapor') {
+      const vpArray = ['vp', 'tp', 'sp']
+      return vpArray.includes( address.substring(0,2) )
+    }else{
+      const bmArray = ['bm', 'tm', 'sm']
+      return bmArray.includes( address.substring(0,2) )
+    }
+  }
 }

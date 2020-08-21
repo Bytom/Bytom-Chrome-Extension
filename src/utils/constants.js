@@ -22,11 +22,14 @@ export const camelize = (object) => {
 
 export const networks = {
   mainnet:'https://bcapi.movapi.com',
+  testnet:'http://161.189.9.64'
 }
 
 export const networksJS = {
-  mainnet: `${networks['mainnet']}/bytom/v3/`,
+  mainnetbytom: `${networks['mainnet']}/bytom/v3/`,
   mainnetvapor: `${networks['mainnet']}/vapor/v3/` ,
+  testnetbytom: `${networks['testnet']}:4000/bytom/v3/`,
+  testnetvapor: `${networks['testnet']}:3000/vapor/v3/` ,
 }
 
 
@@ -49,3 +52,7 @@ export const decimalsMap = {
     'ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff':8
   }
 }
+
+//Todo: update to production
+export const bappRequestUrl = 'https://raw.githubusercontent.com/movnetwork/Byone/dev/src/assets/bapp/bapp.json'
+export const bappImgUrl = 'https://raw.githubusercontent.com/movnetwork/Byone/dev/src/assets/img/bapp/'

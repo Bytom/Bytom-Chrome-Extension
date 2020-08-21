@@ -6,3 +6,5 @@ export const REQUEST_TRANSFER = 'transfer';
 export const REQUEST_ADD_NETWORK = 'requestAddNetwork';
 export const REQUEST_UNLOCK = 'requestUnlock';
 export const UPDATE_VERSION = 'updateVersion';
+
+export const REQUEST_PROMPT = 'bappPrompt'

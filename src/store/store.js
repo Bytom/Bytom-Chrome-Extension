@@ -9,6 +9,8 @@ Vue.use(Vuex);
 const state = {
     bytom:null,
 
+    data:null,
+
     alerts:[],
     alertResult:null,
 
@@ -16,6 +18,7 @@ const state = {
     listVote:[],
     selectVote: null,
     currentAsset: null,
+    mnemonic:null,
 };
 
 const getters = {
@@ -24,8 +27,10 @@ const getters = {
     net:state => state.bytom.settings.network,
     netType:state => state.bytom.settings.netType,
     language:state => state.bytom.settings.language,
-    login:state => state.bytom.settings.login,
+    domainsMeta:state => state.bytom.settings.domainsMeta,
+    vMnemonic:state => state.bytom.currentAccount.vMnemonic,
     currency:state => state.bytom.settings.currency,
+    pairs: state => state.bytom.keychain.pairs,
 
     // FOR PROMPTS ONLY
     messages:state => state.prompt.data.messages || [],

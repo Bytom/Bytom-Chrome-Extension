@@ -94,17 +94,17 @@ export default class Background {
       return false;
     }
 
-    NotificationService.open(new Prompt(PromptTypes.REQUEST_SIGN, '', payload ,approved => {
-     sendResponse(camelize(approved));
+    const {domain,  ...txAttrs} = payload;
+
+    txAttrs.type = 'message'
+
+    NotificationService.open(new Prompt(PromptTypes.REQUEST_PROMPT, domain, txAttrs ,approved => {
+      sendResponse(camelize(approved));
     }));
   }
 
   transfer(sendResponse, payload) {
-    var promptURL = chrome.extension.getURL('pages/prompt.html')
     var requestBody = payload
-    requestBody.type = "popup"
-    var queryString = new URLSearchParams(requestBody).toString()
-    console.log(promptURL, queryString)
 
     if(requestBody.from === undefined){
       sendResponse(Error.typeMissed('from'));
@@ -123,43 +123,13 @@ export default class Background {
       return false;
     }
 
-    // NotificationService.open(new Prompt(PromptTypes.REQUEST_TRANSFER, '', payload ,approved => {
-    //   sendResponse(approved);
-    // }));
+    const {domain,  ...txAttrs} = payload;
 
-      chrome.windows.create(
-      {
-        url: `${promptURL}#transfer?${queryString}`,
-        type: 'popup',
-        width: 360,
-        height: 623,
-        top: 0,
-        left: 0
-      },
-      (window) => {
-        chrome.runtime.onMessage.addListener(function(request, sender) {
-          if(sender.tab.windowId === window.id){
-            switch (request.method){
-              case 'transfer':
-                if (request.action === 'success'){
-                  sendResponse(camelize(request.message));
-                  return true;
-                } else if (request.action === 'reject'){
-                  sendResponse(request.message);
-                  return false;
-                }
-            }
-          }
-        });
+    txAttrs.type = 'transfer'
 
-        chrome.windows.onRemoved.addListener(function(windowId){
-          if(windowId === window.id) {
-            sendResponse(Error.promptClosedWithoutAction());
-            return false;
-          }
-        });
-      }
-    )
+    NotificationService.open(new Prompt(PromptTypes.REQUEST_PROMPT, domain, txAttrs ,approved => {
+      sendResponse(camelize(approved));
+    }));
   }
 
   advancedTransfer(sendResponse, payload) {
@@ -177,14 +147,22 @@ export default class Background {
       return false;
     }
 
-    NotificationService.open(new Prompt(PromptTypes.REQUEST_ADVANCED_TRANSFER, '', payload ,approved => {
+    const {domain,  ...txAttrs} = payload;
+
+    txAttrs.type = 'advTransfer'
+
+    NotificationService.open(new Prompt(PromptTypes.REQUEST_PROMPT, domain, txAttrs ,approved => {
       sendResponse(camelize(approved));
     }));
 
   }
 
   signTransaction(sendResponse, payload) {
-    NotificationService.open(new Prompt(PromptTypes.REQUEST_SIGN_TRANSACTION, '', payload ,approved => {
+    const {domain,  ...txAttrs} = payload;
+
+    txAttrs.type = 'signTransaction'
+
+    NotificationService.open(new Prompt(PromptTypes.REQUEST_PROMPT, domain, txAttrs ,approved => {
       sendResponse(camelize(approved));
     }));
   }
@@ -194,15 +172,14 @@ export default class Background {
       const domain = payload.domain;
       if(bytom.settings.domains.find(_domain => _domain === domain)) {
         const currentAccount =  bytom.currentAccount
-        let account
+        const {vpAddress, address} = currentAccount
+        let account = {
+          addresses: [vpAddress, address]
+        }
         if(bytom.settings.netType === 'vapor'){
-          account = {
-            address: currentAccount.vpAddress,
-          };
+          account.address = vpAddress;
         }else{
-          account ={
-            address: currentAccount.address,
-          };
+          account.address = address;
         }
 
         sendResponse(account)
@@ -283,56 +260,35 @@ export default class Background {
 
   static authenticate(sendResponse, payload){
     Background.load(bytom => {
-      const domain = payload.domain;
+      const {domain,  ...domainAttrs} = payload;
+
       const currentAccount =  bytom.currentAccount
 
       if(!currentAccount){
         sendResponse(Error.signatureAccountMissing())
       }else{
-        let account
-        if(bytom.settings.netType === 'vapor'){
-          let vote = 0
-          const votes = currentAccount.votes
-          if(votes && votes.length >0 ){
-            vote = _.sumBy(votes,'total')
-          }
 
-          let balances = currentAccount.vpBalances ||[]
-          balances = balances.map(({ inBtc, inCny, inUsd, name, ...keepAttrs}) => {
-            if(keepAttrs.asset === BTM)
-              return {availableBalance: (keepAttrs.balance-vote),...keepAttrs}
-            else
-              return keepAttrs
-          })
-
-          account ={
-            address: currentAccount.vpAddress,
-            alias:currentAccount.alias,
-            balances: balances || [],
-            accountId: currentAccount.guid,
-            rootXPub: currentAccount.rootXPub
-          };
-
-        }else{
-          let balances = currentAccount.balances ||[]
-          balances = balances.map(({ inBtc, inCny, inUsd, name, ...keepAttrs}) => keepAttrs)
-
-          account ={
-            address: currentAccount.address,
-            alias:currentAccount.alias,
-            balances: balances|| [],
-            accountId: currentAccount.guid,
-            rootXPub: currentAccount.rootXPub
-          };
+        const {vpAddress, address} = currentAccount
+        let account = {
+          addresses: [vpAddress, address],
+          rootXPub: currentAccount.xpub
         }
+        if(bytom.settings.netType === 'vapor'){
+          account.address = vpAddress;
+        }else{
+          account.address = address;
+        }
+
 
         if(bytom.settings.domains.find(_domain => _domain === domain)) {
           sendResponse(account);
         } else{
-          NotificationService.open(new Prompt(PromptTypes.REQUEST_AUTH, payload.domain, {}, approved => {
+          NotificationService.open(new Prompt(PromptTypes.REQUEST_AUTH, payload.domain, payload, approved => {
             if(approved === false || approved.hasOwnProperty('isError')) sendResponse(approved);
             else {
               bytom.settings.domains.unshift(domain);
+              bytom.settings.domainsMeta[domain] = domainAttrs;
+
               if(approved === true){
                 this.update(() => sendResponse(account), bytom);
               }else{
@@ -351,10 +307,13 @@ export default class Background {
 
       var index = bytom.settings.domains.indexOf(domain);
       if(index !== -1) {
-        NotificationService.open(new Prompt(PromptTypes.REQUEST_AUTH, payload.domain, {type:'dis'}, approved => {
+        payload.type = 'dis'
+        NotificationService.open(new Prompt(PromptTypes.REQUEST_AUTH, payload.domain, payload, approved => {
           if(approved === false || approved.hasOwnProperty('isError')) sendResponse(approved);
           else {
             bytom.settings.domains.splice(index, 1);
+            delete bytom.settings.domainsMeta[domain];
+
             if(approved === true){
               this.update(() => sendResponse({status:'success'}), bytom);
             }else{
