@@ -299,7 +299,7 @@ const cn = {
     ok:'已完成'
   },
   protocol: {
-    title: 'Bytom Chrome Wallet服务协议',
+    title: '用户服务协议',
     content: `尊敬的用户：
     感谢您选择Bytom Chrome Wallet服务。《Bytom Chrome Wallet服务协议》（以下简称“本协议”）由Bytom和用户（以下简称“您”或“用户”）签订，本协议在您与Bytom之间具有合同上的法律效力。
     Bytom在此特别提醒您在使用Bytom Chrome Wallet（以下简称“Bytom Chrome Wallet” 或“本软件”）之前，请认真阅读《Bytom Chrome Wallet服务协议》及后文提到的相关协议，尤其是本协议规定的“免责及责任限制”等条款将以加粗的形式体现，确保您充分理解本协议中各条款，并自主考虑风险。

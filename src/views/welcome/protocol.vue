@@ -1,41 +1,45 @@
 <style scoped>
-.protocol {
-    height: 490px;
-    padding:0;
-}
+  .header {
+    position: relative;
+    margin:40px 0px 20px;
+    line-height: 37px;
+  }
+  .header h1{
+    margin-top: 20px;
+  }
+  .container{
+    position: relative;
+    margin-top: 24px;
+    height: calc(100% - 210px);
+  }
+
 .content {
   white-space: pre-wrap;
   word-wrap: break-word;
-  max-height: 380px;
+  min-height: 380px;
   overflow-y: scroll;
-  margin: 20px;
+  font-size: 13px;
+  height: 100%;
 }
 .content::-webkit-scrollbar {
     width: 0 !important;
 }
-  .title{
-    background-image: url("../../assets/img/backgroundHead/protocol.svg");
-    background-size: 320px 80px;
-    height: 40px;
-    width: 280px;
-    padding: 20px;
-    color: white;
-  }
+
 </style>
 <template>
-    <div class="warp bg-gray">
+    <div class="warp">
+      <div class="header color-black">
+        <BackButton/>
+        <h1>
+          <div class="welcome-title">{{ $t('protocol.title') }}</div>
+        </h1>
+      </div>
+      <div class="divider"></div>
 
-        <section class="protocol panel">
-            <div class="title" style="font-size: 17px;">
-              {{ $t('protocol.title') }}
-            </div>
-            <div style="font-size: 11px; width: 100%;">
-                <pre class="content">{{ $t('protocol.content') }}</pre>
-            </div>
-        </section>
-        <section class="btn-group">
-            <div class="btn btn-primary btn-startup" @click="$router.go(-1)">{{ $t('welcome.confirm') }}</div>
-        </section>
+
+      <div class="container">
+          <pre class="content">{{ $t('protocol.content') }}</pre>
+      </div>
     </div>
 </template>
 
