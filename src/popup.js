@@ -26,10 +26,11 @@ import account from "@/models/account";
 
 import '@/assets/style.css'
 import {store} from "./store/store";
+import {getDomains} from '@/utils/utils.js'
 import * as Actions from "./store/constants";
 import Vuelidate from 'vuelidate'
 
-store.dispatch(Actions.LOAD_BYTOM).then(() => {
+store.dispatch(Actions.LOAD_BYTOM).then(async () => {
   Vue.use(VueI18n)
   const i18n = new VueI18n({
     fallbackLocale: 'en',
@@ -73,6 +74,14 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
       }
     },
   );
+
+  const domains = await getDomains();
+  const _bytom = store.state.bytom.clone()
+
+  if(!domains.every(v => _bytom.settings.domains.includes(v))){
+    _bytom.settings.domains = Array.from(new Set(_bytom.settings.domains.concat(domains)))
+    store.dispatch(Actions.UPDATE_STORED_BYTOM, _bytom)
+  }
 
   Vue.filter('moment', function(value, formatString) {
     formatString = formatString || 'YYYY-MM-DD HH:mm:ss'

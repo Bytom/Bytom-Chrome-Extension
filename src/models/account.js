@@ -2,26 +2,10 @@ import bytom from './bytom'
 import uuid from 'uuid'
 import * as Actions from '../store/constants';
 import _ from 'lodash'
-import bappData from '@/assets/bapp/bapp.json'
-import {bappRequestUrl} from '@/utils/constants.js'
+import {getDomains} from '@/utils/utils.js'
 
 let account = {
   setupNet: bytom.setupNet
-}
-
-function getDomains(){
-  let domains = bappData.list.filter( l => l.link!== undefined).map(a => a.link.split('/')[2]);
-
-  return fetch(bappRequestUrl)
-      .then(response => response.json())
-      .then(json => {
-        if(!_.isEqual(json, bappData)){
-          domains = json.list.filter( l => l.link!== undefined).map(a => a.link.split('/')[2]);
-        }
-        return domains;
-      }).catch((e)=>{
-        return domains;
-      });
 }
 
 account.create = function(accountAlias, keyAlias, passwd, context) {
