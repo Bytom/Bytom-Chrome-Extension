@@ -29,6 +29,8 @@ import {store} from "./store/store";
 import {getDomains} from '@/utils/utils.js'
 import * as Actions from "./store/constants";
 import Vuelidate from 'vuelidate'
+import {apis} from '@/utils/BrowserApis';
+
 
 store.dispatch(Actions.LOAD_BYTOM).then(async () => {
   Vue.use(VueI18n)
@@ -97,9 +99,13 @@ store.dispatch(Actions.LOAD_BYTOM).then(async () => {
 
     if (!(store.getters.currentAccount) && to.name == 'home') {
       next({ name: 'welcome' })
+      let newURL = `${apis.runtime.getURL('pages/prompt.html')}#/welcome`;
+      chrome.tabs.create({ url: newURL });
       return
     }else if (!(store.getters.currentAccount && store.getters.vMnemonic)  && to.name == 'home') {
       next({ name: 'welcome-verify-mnemonic' })
+      let newURL = `${apis.runtime.getURL('pages/prompt.html')}#/welcome-verify-mnemonic`;
+      chrome.tabs.create({ url: newURL });
       return
     }
 
