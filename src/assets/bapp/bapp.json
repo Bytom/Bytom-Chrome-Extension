@@ -21,7 +21,8 @@
   "list":[
     {
       "icon":"mov.jpg",
-      "color":"linear-gradient(94.25deg, rgba(255, 255, 255, 0) 21.9%, rgba(255, 255, 255, 0.1) 81.37%), #1E1E1E"
+      "color":"linear-gradient(94.25deg, rgba(255, 255, 255, 0) 21.9%, rgba(255, 255, 255, 0.1) 81.37%), #1E1E1E",
+      "link":"https://supertx.bymov.io/swap"
     },
     {
       "icon":"red-packet.jpg",

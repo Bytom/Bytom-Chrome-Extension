@@ -112,7 +112,7 @@ input.form-item-content:active
                 <label class="form-item-label">{{ $t('transfer.asset') }}</label>
                 <div class="form-item-content currency"  @click="$router.push({ name: 'asset-selection' })">
                   <div class="symbol color-black">
-                    <img :src="img(unit)" alt="" class="c-icon">
+                    <img :src="img(unit)" alt="" class="c-icon"  v-on:error="onImgError">
 
                     <div class="uppercase">
                       {{ unit }}
@@ -176,6 +176,10 @@ input.form-item-content:active
       </section>
 
       <modal-passwd ref="modalPasswd" @confirm="send"></modal-passwd>
+
+      <transition>
+        <router-view></router-view>
+      </transition>
     </div>
 </template>
 
@@ -274,6 +278,7 @@ export default {
         'currentAsset'
       ]),
       ...mapGetters([
+        'language',
         'currentAccount',
         'accountList',
         'currency',
@@ -298,6 +303,18 @@ export default {
 
             this.guid = newAccount.guid;
             this.address = this.netType === 'vapor'?  newAccount.vpAddress: newAccount.address;
+        },
+        currentAsset(newAsset){
+          const currentAssetId = newAsset.assetId
+          const that = this
+
+          transaction.asset(currentAssetId).then(ret => {
+            that.selectAsset = ret
+            if(that.transaction.amount){
+              that.transaction.cost = Number(ret[currencyInPrice[that.currency]] * that.transaction.amount).toFixed(2);
+            }
+          });
+
         }
     },
     methods: {
@@ -316,6 +333,9 @@ export default {
           }else{
             return `https://cdn.blockmeta.com/resources/logo/bytom/${_symbol}.png`
           }
+        },
+        onImgError: function(event) {
+          event.target.src = require(`@/assets/img/asset/${this.netType}.png`)
         },
         shortAddress: function (add) {
           return address.short(add)
@@ -337,9 +357,6 @@ export default {
 
             this.transaction.to = "";
             this.transaction.amount = "";
-            if(this.$route.query.type == 'popup'){
-               window.close();
-            }
         },
         max: function () {
             this.transaction.amount = this.currentBalance;
@@ -407,7 +424,7 @@ export default {
             }).catch(error => {
                 loader.hide();
                 this.$toast.error(
-                   getLang(error.message)
+                   getLang(error.message, this.language)
                 );
             });
       },
@@ -415,42 +432,11 @@ export default {
         Actions.SET_CURRENT_ASSET,
       ])
     }, mounted() {
-        //detect injection
-        let currentAssetId
-        if(this.$route.query.type === 'popup'){
-          if (this.$route.query.from != undefined) {
-              this.address = this.$route.query.from
-              this.guid = this.currentAccount.guid
-              this.account = this.currentAccount
-          }
+        this.account = this.currentAccount
 
-          if (this.$route.query.asset != undefined) {
-            currentAssetId = this.$route.query.asset
+        const currentAsset = this.currentAsset || this.selectAsset
+        const currentAssetId = currentAsset.assetId
 
-            this.transaction.asset= currentAssetId
-
-            const assets = this.assets
-            this.selectAsset = assets.filter(b => b.assetId === currentAssetId.toLowerCase())[0]
-          }
-          if (this.$route.query.to != undefined) {
-              this.transaction.to = this.$route.query.to
-          }
-          if (this.$route.query.amount != undefined) {
-              this.transaction.amount = this.$route.query.amount
-          }
-          if (this.$route.query.gas != undefined) {
-              this.transaction.fee = this.$route.query.gas
-          }
-          if(this.$route.query.confirmations != undefined) {
-              this.transaction.confirmations = this.$route.query.confirmations
-          }
-        }else{
-          this.account = this.currentAccount
-
-          const currentAsset = this.currentAsset || this.selectAsset
-          currentAssetId = currentAsset.assetId
-
-        }
 
         const that = this
 
