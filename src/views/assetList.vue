@@ -91,7 +91,7 @@ font-size: 15px;
         </section>
         <section class="bg-shadow-white currency-banner">
             <div class="color-black symbol" v-if="currentAsset && currentAsset.asset.symbol!=='Asset'">
-                <img :src="img(currentAsset.asset.symbol)" alt="" class="c-icon">
+                <img :src="img(currentAsset.asset.symbol)" alt="" class="c-icon" v-on:error="onImgError">
 
                 <div class="uppercase">
                   {{currentAsset.asset.symbol}}
@@ -257,6 +257,9 @@ export default {
         }else{
           return `https://cdn.blockmeta.com/resources/logo/bytom/${_symbol}.png`
         }
+      },
+      onImgError: function(event) {
+        event.target.src = require(`@/assets/img/asset/${this.netType}.png`)
       },
       blockmeta:function (txid) {
         if(this.netType === 'vapor'){
