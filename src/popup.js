@@ -29,8 +29,10 @@ import {store} from "./store/store";
 import {getDomains} from '@/utils/utils.js'
 import * as Actions from "./store/constants";
 import Vuelidate from 'vuelidate'
+import {apis} from '@/utils/BrowserApis';
 
-store.dispatch(Actions.LOAD_BYTOM).then(async () => {
+
+store.dispatch(Actions.LOAD_BYTOM).then(() => {
   Vue.use(VueI18n)
   const i18n = new VueI18n({
     fallbackLocale: 'en',
@@ -75,13 +77,14 @@ store.dispatch(Actions.LOAD_BYTOM).then(async () => {
     },
   );
 
-  const domains = await getDomains();
-  const _bytom = store.state.bytom.clone()
+  getDomains().then((domains)=>{
+    const _bytom = store.state.bytom.clone()
 
-  if(!domains.every(v => _bytom.settings.domains.includes(v))){
-    _bytom.settings.domains = Array.from(new Set(_bytom.settings.domains.concat(domains)))
-    store.dispatch(Actions.UPDATE_STORED_BYTOM, _bytom)
-  }
+    if(!domains.every(v => _bytom.settings.domains.includes(v))){
+      _bytom.settings.domains = Array.from(new Set(_bytom.settings.domains.concat(domains)))
+      store.dispatch(Actions.UPDATE_STORED_BYTOM, _bytom)
+    }
+  })
 
   Vue.filter('moment', function(value, formatString) {
     formatString = formatString || 'YYYY-MM-DD HH:mm:ss'
@@ -97,9 +100,13 @@ store.dispatch(Actions.LOAD_BYTOM).then(async () => {
 
     if (!(store.getters.currentAccount) && to.name == 'home') {
       next({ name: 'welcome' })
+      let newURL = `${apis.runtime.getURL('pages/prompt.html')}#/welcome`;
+      chrome.tabs.create({ url: newURL });
       return
     }else if (!(store.getters.currentAccount && store.getters.vMnemonic)  && to.name == 'home') {
       next({ name: 'welcome-verify-mnemonic' })
+      let newURL = `${apis.runtime.getURL('pages/prompt.html')}#/mnemonic`;
+      chrome.tabs.create({ url: newURL });
       return
     }
 

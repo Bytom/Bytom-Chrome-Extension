@@ -3,9 +3,9 @@ const en = {
     welcome:"Welcome",
     byone:" Byone Wallet",
     create:"Create",
-    createHint:"创建一个新的钱包来存储和交易您的 BTM 及侧链代币",
+    createHint:"Creat a new wallet to save and transfer your assets.",
     import:"Import",
-    importHint:"如果您在其它网站或 App 上创建过钱包，可以在这里导入"
+    importHint:"If you already have a wallet, you can import it."
   },
   common:{
     veto: 'Veto',
@@ -18,17 +18,34 @@ const en = {
     transfer:'Transfer',
     issue:'Issue',
     retire:'Retire',
+    transfer_in:'Receive',
+    transfer_out:'Send',
+    cross_chain:'Cross Chain',
+    confirm: 'Confirm',
+    cancel: 'Cancel'
   },
   welcome: {
+    enterMain:"Enter Main View",
     title: 'Welcome to the BYTOM Chrome Wallet',
     use: 'Start',
-    terms: 'Terms of Use',
+    term: 'I agree with {0} and {1}',
     confirm: 'I agree',
     cancel: 'Cancel',
     register: 'Register',
     restore: 'Restore',
-    term1:'I agree with ',
-    term2:'Service Agreement'
+  },
+  restore:{
+    title:'Import Wallet',
+    mnemonic:'Mnemonic',
+    kFile:'Keystore File',
+    kFHint:'Backup to upload',
+    kText:'Keystore Text',
+    kSHint:'Please enter Keystore text',
+    sPassword:'Setup password',
+    vPassword:'Verify password',
+    passwordHint:'Keep the password in mind. Transactions, backups, and other operations need to verify the password',
+    p1text:'Please set up password',
+    p2text:'Please repeat your password'
   },
   dialog: {
     header: 'Warning',
@@ -64,7 +81,17 @@ const en = {
     hide:'Hide',
     viewAll:'View All',
     hideAll:'Hide All',
-    types:'Types'
+    types:'Types',
+    password:'Please Enter the password',
+    detail:'Transaction Detail',
+    requestDetail:'Request Detail',
+    amount:'Transaction Amount',
+    signComfirm:'Sign Transaction',
+    signMessage:'Sign Message'
+  },
+  listAsset: {
+    all:'All',
+    fail:'Failed'
   },
   crossChain:{
     title:'Cross Chain',
@@ -154,7 +181,11 @@ const en = {
     noRecord:"No transaction records found.",
     noAssetRecord:"No asset records found.",
     unconfirmed :'Unconfirmed',
-    network:'Network'
+    network:'Network',
+    totalAsset:'Total Asset'
+  },
+  asset:{
+    title:'Asset'
   },
   transactionDetail: {
     title: 'Transaction Detail',
@@ -200,29 +231,75 @@ const en = {
     inputPass: 'Please enter your password.',
     agreeService:'Please read and agree the service term.'
   },
+  mnemonic:{
+    "title":"Backup Mnemonic",
+    "hint":"Please keep the mnemonic, your asset will lost once it lost!",
+    "passwordHint":"Please enter the password to display mnemonic"
+  },
+  verifyMnemonic:{
+    "title":"Verify Mnemonic",
+  },
   error:{
-    BTM0000: 'This field is required.'
+    BTM0000: 'This field is required.',
+    BTM0001:'Please enter mnemonic.',
+    BTM0002:'Mnemonic verification failed, Please enter the correct Mnemonic.',
+    BTM0003:'Please choose the Keystore file.',
+    BTM0004:'Please enter Keystore.',
+    BTM0005:'Insufficient balance.',
+    BTM0006:'Address format error',
+    BTM0007:'Wallet name error',
+    BTM0008:'Empty password',
+    BTM0009:'Current wallet is already an account'
+  },
+  successMsg:{
+    createWallet:{
+      header: 'Create successfully',
+      description:'Please save your mnemonic, Enjoy it!'
+    },
+    restoreWallet:{
+      header: 'Import successfully',
+      description:'Please save your Keystore file and password,Enjoy it!'
+    },
+    transaction:{
+      header: 'Confirm successfully',
+      description:'Transfer successfully, Enjoy it!'
+    }
+  },
+  wallet:{
+    create:"Create wallet",
+    success:'Switch account successfully'
   },
   help: {
     title: 'Help',
     page: 'Info'
   },
   setting: {
-    title: 'Setting',
-    version: 'Version',
     lang: 'Language',
-    unit: 'Btm Amount Unit',
-    currency:'Currency'
+    currency:'Currency',
+    enLange:"Expand view",
+    deleteWallet:'Delete wallet',
+    deleteHint:'Please confirm you has backed up your wallet.',
+    deleteBack:'Return',
+    deleteConfirm:'Confirm',
+    deleteConfirmHint:'Please enter the wallet name.',
+    emptyWallet:'Empty wallet name'
   },
   backup: {
     title: 'Backup',
-    button: 'Backup'
+    button: 'Backup',
+    mnemonic:'Back up mnemonic',
+    keystore:'Back up keystore',
+    mnemonicHint:'Please copy the mnemonic and keep it.',
+    ok:'Completed'
   },
   protocol: {
-    title: 'Bytom Chrome Wallet service agreement',
-    content: `Dear users:
-    Thank you for choosing Bytom Chrome Wallet service. Bytom Chrome Wallet service agreement (hereinafter referred to as "this agreement") is signed by Bytom. (hereinafter referred to as "Chainboat" or "we") and the user (hereinafter referred to as "you" or "user"). This agreement has the legal effect of the contract between you and Chainboat.
-    Chainboat in this special remind you in the use of Bytom Chrome Wallet (hereinafter referred to as "Bytom Chrome Wallet" or "the software"), please read the "Bytom Chrome Wallet service agreement" and later noted that the agreement, in particular the provisions of this agreement "liability and limitation of liability" and other terms will be reflected in the form of a bold, make sure you fully understand the terms of the provisions of this agreement, and independent considering risk.
+    title: 'Service Agreement',
+    content:`Dear users:
+    Thank you for choosing Bytom Chrome Wallet. This“Bytom Chrome Wallet Terms of Service”(“Agreement”) is made between you (“User”) and Chainboat Technology Ltd. (Company Registration Number: 1963344), a company incorporated in The British Virgin Islands (BVI) (“Company”) and is legally binding between you and Company. In this Agreement (a) “we” and “us” refer to the Company and “our” shall be construed accordingly; and (b) “you” refers to User and “your” shall be construed accordingly. Each of you and the Company shall hereinafter be referred to as a “Party”, and collectively, you and the Company shall hereinafter be referred to as the “Parties”.
+
+    Company hereby reminds you that you must carefully read the full content of this Agreement and other documents mentioned in this Agreement before using our Bytom Chrome Wallet（You can use Bytom Chrome Wallet by chrome browser Plug-in to obtain related services）. In particular, you must carefully read the section of “Disclaimer and Limitation of Liability” and other sections which are displayed in bold in this Agreement. You must make sure that you fully understand the whole Agreement and evaluate the risks of using Bytom MOV on your own.
+
+
     I. confirmation and acceptance of this agreement
     1. You understand that this agreement and related agreements are applicable to decentralized applications (" DApp ") developed and owned by Chainboat on Bytom Chrome Wallet and future Bytom Chrome Wallet (excluding DApp developed by third parties).
     2. If you download the Bytom Chrome Wallet software and create or import the wallet, you will be deemed to have fully read and accepted all the terms of this agreement. This agreement takes effect immediately and is binding on both parties.
@@ -454,7 +531,183 @@ const en = {
     4. Any translated version of this policy is provided for the convenience of users only, and there is no intention to modify the provisions of this policy. If there is a conflict between the Chinese version of this policy and the non-chinese version, the Chinese version shall prevail.
     5. This policy shall apply from November 12, 2018.
     For matters not covered in this policy, you are required to comply with the notice and relevant rules updated by Chainboat from time to time.
-    `
+`
+  },
+  privacy:{
+    "title":"Privacy Police",
+    "content":`Dear Users,
+
+Chainboat Technology Ltd. (“Company”, “we”, “us”, or “our”) respects and protects the privacy of Users (“you”, “your” or “Users”). The Company will collect, use, disclose and process your Personal Information, in accordance with this Privacy Policy (“Policy”) when you:
+
+(a) access or use our website and mobile applications (“Applications”) and services; and/or
+(b) provide us with your Personal Information, regardless or the medium through which such Personal Information is provided.
+The Company recommends that you shall carefully read and understand the whole contents of this Policy before your use of the Applications. Additionally, significant information including the Disclaimer is in bold form in this Policy. Definitions of key words in this Policy are consistent with those in the Bytom MOV Terms of Service of the Company. If there is any discrepancy between the definitions of any defined term used in this Policy and the Bytom MOV Terms of Service , the definition of any defined term used in this Policy shall prevail.
+
+By providing us with your Personal Information, you consent to our collection, use, disclosure (including transfer) and processing of your Personal Information in accordance with this Policy. Please DO NOT provide any Personal Information to us if you do not accept this Policy.
+
+The Company reserves the right to update this Policy online from time to time, without notice to you, and the revised Policy will come into effect and supersede the older versions once posted on our Applications. The revised Policy will apply to Personal Information provided to us previously. In particular, if you do not accept the revised Policy, please immediately stop your use of the Applications. Your continuous use of our Applications will be regarded as your acceptance of the revised policy.
+
+1 Information We Collect
+
+1.1 We collect your Personal Information, including but not limited to your device information, operation records, transaction records and wallet addresses.
+
+1.2 In order to satisfy your needs or requests for specific services, we may also collect Personal Information.
+
+1.3 You confirm that your Wallet Password, Private Key, Mnemonic Words, Keystore on the Applications are not stored or synchronized on the Company’ servers. The Company does not offer the service to recover your Wallet Password, Private Key, Mnemonic Words or Keystore.
+
+1.4 We may also request for you to provide us with additional Personal Information in order for us to enable your use of any specific functions of the Applications. Your refusal to provide us with the requested Personal Information will be considered as your choice to not use a particular specific function of the Applications.
+
+1.5 To the extent permitted by applicable laws and regulations, the Company may collect and use the Personal Information in the following circumstances without your prior consent or authorization:
+
+1.5.1 information related to national security and national defense;
+
+1.5.2 information related to public security, public health, significant public interests;
+
+1.5.3 information related to criminal investigation, prosecution, trial and enforcement;
+
+1.5.4 Personal Information in the public domain;
+
+1.5.5 Personal Information collected from legally publicly disclosed information, such as legal news reports, government information disclosure and other channels;
+
+1.5.6 Personal Information necessary to maintain the security and compliance of services, such as to detect or to solve the malfunction of products and services; and/or
+
+1.5.7 other circumstances permitted by laws and regulations.
+
+1.6 We collect information in the following ways:
+
+1.6.1 when you provide us with your Personal Information for whatever reasons;
+
+1.6.2 when you authorize us to obtain your Personal Information from a third party;
+
+1.6.3 when you register for a user account on our Applications;
+
+1.6.4 when you contact us or interact with our employees through various communication channels, for example, through social media platforms, messenger platforms, face-to-face meetings, telephone calls, emails, fax and letters;
+
+1.6.5 when you transact with us, contact us or request that we contact you;
+
+1.6.6 when you request to be included in an email or our mailing list; and/or
+
+1.6.7 when we copy all or part of your transaction records on the blockchain. However, you should refer to the blockchain system for your latest transaction records.
+
+1.7 Our Applications may contain certain technologies that collect Personal Information in the manner described in this Policy (see paragraph 5 below) or the applicable terms and conditions.
+
+1.8 Your provision of Personal Information to us is voluntary and you may withdraw your consent for us to use your Personal Information at any time. However, if you choose not to provide us with the Personal Information we require, it may not be possible for you to use the Applications or for us to contact you, or provide products or services which you need from us.
+
+1.9 In certain circumstances, you may also provide us with the Personal Information of persons other than yourself. If you do so, you warrant that you have informed him/her of the purposes for which we are collecting his/her Personal Information and that he/she has consented to your disclosure of his/her Personal Information to us for those purposes. You agree to indemnify and hold us harmless from and against any and all claims by such individuals relating to our collection, use and disclosure of such Personal Information in accordance with the terms of this Policy.
+
+1.10 You are responsible for ensuring that all Personal Information that you provide to us is true, accurate and complete. You are responsible for informing us of any changes to your Personal Information.
+
+2 How We Use Your Information
+
+2.1 We collect, use or disclose your Personal Information for one or more of the following purposes:
+
+2.1.1 to provide you with products and/or services that you request for;
+
+2.1.2 to manage your relationship with us;
+
+2.1.3 to facilitate your use of our Applications;
+
+2.1.4 to associate you with your wallet by the unique serial number of your mobile device;
+
+2.1.5 to push important notifications to you, such as software update, update of Terms of Service and this Policy;
+
+2.1.6 to assist with your enquiries, feedback, complaints and requests by using the Wallet Address and the mobile device information provided by you;
+
+2.1.7 to notify you of our products, services, programmes and events;
+
+2.1.8 to resolve any disputes, investigating any complaint, claim or dispute or any actual or suspected illegal or unlawful conduct;
+
+2.1.9 to conduct our internal audit, data analysis and research;
+
+2.1.10 to conduct user behavior tracking by tracking the Users’ use of the Applications;
+
+2.1.11 to comply with our obligations in accordance with laws, regulations and to cooperate with regulatory authorities;
+
+2.1.12 to comply with international sanctions and applicable regulation for securities and to counter money-laundering or financing of terrorism;
+
+2.1.13 to enforce obligations owed to us, and contractual terms and conditions; and/or
+
+2.1.14 any other reasonable purposes related to the aforesaid.
+
+3 How You Control Your Own Information
+
+You are entitled to control your Personal Information provided to Bytom MOV.
+
+3.1 You may disconnect your wallets from Bytom MOV to connect another wallet，and you may connect wallet to other website which provide service about blockchain.Bytom MOV will display the information of connected wallets to you.
+
+3.2 You acknowledge that since blockchain is an open source system, your transaction records are automatically public and transparent in the whole blockchain.
+
+3.3 Our Applications may contain links to other websites, applications or Smart Contracts that are not owned, operated, developed or maintained by us. These links are provided only for your convenience. This Policy only applies to our Applications. When using Third-Party Service, you understand that the Bytom MOV Terms of Service and Bytom MOV Privacy Policy will no longer apply. You are encouraged to carefully review their privacy policies and related terms of service.
+
+3.4 You are entitled to ask us to update, revise, and delete your Personal Information. If you wish to update, revise, delete or have access to your Personal Information held by us, or if you do not accept any amendment to this Policy, please contact us.
+
+3.5 We may charge you a fee for responding to your request for access to your Personal Information held by us, or for information about the ways in which we have (or may have) used your Personal Information in the one-year period preceding your request. If a fee is to be charged, we will inform you of the amount beforehand and respond to your request after payment is received. We will endeavour to respond to your request within thirty (30) days, and if that is not possible, we will inform you of the time by which we will respond to you.
+
+3.6 In many circumstances, we need to use your Personal Information in order for us to provide you with products or services that you require. If you do not provide us with the required Personal Information, or if you withdraw your consent to our use and/or disclosure of your Personal Information for these purposes, it may not be possible for us to continue to serve you or provide you with the products and services that you require.
+
+4 Information We may Share or Transfer
+
+4.1 We will keep your Personal Information for so long as we need the Personal Information for our business and legal purposes.
+
+4.2 We do not sell, trade or otherwise transfer your Personal Information to third parties without your consent.
+
+4.3 If you have consented to our disclosure of your Personal Information to our strategic business partners and associates, we may disclose your Personal Information to them. They will use your Personal Information only for the purposes you have consented to.
+
+4.4 You agree that we may disclose or share your Personal Information with third parties such as:
+
+4.4.1 service providers and data processors working on our behalf and providing services to us such as conducting know-your-clients checks, accounting, data processing or management services, website hosting, maintenance and operation services, e-mail message services, analysis services, handling of payment transactions, marketing etc; and
+
+4.4.2 our consultants and professional advisors (such as accountants, lawyers, auditors).
+
+4.5 If we need to transfer your Personal Information to any country for the purposes set out above, we shall obtain your prior consent and ensure that the recipient of the Personal Information protects your Personal Information to the same level as we have committed to protecting your Personal Information. Where these countries or territories do not have personal data protection laws that are comparable to the laws applicable to our relationship with you, we will enter into legally enforceable agreements with the recipients.
+
+4.6 The Company will not share with or transfer your Personal Information to any third party without your prior consent, except for the following circumstances:
+
+4.6.1 the collected Personal Information is publicized by yourself;
+
+4.6.2 the Personal Information is collected from public information which was legally disclosed, such as news (lawfully reported), government information disclosure and other channels;
+
+4.6.3 in order to abide by applicable laws, regulations, legal procedures, and administrative or judiciary authorities or to enforce our Policy or protect our or others’ rights, property or safety;
+
+4.6.4 in the case of mergers and acquisitions, if transfer of Personal Information is involved, the Company may require the receivers of Personal Information to be continuously bound by this Policy.
+
+5 Automatic Data Collection Technologies
+
+5.1 We use Automatic Data Collection Technologies on our Applications. Examples of such technologies include:
+
+5.1.1 Cookies (or browser cookies). Cookies are small text files which are set by a website or application operator so that your browser or device may be recognised. We may make use of cookies on our Applications to store and track information such as the number of users and their frequency of use, profiles of users and their online preferences. Cookies do not capture information which would personally identify you, but the information collected may be used to assist us in analysing the usage of our Applications and to improve your online experience with us. You can disable the cookies by changing the setting on your browser. However, this may affect the functionality of the Applications.
+
+5.1.2 Web analytics. Web analytics is the term given to a method for collecting and assessing the behaviour of visitors to websites and mobile applications. This includes the analysis of traffic patterns in order, for example, to determine the frequency of visits to certain parts of a website or mobile application, or to find out what information and services our visitors are most interested in. The web analytics services on our Applications are provided by third-party service providers.
+
+6 How We Protect Your Information
+
+6.1 If the Company ceases operation, the Company will stop the collection of your Personal Information, and take steps to delete or anonymize your Personal Information held by us within a reasonable period.
+
+6.2 To protect your Personal Information, the Company may adopt data security techniques, improve internal compliance levels, provide security training for our staff, and set security authority for access to relevant data to protect your Personal Information.
+
+6.3 We will send you messages about information security in the “Notifications” column and update articles concerning the use of wallets and information protection in the “Support” column on our Applications for your reference.
+
+7 Protection for the Minors
+
+The following special provisions apply to minors who are under the age of 18 years old:
+
+7.1 The minors shall not use Bytom MOV without the guidance from their parents or guardians.
+
+7.2 The parents and guardians of the minors shall provide guidance to the minors on using Bytom MOV after they read this Policy, Bytom MOV Terms of Service and other relevant rules.
+
+7.3 Bytom MOV will ensure the confidentiality and security of the minors’ Personal Information in accordance with the applicable laws and regulations.
+
+8 Disclaimer
+
+8.1 After you use Third-Party Service, you acknowledge that this Policy no longer applies to the collection, use, disclosure and transfer of your Personal Information by these third parties. The Company is unable to guarantee that these third parties will implement reasonable security measures to protect your Personal Information.
+
+8.2 You are solely responsible for your use of Third-Party Service and agree that you will not hold the Company liable for any damages incurred or injuries inflicted as a result of the collection, use, disclosure and transfer of your Personal Information by these third parties.
+
+8.3 YOU ACKNOWLEDGE AND ACCEPT THAT, TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, THE COMPANY WILL ADOPT MEASURES AS REASONABLE AS POSSIBLE TO PROTECT YOUR PERSONAL INFORMATION UNDER CURRENT TECHNIQUES ON AN “AS IS”, “AS AVAILABLE” AND “WITH ALL FAULTS” BASIS, TO AVOID THE DISCLOSURE, TAMPERING OR DAMAGE OF INFORMATION. SINCE THE COMPANY TRANSFERS DATA WIRELESSLY, THE COMPANY MAKES NO GUARANTEE ON THE PRIVACY AND SECURITY OF WIRELESS INTERNET DATA TRANSFERRING.
+
+9 Miscellaneous
+
+9.1 You shall fully understand and conform to the laws, regulations and rules in your jurisdictions which are relevant to use of the services provided by the Company.`
   }
 }
 

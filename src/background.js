@@ -85,26 +85,30 @@ export default class Background {
   }
 
   signMessage(sendResponse, payload) {
-    if(payload.address === undefined){
+    var requestBody = payload.value
+
+    if(requestBody.address === undefined){
       sendResponse(Error.typeMissed('address'));
       return false;
     }
-    if(payload.message === undefined){
+    if(requestBody.message === undefined){
       sendResponse(Error.typeMissed('message'));
       return false;
     }
 
-    const {domain,  ...txAttrs} = payload;
+    const {domain} = payload;
+    const data={
+      value: requestBody,
+      type:  'message'
+    }
 
-    txAttrs.type = 'message'
-
-    NotificationService.open(new Prompt(PromptTypes.REQUEST_PROMPT, domain, txAttrs ,approved => {
+    NotificationService.open(new Prompt(PromptTypes.REQUEST_PROMPT, domain, data ,approved => {
       sendResponse(camelize(approved));
     }));
   }
 
   transfer(sendResponse, payload) {
-    var requestBody = payload
+    var requestBody = payload.value
 
     if(requestBody.from === undefined){
       sendResponse(Error.typeMissed('from'));
@@ -123,46 +127,55 @@ export default class Background {
       return false;
     }
 
-    const {domain,  ...txAttrs} = payload;
+    const {domain} = payload;
+    const data={
+      value: requestBody,
+      type:  'transfer'
+    }
 
-    txAttrs.type = 'transfer'
-
-    NotificationService.open(new Prompt(PromptTypes.REQUEST_PROMPT, domain, txAttrs ,approved => {
+    NotificationService.open(new Prompt(PromptTypes.REQUEST_PROMPT, domain, data ,approved => {
       sendResponse(camelize(approved));
     }));
   }
 
   advancedTransfer(sendResponse, payload) {
+    var requestBody = payload.value
 
-    if(payload.input === undefined){
+    if(requestBody.input === undefined){
       sendResponse(Error.typeMissed('input'));
       return false;
     }
-    if(payload.output === undefined){
+    if(requestBody.output === undefined){
       sendResponse(Error.typeMissed('output'));
       return false;
     }
-    if(payload.gas === undefined){
+    if(requestBody.gas === undefined){
       sendResponse(Error.typeMissed('gas'));
       return false;
     }
 
-    const {domain,  ...txAttrs} = payload;
+    const {domain} = payload;
 
-    txAttrs.type = 'advTransfer'
+    const data={
+      value: requestBody,
+      type:  'advTransfer'
+    }
 
-    NotificationService.open(new Prompt(PromptTypes.REQUEST_PROMPT, domain, txAttrs ,approved => {
+    NotificationService.open(new Prompt(PromptTypes.REQUEST_PROMPT, domain, data ,approved => {
       sendResponse(camelize(approved));
     }));
 
   }
 
   signTransaction(sendResponse, payload) {
-    const {domain,  ...txAttrs} = payload;
+    const {domain,  value} = payload;
 
-    txAttrs.type = 'signTransaction'
+    const data={
+      value: value,
+      type:  'signTransaction'
+    }
 
-    NotificationService.open(new Prompt(PromptTypes.REQUEST_PROMPT, domain, txAttrs ,approved => {
+    NotificationService.open(new Prompt(PromptTypes.REQUEST_PROMPT, domain, data ,approved => {
       sendResponse(camelize(approved));
     }));
   }

@@ -276,7 +276,7 @@ input:checked + .slider:before {
           <ul class="list">
             <li class="list-item" v-for="(balance, index) in balances" :key="index" @click="assetOpen(balance)">
               <div class="symbol" v-if="balance.asset.symbol!== 'Asset'">
-                <img :src="img(balance.asset.symbol)" alt="" class="c-icon">
+                <img :src="img(balance.asset.symbol)" alt="" class="c-icon"  v-on:error="onImgError">
                 <div class="uppercase">
                   {{balance.asset.symbol}}
                 </div>
@@ -302,7 +302,7 @@ input:checked + .slider:before {
               <li class="list-item" v-for="(asset, index) in defaultBalances" :key="index" @click="assetOpen(asset)">
 
                 <div class="symbol">
-                  <img :src="img(asset.asset.symbol)" alt="" class="c-icon">
+                  <img :src="img(asset.asset.symbol)" alt="" class="c-icon"  v-on:error="onImgError">
 
                   <div class="uppercase">
                     {{asset.asset.symbol}}
@@ -456,6 +456,9 @@ export default {
         }else{
           return `https://cdn.blockmeta.com/resources/logo/bytom/${_symbol}.png`
         }
+      },
+      onImgError: function(event) {
+        event.target.src = require(`@/assets/img/asset/${this.netType}.png`)
       },
       currentBalanceAmount: function (balance) {
         return balance[ camelize(this.currency) ]

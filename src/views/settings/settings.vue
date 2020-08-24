@@ -55,6 +55,14 @@
                 {{ currentCurrency }} <i class="iconfont icon_arrow_1"></i>
             </div>
         </div>
+        <a class="row" :href="link" target="_blank">
+            <div class="label color-black">
+                <p>{{ $t("setting.enLange") }}</p>
+            </div>
+            <div class="value">
+                <i class="iconfont icon_arrow_1"></i>
+            </div>
+        </a>
         <div class="row" @click="$router.push({ name: 'settings-delete'})">
             <div class="label color-grey-36">
                 <p>{{ $t("setting.deleteWallet") }}</p>
@@ -68,6 +76,7 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
+import {apis} from '@/utils/BrowserApis';
 
 export default {
     name: "",
@@ -82,6 +91,9 @@ export default {
         }else{
           return 'English'
         }
+      },
+      link(){
+        return `${apis.runtime.getURL('pages/prompt.html')}`;
       },
       currentCurrency(){
         const currencyList = {

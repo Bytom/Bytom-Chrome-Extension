@@ -99,8 +99,12 @@
                      v-model="formItem.checked"
               >
               <label for="checkbox1">
-                {{ $t('welcome.term1') }}<a class="color-green" @click="$router.push({ name: 'welcome-protocol' })">{{  $t('welcome.term2')}}</a>
+                <i18n path="welcome.term" tag="label" for="protocol.title">
+                  <a class="color-green" @click="$router.push({ name: 'welcome-privacy' })">{{ $t('privacy.title') }}</a>
+                  <a class="color-green" @click="$router.push({ name: 'welcome-protocol' })">{{ $t('protocol.title') }}</a>
+                </i18n>
               </label>
+
             </div>
           </div>
           <div>
@@ -259,7 +263,6 @@ export default {
         ])
     },
     mounted() {
-        this.i18n = getLanguage(this.language);
     }
 };
 </script>

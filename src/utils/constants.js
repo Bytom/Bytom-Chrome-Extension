@@ -54,5 +54,5 @@ export const decimalsMap = {
 }
 
 //Todo: update to production
-export const bappRequestUrl = 'https://raw.githubusercontent.com/movnetwork/Byone/dev/src/assets/bapp/bapp.json'
-export const bappImgUrl = 'https://raw.githubusercontent.com/movnetwork/Byone/dev/src/assets/img/bapp/'
+export const bappRequestUrl = 'https://raw.githubusercontent.com/movnetwork/Byone/master/src/assets/bapp/bapp.json'
+export const bappImgUrl = 'https://raw.githubusercontent.com/movnetwork/Byone/master/src/assets/img/bapp/'

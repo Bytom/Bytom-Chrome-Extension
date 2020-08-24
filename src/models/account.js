@@ -70,6 +70,9 @@ account.restoreByMnemonic = function(accountAlias, mnemonic, passwd, context) {
 
     const res = bytom.keys.restoreFromMnemonic(keyAlias, passwd, mnemonic)
 
+    _bytom.settings.netType = 'bytom';
+
+    bytom.setupNet(`${context.net}bytom`)
     bytom.wallet.list(res.xpub).then(async (wallet) =>{
       let walletInfo
       if(wallet.length>0){
@@ -122,6 +125,9 @@ account.restoreByKeystore = function(accountAlias, keystore, password, context) 
 
     const res = bytom.keys.restoreFromKeystore(password, keystore)
 
+    _bytom.settings.netType = 'bytom';
+
+    bytom.setupNet(`${context.net}bytom`)
     bytom.wallet.list(res.xpub).then(async (wallet) =>{
       let walletInfo
       if(wallet.length>0){
