@@ -28,13 +28,11 @@ const cn = {
     enterMain:'进入主界面',
     title: '欢迎使用BYTOM精简Chrome钱包',
     use: '开始',
-    terms: '使用条款',
+    term: '同意{0}和{1}',
     confirm: '确认',
     cancel: '取消',
     register: '注册',
     restore: '恢复',
-    term1:'我同意',
-    term2:'使用条款'
   },
   restore:{
     title:'导入钱包',

@@ -28,13 +28,11 @@ const en = {
     enterMain:"Enter Main View",
     title: 'Welcome to the BYTOM Chrome Wallet',
     use: 'Start',
-    terms: 'Terms of Use',
+    term: 'I agree with {0} and {1}',
     confirm: 'I agree',
     cancel: 'Cancel',
     register: 'Register',
     restore: 'Restore',
-    term1:'I agree with ',
-    term2:'Service Agreement'
   },
   restore:{
     title:'Import Wallet',
@@ -295,7 +293,7 @@ const en = {
   },
   protocol: {
     title: 'Service Agreement',
-    content:`    Dear users:
+    content:`Dear users:
     Thank you for choosing Bytom Chrome Wallet. This“Bytom Chrome Wallet Terms of Service”(“Agreement”) is made between you (“User”) and Chainboat Technology Ltd. (Company Registration Number: 1963344), a company incorporated in The British Virgin Islands (BVI) (“Company”) and is legally binding between you and Company. In this Agreement (a) “we” and “us” refer to the Company and “our” shall be construed accordingly; and (b) “you” refers to User and “your” shall be construed accordingly. Each of you and the Company shall hereinafter be referred to as a “Party”, and collectively, you and the Company shall hereinafter be referred to as the “Parties”.
 
     Company hereby reminds you that you must carefully read the full content of this Agreement and other documents mentioned in this Agreement before using our Bytom Chrome Wallet（You can use Bytom Chrome Wallet by chrome browser Plug-in to obtain related services）. In particular, you must carefully read the section of “Disclaimer and Limitation of Liability” and other sections which are displayed in bold in this Agreement. You must make sure that you fully understand the whole Agreement and evaluate the risks of using Bytom MOV on your own.
@@ -536,7 +534,7 @@ const en = {
   },
   privacy:{
     "title":"Privacy Police",
-    "content":` Dear Users,
+    "content":`Dear Users,
 
 Chainboat Technology Ltd. (“Company”, “we”, “us”, or “our”) respects and protects the privacy of Users (“you”, “your” or “Users”). The Company will collect, use, disclose and process your Personal Information, in accordance with this Privacy Policy (“Policy”) when you:
 
