@@ -43,7 +43,16 @@ const routers = [
         meta: { title: '转账' },
         component: resolve => {
           require(['@/views/sendTransaction/transfer.vue'], resolve)
-        }
+        },
+        children: [
+          {
+            path: '/assetSelection',
+            name: RouteNames.ASSET_SELECTION,
+            meta: { title: '选择资产' },
+            component: resolve => {
+              require(['@/views/sendTransaction/assetSelection.vue'], resolve)
+            }
+          }]
       },
       {
         path: '/asset',
@@ -59,15 +68,6 @@ const routers = [
         meta: { title: '接收' },
         component: resolve => {
           require(['@/views/received.vue'], resolve)
-        }
-      },
-
-      {
-        path: '/assetSelection',
-        name: RouteNames.ASSET_SELECTION,
-        meta: { title: '选择资产' },
-        component: resolve => {
-          require(['@/views/sendTransaction/assetSelection.vue'], resolve)
         }
       },
     ]

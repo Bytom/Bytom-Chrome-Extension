@@ -2,6 +2,7 @@
   .logo{
     width: 24px;
     height: 24px;
+    margin-right: 5px;
   }
 
   .text{
@@ -41,7 +42,7 @@
     <div class="inside-warp d-flex">
 
       <div class="d-flex">
-        <img class="logo" src="@/assets/logo.png" alt="">
+        <img class="logo" src="@/assets/logo_small.png" alt="">
         <div class="text">Byone Wallet for Chrome</div>
       </div>
       <div>
