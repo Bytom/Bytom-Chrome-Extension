@@ -43,7 +43,7 @@
           <div>
             <p class="hint">{{ $t("setting.deleteHint") }}</p>
             <div class="btn-gp">
-              <button class="btn btn-primary">{{ $t("setting.deleteBack") }}</button>
+              <button class="btn btn-primary"  @click="$router.push({ name: 'backup'})">{{ $t("setting.deleteBack") }}</button>
               <button class="btn btn-outlined color-black" @click="$refs.confirmModal.open()">{{ $t("setting.deleteConfirm") }}</button>
             </div>
           </div>
@@ -77,7 +77,7 @@ export default {
           const bytom = this.bytom.clone();
           bytom.keychain.removeByAlias(alias);
           const values = Object.values(bytom.keychain.pairs)
-          
+
           if(values.length === 0){
             bytom.currentAccount= null
             bytom.settings.netType= 'bytom'

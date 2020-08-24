@@ -282,6 +282,7 @@ const cn = {
   setting: {
     lang: '显示语言',
     currency:'货币单位',
+    enLange:"展开视图",
     deleteWallet:'删除钱包',
     deleteHint:'执行删除钱包操作前请确认您已备份好钱包，否则将无法找回！',
     deleteBack:'返回备份',

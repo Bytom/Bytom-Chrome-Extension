@@ -276,6 +276,7 @@ const en = {
   setting: {
     lang: 'Language',
     currency:'Currency',
+    enLange:"Expand view",
     deleteWallet:'Delete wallet',
     deleteHint:'Please confirm you has backed up your wallet.',
     deleteBack:'Return',

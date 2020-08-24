@@ -115,8 +115,6 @@ export default {
       },
       link(){
         return `${apis.runtime.getURL('pages/prompt.html')}#/welcome`;
-
-
       },
       ...mapState([
         'bytom'
