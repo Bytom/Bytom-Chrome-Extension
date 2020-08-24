@@ -42,7 +42,7 @@
     font-weight: 500;
     text-align: center;
     color: rgba(0, 0, 0, 0.88);
-    margin: 10px 0;
+    margin: 6px 0;
     min-width: 110px;
 
     div{
@@ -51,7 +51,7 @@
       box-sizing: border-box;
       border-radius: 4px;
       padding: 5px 20px;
-      width: 80%;
+      width: 90%;
       display: block;
       margin-left: auto;
       margin-right: auto;

@@ -71,6 +71,7 @@ a {
 
 .inside-warp{
   min-width: 320px;
+  max-width: 600px;
   width: 60%;
   margin-left: auto;
   margin-right: auto;
@@ -78,6 +79,7 @@ a {
 .warp {
   position: absolute;
   min-width: 320px;
+  max-width: 600px;
   width: 60%;
   height: 600px;
   margin-left: auto;

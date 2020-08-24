@@ -152,6 +152,7 @@
     color: white;
     background: #1A1A1A;
     border-radius: 4px;
+    word-break: break-all;
   }
 
   .inputfile + label {
@@ -160,7 +161,6 @@
     padding: 8px 12px;
     align-items: center;
     font-size: 13px;
-    max-width: 80%;
   }
 
   .box {
@@ -226,8 +226,10 @@
                    v-model="formItem.checked"
             >
             <label for="checkbox1">
-              {{ $t('welcome.term1') }}<a class="color-green" @click="$router.push({ name: 'welcome-protocol' })">{{
-              $t('welcome.term2')}}</a>
+              <i18n path="welcome.term" tag="label" for="protocol.title">
+                <a class="color-green" @click="$router.push({ name: 'welcome-privacy' })">{{ $t('privacy.title') }}</a>
+                <a class="color-green" @click="$router.push({ name: 'welcome-protocol' })">{{ $t('protocol.title') }}</a>
+              </i18n>
             </label>
           </div>
         </div>

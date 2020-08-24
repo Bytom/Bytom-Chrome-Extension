@@ -61,8 +61,9 @@
         color: rgba(0, 0, 0, 0.88);
         font-weight: 500;
         font-size: 16px;
-        margin: 5px 10px;
+        margin: 6px;
         cursor: pointer;
+        padding: 5px 0;
 
         &.active{
           background: #004EE4;
@@ -73,12 +74,17 @@
     }
   }
 
+  .mnemonic-panel{
+    margin-bottom: 10px;
+  }
+
   .target-mnemonic-panel {
     background: #FAFAFA;
     border-radius: 4px;
-    padding: 16px;
-    margin-bottom: 20px;
-    min-height: 110px;
+    padding: 10px;
+    margin-bottom: 18px;
+    min-height: 148px;
+
     div{
       cursor: auto !important;
     }
@@ -107,7 +113,7 @@
             </div>
           </div>
           <div>
-            <div :class="['btn btn-primary btn-round float-right',{disable: disableBtn}]" @click="verify"><i class="iconfont icon-right-arrow"></i></div>
+            <button :class="['btn btn-primary btn-round float-right',{disable: disableBtn}]" @click="verify" :disabled="disableBtn"><i class="iconfont icon-right-arrow"></i></button>
           </div>
         </div>
      </div>
