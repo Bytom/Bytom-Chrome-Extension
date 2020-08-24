@@ -22,6 +22,8 @@
 
   img{
     border-radius: 32px;
+    height: 58px;
+    width: 58px;
   }
 }
 

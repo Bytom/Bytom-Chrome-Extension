@@ -85,16 +85,16 @@
   }
 
   .logo{
-    width: 62px;
+    width: 52px;
     border-radius: 36px;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.16);
-    height: 62px;
+    height: 52px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 28px;
     text-transform: uppercase;
-    padding: 5px;
+    padding: 10px;
   }
 
   .logo-container{

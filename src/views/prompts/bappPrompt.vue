@@ -80,8 +80,8 @@
     }
 
     .logo {
-      width: 26px;
-      height: 26px;
+      width: 20px;
+      height: 20px;
       -webkit-border-radius: 16px;
       -moz-border-radius: 16px;
       border-radius: 16px;
@@ -92,7 +92,7 @@
       font-size: 16px;
       text-transform: uppercase;
       color: black;
-      padding: 3px;
+      padding: 6px;
     }
   }
 
