@@ -404,6 +404,10 @@
         } else if(this.prompt.data.type ==='transfer'){
           transaction.transfer(this.transaction, this.password, this.address, this).then(result => {
             loader.hide();
+            this.prompt.responder(result);
+            this.$toast.success(
+              this.$t("transfer.success")
+            );
             NotificationService.close();
 
           }).catch(error => {
@@ -413,18 +417,38 @@
             );
           });
         } else if(this.prompt.data.type ==='signTransaction'){
-          transaction.signTransaction(this.address,  this.prompt.data,  this.password, this).then( (result) => {
-            loader.hide();
-            this.prompt.responder(result);
-            this.$toast.success(this.$t("transfer.success"));
-            NotificationService.close();
-          }).catch(error => {
-            loader.hide();
+          const data = this.prompt.data.value
 
-            this.$toast.error(
-              getLang(error.message) || error.message || error
-            );
-          });
+          if(Array.isArray(data)){
+            Promise.all(data.map( (rawdata) => transaction.signTransaction(this.address, rawdata, this.password, this)))
+              .then( (result) => {
+                loader.hide();
+                this.prompt.responder(result);
+                this.$toast.success(this.$t("transfer.success"));
+                NotificationService.close();
+              }).catch(error => {
+              loader.hide();
+
+              this.$toast.error(
+                getLang(error.message) || error.message || error
+              );
+            });
+          }else{
+            transaction.signTransaction(this.address,  data,  this.password, this).then( (result) => {
+              loader.hide();
+              this.prompt.responder(result);
+              this.$toast.success(this.$t("transfer.success"));
+
+              NotificationService.close();
+            }).catch(error => {
+              loader.hide();
+
+              this.$toast.error(
+                getLang(error.message) || error.message || error
+              );
+            });
+          }
+
         } else if(this.prompt.data.type ==='message'){
           transaction.signMessage(this.transaction.message, this.password, this.address, this).then((resp) => {
             loader.hide();
@@ -454,9 +478,10 @@
       this.prompt = window.data || apis.extension.getBackgroundPage().notification || null;
       console.log(this.prompt)
 
-      const data = this.prompt.data
-      if (data !== undefined) {
-        switch(data.type){
+      const params = this.prompt.data
+      if (params !== undefined) {
+        const data = params.value
+        switch(params.type){
           case "advTransfer":{
             const inout = data
             if (inout.input !== undefined) {

@@ -165,7 +165,11 @@ class Content {
   prompt(type, message) {
     if (!isReady) return
 
-    const payload = Object.assign(message.payload, {domain: strippedHost()})
+    const payload = {
+      value: message.payload,
+      domain: strippedHost()
+    }
+
     InternalMessage.payload(type,payload)
       .send()
       .then(res => this.respond(message, res))
