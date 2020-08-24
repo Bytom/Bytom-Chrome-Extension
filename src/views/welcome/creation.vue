@@ -99,7 +99,7 @@
                      v-model="formItem.checked"
               >
               <label for="checkbox1">
-                {{ $t('welcome.term1') }}<a class="color-green" @click="$router.push({ name: 'welcome-protocol' })">{{  $t('welcome.term2')}}</a>
+                {{ $t('welcome.term1') }}<a class="color-green" @click="$router.push({ name: 'welcome-protocol' })">{{  $t('protocl.title')}}</a>
               </label>
             </div>
           </div>

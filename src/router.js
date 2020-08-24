@@ -8,6 +8,7 @@ export const RouteNames = {
   RESTORE_ACCOUNT:  'welcome-import',
   SETTING_PASSWORD: 'welcome-password',
   PROTOCOL: 'welcome-protocol',
+  PRIVACY: 'welcome-privacy',
 
 
   SETTINGS:'settings',
@@ -160,6 +161,13 @@ const routers = [
     meta: { title: '用户协议' },
     component: resolve => {
       require(['@/views/welcome/protocol.vue'], resolve)
+    }
+  },{
+    path: '/privacy',
+    name: RouteNames.PRIVACY,
+    meta: { title: '隐私服务' },
+    component: resolve => {
+      require(['@/views/welcome/privacy.vue'], resolve)
     }
   },
   {

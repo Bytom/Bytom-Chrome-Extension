@@ -1,7 +1,7 @@
 <template>
     <nav v-if="showNav()">
         <section class="breadcrumb">
-          <figure><img class="logo" src="@/assets/logo_pure.png" alt=""></figure>
+          <figure><img class="logo" src="@/assets/logo.png" alt=""></figure>
           <div class="logo_divider"></div>
           <figure  :class="active('HOME')" v-on:click="toggleTab('HOME')"><i class="iconfont icon_home_filled"></i></figure>
           <figure  :class="active('BAPP')" v-on:click="toggleTab('BAPP')"><i class="iconfont icon_bapp_filled"></i></figure>
