@@ -279,8 +279,8 @@ const en = {
     enLange:"Expand view",
     deleteWallet:'Delete wallet',
     deleteHint:'Please confirm you has backed up your wallet.',
-    deleteBack:'Return',
-    deleteConfirm:'Confirm',
+    deleteBack:'Backup',
+    deleteConfirm:'Delete',
     deleteConfirmHint:'Please enter the wallet name.',
     emptyWallet:'Empty wallet name'
   },
