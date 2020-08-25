@@ -24,8 +24,9 @@ export const m3_0_0 = async bytom => {
     }
 
     bytom.settings.netType = 'bytom';
-
     bytomApi.setupNet(`${bytom.settings.net}bytom`)
+
+    delete bytom.accountList
     bytom.currentAccount = bytom.keychain.pairs[oldAccountList[0].alias]
   }
 
