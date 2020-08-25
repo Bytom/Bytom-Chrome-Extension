@@ -243,30 +243,12 @@ account.balance = function(address , context) {
 }
 
 account.list = function() {
-  let retPromise = new Promise((resolve, reject) => {
-    bytom.accounts
+  return  bytom.accounts
       .listAccountUseServer()
-      .then(accounts => {
-        Promise.all(accounts.map(async (account) => {
-          try{
-            const obj = await this.balance(account.guid)
-            account.balances = obj.balances
-            account.votes = obj.votes
-          }catch (e) {
-            return e
-          }
-        })).then(()=>{
-          resolve(accounts)
-        }).catch(error=>{
-          throw error
-        })
-      })
-      .catch(error => {
-        reject(error)
-      })
-  })
-
-  return retPromise
+}
+account.listKeyByXpubOld = function(xpub){
+  return  bytom.keys
+    .getKeyByXPub(xpub)
 }
 
 account.backup = function() {
@@ -286,4 +268,30 @@ account.decryptMnemonic = function(vault,password, context) {
   return bytom.keys.decryptMnemonic(vault, password, keystore)
 }
 
+
+account.createOld = function(accountAlias, keyAlias, passwd, success, error) {
+  let retPromise = new Promise((resolve, reject) => {
+    if(!keyAlias){
+      keyAlias = `${accountAlias}-key-${uuid.v4()}`
+    }
+    debugger
+    bytom.keys
+      .create(keyAlias, passwd)
+      .then(res => {
+        debugger
+        bytom.accounts
+          .createAccountUseServer(res.xpub, accountAlias)
+          .then(ret => {
+            resolve(ret)
+          })
+          .catch(error => {
+            reject(error)
+          })
+      })
+      .catch(error => {
+        reject(error)
+      })
+  })
+  return retPromise
+}
 export default account

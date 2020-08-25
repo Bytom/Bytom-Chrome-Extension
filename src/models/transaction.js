@@ -167,7 +167,7 @@ function signSubmit (txObject, password, address, context) {
           context
         )
           .then(ret => {
-            bytom.transaction
+            return bytom.transaction
               .submitPayment(address, ret.raw_transaction, ret.signatures)
               .then(res3 => {
                 const object = {

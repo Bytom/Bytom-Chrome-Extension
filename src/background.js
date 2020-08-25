@@ -5,10 +5,13 @@ import NotificationService from './services/NotificationService'
 import StorageService from './services/StorageService'
 import Prompt from './prompts/Prompt';
 import * as PromptTypes from './prompts/PromptTypes'
+import migrate from './migrations/migrator'
 
 import _ from 'lodash'
 import Error from './utils/errors/Error'
 import { BTM, camelize } from './utils/constants'
+
+import account from "@/models/account";
 
 let prompt = null;
 
@@ -241,7 +244,10 @@ export default class Background {
    * @returns {Bytom}
    */
   static load(sendResponse){
-    StorageService.get().then(bytom => {
+    StorageService.get().then(async bytom => {
+
+      const migrated = await migrate(bytom);
+      if(migrated) this.update(() => {}, bytom);
       sendResponse(bytom)
     })
   }

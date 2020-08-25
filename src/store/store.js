@@ -22,6 +22,7 @@ const state = {
 };
 
 const getters = {
+    meta:state => state.bytom.meta,
     currentAccount:state => state.bytom.currentAccount,
     accountList:state => state.bytom.accountList,
     net:state => state.bytom.settings.network,

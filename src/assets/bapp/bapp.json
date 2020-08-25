@@ -22,13 +22,18 @@
     {
       "icon":"mov.jpg",
       "color":"linear-gradient(94.25deg, rgba(255, 255, 255, 0) 21.9%, rgba(255, 255, 255, 0.1) 81.37%), #1E1E1E",
-      "link":"https://supertx.bymov.io/swap"
+      "link":"https://supertx.bymov.io/swap",
+      "domainsMeta": {
+         "icon": "https://supertx.bymov.io/favicon.ico"
+      }
     },
     {
       "icon":"red-packet.jpg",
       "color":"linear-gradient(274.27deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%), #EB4232",
-      "link":"https://bapp.blockmeta.com/redpacket/"
+      "link":"https://bapp.blockmeta.com/redpacket/",
+      "domainsMeta": {
+        "icon": "https://supertx.bymov.io/favicon.ico"
+      }
     }
-
   ]
 }
