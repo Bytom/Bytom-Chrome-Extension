@@ -290,8 +290,15 @@ export default {
             const singlePrice = this.selectAsset[currencyInPrice[this.currency]]||this.selectAsset[this.currency]||0
             this.transaction.cost = Number( singlePrice * newAmount).toFixed(2);
 
+            const n = new BigNumber(this.currentBalance)
+
             if(newAmount){
-              this.estimateFee()
+              this.estimateFee().then(()=>{
+              const maxBalance = n.minus(this.transaction.fee)
+                if(maxBalance.lt(newAmount)){
+                  this.transaction.amount = maxBalance.toString()
+                }
+              })
             }else{
               this.transaction.fee = '0.00000000'
             }
@@ -322,7 +329,7 @@ export default {
           const asset_amount={}
           asset_amount[this.selectAsset.assetId] = this.transaction.amount || 0;
 
-          transaction.estimateFee(this.address, asset_amount).then( (resp) =>{
+          return transaction.estimateFee(this.address, asset_amount).then( (resp) =>{
             this.transaction.fee = resp.fee
           })
         },
@@ -359,7 +366,7 @@ export default {
             this.transaction.amount = "";
         },
         max: function () {
-            this.transaction.amount = this.currentBalance;
+          this.transaction.amount = this.currentBalance;
         },
         validate: function () {
           this.$v.$touch();
