@@ -285,6 +285,16 @@ account.isValidKeystore = function(keystore, context) {
   return walletImage
 }
 
+account.isAliasValid = function(alias, context){
+
+  const hanArray = (alias.match(/[\u3000\u3400-\u4DBF\u4E00-\u9FFF]+/g) || []).join('')
+  if(hanArray.length> 7){
+    throw(context.$t('error.BTM0013'))
+  }else if( alias.length >9 ){
+    throw(context.$t('error.BTM0014'))
+  }
+}
+
 account.decryptMnemonic = function(vault,password, context) {
   const keystore = context.bytom.currentAccount.keystore;
   return bytom.keys.decryptMnemonic(vault, password, keystore)

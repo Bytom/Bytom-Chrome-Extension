@@ -252,7 +252,9 @@ const en = {
     BTM0009:'Current wallet is already an account',
     BTM0010:'Keystore restore dose not support V2 multiple account. Please split into single keystore.',
     BTM0011:'Keystore file format error.',
-    BTM0012:'Keystore already exist.'
+    BTM0012:'Keystore already exist.',
+    BTM0013:'The max length of chinese char is 7.',
+    BTM0014:'The max length of wallet alias is 9.'
   },
   successMsg:{
     createWallet:{

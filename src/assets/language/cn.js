@@ -258,7 +258,9 @@ const cn = {
     BTM0009:'目前钱包已为账户',
     BTM0010:'Keystore导入不支持V2多账户导入，请拆分为单个Keystore',
     BTM0011:'Keystore文件格式错误。',
-    BTM0012:'Keystore已存在请勿重复导入。'
+    BTM0012:'Keystore已存在请勿重复导入。',
+    BTM0013:'钱包名称的汉字最大长度为7。',
+    BTM0014:'钱包名称的最大长度为9。'
   },
   successMsg:{
     createWallet:{
