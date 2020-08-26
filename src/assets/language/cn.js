@@ -255,7 +255,10 @@ const cn = {
     BTM0006:'输入有效的地址格式。',
     BTM0007:'钱包名称错误，请输入正确钱包名称。',
     BTM0008:'密码不能为空',
-    BTM0009:'目前钱包已为账户'
+    BTM0009:'目前钱包已为账户',
+    BTM0010:'Keystore导入不支持V2多账户导入，请拆分为单个Keystore',
+    BTM0011:'Keystore文件格式错误。',
+    BTM0012:'Keystore已存在请勿重复导入。'
   },
   successMsg:{
     createWallet:{

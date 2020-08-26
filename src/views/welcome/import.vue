@@ -348,7 +348,7 @@
             }
 
             try{
-              const keystore = account.isValidKeystore(this.formItem.keystoreF)
+              const keystore = account.isValidKeystore(this.formItem.keystoreF, this)
               this[Actions.SET_DATA]({
                 keystore: keystore
               }).then(() => {
@@ -373,7 +373,7 @@
             }
 
             try{
-              const keystore = account.isValidKeystore(this.formItem.keystore)
+              const keystore = account.isValidKeystore(this.formItem.keystore, this)
               this[Actions.SET_DATA]({
                 keystore: keystore
               }).then(() => {

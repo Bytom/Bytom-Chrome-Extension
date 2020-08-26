@@ -249,7 +249,10 @@ const en = {
     BTM0006:'Address format error',
     BTM0007:'Wallet name error',
     BTM0008:'Empty password',
-    BTM0009:'Current wallet is already an account'
+    BTM0009:'Current wallet is already an account',
+    BTM0010:'Keystore restore dose not support V2 multiple account. Please split into single keystore.',
+    BTM0011:'Keystore file format error.',
+    BTM0012:'Keystore already exist.'
   },
   successMsg:{
     createWallet:{

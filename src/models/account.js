@@ -2,7 +2,7 @@ import bytom from './bytom'
 import uuid from 'uuid'
 import * as Actions from '../store/constants';
 import _ from 'lodash'
-import {getDomains} from '@/utils/utils.js'
+import {getDomains, camelize} from '@/utils/utils.js'
 
 let account = {
   setupNet: bytom.setupNet
@@ -259,8 +259,30 @@ account.isValidMnemonic = function(mnemonic) {
   return bytom.keys.isValidMnemonic(mnemonic)
 }
 
-account.isValidKeystore = function(keystore) {
-  return bytom.keys.isValidKeystore(keystore)
+account.isValidKeystore = function(keystore, context) {
+  const walletImage = camelize(JSON.parse(keystore));
+  //V2
+  if(walletImage['accounts-server']){
+    const account = walletImage['accounts-server'].filter(a => a.net === context.net)
+    if(account.length>1){
+      throw(context.$t('error.BTM0010'))
+    }else if(account.length===0){
+      throw(context.$t('error.BTM0011'))
+    }else{
+      const xpub = account[0].rootXPub
+      if(context.bytom.keychain.findIdentity(xpub)){
+        throw(context.$t('error.BTM0012'))
+      }else{
+        const key = walletImage["keys"].find(key => key.xpub === xpub)
+        return key.key
+      }
+    }
+  }
+  //invalid format
+  else if(!walletImage['crypto']){
+    throw(context.$t('error.BTM0011'))
+  }
+  return walletImage
 }
 
 account.decryptMnemonic = function(vault,password, context) {
@@ -274,11 +296,9 @@ account.createOld = function(accountAlias, keyAlias, passwd, success, error) {
     if(!keyAlias){
       keyAlias = `${accountAlias}-key-${uuid.v4()}`
     }
-    debugger
     bytom.keys
       .create(keyAlias, passwd)
       .then(res => {
-        debugger
         bytom.accounts
           .createAccountUseServer(res.xpub, accountAlias)
           .then(ret => {
