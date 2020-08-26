@@ -16,10 +16,11 @@ export const m3_0_0 = async bytom => {
         delete account['rootXPub'];
 
         const key = await accountApi.listKeyByXpubOld(account.xpub);
-        account.keystore = key.key;
-        account.keyAlias = key.alias
-        account.vMnemonic = true
-        bytom.keychain.pairs[account.alias] = account
+        const _key = JSON.parse(key)
+        account.keystore = _key;
+        account.keyAlias = _key.alias;
+        account.vMnemonic = true;
+        bytom.keychain.pairs[account.alias] = account;
       }
     }
 
