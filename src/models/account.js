@@ -274,7 +274,7 @@ account.isValidKeystore = function(keystore, context) {
         throw(context.$t('error.BTM0012'))
       }else{
         const key = walletImage["keys"].find(key => key.xpub === xpub)
-        return key.key
+        return JSON.parse(key.key)
       }
     }
   }
