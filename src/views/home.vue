@@ -479,7 +479,7 @@ export default {
         if(asset.assetId === BTM){
           return Num.formatNue(assetObj.availableBalance,8)
         }else{
-          return Num.formatNue(assetObj.availableBalance, assetObj.asset.decimals)
+          return assetObj.availableBalance
         }
       },
         setupRefreshTimer() {
