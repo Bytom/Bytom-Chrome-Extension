@@ -7,6 +7,13 @@ const cn = {
     import:"导入钱包",
     importHint:"如果您在其它网站或 App 上创建过钱包，可以在这里导入"
   },
+  menu:{
+    home:"首页",
+    wallets:"钱包",
+    backup:"备份",
+    expand:"展开",
+    setting:"设置"
+  },
   common:{
     veto: '取消投票',
     cross_chain_in: '跨入Vapor',
@@ -207,13 +214,6 @@ const cn = {
     pending:'未确认交易',
     tips:'提示：访问blockmeta.com来获取交易的相关信息。',
     assetId:'资产Id'
-  },
-  menu: {
-    title: '切换账户',
-    createAccount: '创建账户',
-    backup: '备份',
-    help: '帮助',
-    setting: '设置',
   },
   createAccount: {
     title: '创建钱包',

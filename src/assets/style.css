@@ -681,3 +681,10 @@ label{
     border-left: 2px solid #FAFAFA;
     width: calc( 100% - 122px);
   }
+
+@media screen and (min-width: 993px) {
+  .warp-menu {
+    width: calc( 100% - 248px);
+    left: 208px;
+  }
+}

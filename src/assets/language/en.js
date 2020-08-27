@@ -24,6 +24,14 @@ const en = {
     confirm: 'Confirm',
     cancel: 'Cancel'
   },
+  menu:{
+    home:"Home",
+    bapp:"BApp",
+    wallets:"Wallets",
+    backup:"Backup",
+    expand:"Expand",
+    setting:"Setting"
+  },
   welcome: {
     enterMain:"Enter Main View",
     title: 'Welcome to the BYTOM Chrome Wallet',
@@ -202,13 +210,6 @@ const en = {
     pending:'The transaction is pending…',
     tips:'Tip: Visit Blockmeta.com to check more information. ',
     assetId:'Asset Id'
-  },
-  menu: {
-    title: 'Switch Account',
-    createAccount: 'Create Account',
-    backup: 'Backup',
-    help: 'Help',
-    setting: 'Setting'
   },
   createAccount: {
     title: 'Create A Wallet',

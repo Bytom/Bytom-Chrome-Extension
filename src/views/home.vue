@@ -222,6 +222,38 @@ input:checked + .slider:before {
     display: flex;
     flex-direction: column;
   }
+
+  @media screen and (min-width: 768px) {
+      .balance-bg{
+        display: flex;
+        align-items: center;
+        padding: 20px 40px;
+
+        .amount{
+          text-align:left;
+        }
+
+        .total-asset{
+          font-size:14px;
+        }
+        .token-amount{
+          font-size: 36px;
+          margin-top: 5px;
+        }
+
+        .token-amount:first-letter {
+          font-size: 28px;
+        }
+
+        .btn-send-transfer{
+          align-items: center;
+          margin-right: inherit;
+          width: 372px;
+        }
+      }
+
+
+    }
 </style>
 
 <template>
