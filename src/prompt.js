@@ -28,6 +28,7 @@ import {apis} from '@/utils/BrowserApis';
 
 import account from "@/models/account";
 import {getDomains} from '@/utils/utils.js'
+import _ from 'lodash'
 
 
 store.dispatch(Actions.LOAD_BYTOM).then(() => {
@@ -82,11 +83,11 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
   getDomains().then(({domains, domainMeta})=>{
     const _bytom = store.state.bytom.clone()
 
-    if(!domains.every(v => _bytom.settings.domains.includes(v))){
-      _bytom.settings.domains = Array.from(new Set(_bytom.settings.domains.concat(domains)))
-      _bytom.settings.domainsMeta = Object.assign(_bytom.settings.domainsMeta, domainMeta)
-      store.dispatch(Actions.UPDATE_STORED_BYTOM, _bytom)
-    }
+    if(!domains.every(v => _bytom.settings.domains.includes(v)) || _.isEmpty(_bytom.settings.domainsMeta)){
+        _bytom.settings.domains = Array.from(new Set(_bytom.settings.domains.concat(domains)))
+        _bytom.settings.domainsMeta = Object.assign(_bytom.settings.domainsMeta, domainMeta)
+        store.dispatch(Actions.UPDATE_STORED_BYTOM, _bytom)
+      }
   })
 
   Vue.filter('moment', function(value, formatString) {
