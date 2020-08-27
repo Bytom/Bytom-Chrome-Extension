@@ -282,9 +282,9 @@ export default {
       },
       itemBalance: function(asset){
         if(asset.asset.assetId === BTM){
-          return Num.formatNue(asset.availableBalance,8)
+          return Num.formatNue(asset.balance,8)
         }else{
-          return Num.formatNue(asset.availableBalance,asset.asset.decimals)
+          return asset.balance
         }
 
       },

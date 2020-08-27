@@ -237,6 +237,17 @@ export default {
               );
               return;
             }
+
+            try{
+              account.isAliasValid(this.formItem.accAlias, this)
+            }catch (e){
+              this.$toast.error(
+                e.message || e
+              );
+              this.$refs['accAlias'].focus();
+              return;
+            }
+
             let loader = this.$loading.show({
               container: null,
               canCancel: true,

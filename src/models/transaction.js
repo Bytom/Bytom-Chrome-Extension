@@ -167,7 +167,7 @@ function signSubmit (txObject, password, address, context) {
           context
         )
           .then(ret => {
-            bytom.transaction
+            return bytom.transaction
               .submitPayment(address, ret.raw_transaction, ret.signatures)
               .then(res3 => {
                 const object = {
@@ -189,7 +189,7 @@ function signSubmit (txObject, password, address, context) {
 
 transaction.signMessage = function(message, password, address, context) {
   const keyArray = context.bytom.keychain.findByAddress(address);
-  const key = JSON.stringify(keyArray.keystore)
+  const key = typeof keyArray.keystore ==='string'? keyArray.keystore :JSON.stringify(keyArray.keystore);
 
   return bytom.keys.signMessage(message, password,key);
 };

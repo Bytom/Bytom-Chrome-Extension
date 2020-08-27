@@ -24,8 +24,11 @@ import Toast from '@/components/toast'
 import messages, { getLanguage } from '@/assets/language'
 import '@/assets/style.css'
 import Vuelidate from "vuelidate";
+import {apis} from '@/utils/BrowserApis';
 
 import account from "@/models/account";
+import {getDomains} from '@/utils/utils.js'
+
 
 store.dispatch(Actions.LOAD_BYTOM).then(() => {
   Vue.use(VueI18n)
@@ -76,10 +79,41 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
     },
   );
 
+  getDomains().then((domains)=>{
+    const _bytom = store.state.bytom.clone()
+
+    if(!domains.every(v => _bytom.settings.domains.includes(v))){
+      _bytom.settings.domains = Array.from(new Set(_bytom.settings.domains.concat(domains)))
+      store.dispatch(Actions.UPDATE_STORED_BYTOM, _bytom)
+    }
+  })
+
+  Vue.filter('moment', function(value, formatString) {
+    formatString = formatString || 'YYYY-MM-DD HH:mm:ss'
+    return moment(value * 1000).format(formatString)
+  })
+
   const RouterConfig = {
     routes: Routers
   }
   const router = new VueRouter(RouterConfig)
+  router.beforeEach((to, from, next) => {
+    // wallet init
+
+    if (!(store.getters.currentAccount) && to.name == 'home') {
+      next({ name: 'welcome' })
+      let newURL = `${apis.runtime.getURL('pages/prompt.html')}#/welcome`;
+      chrome.tabs.create({ url: newURL });
+      return
+    }else if (!(store.getters.currentAccount && store.getters.vMnemonic)  && to.name == 'home') {
+      next({ name: 'welcome-verify-mnemonic' })
+      let newURL = `${apis.runtime.getURL('pages/prompt.html')}#/mnemonic`;
+      chrome.tabs.create({ url: newURL });
+      return
+    }
+
+    next()
+  })
   new Vue({
     el: '#app',
     i18n: i18n,

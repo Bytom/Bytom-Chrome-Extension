@@ -271,7 +271,6 @@ input:checked + .slider:before {
       <h3 class="color-black">{{ $t('main.asset') }}</h3>
       </section>
       <section class="transactions">
-        <div v-if="address!=undefined">
         <div v-if=" balances && balances.length > 0">
           <ul class="list">
             <li class="list-item" v-for="(balance, index) in balances" :key="index" @click="assetOpen(balance)">
@@ -297,36 +296,26 @@ input:checked + .slider:before {
             </li>
           </ul>
         </div>
-          <div v-else>
-            <ul class="list">
-              <li class="list-item" v-for="(asset, index) in defaultBalances" :key="index" @click="assetOpen(asset)">
-
-                <div class="symbol">
-                  <img :src="img(asset.asset.symbol)" alt="" class="c-icon"  v-on:error="onImgError">
-
-                  <div class="uppercase">
-                    {{asset.asset.symbol}}
-                  </div>
-
-                </div>
-
-                <div class=" text-align-right">
-                  <div class="value">{{ itemBalance(asset) }}</div>
-                  <div class="addr color-grey">{{ formatCurrency(asset[ currency ]) }}</div>
-                </div>
-
-              </li>
-            </ul>
-          </div>
-        </div>
         <div v-else>
-          <router-link :to="{name: 'menu-account-creation'}">
-            <div class="bg-emptytx"></div>
-            <div>
-              <span class="color-lightgrey center-text no-record">{{$t('main.noAssetRecord')}}</span>
-            </div>
-            <a class="btn btn-primary btn-creation">{{ $t('main.create') }}</a>
-          </router-link>
+          <ul class="list">
+            <li class="list-item" v-for="(asset, index) in defaultBalances" :key="index" @click="assetOpen(asset)">
+
+              <div class="symbol">
+                <img :src="img(asset.asset.symbol)" alt="" class="c-icon"  v-on:error="onImgError">
+
+                <div class="uppercase">
+                  {{asset.asset.symbol}}
+                </div>
+
+              </div>
+
+              <div class=" text-align-right">
+                <div class="value">{{ itemBalance(asset) }}</div>
+                <div class="addr color-grey">{{ formatCurrency(asset[ currency ]) }}</div>
+              </div>
+
+            </li>
+          </ul>
         </div>
       </section>
 
@@ -425,7 +414,23 @@ export default {
         },
         address: function(){
           if(this.netType === 'vapor'){
-            return this.currentAccount.vpAddress
+            const vpAddress = this.currentAccount.vpAddress
+            if(!vpAddress){
+              const bytom = this.bytom.clone();
+              return account.copy(this.currentAccount.guid).then(accounts => {
+                //update currentAccount
+                bytom.currentAccount.vpAddress = accounts.address
+                //update AccountList
+                bytom.keychain.pairs[bytom.currentAccount.alias].vpAddress = accounts.address
+
+                this[Actions.UPDATE_STORED_BYTOM](bytom).then(() => {
+                  this.setupRefreshTimer()
+                })
+
+                return accounts.address
+              })
+            }else return vpAddress
+
           }else{
             return this.currentAccount.address
           }
@@ -472,9 +477,9 @@ export default {
       itemBalance: function(assetObj){
         const asset = assetObj.asset
         if(asset.assetId === BTM){
-          return Num.formatNue(assetObj.availableBalance,8)
+          return Num.formatNue(assetObj.balance,8)
         }else{
-          return Num.formatNue(assetObj.availableBalance, assetObj.asset.decimals)
+          return assetObj.balance
         }
       },
         setupRefreshTimer() {

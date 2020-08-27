@@ -8,18 +8,31 @@
           <figure :class="active('WALLETS')" v-on:click="toggleTab('WALLETS')"><i class="iconfont icon_wallet_filled"></i></figure>
           <figure :class="active('BACKUP')" v-on:click="toggleTab('BACKUP')"><i class="iconfont icon_backup_filled"></i></figure>
         </section>
-        <figure class="setting" :class="active('SETTINGS')" v-on:click="toggleTab('SETTINGS')">
-          <i class="iconfont icon_setting_fiiled" ></i>
-        </figure>
+        <section class="bottom">
+
+          <a v-if="!hideExpand" :href="link" target="_blank">
+            <i class="iconfont icon_Small_Fullscreen" ></i>
+          </a>
+          <figure class="setting" :class="active('SETTINGS')" v-on:click="toggleTab('SETTINGS')">
+            <i class="iconfont icon_setting_fiiled" ></i>
+          </figure>
+        </section>
     </nav>
 </template>
 
 <script>
     import { mapActions, mapGetters, mapState } from 'vuex'
     import {RouteNames} from '@/router'
+    import {apis} from '@/utils/BrowserApis';
 
     export default {
         computed: {
+            hideExpand(){
+              return new URL(window.location.href).pathname === '/pages/prompt.html'
+            },
+            link(){
+              return `${apis.runtime.getURL('pages/prompt.html')}`;
+            },
             ...mapState([
                 'bytom'
             ]),
@@ -165,7 +178,7 @@
 
         }
 
-        figure.setting{
+        .bottom{
           position: absolute;
           bottom: 0px;
           left: 0;

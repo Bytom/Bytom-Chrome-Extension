@@ -2,7 +2,7 @@ import bytom from './bytom'
 import uuid from 'uuid'
 import * as Actions from '../store/constants';
 import _ from 'lodash'
-import {getDomains} from '@/utils/utils.js'
+import {getDomains, camelize} from '@/utils/utils.js'
 
 let account = {
   setupNet: bytom.setupNet
@@ -243,30 +243,12 @@ account.balance = function(address , context) {
 }
 
 account.list = function() {
-  let retPromise = new Promise((resolve, reject) => {
-    bytom.accounts
+  return  bytom.accounts
       .listAccountUseServer()
-      .then(accounts => {
-        Promise.all(accounts.map(async (account) => {
-          try{
-            const obj = await this.balance(account.guid)
-            account.balances = obj.balances
-            account.votes = obj.votes
-          }catch (e) {
-            return e
-          }
-        })).then(()=>{
-          resolve(accounts)
-        }).catch(error=>{
-          throw error
-        })
-      })
-      .catch(error => {
-        reject(error)
-      })
-  })
-
-  return retPromise
+}
+account.listKeyByXpubOld = function(xpub){
+  return  bytom.keys
+    .getKeyByXPub(xpub)
 }
 
 account.backup = function() {
@@ -277,8 +259,40 @@ account.isValidMnemonic = function(mnemonic) {
   return bytom.keys.isValidMnemonic(mnemonic)
 }
 
-account.isValidKeystore = function(keystore) {
-  return bytom.keys.isValidKeystore(keystore)
+account.isValidKeystore = function(keystore, context) {
+  const walletImage = camelize(JSON.parse(keystore));
+  //V2
+  if(walletImage['accounts-server']){
+    const account = walletImage['accounts-server'].filter(a => a.net === context.net)
+    if(account.length>1){
+      throw(context.$t('error.BTM0010'))
+    }else if(account.length===0){
+      throw(context.$t('error.BTM0011'))
+    }else{
+      const xpub = account[0].rootXPub
+      if(context.bytom.keychain.findIdentity(xpub)){
+        throw(context.$t('error.BTM0012'))
+      }else{
+        const key = walletImage["keys"].find(key => key.xpub === xpub)
+        return JSON.parse(key.key)
+      }
+    }
+  }
+  //invalid format
+  else if(!walletImage['crypto']){
+    throw(context.$t('error.BTM0011'))
+  }
+  return walletImage
+}
+
+account.isAliasValid = function(alias, context){
+
+  const hanArray = (alias.match(/[\u3000\u3400-\u4DBF\u4E00-\u9FFF]+/g) || []).join('')
+  if(hanArray.length> 7){
+    throw(context.$t('error.BTM0013'))
+  }else if( alias.length >9 ){
+    throw(context.$t('error.BTM0014'))
+  }
 }
 
 account.decryptMnemonic = function(vault,password, context) {
@@ -286,4 +300,28 @@ account.decryptMnemonic = function(vault,password, context) {
   return bytom.keys.decryptMnemonic(vault, password, keystore)
 }
 
+
+account.createOld = function(accountAlias, keyAlias, passwd, success, error) {
+  let retPromise = new Promise((resolve, reject) => {
+    if(!keyAlias){
+      keyAlias = `${accountAlias}-key-${uuid.v4()}`
+    }
+    bytom.keys
+      .create(keyAlias, passwd)
+      .then(res => {
+        bytom.accounts
+          .createAccountUseServer(res.xpub, accountAlias)
+          .then(ret => {
+            resolve(ret)
+          })
+          .catch(error => {
+            reject(error)
+          })
+      })
+      .catch(error => {
+        reject(error)
+      })
+  })
+  return retPromise
+}
 export default account

@@ -219,6 +219,16 @@
           const keystore = this.data.keystore
           const accountAlias = this.formItem.accAlias
 
+          try{
+            account.isAliasValid(accountAlias, this)
+          }catch (e){
+            this.$toast.error(
+              e.message || e
+            );
+            this.$refs['accAlias'].focus();
+            return;
+          }
+
           let loader = this.$loading.show({
             container: null,
             canCancel: true,
