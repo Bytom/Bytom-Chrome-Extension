@@ -159,7 +159,10 @@ export default {
         'mnemonic'
       ]),
       ...mapGetters([
-        'currentAccount'
+        'currentAccount',
+        'net',
+        'language',
+        'netType'
       ])
     },
     props: {
@@ -179,12 +182,21 @@ export default {
             return;
           }
 
-          const bytom = this.bytom.clone();
-          bytom.currentAccount.vMnemonic = true;
-          bytom.keychain.pairs[bytom.currentAccount.alias].vMnemonic = true;
-          this[Actions.UPDATE_STORED_BYTOM](bytom).then(()=>{
+          let loader = this.$loading.show({
+            container: null,
+            canCancel: true,
+            onCancel: this.onCancel
+          });
+
+          account.createAccount(this).then(() => {
+            loader.hide();
             this[Actions.PUSH_ALERT](this.$t("successMsg.createWallet"))
-          })
+          }).catch(err => {
+            loader.hide();
+            this.$toast.error(
+              err.message || err
+            )
+          });
         },
         updateMnemonicList(m){
           const i = this.inputMnemonic.indexOf(m)

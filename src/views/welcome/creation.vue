@@ -254,7 +254,7 @@ export default {
               onCancel: this.onCancel
             });
 
-            account.create(this.formItem.accAlias, null, this.formItem.passwd1, this).then(currentAccount => {
+            account.createKey(this.formItem.accAlias, null, this.formItem.passwd1, this).then(() => {
                 loader.hide();
                 this.formItem = {};
                 this.$router.push('/mnemonic');

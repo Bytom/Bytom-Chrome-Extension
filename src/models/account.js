@@ -8,7 +8,7 @@ let account = {
   setupNet: bytom.setupNet
 }
 
-account.create = function(accountAlias, keyAlias, passwd, context) {
+account.createKey = function(accountAlias, keyAlias, passwd, context) {
   let retPromise = new Promise((resolve, reject) => {
     if (!keyAlias) {
       keyAlias = `${accountAlias}-key-${uuid.v4()}`
@@ -24,36 +24,50 @@ account.create = function(accountAlias, keyAlias, passwd, context) {
     _bytom.keychain.removeUnverifyIdentity();
     _bytom.settings.netType = 'bytom';
 
-    const res = bytom.keys.createKey(keyAlias, passwd)
+    const resultObj = bytom.keys.createKey(keyAlias, passwd)
 
-    bytom.setupNet(`${context.net}bytom`)
-    bytom.accounts.createNewAccount(res.xpub).then( async (ret) => {
-      let resultObj =  Object.assign(res, ret)
-      resultObj.alias = accountAlias
-      resultObj.keyAlias = keyAlias
-      resultObj.vMnemonic = false
+    resultObj.alias = accountAlias
+    resultObj.keyAlias = keyAlias
+    resultObj.vMnemonic = false
 
-      const domains = await getDomains();
-      _bytom.settings.domains = Array.from(new Set(_bytom.settings.domains.concat(domains)))
+    context[Actions.SET_MNEMONIC](resultObj['mnemonic']).then(()=>{
+      delete resultObj['mnemonic']
 
-
-      context[Actions.SET_MNEMONIC](resultObj['mnemonic']).then(()=>{
-        delete resultObj['mnemonic']
-
-        _bytom.keychain.pairs[accountAlias] = resultObj
-        _bytom.currentAccount = resultObj
-        context[Actions.UPDATE_STORED_BYTOM](_bytom).then(() => {
-          resolve(resultObj)
-        }).catch(e => { throw e })
-      })
-      .catch(error => {
-        reject(error)
-      })
+      _bytom.currentAccount = resultObj
+      context[Actions.UPDATE_STORED_BYTOM](_bytom).then(() => {
+        resolve(resultObj)
+      }).catch(e => { throw e })
+    })
+    .catch(error => {
+      reject(error)
     })
   })
   return retPromise
 }
 
+account.createAccount = function( context) {
+  let retPromise = new Promise((resolve, reject) => {
+    const _bytom = context.bytom.clone();
+    const currentAccount = _bytom.currentAccount
+
+    const keystore = currentAccount.keystore
+    bytom.setupNet(`${context.net}bytom`)
+    bytom.accounts.createNewAccount(keystore.xpub).then( async (ret) => {
+      let resultObj =  Object.assign(currentAccount, ret)
+      resultObj.vMnemonic = true;
+
+      const domains = await getDomains();
+      _bytom.settings.domains = Array.from(new Set(_bytom.settings.domains.concat(domains)))
+
+      _bytom.keychain.pairs[currentAccount.alias] = resultObj
+      _bytom.currentAccount = resultObj
+      context[Actions.UPDATE_STORED_BYTOM](_bytom).then(() => {
+        resolve(resultObj)
+      }).catch(e => { throw e })
+    })
+  })
+  return retPromise
+}
 
 account.restoreByMnemonic = function(accountAlias, mnemonic, passwd, context) {
   let retPromise = new Promise((resolve, reject) => {
