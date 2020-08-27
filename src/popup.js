@@ -77,11 +77,14 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
     },
   );
 
-  getDomains().then((domains)=>{
+  const lang = store.getters.language === 'zh'?'cn':'en'
+
+  getDomains(lang).then(({domains, domainMeta})=>{
     const _bytom = store.state.bytom.clone()
 
     if(!domains.every(v => _bytom.settings.domains.includes(v))){
       _bytom.settings.domains = Array.from(new Set(_bytom.settings.domains.concat(domains)))
+      _bytom.settings.domainsMeta = Object.assign(_bytom.settings.domainsMeta, domainMeta)
       store.dispatch(Actions.UPDATE_STORED_BYTOM, _bytom)
     }
   })
