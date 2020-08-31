@@ -275,8 +275,25 @@ account.isValidMnemonic = function(mnemonic) {
 
 account.isValidKeystore = function(keystore, context) {
   const walletImage = camelize(JSON.parse(keystore));
+  //bycoin && bytom wallet
+  if(walletImage.keyImages && walletImage.keyImages.xkeys ){
+    const keys = walletImage.keyImages.xkeys;
+    if(keys.length>1){
+      throw(context.$t('error.BTM0010'))
+    }else if(keys.length===0){
+      throw(context.$t('error.BTM0011'))
+    }else{
+      const key = keys[0]
+      const xpub = key.xpub
+      if(context.bytom.keychain.findIdentity(xpub)){
+        throw(context.$t('error.BTM0012'))
+      }else{
+        return key
+      }
+    }
+  }
   //V2
-  if(walletImage['accounts-server']){
+  else if(walletImage['accounts-server']){
     const account = walletImage['accounts-server'].filter(a => a.net === context.net)
     if(account.length>1){
       throw(context.$t('error.BTM0010'))
