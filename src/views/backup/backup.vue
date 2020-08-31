@@ -98,7 +98,7 @@ export default {
           var blob = new Blob([keystore], {
               type: "text/plain;charset=utf-8"
           });
-          FileSaver.saveAs(blob, `byone_backup_${+new Date()}.dat`);
+          FileSaver.saveAs(blob, `byone_${this.currentAccount.alias}_backup_${+new Date()}.dat`);
         },
       ...mapActions([
         Actions.SET_MNEMONIC
