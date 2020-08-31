@@ -13,7 +13,8 @@
     z-index: 4;
     margin: auto;
     top: 0;
-    height: 131px;
+    min-height: 131px;
+    height: fit-content;
     border-radius: 8px;
 }
 
@@ -30,12 +31,16 @@
 <template>
     <div>
         <section v-show="show" class="mask"></section>
-        <transition name="page-transfer" <!-- enter-active-class="animated slideInUp faster" leave-active-class="animated slideOutDown faster"> -->
+        <transition name="page-transfer" >
             <div v-show="show" class="confirm form bg-white">
+                <div v-if="label" class="form-item">
+                    <div class="form-item-content">
+                        <span class="color-black font-bold">{{ label }}</span>
+                    </div>
+                </div>
                 <div class="form-item">
                     <div class="form-item-content">
-                        <input v-if="text_placeholder" type="text" v-model="passwd" :placeholder="text_placeholder" autofocus>
-                        <input v-else type="password" v-model="passwd" :placeholder="$t('transfer.password')" autofocus>
+                        <input type="password" v-model="passwd" :placeholder="$t('transfer.password')" autofocus>
                     </div>
                 </div>
                 <div class="btn-group btn-inline">
@@ -59,10 +64,7 @@ export default {
         };
     },
     props: {
-        text_placeholder:{
-            type: String,
-        },
-        text_error_hint:{
+        label:{
             type: String,
         },
         i18n: {
@@ -88,7 +90,7 @@ export default {
         confirm() {
             if (this.passwd == "") {
                 this.$toast.error(
-                    this.text_error_hint || this.$t("transfer.emptyPassword")
+                    this.$t("transfer.emptyPassword")
                 );
                 return;
             }

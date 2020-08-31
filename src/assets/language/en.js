@@ -248,7 +248,7 @@ const en = {
     BTM0004:'Please enter Keystore.',
     BTM0005:'Insufficient balance.',
     BTM0006:'Address format error',
-    BTM0007:'Wallet name error',
+    BTM0007:'Wallet password is wrong, please enter the correct password.',
     BTM0008:'Empty password',
     BTM0009:'Current wallet is already an account',
     BTM0010:'Keystore restore dose not support V2 multiple account. Please split into single keystore.',

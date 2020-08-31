@@ -49,13 +49,14 @@
           </div>
         </section>
 
-        <modal-passwd ref="confirmModal" @confirm="deleteW" :text_placeholder="$t('setting.deleteConfirmHint')" :text_error_hint="$t('setting.emptyWallet')"></modal-passwd>
+        <modal-passwd ref="confirmModal" @confirm="deleteW" :label="walletName" ></modal-passwd>
     </div>
 </template>
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
 import * as Actions from '@/store/constants';
+import account from "@/models/account";
 
 export default {
     name: "",
@@ -64,6 +65,11 @@ export default {
         };
     },
     computed: {
+      walletName(){
+        if(this.currentAccount){
+          return this.currentAccount.alias
+        }
+      },
       ...mapState([
         'bytom',
       ]),
@@ -72,10 +78,10 @@ export default {
       ])
     },
     methods: {
-      deleteW(alias){
-        if(this.currentAccount.alias === alias){
+      deleteW(password){
+        if(account.isValidPassword(this.currentAccount.keystore, password)){
           const bytom = this.bytom.clone();
-          bytom.keychain.removeByAlias(alias);
+          bytom.keychain.removeByAlias(this.currentAccount.alias);
           const values = Object.values(bytom.keychain.pairs)
 
           if(values.length === 0){

@@ -338,4 +338,9 @@ account.createOld = function(accountAlias, keyAlias, passwd, success, error) {
   })
   return retPromise
 }
+
+account.isValidPassword = function(keystore, password){
+  return bytom.keys.verifyPassword(keystore, password)
+}
+
 export default account

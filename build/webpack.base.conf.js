@@ -104,7 +104,7 @@ module.exports = {
       chunks: ['options']
     }),
     page({
-      title: 'Byone notification',
+      title: 'Byone',
       name: 'prompt',
       chunks: ['prompt']
     }),
