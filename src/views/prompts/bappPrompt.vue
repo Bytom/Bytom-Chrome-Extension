@@ -273,6 +273,7 @@
   import add from "@/utils/address";
   import { camelize, removeFromArray } from "@/utils/utils";
   import bytomjslib from 'bytomjs-lib'
+  import BigNumber from "bignumber.js"
 
 
   export default {
@@ -593,7 +594,7 @@
                     const inputAmount = new BigNumber(_.sumBy(assetInput, 'amount'))
                     const outputAmount = new BigNumber(_.sumBy(assetOutput, 'amount'))
 
-                    const decimals = decimalsMap[this.net][assetId]
+                    const decimals = resp.decimals
                     const amount = inputAmount.minus(outputAmount).shiftedBy(-decimals)
 
                     return {
