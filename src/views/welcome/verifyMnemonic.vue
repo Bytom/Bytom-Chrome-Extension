@@ -103,13 +103,13 @@
       <div class="divider"></div>
       <div class="container">
         <div class="target-mnemonic-panel">
-          <div v-for="word in inputMnemonic">
-            <div> {{ word }}</div>
+          <div v-for="index in inputMnemonicIndex">
+            <div> {{ mnemonicList[index] }}</div>
           </div>
         </div>
           <div class="mnemonic-panel">
-            <div v-for="word in mnemonicList">
-              <div :class="activeWord(word)" @click="updateMnemonicList(word)"> {{ word }}</div>
+            <div v-for="(word, index) in mnemonicList">
+              <div :class="activeWord(index)" @click="updateMnemonicList(index)"> {{ word }}</div>
             </div>
           </div>
           <div>
@@ -133,7 +133,7 @@ export default {
     name: "",
     data() {
         return {
-            inputMnemonic:[]
+            inputMnemonicIndex:[]
         };
     },
     computed: {
@@ -152,7 +152,8 @@ export default {
         }
       },
       disableBtn(){
-        return this.inputMnemonic.length !==12 || this.inputMnemonic.join(" ") !==this.mnemonic;
+        const formMnemonic = this.inputMnemonicIndex.map(i => this.mnemonicList[i]).join(" ")
+        return this.inputMnemonicIndex.length !==12 || formMnemonic !==this.mnemonic;
       },
       ...mapState([
         'bytom',
@@ -173,7 +174,7 @@ export default {
     },
     methods: {
         verify: function () {
-          const formMnemonic = this.inputMnemonic.join(" ")
+          const formMnemonic = this.inputMnemonicIndex.map(i => this.mnemonicList[i]).join(" ")
 
           if (formMnemonic !== this.mnemonic) {
             this.$toast.error(
@@ -198,16 +199,16 @@ export default {
             )
           });
         },
-        updateMnemonicList(m){
-          const i = this.inputMnemonic.indexOf(m)
+        updateMnemonicList(index){
+          const i = this.inputMnemonicIndex.indexOf(index)
           if(i !== -1){
-            this.inputMnemonic.splice(i, 1)
+            this.inputMnemonicIndex.splice(i, 1)
           }else{
-            this.inputMnemonic.push(m)
+            this.inputMnemonicIndex.push(index)
           }
         },
-        activeWord(word){
-          return this.inputMnemonic.includes(word)?  "active": "";
+        activeWord(index){
+          return this.inputMnemonicIndex.includes(index)?  "active": "";
         },
         ...mapActions([
           Actions.UPDATE_STORED_BYTOM,
