@@ -1,3 +1,5 @@
+import uuid from 'uuid'
+
 export default class Settings {
 
     constructor(){
@@ -9,6 +11,7 @@ export default class Settings {
         // this.network ='testnet';
         this.currency = uiLang ==='en'?'inUsd':"inCny"
         this.domainsMeta ={}
+        this.clientId = uuid.v4()
     }
 
 

@@ -3,6 +3,7 @@ import uuid from 'uuid'
 import * as Actions from '../store/constants';
 import _ from 'lodash'
 import {getDomains, camelize} from '@/utils/utils.js'
+import * as Sentry from "@sentry/browser";
 
 let account = {
   setupNet: bytom.setupNet
@@ -52,7 +53,7 @@ account.createAccount = function( context) {
 
     const keystore = currentAccount.keystore
     bytom.setupNet(`${context.net}bytom`)
-    bytom.accounts.createNewAccount(keystore.xpub).then( async (ret) => {
+    bytom.accounts.createNewAccount(keystore.xpub, 'byone').then( async (ret) => {
       let resultObj =  Object.assign(currentAccount, ret)
       resultObj.vMnemonic = true;
 
@@ -97,7 +98,7 @@ account.restoreByMnemonic = function(accountAlias, mnemonic, passwd, context) {
 
         walletInfo = Promise.resolve(ret)
       }else{
-        walletInfo = bytom.accounts.createNewAccount(res.xpub)
+        walletInfo = bytom.accounts.createNewAccount(res.xpub, 'byone')
       }
 
       const domains = await getDomains();
@@ -152,7 +153,7 @@ account.restoreByKeystore = function(accountAlias, keystore, password, context) 
 
         walletInfo = Promise.resolve(ret)
       }else{
-        walletInfo = bytom.accounts.createNewAccount(res.xpub)
+        walletInfo = bytom.accounts.createNewAccount(res.xpub, 'byone')
       }
 
 
@@ -220,9 +221,15 @@ account.balance = function(address , context) {
         let votes = address.votes || []
         const _bytom = context.bytom.clone();
 
+
         const isVapor = _bytom.settings.netType === 'vapor'
         const _currentBalance = isVapor? _bytom.currentAccount.vpBalances : _bytom.currentAccount.balances
 
+          Sentry.configureScope(function(scope) {
+            if(!isVapor) {
+              scope.setTag("wallet.address", address.address);
+            }
+          });
         const balanceNotEqual = !_.isEqual(_currentBalance, balances)
         const voteNotEqual = ( isVapor && !_.isEqual(_bytom.currentAccount.votes, votes))
 

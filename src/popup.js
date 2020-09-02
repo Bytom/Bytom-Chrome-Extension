@@ -31,7 +31,9 @@ import * as Actions from "./store/constants";
 import Vuelidate from 'vuelidate'
 import {apis} from '@/utils/BrowserApis';
 import _ from 'lodash'
-
+import * as Sentry from "@sentry/browser";
+import { Vue as VueIntegration } from "@sentry/integrations";
+import { Integrations } from '@sentry/tracing';
 
 store.dispatch(Actions.LOAD_BYTOM).then(() => {
   Vue.use(VueI18n)
@@ -66,6 +68,23 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
       background: '#c9c9c9'
     }
   }
+
+  Sentry.init({
+    dsn: "https://f080e90fe9d94cf9b05323b373d839f3@o441881.ingest.sentry.io/5412722",
+    release: "byone@" + process.env.npm_package_version,
+    integrations: [
+      new VueIntegration({
+        Vue,
+        tracing: true
+      }),
+      new Integrations.BrowserTracing()
+    ],
+    tracesSampleRate: 1
+  });
+
+  Sentry.configureScope(function(scope) {
+    scope.setUser({ id: store.getters.clientId });
+  });
 
   account.setupNet(`${store.getters.net}${store.getters.netType}`)
 
