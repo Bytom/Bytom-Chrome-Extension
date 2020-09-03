@@ -583,6 +583,7 @@
             const outputAsset = outputs.map(i => i.assetID);
 
             const asset = _.union(inputAsset, outputAsset)
+            let that = this;
 
             let types = ["transfer"]
             const promise =
@@ -595,17 +596,21 @@
                     const outputAmount = new BigNumber(_.sumBy(assetOutput, 'amount'))
 
                     const decimals = resp.decimals
-                    const amount = inputAmount.minus(outputAmount).shiftedBy(-decimals)
+                    const amount = inputAmount.minus(outputAmount)
+
+                    const balanced_outputs = tx.outputs.find( o => o.amount === amount.toNumber())
+                    if(balanced_outputs.type == 'cross_chain_out'){
+                      that.transaction.types = (that.$t('common.cross_chain'));
+                    }
 
                     return {
                       'asset': assetId,
                       'alias': resp.symbol,
-                      'amount': amount.toString()
+                      'amount': amount.shiftedBy(-decimals).toString()
                     }
                   })
                 })
 
-            let that = this;
             const inputType = inputs.map(i => i.type);
             const outputType = outputs.map(o => o.type);
             types = _.union(inputType, outputType, types);
@@ -622,7 +627,6 @@
             }).catch(()=>{
               that.dataReady = true
             })
-
 
             break
           }
