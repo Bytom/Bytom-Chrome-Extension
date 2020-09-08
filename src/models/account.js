@@ -320,6 +320,10 @@ account.isValidKeystore = function(keystore, context) {
   else if(!walletImage['crypto']){
     throw(context.$t('error.BTM0011'))
   }
+  //existed keystore
+  else if(context.bytom.keychain.findIdentity(walletImage.xpub)){
+    throw(context.$t('error.BTM0012'))
+  }
   return walletImage
 }
 
