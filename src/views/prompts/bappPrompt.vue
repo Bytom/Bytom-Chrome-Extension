@@ -398,9 +398,13 @@
           }).catch(error => {
             loader.hide();
 
-            this.$toast.error(
-              getLang(error.message) || error.message || error
-            );
+            let e = error
+            if (error.code){
+              e = this.$t(`error.${error.code}`)
+            }else if(error.message){
+              e = getLang(error.message)
+            }
+            this.$toast.error(e);
           });
         } else if(this.prompt.data.type ==='transfer'){
           transaction.transfer(this.transaction, this.password, this.address, this).then(result => {
@@ -413,9 +417,13 @@
 
           }).catch(error => {
             loader.hide();
-            this.$toast.error(
-              getLang(error.message) || error.message || error
-            );
+            let e = error
+            if (error.code){
+              e = this.$t(`error.${error.code}`)
+            }else if(error.message){
+              e = getLang(error.message)
+            }
+            this.$toast.error(e);
           });
         } else if(this.prompt.data.type ==='signTransaction'){
           const data = this.prompt.data.value
@@ -444,9 +452,13 @@
             }).catch(error => {
               loader.hide();
 
-              this.$toast.error(
-                getLang(error.message) || error.message || error
-              );
+              let e = error
+              if (error.code){
+                e = this.$t(`error.${error.code}`)
+              }else if(error.message){
+                e = getLang(error.message)
+              }
+              this.$toast.error(e);
             });
           }
 
@@ -461,7 +473,13 @@
           }).catch(error => {
             loader.hide();
 
-            this.$toast.error( getLang(error.message));
+            let e = error
+            if (error.code){
+              e = this.$t(`error.${error.code}`)
+            }else if(error.message){
+              e = getLang(error.message)
+            }
+            this.$toast.error(e);
           });
         }
         else{

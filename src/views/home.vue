@@ -370,6 +370,7 @@ import * as Actions from '@/store/constants';
 import _ from 'lodash';
 import { Number as Num } from "@/utils/Number"
 import BigNumber from "bignumber.js"
+import getLang from "@/assets/language/sdk";
 
 
 const EnterActive = 'animated faster fadeInLeft';
@@ -539,10 +540,14 @@ export default {
               this[Actions.UPDATE_STORED_BYTOM](bytom).then(()=>{
                 this.setupRefreshTimer()
               })
-            }).catch(e =>{
-              this.$toast.error(
-                e.message ||e
-              );
+            }).catch(error =>{
+              let e = error
+              if (error.code){
+                e = this.$t(`error.${error.code}`)
+              }else if(error.message){
+                e = getLang(error.message, this.language)
+              }
+              this.$toast.error(e);
             })
           }else{
             this[Actions.UPDATE_STORED_BYTOM](bytom).then(()=>{

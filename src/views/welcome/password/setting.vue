@@ -221,10 +221,14 @@
 
           try{
             account.isAliasValid(accountAlias, this)
-          }catch (e){
-            this.$toast.error(
-              e.message || e
-            );
+          }catch (error){
+            let e = error
+            if (error.code){
+              e = this.$t(`error.${error.code}`)
+            }else if(error.message){
+              e = error.message
+            }
+            this.$toast.error( e );
             this.$refs['accAlias'].focus();
             return;
           }
@@ -242,11 +246,15 @@
               this.formItem = {};
               this[Actions.CLEAR_DATA]()
               this[Actions.PUSH_ALERT](this.$t("successMsg.restoreWallet"))
-            }).catch(err => {
+            }).catch(error => {
               loader.hide();
-              this.$toast.error(
-                err.message || err
-              )
+              let e = error
+              if (error.code){
+                e = this.$t(`error.${error.code}`)
+              }else if(error.message){
+                e = error.message
+              }
+              this.$toast.error(e)
             });
           }else if(keystore){
             //restore by keystore
@@ -255,11 +263,15 @@
               this.formItem = {};
               this[Actions.CLEAR_DATA]()
               this[Actions.PUSH_ALERT](this.$t("successMsg.restoreWallet"))
-            }).catch(err => {
+            }).catch(error => {
               loader.hide();
-              this.$toast.error(
-                err.message || err
-              )
+              let e = error
+              if (error.code){
+                e = this.$t(`error.${error.code}`)
+              }else if(error.message){
+                e = error.message
+              }
+              this.$toast.error(e)
             });
 
           }

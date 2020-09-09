@@ -64,8 +64,11 @@ const en = {
   },
   transfer: {
     address: 'Address',
-    quantity: 'Amount',
+    bytomAddress:'Bytom address (start with bm)',
+    vaporAddress:'Vapor address (start with vp)',
+    quantity: ' Amount',
     fee: 'Fee',
+    available:'Available:',
     feeType: 'Standard',
     send: 'Send transaction',
     confirmPassword: 'password',
@@ -255,7 +258,18 @@ const en = {
     BTM0011:'Keystore file format error.',
     BTM0012:'Keystore already exist.',
     BTM0013:'The max length of chinese char is 7.',
-    BTM0014:'The max length of wallet alias is 9.'
+    BTM0014:'The max length of wallet alias is 9.',
+    BTM3000:'Key derivation failed - possibly wrong password',
+    BTM3001:'Unsupported key derivation scheme' ,
+    BTM3002:'Unsupported parameters to PBKDF2',
+    BTM3003:'No password given.',
+    BTM3004:'do not support multiple keystore imported.',
+    BTM3005:'mnemonic length error',
+    BTM3006:'mnemonic is invalid',
+
+    BTM3100:'Input args are empty',
+    BTM3101:'Invalid data type.',
+    BTM3102:'Invalid Boolean argument'
   },
   successMsg:{
     createWallet:{

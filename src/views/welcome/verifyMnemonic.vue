@@ -192,11 +192,14 @@ export default {
           account.createAccount(this).then(() => {
             loader.hide();
             this[Actions.PUSH_ALERT](this.$t("successMsg.createWallet"))
-          }).catch(err => {
-            loader.hide();
-            this.$toast.error(
-              err.message || err
-            )
+          }).catch(error => {
+            let e = error
+            if (error.code){
+              e = this.$t(`error.${error.code}`)
+            }else if(error.message){
+              e = error.message
+            }
+            this.$toast.error(e)
           });
         },
         updateMnemonicList(index){

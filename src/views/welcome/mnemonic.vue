@@ -167,10 +167,14 @@ export default {
             const mnemonic = account.decryptMnemonic(vault, this.passwd, this)
             this[Actions.SET_MNEMONIC](mnemonic)
           }
-          catch (e){
-            this.$toast.error(
-              e.message || e
-            );
+          catch (error){
+            let e = error
+            if (error.code){
+              e = this.$t(`error.${error.code}`)
+            }else if(error.message){
+              e = error.message
+            }
+            this.$toast.error(e)
           }
       },
       ...mapActions([

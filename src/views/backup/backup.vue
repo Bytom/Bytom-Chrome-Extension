@@ -86,10 +86,14 @@ export default {
               this.$router.push({ name: RouteNames.BACKUP_MNEMONIC })
             })
           }
-          catch (e){
-            this.$toast.error(
-              e.message || e
-            );
+          catch (error){
+            let e = error
+            if (error.code){
+              e = this.$t(`error.${error.code}`)
+            }else if(error.message){
+              e = error.message
+            }
+            this.$toast.error(e);
           }
 
         },
