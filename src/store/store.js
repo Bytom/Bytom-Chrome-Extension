@@ -31,6 +31,7 @@ const getters = {
     domainsMeta:state => state.bytom.settings.domainsMeta,
     vMnemonic:state => state.bytom.currentAccount.vMnemonic,
     currency:state => state.bytom.settings.currency,
+    clientId:state => state.bytom.settings.clientId,
     pairs: state => state.bytom.keychain.pairs,
 
     // FOR PROMPTS ONLY

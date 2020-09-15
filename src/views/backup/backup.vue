@@ -86,10 +86,14 @@ export default {
               this.$router.push({ name: RouteNames.BACKUP_MNEMONIC })
             })
           }
-          catch (e){
-            this.$toast.error(
-              e.message || e
-            );
+          catch (error){
+            let e = error
+            if (error.code){
+              e = this.$t(`error.${error.code}`)
+            }else if(error.message){
+              e = error.message
+            }
+            this.$toast.error(e);
           }
 
         },
@@ -98,7 +102,7 @@ export default {
           var blob = new Blob([keystore], {
               type: "text/plain;charset=utf-8"
           });
-          FileSaver.saveAs(blob, `byone_backup_${+new Date()}.dat`);
+          FileSaver.saveAs(blob, `byone_${this.currentAccount.alias}_backup_${+new Date()}.dat`);
         },
       ...mapActions([
         Actions.SET_MNEMONIC

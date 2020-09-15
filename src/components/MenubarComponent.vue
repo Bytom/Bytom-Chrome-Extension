@@ -1,20 +1,30 @@
 <template>
     <nav v-if="showNav()">
         <section class="breadcrumb">
-          <figure><img class="logo" src="@/assets/logo.png" alt=""></figure>
+          <figure class="logo-f"><img class="logo" src="@/assets/logo.png" alt=""></figure>
           <div class="logo_divider"></div>
-          <figure  :class="active('HOME')" v-on:click="toggleTab('HOME')"><i class="iconfont icon_home_filled"></i></figure>
-          <figure  :class="active('BAPP')" v-on:click="toggleTab('BAPP')"><i class="iconfont icon_bapp_filled"></i></figure>
-          <figure :class="active('WALLETS')" v-on:click="toggleTab('WALLETS')"><i class="iconfont icon_wallet_filled"></i></figure>
-          <figure :class="active('BACKUP')" v-on:click="toggleTab('BACKUP')"><i class="iconfont icon_backup_filled"></i></figure>
+          <figure  :class="active('HOME')" v-on:click="toggleTab('HOME')">
+            <a><i class="iconfont icon_home_filled"></i> <span class="hide-small">{{ $t('menu.home') }}</span></a>
+          </figure>
+          <figure  :class="active('BAPP')" v-on:click="toggleTab('BAPP')">
+            <a><i class="iconfont icon_bapp_filled"></i> <span class="hide-small">{{ $t('menu.bapp') }}</span></a>
+          </figure>
+          <figure :class="active('WALLETS')" v-on:click="toggleTab('WALLETS')">
+            <a><i class="iconfont icon_wallet_filled"></i> <span class="hide-small">{{ $t('menu.wallets') }}</span></a>
+          </figure>
+          <figure :class="active('BACKUP')" v-on:click="toggleTab('BACKUP')">
+            <a><i class="iconfont icon_backup_filled"></i> <span class="hide-small">{{ $t('menu.backup') }}</span></a>
+          </figure>
         </section>
         <section class="bottom">
 
-          <a v-if="!hideExpand" :href="link" target="_blank">
-            <i class="iconfont icon_Small_Fullscreen" ></i>
-          </a>
+          <figure>
+            <a v-if="!hideExpand" :href="link" target="_blank">
+              <i class="iconfont icon_Small_Fullscreen" ></i><span class="hide-small">{{ $t('menu.expand') }}</span>
+            </a>
+          </figure>
           <figure class="setting" :class="active('SETTINGS')" v-on:click="toggleTab('SETTINGS')">
-            <i class="iconfont icon_setting_fiiled" ></i>
+            <a><i class="iconfont icon_setting_fiiled" ></i><span class="hide-small">{{ $t('menu.setting') }}</span></a>
           </figure>
         </section>
     </nav>
@@ -134,6 +144,7 @@
 </script>
 
 <style lang="scss">
+
     nav {
         height: 100%;
         background: #fff;
@@ -225,5 +236,40 @@
         &.main-menu-nav {
             background:#f9f9f9;
         }
+    }
+    @media screen and (max-width: 992px) {
+      .hide-small{
+        display: none;
+      }
+    }
+    @media screen and (min-width: 993px) {
+      nav{
+        width: 208px;
+        figure{
+          text-align: left;
+          padding: 0px 12px;
+          margin: 18px;
+          span{
+            font-size: 16px;
+            color: rgba(0, 0, 0, 0.64);
+            margin-left: 6px;
+          }
+          a{
+            display: flex;
+            align-items: center;
+          }
+        }
+
+        figure.active{
+          background: #F5F5F5;
+          border-radius: 8px;
+          span{
+            color:  rgba(0, 0, 0, 0.88);
+          }
+        }
+        figure.logo-f{
+          text-align: center;
+        }
+      }
     }
 </style>

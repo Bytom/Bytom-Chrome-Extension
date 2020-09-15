@@ -222,6 +222,38 @@ input:checked + .slider:before {
     display: flex;
     flex-direction: column;
   }
+
+  @media screen and (min-width: 768px) {
+      .balance-bg{
+        display: flex;
+        align-items: center;
+        padding: 20px 40px;
+
+        .amount{
+          text-align:left;
+        }
+
+        .total-asset{
+          font-size:14px;
+        }
+        .token-amount{
+          font-size: 36px;
+          margin-top: 5px;
+        }
+
+        .token-amount:first-letter {
+          font-size: 28px;
+        }
+
+        .btn-send-transfer{
+          align-items: center;
+          margin-right: inherit;
+          width: 372px;
+        }
+      }
+
+
+    }
 </style>
 
 <template>
@@ -338,6 +370,7 @@ import * as Actions from '@/store/constants';
 import _ from 'lodash';
 import { Number as Num } from "@/utils/Number"
 import BigNumber from "bignumber.js"
+import getLang from "@/assets/language/sdk";
 
 
 const EnterActive = 'animated faster fadeInLeft';
@@ -507,10 +540,14 @@ export default {
               this[Actions.UPDATE_STORED_BYTOM](bytom).then(()=>{
                 this.setupRefreshTimer()
               })
-            }).catch(e =>{
-              this.$toast.error(
-                e.message ||e
-              );
+            }).catch(error =>{
+              let e = error
+              if (error.code){
+                e = this.$t(`error.${error.code}`)
+              }else if(error.message){
+                e = getLang(error.message, this.language)
+              }
+              this.$toast.error(e);
             })
           }else{
             this[Actions.UPDATE_STORED_BYTOM](bytom).then(()=>{

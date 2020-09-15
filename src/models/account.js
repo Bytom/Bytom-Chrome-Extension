@@ -3,12 +3,13 @@ import uuid from 'uuid'
 import * as Actions from '../store/constants';
 import _ from 'lodash'
 import {getDomains, camelize} from '@/utils/utils.js'
+import * as Sentry from "@sentry/browser";
 
 let account = {
   setupNet: bytom.setupNet
 }
 
-account.create = function(accountAlias, keyAlias, passwd, context) {
+account.createKey = function(accountAlias, keyAlias, passwd, context) {
   let retPromise = new Promise((resolve, reject) => {
     if (!keyAlias) {
       keyAlias = `${accountAlias}-key-${uuid.v4()}`
@@ -24,36 +25,50 @@ account.create = function(accountAlias, keyAlias, passwd, context) {
     _bytom.keychain.removeUnverifyIdentity();
     _bytom.settings.netType = 'bytom';
 
-    const res = bytom.keys.createKey(keyAlias, passwd)
+    const resultObj = bytom.keys.createKey(keyAlias, passwd)
 
-    bytom.setupNet(`${context.net}bytom`)
-    bytom.accounts.createNewAccount(res.xpub).then( async (ret) => {
-      let resultObj =  Object.assign(res, ret)
-      resultObj.alias = accountAlias
-      resultObj.keyAlias = keyAlias
-      resultObj.vMnemonic = false
+    resultObj.alias = accountAlias
+    resultObj.keyAlias = keyAlias
+    resultObj.vMnemonic = false
 
-      const domains = await getDomains();
-      _bytom.settings.domains = Array.from(new Set(_bytom.settings.domains.concat(domains)))
+    context[Actions.SET_MNEMONIC](resultObj['mnemonic']).then(()=>{
+      delete resultObj['mnemonic']
 
-
-      context[Actions.SET_MNEMONIC](resultObj['mnemonic']).then(()=>{
-        delete resultObj['mnemonic']
-
-        _bytom.keychain.pairs[accountAlias] = resultObj
-        _bytom.currentAccount = resultObj
-        context[Actions.UPDATE_STORED_BYTOM](_bytom).then(() => {
-          resolve(resultObj)
-        }).catch(e => { throw e })
-      })
-      .catch(error => {
-        reject(error)
-      })
+      _bytom.currentAccount = resultObj
+      context[Actions.UPDATE_STORED_BYTOM](_bytom).then(() => {
+        resolve(resultObj)
+      }).catch(e => { throw e })
+    })
+    .catch(error => {
+      reject(error)
     })
   })
   return retPromise
 }
 
+account.createAccount = function( context) {
+  let retPromise = new Promise((resolve, reject) => {
+    const _bytom = context.bytom.clone();
+    const currentAccount = _bytom.currentAccount
+
+    const keystore = currentAccount.keystore
+    bytom.setupNet(`${context.net}bytom`)
+    bytom.accounts.createNewAccount(keystore.xpub, 'byone').then( async (ret) => {
+      let resultObj =  Object.assign(currentAccount, ret)
+      resultObj.vMnemonic = true;
+
+      const domains = await getDomains();
+      _bytom.settings.domains = Array.from(new Set(_bytom.settings.domains.concat(domains)))
+
+      _bytom.keychain.pairs[currentAccount.alias] = resultObj
+      _bytom.currentAccount = resultObj
+      context[Actions.UPDATE_STORED_BYTOM](_bytom).then(() => {
+        resolve(resultObj)
+      }).catch(e => { throw e })
+    })
+  })
+  return retPromise
+}
 
 account.restoreByMnemonic = function(accountAlias, mnemonic, passwd, context) {
   let retPromise = new Promise((resolve, reject) => {
@@ -83,7 +98,7 @@ account.restoreByMnemonic = function(accountAlias, mnemonic, passwd, context) {
 
         walletInfo = Promise.resolve(ret)
       }else{
-        walletInfo = bytom.accounts.createNewAccount(res.xpub)
+        walletInfo = bytom.accounts.createNewAccount(res.xpub, 'byone')
       }
 
       const domains = await getDomains();
@@ -138,7 +153,7 @@ account.restoreByKeystore = function(accountAlias, keystore, password, context) 
 
         walletInfo = Promise.resolve(ret)
       }else{
-        walletInfo = bytom.accounts.createNewAccount(res.xpub)
+        walletInfo = bytom.accounts.createNewAccount(res.xpub, 'byone')
       }
 
 
@@ -206,9 +221,15 @@ account.balance = function(address , context) {
         let votes = address.votes || []
         const _bytom = context.bytom.clone();
 
+
         const isVapor = _bytom.settings.netType === 'vapor'
         const _currentBalance = isVapor? _bytom.currentAccount.vpBalances : _bytom.currentAccount.balances
 
+          Sentry.configureScope(function(scope) {
+            if(!isVapor) {
+              scope.setTag("wallet.address", address.address);
+            }
+          });
         const balanceNotEqual = !_.isEqual(_currentBalance, balances)
         const voteNotEqual = ( isVapor && !_.isEqual(_bytom.currentAccount.votes, votes))
 
@@ -261,8 +282,25 @@ account.isValidMnemonic = function(mnemonic) {
 
 account.isValidKeystore = function(keystore, context) {
   const walletImage = camelize(JSON.parse(keystore));
+  //bycoin && bytom wallet
+  if(walletImage.keyImages && walletImage.keyImages.xkeys ){
+    const keys = walletImage.keyImages.xkeys;
+    if(keys.length>1){
+      throw(context.$t('error.BTM0010'))
+    }else if(keys.length===0){
+      throw(context.$t('error.BTM0011'))
+    }else{
+      const key = keys[0]
+      const xpub = key.xpub
+      if(context.bytom.keychain.findIdentity(xpub)){
+        throw(context.$t('error.BTM0012'))
+      }else{
+        return key
+      }
+    }
+  }
   //V2
-  if(walletImage['accounts-server']){
+  else if(walletImage['accounts-server']){
     const account = walletImage['accounts-server'].filter(a => a.net === context.net)
     if(account.length>1){
       throw(context.$t('error.BTM0010'))
@@ -281,6 +319,10 @@ account.isValidKeystore = function(keystore, context) {
   //invalid format
   else if(!walletImage['crypto']){
     throw(context.$t('error.BTM0011'))
+  }
+  //existed keystore
+  else if(context.bytom.keychain.findIdentity(walletImage.xpub)){
+    throw(context.$t('error.BTM0012'))
   }
   return walletImage
 }
@@ -324,4 +366,9 @@ account.createOld = function(accountAlias, keyAlias, passwd, success, error) {
   })
   return retPromise
 }
+
+account.isValidPassword = function(keystore, password){
+  return bytom.keys.verifyPassword(keystore, password)
+}
+
 export default account

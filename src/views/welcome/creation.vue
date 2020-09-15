@@ -240,10 +240,14 @@ export default {
 
             try{
               account.isAliasValid(this.formItem.accAlias, this)
-            }catch (e){
-              this.$toast.error(
-                e.message || e
-              );
+            }catch (error){
+              let e = error
+              if (error.code){
+                e = this.$t(`error.${error.code}`)
+              }else if(error.message){
+                e = error.message
+              }
+              this.$toast.error(e);
               this.$refs['accAlias'].focus();
               return;
             }
@@ -254,15 +258,19 @@ export default {
               onCancel: this.onCancel
             });
 
-            account.create(this.formItem.accAlias, null, this.formItem.passwd1, this).then(currentAccount => {
+            account.createKey(this.formItem.accAlias, null, this.formItem.passwd1, this).then(() => {
                 loader.hide();
                 this.formItem = {};
                 this.$router.push('/mnemonic');
-            }).catch(err => {
+            }).catch(error => {
               loader.hide();
-              this.$toast.error(
-                err.message || err
-              )
+              let e = error
+              if (error.code){
+                e = this.$t(`error.${error.code}`)
+              }else if(error.message){
+                e = error.message
+              }
+              this.$toast.error(e)
             });
           }
         },

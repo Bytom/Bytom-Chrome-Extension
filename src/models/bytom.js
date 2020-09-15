@@ -1,7 +1,7 @@
 import Bytom from 'bytom-js-sdk'
 import { networksJS as networks} from '../utils/constants'
 
-var bytom = new Bytom(networks, chrome.runtime.getURL('wasm/main.wasm'))
+var bytom = new Bytom(networks)
 
 bytom.sdk.networks = function() {
   return bytom.getNetType()

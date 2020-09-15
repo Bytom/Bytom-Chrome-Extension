@@ -30,7 +30,10 @@ import {getDomains} from '@/utils/utils.js'
 import * as Actions from "./store/constants";
 import Vuelidate from 'vuelidate'
 import {apis} from '@/utils/BrowserApis';
-
+import _ from 'lodash'
+import * as Sentry from "@sentry/browser";
+import { Vue as VueIntegration } from "@sentry/integrations";
+import { Integrations } from '@sentry/tracing';
 
 store.dispatch(Actions.LOAD_BYTOM).then(() => {
   Vue.use(VueI18n)
@@ -66,6 +69,23 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
     }
   }
 
+  Sentry.init({
+    dsn: "https://f080e90fe9d94cf9b05323b373d839f3@o441881.ingest.sentry.io/5412722",
+    release: "byone@" + process.env.npm_package_version,
+    integrations: [
+      new VueIntegration({
+        Vue,
+        tracing: true
+      }),
+      new Integrations.BrowserTracing()
+    ],
+    tracesSampleRate: 1
+  });
+
+  Sentry.configureScope(function(scope) {
+    scope.setUser({ id: store.getters.clientId });
+  });
+
   account.setupNet(`${store.getters.net}${store.getters.netType}`)
 
   store.watch(
@@ -77,11 +97,14 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
     },
   );
 
-  getDomains().then((domains)=>{
+  const lang = store.getters.language === 'zh'?'cn':'en'
+
+  getDomains(lang).then(({domains, domainMeta})=>{
     const _bytom = store.state.bytom.clone()
 
-    if(!domains.every(v => _bytom.settings.domains.includes(v))){
+    if(!domains.every(v => _bytom.settings.domains.includes(v)) || _.isEmpty(_bytom.settings.domainsMeta)){
       _bytom.settings.domains = Array.from(new Set(_bytom.settings.domains.concat(domains)))
+      _bytom.settings.domainsMeta = Object.assign(_bytom.settings.domainsMeta, domainMeta)
       store.dispatch(Actions.UPDATE_STORED_BYTOM, _bytom)
     }
   })

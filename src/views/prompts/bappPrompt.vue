@@ -273,6 +273,7 @@
   import add from "@/utils/address";
   import { camelize, removeFromArray } from "@/utils/utils";
   import bytomjslib from 'bytomjs-lib'
+  import BigNumber from "bignumber.js"
 
 
   export default {
@@ -397,9 +398,13 @@
           }).catch(error => {
             loader.hide();
 
-            this.$toast.error(
-              getLang(error.message) || error.message || error
-            );
+            let e = error
+            if (error.code){
+              e = this.$t(`error.${error.code}`)
+            }else if(error.message){
+              e = getLang(error.message)
+            }
+            this.$toast.error(e);
           });
         } else if(this.prompt.data.type ==='transfer'){
           transaction.transfer(this.transaction, this.password, this.address, this).then(result => {
@@ -412,9 +417,13 @@
 
           }).catch(error => {
             loader.hide();
-            this.$toast.error(
-              getLang(error.message) || error.message || error
-            );
+            let e = error
+            if (error.code){
+              e = this.$t(`error.${error.code}`)
+            }else if(error.message){
+              e = getLang(error.message)
+            }
+            this.$toast.error(e);
           });
         } else if(this.prompt.data.type ==='signTransaction'){
           const data = this.prompt.data.value
@@ -443,9 +452,13 @@
             }).catch(error => {
               loader.hide();
 
-              this.$toast.error(
-                getLang(error.message) || error.message || error
-              );
+              let e = error
+              if (error.code){
+                e = this.$t(`error.${error.code}`)
+              }else if(error.message){
+                e = getLang(error.message)
+              }
+              this.$toast.error(e);
             });
           }
 
@@ -460,7 +473,13 @@
           }).catch(error => {
             loader.hide();
 
-            this.$toast.error( getLang(error.message));
+            let e = error
+            if (error.code){
+              e = this.$t(`error.${error.code}`)
+            }else if(error.message){
+              e = getLang(error.message)
+            }
+            this.$toast.error(e);
           });
         }
         else{
@@ -582,6 +601,7 @@
             const outputAsset = outputs.map(i => i.assetID);
 
             const asset = _.union(inputAsset, outputAsset)
+            let that = this;
 
             let types = ["transfer"]
             const promise =
@@ -593,18 +613,22 @@
                     const inputAmount = new BigNumber(_.sumBy(assetInput, 'amount'))
                     const outputAmount = new BigNumber(_.sumBy(assetOutput, 'amount'))
 
-                    const decimals = decimalsMap[this.net][assetId]
-                    const amount = inputAmount.minus(outputAmount).shiftedBy(-decimals)
+                    const decimals = resp.decimals
+                    const amount = inputAmount.minus(outputAmount)
+
+                    const balanced_outputs = tx.outputs.find( o => o.amount === amount.toNumber())
+                    if(balanced_outputs.type == 'cross_chain_out'){
+                      that.transaction.types = (that.$t('common.cross_chain'));
+                    }
 
                     return {
                       'asset': assetId,
                       'alias': resp.symbol,
-                      'amount': amount.toString()
+                      'amount': amount.shiftedBy(-decimals).toString()
                     }
                   })
                 })
 
-            let that = this;
             const inputType = inputs.map(i => i.type);
             const outputType = outputs.map(o => o.type);
             types = _.union(inputType, outputType, types);
@@ -621,7 +645,6 @@
             }).catch(()=>{
               that.dataReady = true
             })
-
 
             break
           }

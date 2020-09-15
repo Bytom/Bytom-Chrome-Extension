@@ -324,10 +324,14 @@
 
             try{
               account.isValidMnemonic(mnemonic)
-            }catch (e){
-              this.$toast.error(
-               e.message || e
-              );
+            }catch (error){
+              let e = error
+              if (error.code){
+                e = this.$t(`error.${error.code}`)
+              }else if(error.message){
+                e = error.message
+              }
+              this.$toast.error(e)
               return
             }
 
@@ -354,10 +358,14 @@
               }).then(() => {
                 this.$router.push('/restore-password');
               });
-            }catch (e){
-              this.$toast.error(
-                e.message || e
-              );
+            }catch (error){
+              let e = error
+              if (error.code){
+                e = this.$t(`error.${error.code}`)
+              }else if(error.message){
+                e = error.message
+              }
+              this.$toast.error(e)
               return
             }
 
@@ -379,10 +387,14 @@
               }).then(() => {
                 this.$router.push('/restore-password');
               });
-            }catch (e){
-              this.$toast.error(
-                e.message || e
-              );
+            }catch (error){
+              let e = error
+              if (error.code){
+                e = this.$t(`error.${error.code}`)
+              }else if(error.message){
+                e = error.message
+              }
+              this.$toast.error(e)
               return
             }
 

@@ -24,6 +24,14 @@ const en = {
     confirm: 'Confirm',
     cancel: 'Cancel'
   },
+  menu:{
+    home:"Home",
+    bapp:"BApp",
+    wallets:"Wallets",
+    backup:"Backup",
+    expand:"Expand",
+    setting:"Setting"
+  },
   welcome: {
     enterMain:"Enter Main View",
     title: 'Welcome to the BYTOM Chrome Wallet',
@@ -56,8 +64,11 @@ const en = {
   },
   transfer: {
     address: 'Address',
-    quantity: 'Amount',
+    bytomAddress:'Bytom address (start with bm)',
+    vaporAddress:'Vapor address (start with vp)',
+    quantity: ' Amount',
     fee: 'Fee',
+    available:'Available:',
     feeType: 'Standard',
     send: 'Send transaction',
     confirmPassword: 'password',
@@ -203,13 +214,6 @@ const en = {
     tips:'Tip: Visit Blockmeta.com to check more information. ',
     assetId:'Asset Id'
   },
-  menu: {
-    title: 'Switch Account',
-    createAccount: 'Create Account',
-    backup: 'Backup',
-    help: 'Help',
-    setting: 'Setting'
-  },
   createAccount: {
     title: 'Create A Wallet',
     walletName:'Please enter wallet\'s name',
@@ -247,14 +251,25 @@ const en = {
     BTM0004:'Please enter Keystore.',
     BTM0005:'Insufficient balance.',
     BTM0006:'Address format error',
-    BTM0007:'Wallet name error',
+    BTM0007:'Wallet password is wrong, please enter the correct password.',
     BTM0008:'Empty password',
     BTM0009:'Current wallet is already an account',
     BTM0010:'Keystore restore dose not support V2 multiple account. Please split into single keystore.',
     BTM0011:'Keystore file format error.',
     BTM0012:'Keystore already exist.',
     BTM0013:'The max length of chinese char is 7.',
-    BTM0014:'The max length of wallet alias is 9.'
+    BTM0014:'The max length of wallet alias is 9.',
+    BTM3000:'Key derivation failed - possibly wrong password',
+    BTM3001:'Unsupported key derivation scheme' ,
+    BTM3002:'Unsupported parameters to PBKDF2',
+    BTM3003:'No password given.',
+    BTM3004:'do not support multiple keystore imported.',
+    BTM3005:'mnemonic length error',
+    BTM3006:'mnemonic is invalid',
+
+    BTM3100:'Input args are empty',
+    BTM3101:'Invalid data type.',
+    BTM3102:'Invalid Boolean argument'
   },
   successMsg:{
     createWallet:{

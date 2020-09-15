@@ -7,6 +7,13 @@ const cn = {
     import:"导入钱包",
     importHint:"如果您在其它网站或 App 上创建过钱包，可以在这里导入"
   },
+  menu:{
+    home:"首页",
+    wallets:"钱包",
+    backup:"备份",
+    expand:"展开",
+    setting:"设置"
+  },
   common:{
     veto: '取消投票',
     cross_chain_in: '跨入Vapor',
@@ -208,13 +215,6 @@ const cn = {
     tips:'提示：访问blockmeta.com来获取交易的相关信息。',
     assetId:'资产Id'
   },
-  menu: {
-    title: '切换账户',
-    createAccount: '创建账户',
-    backup: '备份',
-    help: '帮助',
-    setting: '设置',
-  },
   createAccount: {
     title: '创建钱包',
     walletName:'请输入钱包名称',
@@ -253,14 +253,25 @@ const cn = {
     BTM0004:'请输入Keystore。',
     BTM0005:'输入数量大于可用余额。',
     BTM0006:'输入有效的地址格式。',
-    BTM0007:'钱包名称错误，请输入正确钱包名称。',
+    BTM0007:'钱包密码错误，请输入正确钱包密码。',
     BTM0008:'密码不能为空',
     BTM0009:'目前钱包已为账户',
     BTM0010:'Keystore导入不支持V2多账户导入，请拆分为单个Keystore',
     BTM0011:'Keystore文件格式错误。',
     BTM0012:'Keystore已存在请勿重复导入。',
     BTM0013:'钱包名称的汉字最大长度为7。',
-    BTM0014:'钱包名称的最大长度为9。'
+    BTM0014:'钱包名称的最大长度为9。',
+    BTM3000:'密码错误。',
+    BTM3001:'无效密钥派生规则。' ,
+    BTM3002:'无法支持解析至PBKDF2。',
+    BTM3003:'请输入密码。',
+    BTM3004:'不支持多个keystore文件导入',
+    BTM3005:'助记词长度错误',
+    BTM3006:'助记词无效',
+
+    BTM3100:'输入不能为空',
+    BTM3101:'无效data类型。',
+    BTM3102:'无效Boolean类型。',
   },
   successMsg:{
     createWallet:{

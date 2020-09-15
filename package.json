@@ -1,7 +1,7 @@
 {
     "name": "Byone",
     "description": "Bytom Chrome Extension Wallet",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "author": "zhiting.fly@8btc.com",
     "license": "MIT",
     "private": true,
@@ -12,6 +12,9 @@
         "clear": "rm -rf chrome-ext.crx extension.zip dist"
     },
     "dependencies": {
+        "@sentry/browser": "^5.22.3",
+        "@sentry/integrations": "^5.22.3",
+        "@sentry/tracing": "^5.22.3",
         "animate.css": "^3.7.0",
         "axios": "^0.18.0",
         "babel-preset-es2015": "^6.24.1",

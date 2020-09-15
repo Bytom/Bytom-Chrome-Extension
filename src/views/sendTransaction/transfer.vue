@@ -432,9 +432,14 @@ export default {
 
             }).catch(error => {
                 loader.hide();
-                this.$toast.error(
-                   getLang(error.message, this.language)
-                );
+
+                let e = error
+                if (error.code){
+                  e = this.$t(`error.${error.code}`)
+                }else if(error.message){
+                  e = getLang(error.message, this.language)
+                }
+                this.$toast.error(e);
             });
       },
       ...mapActions([

@@ -30,10 +30,7 @@
     {
       "icon":"red-packet.jpg",
       "color":"linear-gradient(274.27deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%), #EB4232",
-      "link":"https://bapp.blockmeta.com/redpacket/",
-      "domainsMeta": {
-        "icon": "https://supertx.bymov.io/favicon.ico"
-      }
+      "link":"https://bapp.blockmeta.com/redpacket/"
     }
   ]
 }

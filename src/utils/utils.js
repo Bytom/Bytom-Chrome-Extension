@@ -54,21 +54,43 @@ export function removeFromArray(original, remove) {
   return original.filter(value => !remove.includes(value));
 }
 
-export function getDomains(){
+export function getDomains(lang = 'en'){
   let domains = bappData.list.filter( l => l.link!== undefined).map(a => a.link.split('/')[2]);
   const crossChainLink = "crosschain.bymov.io"
+
+  let domainMeta = {
+    "crosschain.bymov.io":{
+      icon: "https://crosschain.bymov.io/favicon.ico",
+      title: "MOV"
+    }
+  }
+
+  updateDomainMeta(bappData, domainMeta, lang)
 
   return fetch(bappRequestUrl)
     .then(response => response.json())
     .then(json => {
       if(!_.isEqual(json, bappData)){
         domains = json.list.filter( l => l.link!== undefined).map(a => a.link.split('/')[2]);
+        updateDomainMeta(json, domainMeta, lang)
       }
 
       domains.push(crossChainLink)
-      return domains;
+      return {domains, domainMeta};
     }).catch((e)=>{
       domains.push(crossChainLink)
-      return domains;
+      return {domains, domainMeta};
     });
+}
+
+function updateDomainMeta(jsonData, domainMeta, lang){
+  const list = jsonData.list
+  for(let index in list){
+    const meta = list[index].domainsMeta
+    if(meta){
+      meta.title = jsonData[lang][index].title
+      const domain = list[index]['link'].split('/')[2]
+      domainMeta[domain] = meta
+    }
+  }
 }

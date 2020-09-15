@@ -69,8 +69,6 @@ export default {
           list = list.map((l , index)=> Object.assign(l, this.jsonData['en'][index]))
         }
 
-        console.log(list)
-
         return list;
       },
     },
