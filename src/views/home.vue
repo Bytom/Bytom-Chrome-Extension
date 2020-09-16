@@ -291,7 +291,7 @@ input:checked + .slider:before {
                   <i class="icon iconfont icon_recvice"></i>
                   <div>{{ $t('main.receive') }}</div>
                 </a>
-                <a class="color-white" href="http://crosschain.bymov.io/" target="_blank">
+                <a class="color-white" href="https://ofmf.bymov.io/cross-chain" target="_blank">
                   <i class="icon iconfont icon_cross"></i>
                   <div>{{ $t('main.crossChain') }}</div>
                 </a>

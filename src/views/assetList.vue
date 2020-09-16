@@ -320,7 +320,7 @@ export default {
                     type_txs = ["transfer_in"];
                     break;
                   default:
-                    type_txs = ['out_crosschain','in_crosschain',"ordinary"]
+                    type_txs = []
                     break;
                 }
 
@@ -374,10 +374,16 @@ export default {
                     transaction.address = (resultAddr && resultAddr.includes(' '))?resultAddr:address.short(resultAddr);
                 }
 
+                if(transaction.types.includes('in_crosschain')){
+                  transaction.address = `${this.currentAsset.asset.symbol} ${this.$t("listAsset.main")}`
+                }
                 transaction.val =  val ;
 
                 formattedTransactions.push(transaction);
               }else{
+                if(!transaction.type) {
+                  transaction.type = this.$t("common.transfer_out");
+                }
                 transaction.val =  0
                 transaction.address = address.short(this.address)
 

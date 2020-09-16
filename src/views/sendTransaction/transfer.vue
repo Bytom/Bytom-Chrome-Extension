@@ -206,6 +206,7 @@ import BigNumber from "bignumber.js"
     inBtc:'btcPrice'
   }
 
+  const mustNonZero = (value) => Number(value) > 0
 export default {
     components: {
         Confirm
@@ -237,7 +238,8 @@ export default {
           required
         },
         amount:{
-          required
+          required,
+          mustNonZero
         }
       }
   },

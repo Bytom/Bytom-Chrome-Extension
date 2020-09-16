@@ -56,11 +56,11 @@ export function removeFromArray(original, remove) {
 
 export function getDomains(lang = 'en'){
   let domains = bappData.list.filter( l => l.link!== undefined).map(a => a.link.split('/')[2]);
-  const crossChainLink = "crosschain.bymov.io"
+  const crossChainLink = "ofmf.bymov.io"
 
   let domainMeta = {
-    "crosschain.bymov.io":{
-      icon: "https://crosschain.bymov.io/favicon.ico",
+    "ofmf.bymov.io":{
+      icon: "https://ofmf.bymov.io/favicon.ico",
       title: "MOV"
     }
   }

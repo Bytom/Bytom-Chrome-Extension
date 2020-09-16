@@ -102,7 +102,8 @@ const en = {
   },
   listAsset: {
     all:'All',
-    fail:'Failed'
+    fail:'Failed',
+    main:'Chain'
   },
   crossChain:{
     title:'Cross Chain',
@@ -129,7 +130,7 @@ const en = {
     votes:'Votes',
     voteVotes:'Votes',
     voteAccount:'Vote Account',
-    vetoAccount:'Veto Account'
+    vetoAccount:'Veto Account',
   },
   listCancel:{
     voted:'Voted',

@@ -224,7 +224,7 @@
             </div>
           </div>
           <div v-else v-for="(amountInput, index) in transaction.amounts" :key="index" class="amount-list">
-            <div>{{index ==0 && $t('transfer.amount') }}</div>
+            <div>{{ index ==0 ? $t('transfer.amount'):'' }}</div>
             <div class="color-black font-bold">{{amountInput.amount}}<span class="uint uppercase">{{amountInput.alias || short(amountInput.asset) }}</span>
             </div>
           </div>
