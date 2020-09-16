@@ -102,7 +102,8 @@ const cn = {
   },
   listAsset: {
     all:'全部',
-    fail:'失败'
+    fail:'失败',
+    main:'主链'
   },
   crossChain:{
     title:'跨链',
@@ -129,7 +130,7 @@ const cn = {
     votes:'票数',
     voteVotes:'投票票数',
     voteAccount:'投票账户',
-    vetoAccount:'取消投票账户'
+    vetoAccount:'取消投票账户',
   },
   listCancel:{
     voted:'已投票',
