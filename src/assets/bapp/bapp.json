@@ -36,7 +36,7 @@
       }
     },
     {
-      "icon":"staking.png",
+      "icon":"vote.jpg",
       "color":"linear-gradient(94.25deg, rgba(255, 255, 255, 0) 21.9%, rgba(255, 255, 255, 0.1) 81.37%), #0A57EB",
       "link":"https://staking.bymov.io",
       "domainsMeta": {
