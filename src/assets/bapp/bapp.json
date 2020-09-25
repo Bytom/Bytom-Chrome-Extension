@@ -5,6 +5,10 @@
       "description":"The next generation of Financial System"
     },
     {
+      "title":"Staking",
+      "description":"Staking for high rewards"
+    },
+    {
       "title":"Redpacket",
       "description":"Support all kind of tokens"
     }],
@@ -12,6 +16,10 @@
     {
       "title":"MOV",
       "description":"下一代稳定金融体系"
+    },
+    {
+      "title":"投票",
+      "description":"节点投票 高额年化"
     },
     {
       "title":"红包",
@@ -23,6 +31,14 @@
       "icon":"mov.jpg",
       "color":"linear-gradient(94.25deg, rgba(255, 255, 255, 0) 21.9%, rgba(255, 255, 255, 0.1) 81.37%), #1E1E1E",
       "link":"https://supertx.bymov.io/swap",
+      "domainsMeta": {
+         "icon": "https://supertx.bymov.io/favicon.ico"
+      }
+    },
+    {
+      "icon":"vote.jpg",
+      "color":"linear-gradient(94.25deg, rgba(255, 255, 255, 0) 21.9%, rgba(255, 255, 255, 0.1) 81.37%), #0A57EB",
+      "link":"https://staking.bymov.io",
       "domainsMeta": {
          "icon": "https://supertx.bymov.io/favicon.ico"
       }
