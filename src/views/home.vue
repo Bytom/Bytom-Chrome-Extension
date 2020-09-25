@@ -74,7 +74,7 @@
   padding: 12px 0 16px 0px;
   font-weight: 600;
 }
-.transactions {
+.assets {
   font-size: 15px;
   overflow: auto;
   flex-grow: 1;
@@ -302,7 +302,7 @@ input:checked + .slider:before {
       <section v-if="address!=undefined" class="transaction-title">
       <h3 class="color-black">{{ $t('main.asset') }}</h3>
       </section>
-      <section class="transactions">
+      <section class="assets">
         <div v-if=" balances && balances.length > 0">
           <ul class="list">
             <li class="list-item" v-for="(balance, index) in balances" :key="index" @click="assetOpen(balance)">
