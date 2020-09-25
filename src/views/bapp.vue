@@ -37,7 +37,7 @@
           <div class="title">{{bapp.title}}</div>
           <div class="description">{{bapp.description}}</div>
         </div>
-        <img :src="require(`@/assets/img/bapp/${bapp.icon}`)" :alt="bapp.icon" v-on:error="onImgError($event, bapp.icon)"/>
+        <img :src="src(bapp.icon)" :alt="bapp.icon" v-on:error="onImgError($event, bapp.icon)"/>
 
       </a>
 
@@ -68,17 +68,24 @@ export default {
         }else{
           list = list.map((l , index)=> Object.assign(l, this.jsonData['en'][index]))
         }
-
         return list;
       },
     },
     methods: {
+      src: function(name){
+        try {
+          const src = require(`@/assets/img/bapp/${name}`)
+          return src
+        } catch (ex) {
+          return `${bappImgUrl}${name}`
+        }
+      },
       onImgError: function(event, name) {
         event.target.src = `${bappImgUrl}${name}`
       }
     },
     mounted() {
-        //  Todo: update to production before publish
+      //  Todo: update to production before publish
       fetch(bappRequestUrl)
         .then(response => response.json())
         .then(json => {
