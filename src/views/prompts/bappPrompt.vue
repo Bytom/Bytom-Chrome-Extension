@@ -584,6 +584,7 @@
           }
           case "signTransaction":{
             const param = data[0] || data
+
             const _tx = camelize(param)
             const rawTransaction = _tx.rawTransaction
 
@@ -634,11 +635,13 @@
             types = _.union(inputType, outputType, types);
 
             const remove = ['spend','control'];
-            if(inputs[0].amount ===outputs[0].amount){
-              const isVeto = inputs.find(o => o.type ==='veto')
-              const isVote = outputs.find(o => o.type ==='vote')
-              if(isVeto || isVote){
-                remove.push('transfer')
+            if(inputs[0] && outputs[0] && inputs[0].amount && outputs[0].amount ){
+              if((inputs[0].amount ===outputs[0].amount)){
+                const isVeto = inputs.find(o => o.type ==='veto')
+                const isVote = outputs.find(o => o.type ==='vote')
+                if(isVeto || isVote){
+                  remove.push('transfer')
+                }
               }
             }
             types = removeFromArray(types, remove);
