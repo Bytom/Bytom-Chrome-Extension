@@ -634,6 +634,13 @@
             types = _.union(inputType, outputType, types);
 
             const remove = ['spend','control'];
+            if(inputs[0].amount ===outputs[0].amount){
+              const isVeto = inputs.find(o => o.type ==='veto')
+              const isVote = outputs.find(o => o.type ==='vote')
+              if(isVeto || isVote){
+                remove.push('transfer')
+              }
+            }
             types = removeFromArray(types, remove);
             types = types.map(ty => this.$t(`common.${ty}`)).join(', ');
 
