@@ -138,8 +138,9 @@ transaction.transfer = function(transaction, password, address, context) {
   let retPromise = new Promise((resolve, reject) => {
 
     const {to, asset, amount, confirmations} = transaction
+    const _to = to.trim()
     bytom.transaction
-      .buildPayment(address, to, asset, amount.toString(), confirmations)
+      .buildPayment(address, _to, asset, amount.toString(), confirmations)
       .then(result => {
         return Promise.all(result.map( (data) =>
           signSubmit( data, password, address, context)))

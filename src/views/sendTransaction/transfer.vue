@@ -428,6 +428,7 @@ export default {
             });
 
             this.transaction.asset = this.selectAsset.assetId;
+            this.transaction.to = this.transaction.to.trim();
             transaction.transfer(this.transaction, password, this.address, this).then(result => {
                 loader.hide();
                 this.$router.push('/')
