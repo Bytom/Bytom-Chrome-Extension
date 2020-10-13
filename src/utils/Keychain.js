@@ -2,8 +2,6 @@ export default class Keychain {
 
   constructor(){
     this.pairs = {
-      mainnet:{},
-      testnet:{}
     };
   }
 
