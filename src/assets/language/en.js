@@ -172,8 +172,8 @@ const en = {
     vpWarning:'Please don\'t use Vapor address in the real transaction.'
   },
   main: {
-    mainnet: 'Mainnet',
-    testnet: 'Testnet',
+    mainnet: 'Main network',
+    testnet: 'Test network',
     vapor: 'Vapor',
     bytom: 'Bytom',
     solonet: 'Solonet',
@@ -297,6 +297,7 @@ const en = {
   setting: {
     lang: 'Language',
     currency:'Currency',
+    network:'Networks',
     enLange:"Expand view",
     deleteWallet:'Delete wallet',
     deleteHint:'Please confirm you has backed up your wallet.',

@@ -338,9 +338,9 @@
       },
       currentWallet(){
         if(this.prompt.data && this.prompt.data.type ==='transfer'){
-          return this.bytom.keychain.findByAddress(this.transaction.from);
+          return this.bytom.keychain.findByAddress(this.transaction.from, this.net);
         }else if(this.prompt.data && this.prompt.data.type ==='message'){
-          return this.bytom.keychain.findByAddress(this.transaction.address);
+          return this.bytom.keychain.findByAddress(this.transaction.address, this.net);
         }else{
           return this.currentAccount
         }

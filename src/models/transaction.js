@@ -189,7 +189,7 @@ function signSubmit (txObject, password, address, context) {
 
 
 transaction.signMessage = function(message, password, address, context) {
-  const keyArray = context.bytom.keychain.findByAddress(address);
+  const keyArray = context.bytom.keychain.findByAddress(address, context.bytom.settings.network);
   const key = typeof keyArray.keystore ==='string'? keyArray.keystore :JSON.stringify(keyArray.keystore);
 
   return bytom.keys.signMessageJsPromise(message, password,key);
@@ -230,7 +230,7 @@ transaction.advancedTransfer = function(address, transaction, password, arrayDat
 
 
 function signTx(address, transaction, password, context){
-  const keyArray = context.bytom.keychain.findByAddress(address);
+  const keyArray = context.bytom.keychain.findByAddress(address, context.bytom.settings.network);
   if(!keyArray){
     throw 'Account not found.'
   }else{

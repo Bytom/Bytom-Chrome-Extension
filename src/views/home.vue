@@ -454,7 +454,7 @@ export default {
                 //update currentAccount
                 bytom.currentAccount.vpAddress = accounts.address
                 //update AccountList
-                bytom.keychain.pairs[bytom.currentAccount.alias].vpAddress = accounts.address
+                bytom.keychain.pairs[this.net][bytom.currentAccount.alias].vpAddress = accounts.address
 
                 this[Actions.UPDATE_STORED_BYTOM](bytom).then(() => {
                   this.setupRefreshTimer()
@@ -535,7 +535,7 @@ export default {
               //update currentAccount
               bytom.currentAccount.vpAddress = accounts.address
               //update AccountList
-              bytom.keychain.pairs[bytom.currentAccount.alias].vpAddress = accounts.address
+              bytom.keychain.pairs[this.net][bytom.currentAccount.alias].vpAddress = accounts.address
 
               this[Actions.UPDATE_STORED_BYTOM](bytom).then(()=>{
                 this.setupRefreshTimer()

@@ -1,7 +1,10 @@
 export default class Keychain {
 
   constructor(){
-    this.pairs = {};
+    this.pairs = {
+      mainnet:{},
+      testnet:{}
+    };
   }
 
   static placeholder(){ return new Keychain(); }
@@ -11,19 +14,19 @@ export default class Keychain {
     return p;
   }
 
-  findIdentity(publicKey){ return Object.values(this.pairs).find(id => id.xpub === publicKey); }
-  findByGuid(guid){ return Object.values(this.pairs).find(id => id.guid === guid); }
-  findByAddress(address){ return Object.values(this.pairs).find(id => id.address === address || id.vpAddress=== address); }
+  findIdentity(publicKey, net){ return Object.values(this.pairs[net]).find(id => id.xpub === publicKey); }
+  findByGuid(guid, net){ return Object.values(this.pairs[net]).find(id => id.guid === guid); }
+  findByAddress(address, net){ return Object.values(this.pairs[net]).find(id => id.address === address || id.vpAddress=== address); }
 
-  removeByAlias(alias){
-    if(this.pairs[alias]){
-      delete(this.pairs[alias])
+  removeByAlias(alias, net){
+    if(this.pairs[net][alias]){
+      delete(this.pairs[net][alias])
     }
   }
-  removeUnverifyIdentity(){
-    const pairObject = Object.values(this.pairs).filter(id => !id.vMnemonic );
+  removeUnverifyIdentity(net){
+    const pairObject = Object.values(this.pairs[net]).filter(id => !id.vMnemonic );
     for(let o of pairObject){
-      delete this.pairs[o.alias];
+      delete this.pairs[net][o.alias];
     }
   }
 }

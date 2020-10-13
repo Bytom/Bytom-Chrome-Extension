@@ -175,8 +175,8 @@ const cn = {
   main: {
     bytom:'主链',
     vapor:'侧链',
-    mainnet: '主网络',
-    testnet: '测试网络',
+    mainnet: '正式网络环境',
+    testnet: '测试网络环境',
     solonet: '单机网络',
     mainNetShort: 'Bytom主网络',
     testNetShort: 'Bytom测试网络',
@@ -299,6 +299,7 @@ const cn = {
   setting: {
     lang: '显示语言',
     currency:'货币单位',
+    network:'网络',
     enLange:"展开视图",
     deleteWallet:'删除钱包',
     deleteHint:'执行删除钱包操作前请确认您已备份好钱包，否则将无法找回！',

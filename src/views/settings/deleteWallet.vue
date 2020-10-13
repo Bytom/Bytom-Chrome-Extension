@@ -75,14 +75,15 @@ export default {
       ]),
       ...mapGetters([
         'currentAccount',
+        'net'
       ])
     },
     methods: {
       deleteW(password){
         if(account.isValidPassword(this.currentAccount.keystore, password)){
           const bytom = this.bytom.clone();
-          bytom.keychain.removeByAlias(this.currentAccount.alias);
-          const values = Object.values(bytom.keychain.pairs)
+          bytom.keychain.removeByAlias(this.currentAccount.alias, this.net);
+          const values = Object.values(bytom.keychain.pairs[this.net])
 
           if(values.length === 0){
             bytom.currentAccount= null
