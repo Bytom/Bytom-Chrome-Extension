@@ -92,6 +92,11 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
   apis.storage.onChanged.addListener(function(changes, namespace) {
     for (let key in changes) {
       if(key === 'bytom'){
+        const newNetwork = changes[key].newValue.settings.network
+        if(newNetwork !== changes[key].oldValue.settings.network){
+          account.setupNet(`${newNetwork}${store.getters.netType}`)
+        }
+
         store.dispatch(Actions.LOAD_BYTOM)
       }
     }
