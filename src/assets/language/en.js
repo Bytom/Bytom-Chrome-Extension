@@ -103,7 +103,8 @@ const en = {
   listAsset: {
     all:'All',
     fail:'Failed',
-    main:'Chain'
+    main:'Chain',
+    side:'Sidechain',
   },
   crossChain:{
     title:'Cross Chain',

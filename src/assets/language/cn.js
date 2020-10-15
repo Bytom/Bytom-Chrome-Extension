@@ -103,7 +103,8 @@ const cn = {
   listAsset: {
     all:'全部',
     fail:'失败',
-    main:'主链'
+    main:'主链',
+    side:'侧链',
   },
   crossChain:{
     title:'跨链',
