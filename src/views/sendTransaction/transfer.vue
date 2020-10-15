@@ -298,8 +298,10 @@ export default {
               this.estimateFee().then(()=>{
               const maxBalance = n.minus(this.transaction.fee)
               const assetId = this.selectAsset.assetId
-
-                if(maxBalance.lt(newAmount) && assetId === BTM){
+                if(maxBalance.lt(0)){
+                  this.transaction.amount = '0'
+                }
+                else if(maxBalance.lt(newAmount) && assetId === BTM){
                   this.transaction.amount = maxBalance.toString()
                 }
               })
