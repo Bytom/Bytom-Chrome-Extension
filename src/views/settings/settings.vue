@@ -55,6 +55,14 @@
                 {{ currentCurrency }} <i class="iconfont icon_arrow_1"></i>
             </div>
         </div>
+      <div class="row" @click="$router.push({ name: 'settings-network'})">
+            <div class="label color-black">
+                <p>{{ $t("setting.network") }}</p>
+            </div>
+            <div class="value">
+                {{ $t(`main.${net}`)  }} <i class="iconfont icon_arrow_1"></i>
+            </div>
+        </div>
         <div class="row" @click="$router.push({ name: 'settings-delete'})">
             <div class="label color-grey-36">
                 <p>{{ $t("setting.deleteWallet") }}</p>
@@ -101,7 +109,8 @@ export default {
       ]),
       ...mapGetters([
         'language',
-        'currency'
+        'currency',
+        'net'
       ])
     },
     methods: {

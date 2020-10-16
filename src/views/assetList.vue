@@ -376,7 +376,16 @@ export default {
                 }
 
                 if(transaction.types.includes('in_crosschain')){
-                  transaction.address = `${this.currentAsset.asset.symbol} ${this.$t("listAsset.main")}`
+                  const chain = this.netType ==='vapor'? this.$t("listAsset.main"):this.$t("listAsset.side")
+                  let symbol = this.currentAsset.asset.symbol
+                  if(symbol =='SUP' ){
+                    symbol = 'BTM'
+                  }else if(symbol =='BTC'|| symbol=='BTM')
+                  {}
+                  else{
+                    symbol='ETH'
+                  }
+                  transaction.address = `${symbol} ${chain}`
                 }else if(transaction.types.includes('vote')){
                   const pubKey = transaction.outputs.find( i => i.type ==='vote').vote
                   const item = this.listVote[pubKey]

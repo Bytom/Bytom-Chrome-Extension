@@ -34,6 +34,7 @@ import _ from 'lodash'
 import * as Sentry from "@sentry/browser";
 import { Vue as VueIntegration } from "@sentry/integrations";
 import { Integrations } from '@sentry/tracing';
+import BytomObj from "./utils/Bytom";
 
 store.dispatch(Actions.LOAD_BYTOM).then(() => {
   Vue.use(VueI18n)
@@ -87,6 +88,19 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
   });
 
   account.setupNet(`${store.getters.net}${store.getters.netType}`)
+
+  apis.storage.onChanged.addListener(function(changes, namespace) {
+    for (let key in changes) {
+      if(key === 'bytom'){
+        const newNetwork = changes[key].newValue.settings.network
+        if(newNetwork !== changes[key].oldValue.settings.network){
+          account.setupNet(`${newNetwork}${store.getters.netType}`)
+        }
+
+        store.dispatch(Actions.LOAD_BYTOM)
+      }
+    }
+  });
 
   store.watch(
     (state, getters) => getters.netType,

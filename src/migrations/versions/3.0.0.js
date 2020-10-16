@@ -9,7 +9,7 @@ export const m3_0_0 = async bytom => {
   if(oldAccountList.length >0){
 
     for(let oldAccount of oldAccountList){
-      if(!bytom.keychain.findByGuid(oldAccount)){
+      if(!bytom.keychain.findByGuid(oldAccount, bytom.settings.network)){
         let account = Object.assign({},oldAccount);
         account.xpub = oldAccount.rootXPub
         delete account['net'];

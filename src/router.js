@@ -14,6 +14,7 @@ export const RouteNames = {
   SETTINGS:'settings',
   SETTINGS_LANG:'settings-language',
   SETTINGS_CURRENCY:'settings-currency',
+  SETTINGS_NETWORK:'settings-network',
   SETTINGS_DELETE:'settings-delete',
 
   TRANSFER:'transfer',
@@ -145,6 +146,14 @@ const routers = [
     meta: { title: '设置货币' },
     component: resolve => {
       require(['@/views/settings/currencySelection.vue'], resolve)
+    }
+  },
+  {
+    path: '/settings-network',
+    name: RouteNames.SETTINGS_NETWORK,
+    meta: { title: '切换网络' },
+    component: resolve => {
+      require(['@/views/settings/networkSelection.vue'], resolve)
     }
   },
   {

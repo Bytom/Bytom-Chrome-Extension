@@ -17,12 +17,12 @@ account.createKey = function(accountAlias, keyAlias, passwd, context) {
 
     const _bytom = context.bytom.clone();
 
-    const accountObject = _bytom.keychain.pairs[accountAlias]
+    const accountObject = _bytom.keychain.pairs[_bytom.settings.network][accountAlias]
     if(accountObject && accountObject.vMnemonic){
       reject('Alias already exist, please use another alias.')
     }
 
-    _bytom.keychain.removeUnverifyIdentity();
+    _bytom.keychain.removeUnverifyIdentity(_bytom.settings.network);
     _bytom.settings.netType = 'bytom';
 
     const resultObj = bytom.keys.createKey(keyAlias, passwd)
@@ -60,7 +60,7 @@ account.createAccount = function( context) {
       const domains = await getDomains();
       _bytom.settings.domains = Array.from(new Set(_bytom.settings.domains.concat(domains)))
 
-      _bytom.keychain.pairs[currentAccount.alias] = resultObj
+      _bytom.keychain.pairs[_bytom.settings.network][currentAccount.alias] = resultObj
       _bytom.currentAccount = resultObj
       context[Actions.UPDATE_STORED_BYTOM](_bytom).then(() => {
         resolve(resultObj)
@@ -76,12 +76,12 @@ account.restoreByMnemonic = function(accountAlias, mnemonic, passwd, context) {
 
     const _bytom = context.bytom.clone();
 
-    const accountObject = _bytom.keychain.pairs[accountAlias]
+    const accountObject =  _bytom.keychain.pairs[_bytom.settings.network][accountAlias]
     if(accountObject && accountObject.vMnemonic){
       reject('Alias already exist, please use another alias.')
     }
 
-    _bytom.keychain.removeUnverifyIdentity();
+    _bytom.keychain.removeUnverifyIdentity(_bytom.settings.network);
 
     const res = bytom.keys.restoreFromMnemonic(keyAlias, passwd, mnemonic)
 
@@ -110,7 +110,7 @@ account.restoreByMnemonic = function(accountAlias, mnemonic, passwd, context) {
         resultObj.keyAlias = keyAlias
         resultObj.vMnemonic = true
 
-        _bytom.keychain.pairs[accountAlias] = resultObj
+        _bytom.keychain.pairs[_bytom.settings.network][accountAlias] = resultObj
         _bytom.currentAccount = resultObj
 
         context[Actions.UPDATE_STORED_BYTOM](_bytom).then(() => {
@@ -131,12 +131,12 @@ account.restoreByKeystore = function(accountAlias, keystore, password, context) 
 
     const _bytom = context.bytom.clone();
 
-    const accountObject = _bytom.keychain.pairs[accountAlias]
+    const accountObject =  _bytom.keychain.pairs[_bytom.settings.network][accountAlias]
     if(accountObject && accountObject.vMnemonic){
       reject('Alias already exist, please use another alias.')
     }
 
-    _bytom.keychain.removeUnverifyIdentity();
+    _bytom.keychain.removeUnverifyIdentity(_bytom.settings.network);
 
     const res = bytom.keys.restoreFromKeystore(password, keystore)
 
@@ -168,7 +168,7 @@ account.restoreByKeystore = function(accountAlias, keystore, password, context) 
         resultObj.keystore = keystore
         resultObj.xpub = res.xpub
 
-        _bytom.keychain.pairs[accountAlias] = resultObj
+        _bytom.keychain.pairs[_bytom.settings.network][accountAlias] = resultObj
         _bytom.currentAccount = resultObj
 
         context[Actions.UPDATE_STORED_BYTOM](_bytom).then(() => {
@@ -239,16 +239,16 @@ account.balance = function(address , context) {
           if (balanceNotEqual) {
             if (isVapor) {
               _bytom.currentAccount.vpBalances = balances;
-              _bytom.keychain.pairs[_bytom.currentAccount.alias].vpBalances =balances
+               _bytom.keychain.pairs[_bytom.settings.network][_bytom.currentAccount.alias].vpBalances =balances
             } else {
               _bytom.currentAccount.balances = balances;
-              _bytom.keychain.pairs[_bytom.currentAccount.alias].balances = balances
+               _bytom.keychain.pairs[_bytom.settings.network][_bytom.currentAccount.alias].balances = balances
             }
           }
 
           if (voteNotEqual) {
             _bytom.currentAccount.votes = votes;
-            _bytom.keychain.pairs[_bytom.currentAccount.alias].votes = votes
+             _bytom.keychain.pairs[_bytom.settings.network][_bytom.currentAccount.alias].votes = votes
           }
 
           context[Actions.UPDATE_STORED_BYTOM](_bytom)
@@ -292,7 +292,7 @@ account.isValidKeystore = function(keystore, context) {
     }else{
       const key = keys[0]
       const xpub = key.xpub
-      if(context.bytom.keychain.findIdentity(xpub)){
+      if(context.bytom.keychain.findIdentity(xpub, context.bytom.settings.network)){
         throw(context.$t('error.BTM0012'))
       }else{
         return key
@@ -308,7 +308,7 @@ account.isValidKeystore = function(keystore, context) {
       throw(context.$t('error.BTM0011'))
     }else{
       const xpub = account[0].rootXPub
-      if(context.bytom.keychain.findIdentity(xpub)){
+      if(context.bytom.keychain.findIdentity(xpub, context.bytom.settings.network)){
         throw(context.$t('error.BTM0012'))
       }else{
         const key = walletImage["keys"].find(key => key.xpub === xpub)
@@ -321,7 +321,7 @@ account.isValidKeystore = function(keystore, context) {
     throw(context.$t('error.BTM0011'))
   }
   //existed keystore
-  else if(context.bytom.keychain.findIdentity(walletImage.xpub)){
+  else if(context.bytom.keychain.findIdentity(walletImage.xpub, context.bytom.settings.network)){
     throw(context.$t('error.BTM0012'))
   }
   return walletImage

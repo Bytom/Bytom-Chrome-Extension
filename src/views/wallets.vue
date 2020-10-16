@@ -106,7 +106,7 @@ export default {
     },
     computed: {
       walletList(){
-        const walletsObject = this.bytom.keychain.pairs
+        const walletsObject = this.bytom.keychain.pairs[this.net]
         if(walletsObject){
            return Object.values(walletsObject).map(w => w.alias);
         }
@@ -121,6 +121,7 @@ export default {
       ]),
       ...mapGetters([
         'currentAccount',
+        'net'
       ])
     },
     methods: {
@@ -128,7 +129,7 @@ export default {
           if(this.currentAccount.alias !== alias){
             const bytom = this.bytom.clone();
 
-            bytom.currentAccount = bytom.keychain.pairs[alias];
+            bytom.currentAccount = bytom.keychain.pairs[this.net][alias];
             this[Actions.UPDATE_STORED_BYTOM](bytom).then(()=>{
               this.$router.push('/')
               this.$toast.success(
