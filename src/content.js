@@ -50,34 +50,28 @@ class Content {
     })
 
     chrome.storage.onChanged.addListener(async (evt) => {
-      if(evt.bytom.newValue.settings.network !== evt.bytom.oldValue.settings.network){
+      const newValue = evt.bytom.newValue;
+      const oldValue = evt.bytom.oldValue
+      if(newValue.settings.network !== oldValue.settings.network){
         const net = await this.getDefaultNetwork();
         const defaultAccount = await this.getDefaultAccount();
         stream.send(
-          NetworkMessage.payload(MsgTypes.UPDATE_BYTOM, {type:'net', value: net}),
+          NetworkMessage.payload(MsgTypes.UPDATE_BYTOM, [{type:'net', value: net}, {type:'default_account', value: defaultAccount}]),
           EventNames.INJECT
         )
-        stream.send(
-          NetworkMessage.payload(MsgTypes.UPDATE_BYTOM, {type:'default_account', value: defaultAccount}),
-          EventNames.INJECT
-        )
-      }else if(!_.isEqual(evt.bytom.newValue.currentAccount,evt.bytom.oldValue.currentAccount)){
+      }else if(newValue.currentAccount.guid !== oldValue.currentAccount.guid){
         const defaultAccount = await this.getDefaultAccount();
         if(defaultAccount){
           stream.send(
-            NetworkMessage.payload(MsgTypes.UPDATE_BYTOM, {type:'default_account', value: defaultAccount}),
+            NetworkMessage.payload(MsgTypes.UPDATE_BYTOM, [{type:'default_account', value: defaultAccount}]),
             EventNames.INJECT
           )
         }
-      }else if(evt.bytom.newValue.settings.netType!== evt.bytom.oldValue.settings.netType){
+      }else if(newValue.settings.netType!== oldValue.settings.netType){
         const chain = await this.getDefaultChain();
         const defaultAccount = await this.getDefaultAccount();
         stream.send(
-          NetworkMessage.payload(MsgTypes.UPDATE_BYTOM, {type:'chain', value: chain}),
-          EventNames.INJECT
-        )
-        stream.send(
-          NetworkMessage.payload(MsgTypes.UPDATE_BYTOM, {type:'default_account', value: defaultAccount}),
+          NetworkMessage.payload(MsgTypes.UPDATE_BYTOM, [{type:'chain', value: chain}, {type:'default_account', value: defaultAccount}]),
           EventNames.INJECT
         )
       }
@@ -176,6 +170,8 @@ class Content {
   }
 
   enable(type, networkMessage) {
+    if (!isReady) return
+
     networkMessage.payload ={
       domain: strippedHost(),
       title: document.title,

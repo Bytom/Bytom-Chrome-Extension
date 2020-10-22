@@ -30,7 +30,25 @@ class Inject {
         msg.hasOwnProperty('type') &&
         msg.type === MsgTypes.UPDATE_BYTOM
       ) {
-        window.bytom[msg.payload.type] = msg.payload.value
+        const array = msg.payload;
+        for(let p of array){
+          window.bytom[p.type] = p.value
+          switch (p.type){
+            case 'default_account':{
+              window.bytom.emit(MsgTypes.ACCOUNT_CHANGED, [p.value])
+              break
+            }
+            case 'net':{
+              window.bytom.emit(MsgTypes.NETWORK_CHANGED, p.value)
+              break
+            }
+            case 'chain':{
+              window.bytom.emit(MsgTypes.NET_TYPE_CHANGED, p.value)
+              break
+            }
+
+          }
+        }
       }
     })
 

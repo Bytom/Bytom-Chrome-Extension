@@ -24,3 +24,11 @@ export const REQUEST_ACCOUNT_LIST = 'accountList';
 //Internal Message
 export const SET_PROMPT = 'setPrompt';
 export const GET_PROMPT = 'getPrompt';
+
+// Eventchanged
+export const ACCOUNT_CHANGED = 'accountsChanged'
+export const NETWORK_CHANGED = 'networkChanged'
+export const NET_TYPE_CHANGED = 'chainChanged'
+export const STORE_UPDATE = 'update';
+
+
