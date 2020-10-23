@@ -296,6 +296,7 @@ const en = {
     page: 'Info'
   },
   setting: {
+    version:'Version: ',
     lang: 'Language',
     currency:'Currency',
     network:'Networks',

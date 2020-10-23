@@ -301,6 +301,7 @@ const cn = {
     lang: '显示语言',
     currency:'货币单位',
     network:'网络',
+    version:'版本号：',
     enLange:"展开视图",
     deleteWallet:'删除钱包',
     deleteHint:'执行删除钱包操作前请确认您已备份好钱包，否则将无法找回！',

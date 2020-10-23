@@ -35,6 +35,13 @@
 .form-item-content .select {
     height: 32px;
 }
+.version{
+  position: absolute;
+  bottom: 30px;
+  right: 20px;
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.36);
+}
 </style>
 
 <template>
@@ -70,6 +77,9 @@
             <div class="value">
                 <i class="iconfont icon_arrow_1"></i>
             </div>
+        </div>
+        <div class="version">
+          {{ $t("setting.version") }}[AIV]{version}[/AIV]
         </div>
     </div>
 </template>
