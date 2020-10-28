@@ -6,6 +6,7 @@ import Loading from 'vue-loading-overlay'
 import vuescroll from 'vuescroll/dist/vuescroll-native'
 import 'vue-loading-overlay/dist/vue-loading.css'
 import 'vuescroll/dist/vuescroll.css'
+import InfiniteLoading from 'vue-infinite-loading';
 
 import {store} from './store/store'
 import * as Actions from './store/constants'
@@ -42,6 +43,7 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
     messages
   })
   Vue.use(Vuelidate)
+  Vue.use(InfiniteLoading)
   Vue.use(i18n)
   Vue.use(vuescroll)
   Vue.use(VueRouter)
@@ -79,7 +81,7 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
         if(newNetwork !== changes[key].oldValue.settings.network){
           account.setupNet(`${newNetwork}${store.getters.netType}`)
         }
-        
+
         store.dispatch(Actions.LOAD_BYTOM)
       }
     }

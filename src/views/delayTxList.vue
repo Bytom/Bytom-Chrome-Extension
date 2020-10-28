@@ -5,8 +5,9 @@
 
 .transactions {
   font-size: 15px;
-  height: 500px;
-  overflow: hidden;
+  height:calc(100% - 80px);
+  overflow: auto;
+  overscroll-behavior: contain;
 }
 
 .value{
@@ -96,39 +97,36 @@ font-size: 15px;
           </h1>
         </section>
 
-        <section>
-            <section class="transactions" v-if="transactions.length != 0">
-                <vue-scroll ref="vs" @handle-scroll="handleScroll">
-                    <ul class="list">
-                        <li class="list-item" v-for="(transaction, index) in transactions" :key="index" >
-                            <a :href="blockmeta(transaction.lockedTxHash)" target="_blank">
-                                <div>
-                                    <div class="font-bold">
-                                      {{transaction.type}}
-                                    </div>
-                                    <div class="addr color-grey" >{{transaction.address}}</div>
+        <section class="transactions" v-if="transactions.length != 0">
+            <ul class="list">
+                <li class="list-item" v-for="(transaction, index) in transactions" :key="index" >
+                    <a :href="blockmeta(transaction.lockedTxHash)" target="_blank">
+                        <div>
+                            <div class="font-bold">
+                              {{transaction.type}}
+                            </div>
+                            <div class="addr color-grey" >{{transaction.address}}</div>
 
-                                </div>
-                                <div class="text-align-right">
-                                    <div class="value">{{transaction.direct}}{{transaction.amount}} {{transaction.asset.symbol}}</div>
+                        </div>
+                        <div class="text-align-right">
+                            <div class="value">{{transaction.direct}}{{transaction.amount}} {{transaction.asset.symbol}}</div>
 
-                                    <div v-if="transaction.status === 'delay_transfer_unlocked'" class="addr color-black">
-                                      <i class="iconfont icon_circle_selected"></i>{{ $t('delayTx.delay_transfer_unlocked') }}
-                                    </div>
-                                    <div v-else class="addr">
-                                      {{ $t(`delayTx.${transaction.status}`, { days: ( transaction.days ) }) }}
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-            </vue-scroll>
-            </section>
-            <div v-else>
-                <div class="bg-emptytx"></div>
-                <div>
-                    <span class="color-lightgrey center-text no-record">{{$t('main.noRecord')}}</span>
-                </div>
+                            <div v-if="transaction.status === 'delay_transfer_unlocked'" class="addr color-black">
+                              <i class="iconfont icon_circle_selected"></i>{{ $t('delayTx.delay_transfer_unlocked') }}
+                            </div>
+                            <div v-else class="addr">
+                              {{ $t(`delayTx.${transaction.status}`, { days: ( transaction.days ) }) }}
+                            </div>
+                        </div>
+                    </a>
+                </li>
+              <infinite-loading @infinite="infiniteHandler"><div slot="no-more"></div><div slot="no-results"></div></infinite-loading>
+            </ul>
+        </section>
+        <section v-else>
+            <div class="bg-emptytx"></div>
+            <div>
+                <span class="color-lightgrey center-text no-record">{{$t('main.noRecord')}}</span>
             </div>
         </section>
 
@@ -233,6 +231,19 @@ export default {
         ])
     },
     methods: {
+      infiniteHandler($state) {
+        if ((this.transactions.length == (this.start+limit)) ) {
+          this.start = this.start + limit;
+          this.refreshTransactions( this.start, limit).then(transactions => {
+            transactions.forEach(transaction => {
+              this.transactions.push(transaction);
+              $state.loaded();
+            });
+          });
+        }else {
+          $state.complete();
+        }
+      },
       img:function (symbol) {
         const _symbol = symbol.toLowerCase();
         if(this.netType === 'vapor'){
@@ -292,7 +303,7 @@ export default {
                 });
             }
         },
-        refreshTransactions: function (start, limit, type) {
+        refreshTransactions: function (start, limit) {
             return new Promise((resolve, reject) => {
 
                 transaction.listDelayTransaction(this.address,  start, limit).then(transactions => {
