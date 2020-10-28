@@ -1,6 +1,7 @@
 export const RouteNames = {
   HOME:'home',
   ASSET:'asset',
+  DELAY_TXS:'delay-transactions',
   ENTRY:'welcome',
   CREATE_ACCOUNT:'welcome-creation',
   MNEMONIC: 'welcome-mnemonic',
@@ -61,6 +62,14 @@ const routers = [
         meta: { title: '资产' },
         component: resolve => {
           require(['@/views/assetList.vue'], resolve)
+        }
+      },
+      {
+        path: '/delayTx',
+        name: RouteNames.DELAY_TXS,
+        meta: { title: '延时交易列表' },
+        component: resolve => {
+          require(['@/views/delayTxList.vue'], resolve)
         }
       },
       {

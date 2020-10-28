@@ -119,6 +119,7 @@
   .balance-bg{
     height: 128px;
 
+    position:relative;
     background: linear-gradient(228.34deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.1) 100%), #1A1A1A;
     border-radius: 8px;
   }
@@ -254,6 +255,21 @@ input:checked + .slider:before {
 
 
     }
+  .delay-btn{
+    position: absolute;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px 0px 0px 16px;
+    right: 0;
+    color: white;
+    font-size: 12px;
+    padding: 4px 10px;
+    top: 20px;
+  }
+  .icon_SBell{
+    font-size: 16px;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
 </style>
 
 <template>
@@ -275,12 +291,12 @@ input:checked + .slider:before {
                 </div>
             </div>
             <div :class="['content balance-bg',{ 'vapor-bg': isVapor }]">
-                <div class="amount color-white">
-                    <div class="total-asset">{{ $t('main.totalAsset') }}</div>
-                    <div class="token-amount">
-                        {{accountBalance}}
-                    </div>
-                </div>
+              <div class="amount color-white">
+                  <div class="total-asset">{{ $t('main.totalAsset') }}</div>
+                  <div class="token-amount">
+                      {{accountBalance}}
+                  </div>
+              </div>
               <div class="btn-send-transfer">
 
                 <a  @click="transferOpen">
@@ -296,6 +312,7 @@ input:checked + .slider:before {
                   <div>{{ $t('main.crossChain') }}</div>
                 </a>
               </div>
+              <a class="delay-btn" @click="delayOpen"><i class="iconfont icon_SBell"></i>{{ $t('delayTx.title') }}</a>
             </div>
 
         </section>
@@ -563,6 +580,9 @@ export default {
         },
         transferOpen: function () {
             this.$router.push('transfer')
+        },
+        delayOpen: function () {
+            this.$router.push('delayTx')
         },
         crossChainOpen: function () {
             this.$router.push('crossChain')
