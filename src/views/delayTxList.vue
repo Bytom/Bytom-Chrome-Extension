@@ -97,7 +97,7 @@ font-size: 15px;
           </h1>
         </section>
 
-        <section class="transactions" v-if="transactions.length != 0">
+        <section class="transactions">
             <ul class="list">
                 <li class="list-item" v-for="(transaction, index) in transactions" :key="index" >
                     <a :href="blockmeta(transaction.lockedTxHash)" target="_blank">
@@ -120,15 +120,18 @@ font-size: 15px;
                         </div>
                     </a>
                 </li>
-              <infinite-loading @infinite="infiniteHandler"><div slot="no-more"></div><div slot="no-results"></div></infinite-loading>
+              <infinite-loading @infinite="infiniteHandler">
+                <div slot="no-more"></div>
+                <div slot="no-results">
+                  <div class="bg-emptytx"></div>
+                  <div>
+                    <span class="color-lightgrey center-text no-record">{{$t('main.noRecord')}}</span>
+                  </div>
+                </div>
+              </infinite-loading>
             </ul>
         </section>
-        <section v-else>
-            <div class="bg-emptytx"></div>
-            <div>
-                <span class="color-lightgrey center-text no-record">{{$t('main.noRecord')}}</span>
-            </div>
-        </section>
+
 
     </div>
 </template>
@@ -156,7 +159,6 @@ export default {
     name: "",
     data() {
         return {
-            asset:null,
             transactions: [],
             maskShow: false,
             start: 0,
@@ -178,36 +180,6 @@ export default {
             this.enterActive = EnterActive
             this.leaveActive = LeaveActive
         },
-      // 'currentAccount.balances'() {
-      //   if(this.$refs['vs']){
-      //     this.$refs['vs'].scrollTo(
-      //       {
-      //         y: 0
-      //       },
-      //       500,
-      //       'easeInQuad'
-      //     );
-      //   }
-      //     this.start = 0
-      //     this.refreshTransactions( this.start, limit, this.type).then(transactions => {
-      //       this.transactions = transactions
-      //     });
-      // },
-      type(newVale){
-          if(this.$refs['vs']){
-            this.$refs['vs'].scrollTo(
-              {
-                y: 0
-              },
-              500,
-              'easeInQuad'
-            );
-          }
-        this.start = 0
-        this.refreshTransactions( this.start, limit, newVale).then(transactions => {
-          this.transactions = transactions
-        });
-      }
     },
     computed: {
       address: function(){
@@ -232,13 +204,15 @@ export default {
     },
     methods: {
       infiniteHandler($state) {
-        if ((this.transactions.length == (this.start+limit)) ) {
-          this.start = this.start + limit;
+        if (this.transactions.length===0 || (this.transactions.length == (this.start)) ) {
           this.refreshTransactions( this.start, limit).then(transactions => {
-            transactions.forEach(transaction => {
-              this.transactions.push(transaction);
+            if (transactions.length) {
+              this.start = this.start + limit;
+              this.transactions.push(...transactions);
               $state.loaded();
-            });
+            }else{
+              $state.complete();
+            }
           });
         }else {
           $state.complete();
@@ -271,53 +245,21 @@ export default {
       shortAddress: function (add) {
         return address.short(add)
       },
-      formatCurrency: function (num) {
-        return Num.formatCurrency(num, this.currency)
-      },
-      itemBalance: function(asset){
-        if(asset.asset.assetId === BTM){
-          return Num.formatNue(asset.balance,8)
-        }else{
-          return asset.balance
-        }
+      refreshTransactions: function (start, limit) {
+          return new Promise((resolve, reject) => {
 
-      },
-      changeType: function (type) {
-        this.type = type
-      },
-        handleScroll(vertical, horizontal, nativeEvent) {
-            if (vertical.process == 0) {
-                this.start = 0;
-                this.refreshTransactions( this.start, limit, this.type).then(transactions => {
-                    this.transactions = transactions
-                });
-                return;
-            }
+              transaction.listDelayTransaction(this.address,  start, limit).then(transactions => {
+                if (transactions == null) {
+                      return;
+                  }
 
-            if ( (vertical.process == 1) && (this.transactions.length == (this.start+limit)) ) {
-                this.start = this.start + limit;
-                this.refreshTransactions( this.start, limit, this.type).then(transactions => {
-                    transactions.forEach(transaction => {
-                        this.transactions.push(transaction);
-                    });
-                });
-            }
-        },
-        refreshTransactions: function (start, limit) {
-            return new Promise((resolve, reject) => {
-
-                transaction.listDelayTransaction(this.address,  start, limit).then(transactions => {
-                  if (transactions == null) {
-                        return;
-                    }
-
-                    const formattedTx = this.transactionsFormat(transactions);
-                    resolve(formattedTx)
-                }).catch(error => {
-                    console.log(error);
-                    reject(error)
-                });
-            })
+                  const formattedTx = this.transactionsFormat(transactions);
+                  resolve(formattedTx)
+              }).catch(error => {
+                  console.log(error);
+                  reject(error)
+              });
+          })
         },
         countDays: function (lockUntil) {
           const blockDiff = lockUntil - this.currentBlockHeight ;
@@ -369,9 +311,6 @@ export default {
           if(resp){
             this.currentBlockHeight = resp.blockHeight;
           }
-          this.refreshTransactions( this.start, limit, this.type).then(transactions => {
-            this.transactions = transactions
-          });
         })
     },
   };

@@ -5,8 +5,9 @@
 
 .transactions {
   font-size: 15px;
-  height: 345px;
-  overflow: hidden;
+  height:calc(100% - 214px);
+  overflow: auto;
+  overscroll-behavior: contain;
 }
 
 .value{
@@ -117,43 +118,42 @@ font-size: 15px;
                 <div :class="{'color-black': (type==='transfer_out') }" @click="changeType('transfer_out')" >{{ $t('common.transfer_out') }}</div>
             </section>
 
-            <section>
-                  <section class="transactions" v-if="transactions.length != 0">
-                      <vue-scroll ref="vs" @handle-scroll="handleScroll">
-                        <ul class="list">
-                            <li class="list-item" v-for="(transaction, index) in transactions" :key="index" >
-                              <a :href="blockmeta(transaction.hash)" target="_blank">
-                                <div>
-                                  <div class="font-bold">
-                                    {{transaction.type}}
-                                  </div>
-                                    <div class="addr color-grey" >{{transaction.address}}</div>
+            <section class="transactions">
+                <ul class="list">
+                    <li class="list-item" v-for="(transaction, index) in transactions" :key="index" >
+                      <a :href="blockmeta(transaction.hash)" target="_blank">
+                        <div>
+                          <div class="font-bold">
+                            {{transaction.type}}
+                          </div>
+                            <div class="addr color-grey" >{{transaction.address}}</div>
 
-                                </div>
-                                <div class="text-align-right">
-                                  <div class="value">{{transaction.direct}}{{transaction.val}} {{currentAsset.asset.symbol}}</div>
+                        </div>
+                        <div class="text-align-right">
+                          <div class="value">{{transaction.direct}}{{transaction.val}} {{currentAsset.asset.symbol}}</div>
 
-                                  <div class="addr color-red" v-if="!transaction.status">
-                                    {{ $t('listAsset.fail') }}
-                                  </div>
-                                  <div class="addr color-grey" v-else-if="transaction.hasOwnProperty('blockTimestamp')">
-                                    {{transaction.submissionTimestamp | moment}}
-                                  </div>
-                                  <div class="addr color-grey" v-else>
-                                    {{ $t('main.unconfirmed') }}
-                                  </div>
-                                </div>
-                              </a>
-                            </li>
-                        </ul>
-                  </vue-scroll>
-                  </section>
-                  <div v-else>
-                      <div class="bg-emptytx"></div>
-                      <div>
-                          <span class="color-lightgrey center-text no-record">{{$t('main.noRecord')}}</span>
+                          <div class="addr color-red" v-if="!transaction.status">
+                            {{ $t('listAsset.fail') }}
+                          </div>
+                          <div class="addr color-grey" v-else-if="transaction.hasOwnProperty('blockTimestamp')">
+                            {{transaction.submissionTimestamp | moment}}
+                          </div>
+                          <div class="addr color-grey" v-else>
+                            {{ $t('main.unconfirmed') }}
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    <infinite-loading :identifier="infiniteId" @infinite="infiniteHandler">
+                      <div slot="no-more"></div>
+                      <div slot="no-results">
+                        <div class="bg-emptytx"></div>
+                        <div>
+                        <span class="color-lightgrey center-text no-record">{{$t('main.noRecord')}}</span>
+                        </div>
                       </div>
-                  </div>
+                    </infinite-loading>
+                </ul>
             </section>
 
     </div>
@@ -185,6 +185,7 @@ export default {
             enterActive: EnterActive,
             leaveActive: LeaveActive,
             type:'all',
+            infiniteId: +new Date(),
         };
     },
     watch: {
@@ -199,36 +200,6 @@ export default {
             this.enterActive = EnterActive
             this.leaveActive = LeaveActive
         },
-      // 'currentAccount.balances'() {
-      //   if(this.$refs['vs']){
-      //     this.$refs['vs'].scrollTo(
-      //       {
-      //         y: 0
-      //       },
-      //       500,
-      //       'easeInQuad'
-      //     );
-      //   }
-      //     this.start = 0
-      //     this.refreshTransactions( this.start, limit, this.type).then(transactions => {
-      //       this.transactions = transactions
-      //     });
-      // },
-      type(newVale){
-          if(this.$refs['vs']){
-            this.$refs['vs'].scrollTo(
-              {
-                y: 0
-              },
-              500,
-              'easeInQuad'
-            );
-          }
-        this.start = 0
-        this.refreshTransactions( this.start, limit, newVale).then(transactions => {
-          this.transactions = transactions
-        });
-      }
     },
     computed: {
       address: function(){
@@ -291,25 +262,25 @@ export default {
       },
       changeType: function (type) {
         this.type = type
+        this.start = 0
+        this.infiniteId += 1;
+        this.transactions = []
       },
-        handleScroll(vertical, horizontal, nativeEvent) {
-            if (vertical.process == 0) {
-                this.start = 0;
-                this.refreshTransactions( this.start, limit, this.type).then(transactions => {
-                    this.transactions = transactions
-                });
-                return;
+      infiniteHandler($state) {
+        if (this.transactions.length===0 || (this.transactions.length == (this.start)) ) {
+          this.refreshTransactions( this.start, limit, this.type).then(transactions => {
+            if (transactions.length) {
+              this.start = this.start + limit;
+              this.transactions.push(...transactions);
+              $state.loaded();
+            }else{
+              $state.complete();
             }
-
-            if ( (vertical.process == 1) && (this.transactions.length == (this.start+limit)) ) {
-                this.start = this.start + limit;
-                this.refreshTransactions( this.start, limit, this.type).then(transactions => {
-                    transactions.forEach(transaction => {
-                        this.transactions.push(transaction);
-                    });
-                });
-            }
-        },
+          });
+        }else {
+          $state.complete();
+        }
+      },
         refreshTransactions: function (start, limit, type) {
             return new Promise((resolve, reject) => {
                 let type_txs
@@ -418,9 +389,9 @@ export default {
       ])
     },
     mounted() {
-        this.refreshTransactions( this.start, limit, this.type).then(transactions => {
-          this.transactions = transactions
-        });
+        // this.refreshTransactions( this.start, limit, this.type).then(transactions => {
+        //   this.transactions = transactions
+        // });
         if(Object.keys(this.listVote).length == 0 && this.netType === 'vapor'){
           query.chainStatus().then(resp => {
             if(resp){
