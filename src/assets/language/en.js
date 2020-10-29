@@ -288,7 +288,7 @@ const en = {
     }
   },
   delayTx:{
-    title:'Scheduled Transactions',
+    title:'Scheduled Tx',
     scheduledTransfer:'Scheduled Tx',
     scheduledReceive:'Scheduled Tx',
     locked: 'Locked',

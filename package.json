@@ -1,7 +1,7 @@
 {
     "name": "Byone",
     "description": "Bytom Chrome Extension Wallet",
-    "version": "3.0.6",
+    "version": "3.0.7",
     "author": "zhiting.fly@8btc.com",
     "license": "MIT",
     "private": true,

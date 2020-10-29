@@ -13,13 +13,9 @@ transaction.list = function(guid, asset_id, start, limit, tx_types) {
   return bytom.transaction.list(guid, filter, null, start, limit);
 };
 
-transaction.listDelayTransaction = function(address, start, limit) {
-
-  let network = bytom.networks()
+transaction.listDelayTransaction = function(address, start, limit, network) {
   if(!network){
     network = 'mainnet'
-  }else{
-    network = network.split('vapor')[0]
   }
 
   let baseURL = networks[network]

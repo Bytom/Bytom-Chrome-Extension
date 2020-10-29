@@ -97,7 +97,7 @@ font-size: 15px;
           </h1>
         </section>
 
-        <section class="transactions">
+        <section class="transactions" v-if="currentBlockHeight !== 0">
             <ul class="list">
                 <li class="list-item" v-for="(transaction, index) in transactions" :key="index" >
                     <a :href="blockmeta(transaction.lockedTxHash)" target="_blank">
@@ -248,7 +248,7 @@ export default {
       refreshTransactions: function (start, limit) {
           return new Promise((resolve, reject) => {
 
-              transaction.listDelayTransaction(this.address,  start, limit).then(transactions => {
+              transaction.listDelayTransaction(this.address,  start, limit, this.net).then(transactions => {
                 if (transactions == null) {
                       return;
                   }
@@ -300,18 +300,15 @@ export default {
         Actions.SET_LIST_VOTE
       ])
     },
-    mounted() {
+    async mounted() {
         if(this.language === 'zh' ||this.language === 'cn'){
           moment.locale('zh-cn');
         }
         else{
           moment.locale('en');
         }
-        query.blockStatus().then(resp => {
-          if(resp){
-            this.currentBlockHeight = resp.blockHeight;
-          }
-        })
+        const resp = await query.blockStatus()
+        this.currentBlockHeight = resp.blockHeight;
     },
   };
 </script>
