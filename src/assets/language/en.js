@@ -287,6 +287,17 @@ const en = {
       description:'Transfer successfully, Enjoy it!'
     }
   },
+  delayTx:{
+    title:'Scheduled Tx',
+    scheduledTransfer:'Scheduled Tx',
+    scheduledReceive:'Scheduled Tx',
+    locked: 'Locked',
+    unlocked: 'Unlocked',
+    delay_transfer_submmitted:'Locking',
+    delay_transfer_locked:'Received in about {days}',
+    delay_transfer_unlock_submitted:'Unlocking',
+    delay_transfer_unlocked:'Unlocked'
+  },
   wallet:{
     create:"Create wallet",
     success:'Switch account successfully'
@@ -296,6 +307,7 @@ const en = {
     page: 'Info'
   },
   setting: {
+    version:'Version: ',
     lang: 'Language',
     currency:'Currency',
     network:'Networks',

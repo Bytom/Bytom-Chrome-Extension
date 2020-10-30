@@ -636,7 +636,10 @@
 
             const remove = ['spend','control'];
             if(inputs[0] && outputs[0] && inputs[0].amount && outputs[0].amount ){
-              if((inputs[0].amount ===outputs[0].amount)){
+              const inAmount = new BigNumber(_.sumBy(inputs, 'amount'))
+              const outAmount = new BigNumber(_.sumBy(outputs, 'amount'))
+
+              if(inAmount.eq(outAmount)){
                 const isVeto = inputs.find(o => o.type ==='veto')
                 const isVote = outputs.find(o => o.type ==='vote')
                 if(isVeto || isVote){

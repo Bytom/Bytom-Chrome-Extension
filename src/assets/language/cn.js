@@ -275,6 +275,17 @@ const cn = {
     BTM3101:'无效data类型。',
     BTM3102:'无效Boolean类型。',
   },
+  delayTx:{
+    title:'延迟交易',
+    scheduledTransfer:'延时转账',
+    scheduledReceive:'延时收款',
+    locked: '未解锁',
+    unlocked: '已解锁',
+    delay_transfer_submmitted:'锁定中',
+    delay_transfer_locked:'大约{days}后解锁',
+    delay_transfer_unlock_submitted:'解锁中',
+    delay_transfer_unlocked:'已解锁'
+  },
   successMsg:{
     createWallet:{
       header: '创建成功',
@@ -301,6 +312,7 @@ const cn = {
     lang: '显示语言',
     currency:'货币单位',
     network:'网络',
+    version:'版本号：',
     enLange:"展开视图",
     deleteWallet:'删除钱包',
     deleteHint:'执行删除钱包操作前请确认您已备份好钱包，否则将无法找回！',

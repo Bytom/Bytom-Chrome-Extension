@@ -1,5 +1,6 @@
 import bytom from "./bytom";
 import { snakeize } from "@/utils/utils";
+import { networks } from '@/utils/constants'
 
 
 let transaction = {};
@@ -10,6 +11,18 @@ transaction.list = function(guid, asset_id, start, limit, tx_types) {
     filter.tx_types = tx_types
   }
   return bytom.transaction.list(guid, filter, null, start, limit);
+};
+
+transaction.listDelayTransaction = function(address, start, limit, network) {
+  if(!network){
+    network = 'mainnet'
+  }
+
+  let baseURL = networks[network]
+  if(network==='testnet'){
+    baseURL = baseURL+':3008'
+  }
+  return bytom.transaction.listDelayTransaction(baseURL, address, start, limit);
 };
 
 transaction.convertArgument = function(argArray) {

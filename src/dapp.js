@@ -3,6 +3,7 @@ import * as MsgTypes from './messages/types'
 import * as EventNames from '@/messages/event'
 import IdGenerator from '@/utils/IdGenerator'
 import { networks } from '@/utils/constants'
+import { EventEmitter } from 'events';
 /***
  * This is just a helper to manage resolving fake-async
  * requests using browser messaging.
@@ -54,9 +55,9 @@ const _send = (_type, _payload) => {
   })
 }
 
-
-export default class Bytomdapp {
+export default class Bytomdapp extends EventEmitter {
   constructor(_stream, _options) {
+    super();
     // currentVersion = parseFloat(_options.version)
     stream = _stream
     resolvers = []
@@ -77,6 +78,8 @@ export default class Bytomdapp {
   enable(){
     return _send(MsgTypes.ENABLE)
       .then(async default_account =>{
+        super.emit(MsgTypes.ACCOUNT_CHANGED, [default_account])
+
         this.default_account = default_account;
         this.defaultAccount = default_account;
         return default_account;
@@ -86,6 +89,8 @@ export default class Bytomdapp {
   disable(){
     return _send(MsgTypes.DISABLE)
       .then(async (res) =>{
+        super.emit(MsgTypes.ACCOUNT_CHANGED, [])
+
         this.default_account = '';
         this.defaultAccount = '';
         return res;
@@ -94,7 +99,10 @@ export default class Bytomdapp {
 
   //v1.4.0
   setChain(params) {
-    return _send(MsgTypes.SETCHAIN, params)
+    return _send(MsgTypes.SETCHAIN, params).then(async (res) =>{
+      super.emit(MsgTypes.NET_TYPE_CHANGED, params)
+      return res;
+    })
   }
 
   sendTransaction(params) {
@@ -111,6 +119,10 @@ export default class Bytomdapp {
 
   signTransaction(params) {
     return _send(MsgTypes.SIGNTRANSACTION, params)
+  }
+
+  on (eventName, listener) {
+    return super.on(eventName, listener)
   }
 
 

@@ -190,7 +190,8 @@ export default class Background {
         const currentAccount =  bytom.currentAccount
         const {vpAddress, address} = currentAccount
         let account = {
-          addresses: [vpAddress, address]
+          addresses: [vpAddress, address],
+          rootXPub: currentAccount.xpub
         }
         if(bytom.settings.netType === 'vapor'){
           account.address = vpAddress;

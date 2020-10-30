@@ -3,9 +3,8 @@ import moment from 'moment'
 import VueI18n from 'vue-i18n'
 import VueRouter from 'vue-router'
 import Loading from 'vue-loading-overlay'
-import vuescroll from 'vuescroll/dist/vuescroll-native'
 import 'vue-loading-overlay/dist/vue-loading.css'
-import 'vuescroll/dist/vuescroll.css'
+import InfiniteLoading from 'vue-infinite-loading';
 
 import Routers from './router'
 import ViewBase from '@/views/viewBase'
@@ -44,8 +43,8 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
     messages
   })
   Vue.use(Vuelidate)
+  Vue.use(InfiniteLoading)
   Vue.use(i18n)
-  Vue.use(vuescroll)
   Vue.use(VueRouter)
   Vue.use(MenuPage)
   Vue.use(SelectionPage)
