@@ -336,7 +336,7 @@ export default {
                     transaction.direct = "+";
                     const resultAddr = inputAddresses.pop()
                     transaction.address = (resultAddr && resultAddr.includes(' '))?resultAddr:address.short(resultAddr);
-                } else {
+                } else if (Number(balanceObject[0].amount) < 0)  {
                     if(!transaction.type) {
                       transaction.type = this.$t("common.transfer_out");
                     }
@@ -344,6 +344,13 @@ export default {
                     transaction.direct = "-";
                     const resultAddr = outputAddresses.pop()
                     transaction.address = (resultAddr && resultAddr.includes(' '))?resultAddr:address.short(resultAddr);
+                }else{
+                  if(!transaction.type) {
+                    transaction.type = this.$t("common.transfer_out");
+                  }
+
+                  const resultAddr = outputAddresses.pop() || this.address
+                  transaction.address = (resultAddr && resultAddr.includes(' '))?resultAddr:address.short(resultAddr);
                 }
 
                 if(transaction.types.includes('in_crosschain')){
@@ -376,7 +383,11 @@ export default {
                   transaction.type = this.$t("common.transfer_out");
                 }
                 transaction.val =  0
-                transaction.address = address.short(this.address)
+                let resultAddr =  transaction.outputs
+                  .find(output => output.address !== this.address)
+                resultAddr = resultAddr? resultAddr.address : this.address
+
+                transaction.address = address.short(resultAddr)
 
                 formattedTransactions.push(transaction);
               }

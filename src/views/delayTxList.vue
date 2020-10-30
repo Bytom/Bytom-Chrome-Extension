@@ -1,8 +1,4 @@
 <style lang="scss" scoped>
-.alias {
-    font-size: 13px;
-}
-
 .transactions {
   font-size: 15px;
   height:calc(100% - 80px);
@@ -22,70 +18,51 @@ font-size: 15px;
   display: block;
 }
 
-  .symbol{
-    display: flex;
-    align-items: center;
-    font-weight: 600;
-    font-size: 15px;
+.back{
+    width: 56px;
+    height: 28px;
+
+    background: #EEEEEE;
+    border-radius: 20px;
+}
+
+.header{
+  display: flex;
+  margin-bottom: 20px;
+  h1{
+    margin-left: 12px;
+    font-size: 20px;
+  }
+}
+
+.list-item a{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  color: rgba(0, 0, 0, 0.88);
+  font-size: 14px;
+}
+
+.transaction-title{
+  display: flex;
+  font-weight: 600;
+  font-size: 15px;
+  margin: 16px 0;
+  color: rgba(0, 0, 0, 0.24);
+  div:not(:first-child) {
+    margin-left: 25px;
   }
 
-  .currency-banner{
-    display: flex;
-    justify-content: space-between;
-    padding: 20px;
-    align-items: center;
-    font-size: 15px;
-    font-weight: 600;
-    .addr{
-      font-weight: normal;
-    }
+  div{
+    cursor: pointer;
   }
-
-  .back{
-      width: 56px;
-      height: 28px;
-
-      background: #EEEEEE;
-      border-radius: 20px;
-  }
-
-  .header{
-    display: flex;
-    margin-bottom: 20px;
-    h1{
-      margin-left: 12px;
-      font-size: 20px;
-    }
-  }
-
-  .list-item a{
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    color: rgba(0, 0, 0, 0.88);
-    font-size: 14px;
-  }
-
-  .transaction-title{
-    display: flex;
-    font-weight: 600;
-    font-size: 15px;
-    margin: 16px 0;
-    color: rgba(0, 0, 0, 0.24);
-    div:not(:first-child) {
-      margin-left: 25px;
-    }
-
-    div{
-      cursor: pointer;
-    }
-  }
-  .icon_circle_selected{
-    color: #06BE85;
-    font-size: 16px;
-    vertical-align: middle;
-    margin-right: 5px;
-  }
+}
+.icon_circle_selected{
+  color: #06BE85;
+  font-size: 16px;
+  vertical-align: middle;
+  margin-right: 5px;
+}
 </style>
 
 <template>
@@ -140,12 +117,8 @@ font-size: 15px;
 import address from "@/utils/address";
 import query from "@/models/query";
 import transaction from "@/models/transaction";
-import { camelize } from "@/utils/utils";
 import { BTM } from "@/utils/constants";
-import { mapActions, mapGetters, mapState } from 'vuex'
-import * as Actions from '@/store/constants';
-import _ from 'lodash';
-import { Number as Num } from "@/utils/Number"
+import { mapGetters, mapState } from 'vuex'
 import moment from 'moment'
 
 const EnterActive = 'animated faster fadeInLeft';
@@ -165,7 +138,6 @@ export default {
             enterActive: EnterActive,
             leaveActive: LeaveActive,
             currentBlockHeight:0,
-            currentTimeStamp:0
         };
     },
     watch: {
@@ -218,26 +190,12 @@ export default {
           $state.complete();
         }
       },
-      img:function (symbol) {
-        const _symbol = symbol.toLowerCase();
-        if(this.netType === 'vapor'){
-          return `https://cdn.blockmeta.com/resources/logo/vapor/${_symbol}.png`
-        }else{
-          return `https://cdn.blockmeta.com/resources/logo/bytom/${_symbol}.png`
-        }
-      },
-      onImgError: function(event) {
-        event.target.src = require(`@/assets/img/asset/${this.netType}.png`)
-      },
       blockmeta:function (txid) {
         if(this.netType === 'vapor'){
           return `https://vapor.blockmeta.com/tx/${txid}`
         }else{
           return `https://blockmeta.com/tx/${txid}`
         }
-      },
-      camelize: function (object) {
-        return camelize(object)
       },
       close: function () {
         this.$router.go(-1)
@@ -295,10 +253,6 @@ export default {
           });
           return formattedTransactions;
         },
-      ...mapActions([
-        Actions.UPDATE_STORED_BYTOM,
-        Actions.SET_LIST_VOTE
-      ])
     },
     async mounted() {
         if(this.language === 'zh' ||this.language === 'cn'){
