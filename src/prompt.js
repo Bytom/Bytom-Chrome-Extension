@@ -1,3 +1,4 @@
+import './ga.js'
 import Vue from 'vue'
 import moment from 'moment'
 import VueI18n from 'vue-i18n'
