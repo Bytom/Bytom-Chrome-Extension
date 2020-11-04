@@ -2,7 +2,7 @@ module.exports = {
   manifest_version: 2,
   name: 'Byone',
   description: 'Bytom Wallet Chrome extension.',
-  version: '3.0.7',
+  version: '3.0.8',
   author: 'Bytom frontend, zhitinglin',
   web_accessible_resources: ['js/inject.js'],
   browser_action: {
@@ -23,7 +23,7 @@ module.exports = {
     'clipboardRead',
     'background'
   ],
-  content_security_policy: "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  content_security_policy: "script-src 'self'  'unsafe-eval' https://www.google-analytics.com/analytics.js; object-src 'self'",
   content_scripts: [
     {
       js: ['js/content.js'],
