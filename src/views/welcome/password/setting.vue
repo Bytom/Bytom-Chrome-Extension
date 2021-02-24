@@ -113,6 +113,7 @@
   import { mapActions, mapGetters, mapState } from 'vuex'
   import * as Actions from '@/store/constants';
   import { required, sameAs } from "vuelidate/lib/validators";
+import { updateLockTime } from '@/models/lock';
 
 
   let testNet = null;
@@ -243,6 +244,7 @@
             //restore by mnemonic
             account.restoreByMnemonic(accountAlias, mnemonic, this.formItem.passwd1, this).then(currentAccount => {
               loader.hide();
+              updateLockTime();
               this.formItem = {};
               this[Actions.CLEAR_DATA]()
               this[Actions.PUSH_ALERT](this.$t("successMsg.restoreWallet"))
@@ -260,6 +262,7 @@
             //restore by keystore
             account.restoreByKeystore(accountAlias, keystore, this.formItem.passwd1, this).then(currentAccount => {
               loader.hide();
+              updateLockTime();
               this.formItem = {};
               this[Actions.CLEAR_DATA]()
               this[Actions.PUSH_ALERT](this.$t("successMsg.restoreWallet"))

@@ -123,6 +123,7 @@ import getLang from "../../assets/language/sdk";
 import { mapActions, mapGetters, mapState } from 'vuex'
 import * as Actions from '@/store/constants';
 import { required, sameAs } from "vuelidate/lib/validators";
+import { updateLockTime } from '@/models/lock';
 
 
 let testNet = null;
@@ -260,6 +261,7 @@ export default {
 
             account.createKey(this.formItem.accAlias, null, this.formItem.passwd1, this).then(() => {
                 loader.hide();
+                updateLockTime();
                 this.formItem = {};
                 this.$router.push('/mnemonic');
             }).catch(error => {

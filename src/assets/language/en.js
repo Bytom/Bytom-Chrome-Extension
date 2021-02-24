@@ -327,6 +327,15 @@ const en = {
     mnemonicHint:'Please copy the mnemonic and keep it.',
     ok:'Completed'
   },
+  lock: {
+    title: 'Lock',
+    subtitle: 'Please enter the password',
+    placeholder: 'password',
+    forget: 'forget password？',
+    import: 'import wallet',
+    passwordEmpty: 'Please enter the password',
+    passwordError: 'Password is wrong'
+  },
   protocol: {
     title: 'Service Agreement',
     content:`Dear users:

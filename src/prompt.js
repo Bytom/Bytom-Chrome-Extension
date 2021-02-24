@@ -34,6 +34,8 @@ import { Vue as VueIntegration } from "@sentry/integrations";
 import { Integrations } from '@sentry/tracing';
 import BytomObj from "./utils/Bytom";
 
+import { updateLockTime, isNeedLock } from '@/models/lock'
+
 store.dispatch(Actions.LOAD_BYTOM).then(() => {
   Vue.use(VueI18n)
   const i18n = new VueI18n({
@@ -135,12 +137,20 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
   router.beforeEach((to, from, next) => {
     // wallet init
 
+    if (!to.meta.nolock) {
+      if (store.getters.currentAccount && isNeedLock()) {
+        next({ name: 'lock', query: { to: to.name } })
+        return
+      } 
+      updateLockTime()
+    }
     if (!(store.getters.currentAccount) && to.name == 'home') {
       next({ name: 'welcome' })
       let newURL = `${apis.runtime.getURL('pages/prompt.html')}#/welcome`;
       chrome.tabs.create({ url: newURL });
       return
-    }else if (!(store.getters.currentAccount && store.getters.vMnemonic)  && to.name == 'home') {
+    }
+    if (!(store.getters.currentAccount && store.getters.vMnemonic)  && to.name == 'home') {
       next({ name: 'welcome-verify-mnemonic' })
       let newURL = `${apis.runtime.getURL('pages/prompt.html')}#/mnemonic`;
       chrome.tabs.create({ url: newURL });
