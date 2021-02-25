@@ -14,6 +14,7 @@ import { BTM, camelize } from './utils/constants'
 import account from "@/models/account";
 
 let prompt = null;
+let lockTime = null;
 
 export default class Background {
   constructor() {
@@ -349,5 +350,8 @@ export default class Background {
 
 
 }
+
+window.setLockTime = (time) => lockTime = time || Date.now();
+window.getLockTime = () => lockTime;
 
 new Background()

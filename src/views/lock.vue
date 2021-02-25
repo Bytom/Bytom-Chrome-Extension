@@ -29,7 +29,6 @@ import { store } from '@/store/store'
 import { toast } from '@/components/toast'
 import account from "@/models/account"
 import { updateLockTime } from '@/models/lock'
-import { log } from 'util'
 
 export default {
   data () {
@@ -56,7 +55,7 @@ export default {
       
       // success
       updateLockTime()
-      this.$router.replace({ name: this.$route.query.to })
+      this.$router.replace({ name: this.$route.query.to || 'home' })
     }
   }
 };

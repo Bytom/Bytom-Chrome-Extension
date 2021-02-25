@@ -1,9 +1,9 @@
-const STORGE_KEY = 'LOCK_TIME'
-let lockTime = localStorage.getItem(STORGE_KEY)
+const backgroundPage = chrome.extension.getBackgroundPage()
+let lockTime = backgroundPage.getLockTime()
 
 export function updateLockTime () {
-  lockTime = Date.now()
-  localStorage.setItem('LOCK_TIME', lockTime)
+  lockTime = Date.now();
+  backgroundPage.setLockTime(lockTime)
 }
 export function isNeedLock () {
   const oneHour = 1000 * 60 * 60
