@@ -15,6 +15,11 @@ module.exports = merge(baseConf, {
     new CleanWebpackPlugin(["dist/*.*"]),
     new webpack.LoaderOptionsPlugin({
       minimize: true
-    })
+    }),
+    new CopyWebpackPlugin([
+      {
+        from: resolve('./src/manifest.json')
+      }
+    ]),
   ]
 });
