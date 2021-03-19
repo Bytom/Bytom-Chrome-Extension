@@ -73,7 +73,7 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
   }
 
   Sentry.init({
-    dsn: "https://f080e90fe9d94cf9b05323b373d839f3@o441881.ingest.sentry.io/5412722",
+    dsn: "https://f5d345e069fe4d0a9e4509ff31c8862c@sentry.8btc-ops.com/14",
     release: "byone@" + process.env.npm_package_version,
     integrations: [
       new VueIntegration({
