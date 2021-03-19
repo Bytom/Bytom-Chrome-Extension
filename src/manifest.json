@@ -18,8 +18,6 @@
     "*://*/",
     "storage",
     "unlimitedStorage",
-    "clipboardWrite",
-    "clipboardRead",
     "background"
   ],
   "content_security_policy": "script-src 'self'  'unsafe-eval' https://www.google-analytics.com/analytics.js; object-src 'self'",
