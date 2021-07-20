@@ -22,7 +22,7 @@ export const camelize = (object) => {
 
 export const networks = {
   mainnet:'https://bcapi.movapi.com',
-  testnet:'http://161.189.9.64'
+  testnet: localStorage.getItem('testnet') || 'http://52.83.11.181'
 }
 
 export const networksJS = {

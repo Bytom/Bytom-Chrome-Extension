@@ -78,7 +78,7 @@
                 <i class="iconfont icon_arrow_1"></i>
             </div>
         </div>
-        <div class="version">
+        <div class="version" @click="onVersionClick">
           {{ $t("setting.version") }}[AIV]{version}[/AIV]
         </div>
     </div>
@@ -87,11 +87,13 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import {apis} from '@/utils/BrowserApis';
+import { log } from 'util';
 
 export default {
     name: "",
     data() {
         return {
+          versionClickCount: 0
         };
     },
     computed: {
@@ -124,6 +126,17 @@ export default {
       ])
     },
     methods: {
+      onVersionClick () {
+        this.versionClickCount++
+        if (this.versionClickCount > 9) {
+          this.versionClickCount = 0
+          const url = window.prompt('testnet')
+          if (url) {
+            this.$toast.success('重新打开插件后生效')
+            localStorage.setItem('testnet', url)
+          }
+        }
+      }
     },
     mounted: function () {
 

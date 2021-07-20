@@ -129,6 +129,20 @@
     font-size: 14px;
   }
 
+  .address-list {
+    margin-top: 10px;
+    padding-top: 10px;
+    max-height: 125px;
+    overflow-y: auto;
+    font-size: 12px;
+    border-top: solid 1px #eee;
+
+    .item {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
   .info {
     margin-bottom: 20px;
   }
@@ -200,7 +214,8 @@
                       v-if="prompt.domain && domainsMeta[prompt.domain] && domainsMeta[prompt.domain].title ">{{domainsMeta[prompt.domain].title }}</span>
                 <span class="color-black" v-else-if="prompt.domain ">{{prompt.domain }}</span>
 
-                <div v-if="transaction.to">{{short(transaction.to)}}</div>
+                <!-- <div v-if="transaction.to">{{short(transaction.to)}}</div> -->
+                <div v-if="transaction.to && typeof transaction.to === 'string'">{{short(transaction.to)}}</div>
               </div>
             </div>
           </div>
@@ -220,7 +235,9 @@
           <!--amounts-->
           <div v-if="prompt.data && prompt.data.type ==='transfer'" class="amount-list">
             <div>{{ $t('transfer.amount') }}</div>
-            <div class="color-black font-bold">{{transaction.amount}}<span class="uint uppercase">{{unit || short(transaction.asset) }}</span>
+            <div class="color-black font-bold">
+              <span>{{transaction.amount}}</span>
+              <span class="uint uppercase">{{unit || short(transaction.asset) }}</span>
             </div>
           </div>
           <div v-else v-for="(amountInput, index) in transaction.amounts" :key="index" class="amount-list">
@@ -233,6 +250,17 @@
           <div v-if="transaction.fee" class="amount-list">
             <div>{{ $t('transfer.fee') }}</div>
             <div class="color-black font-bold">{{transaction.fee}}<span class="uint">BTM</span></div>
+          </div>
+
+          <!-- multi address -->
+          <div 
+            v-if="prompt.data && prompt.data.type ==='transfer' && transaction.to && typeof transaction.to === 'object'" 
+            class="address-list"
+          >
+            <div v-for="(amount, address) in transaction.to" :key="address" class="item">
+              <span>{{ short(address) }}</span>
+              <span>{{ amount }} {{ unit || short(transaction.asset) }}</span>
+            </div>
           </div>
 
         </div>
@@ -274,7 +302,6 @@
   import { camelize, removeFromArray } from "@/utils/utils";
   import bytomjslib from 'bytomjs-lib'
   import BigNumber from "bignumber.js"
-
 
   export default {
     add,
@@ -537,13 +564,15 @@
                   })
 
               let that = this;
-              Promise.all(promise).then(function (output) {
-                that.transaction.amounts = output
+              Promise.all(promise).then((output) => {
+                this.transaction.amounts = output
                 this.dataReady = true
               }).catch(()=>{
                 this.dataReady = true
               })
 
+            } else {
+              this.dataReady = true
             }
             break;
           }
@@ -554,19 +583,24 @@
             if (data.asset != undefined) {
               this.transaction.asset=  data.asset
             }
-            if (data.to != undefined) {
-              this.transaction.to = data.to
-            }
             if (data.amount != undefined) {
               this.transaction.amount = data.amount
             }
-
+            if (data.to != undefined) {
+              this.transaction.to = data.to
+              // multi toAddress
+              if (typeof data.to === 'object') {
+                const amount = Object.values(data.to).reduce((a, b) => +a + +b, 0)
+                this.transaction.amount = amount
+              }
+            }
             if(data.confirmations != undefined) {
               this.transaction.confirmations = data.confirmations
             }
 
-            const asset_amounts ={}
-            asset_amounts[data.asset] = data.amount
+            let asset_amounts = {
+              [data.asset]: this.transaction.amount.toString()
+            }
 
             transaction.estimateFee( data.from, asset_amounts).then( (resp) =>{
               this.transaction.fee = resp.fee
@@ -577,9 +611,10 @@
                 throw e
               })
 
-            }).catch(()=>{
+            }).catch((e)=>{
               this.dataReady = true
             })
+            
             break;
           }
           case "signTransaction":{

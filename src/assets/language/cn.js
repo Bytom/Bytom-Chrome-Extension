@@ -329,6 +329,15 @@ const cn = {
     mnemonicHint:'请抄写助记词，并妥善保管',
     ok:'已完成'
   },
+  lock: {
+    title: '安全锁定',
+    subtitle: '请输入钱包密码以解锁',
+    placeholder: '请输入密码',
+    forget: '忘记密码？',
+    import: '重新导入钱包',
+    passwordEmpty: '请输入密码',
+    passwordError: '密码错误'
+  },
   protocol: {
     title: '服务协议',
     content: `尊敬的用户：

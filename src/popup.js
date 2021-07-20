@@ -36,6 +36,8 @@ import { Vue as VueIntegration } from "@sentry/integrations";
 import { Integrations } from '@sentry/tracing';
 import BytomObj from "./utils/Bytom";
 
+import { updateLockTime, isNeedLock } from '@/models/lock'
+
 store.dispatch(Actions.LOAD_BYTOM).then(() => {
   Vue.use(VueI18n)
   const i18n = new VueI18n({
@@ -71,7 +73,7 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
   }
 
   Sentry.init({
-    dsn: "https://f080e90fe9d94cf9b05323b373d839f3@o441881.ingest.sentry.io/5412722",
+    dsn: "https://f5d345e069fe4d0a9e4509ff31c8862c@sentry.8btc-ops.com/14",
     release: "byone@" + process.env.npm_package_version,
     integrations: [
       new VueIntegration({
@@ -135,6 +137,13 @@ store.dispatch(Actions.LOAD_BYTOM).then(() => {
   router.beforeEach((to, from, next) => {
     // wallet init
 
+    if (!to.meta.nolock) {
+      if (store.getters.currentAccount && isNeedLock()) {
+        next({ name: 'lock', query: { to: to.name } })
+        return
+      } 
+      updateLockTime()
+    }
     if (!(store.getters.currentAccount) && to.name == 'home') {
       next({ name: 'welcome' })
       let newURL = `${apis.runtime.getURL('pages/prompt.html')}#/welcome`;

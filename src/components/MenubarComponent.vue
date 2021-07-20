@@ -131,8 +131,11 @@
                   case RouteNames.ENABLE:
                   case RouteNames.BAPP_PROMPT:
                   case RouteNames.PRIVACY:
-                  case RouteNames.PROTOCOL: return false;
-                  default: return true;
+                  case RouteNames.PROTOCOL: 
+                  case RouteNames.LOCK: 
+                    return false;
+                  default: 
+                    return true;
               }
             },
 

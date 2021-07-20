@@ -172,7 +172,7 @@
   <div>
     <div class="warp bg-white">
       <div class="header color-black">
-        <BackButton des="welcome"/>
+        <BackButton />
         <h1>
           <div class="welcome-title">{{ $t('restore.title')}}</div>
         </h1>

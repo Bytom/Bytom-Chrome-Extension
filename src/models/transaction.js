@@ -149,12 +149,16 @@ transaction.decodeTransaction = function(rawTx) {
 
 transaction.transfer = function(transaction, password, address, context) {
   let retPromise = new Promise((resolve, reject) => {
-
-    const {to, asset, amount, confirmations} = transaction
-    const _to = to.trim()
-    bytom.transaction
-      .buildPayment(address, _to, asset, amount.toString(), confirmations)
-      .then(result => {
+    const build = () => {
+      const {to, asset, amount, confirmations} = transaction
+      // transfer to multi address
+      if (typeof to === 'object') {
+        return bytom.transaction.buildPayment(address, to, asset, null, confirmations)
+      } else {
+        return bytom.transaction.buildPayment(address, to.trim(), asset, amount.toString(), confirmations)
+      }
+    }
+    build().then(result => {
         return Promise.all(result.map( (data) =>
           signSubmit( data, password, address, context)))
             .then((ret )=>{

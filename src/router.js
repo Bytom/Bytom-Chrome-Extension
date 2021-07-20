@@ -28,6 +28,8 @@ export const RouteNames = {
   WALLETS:'wallets',
   BAPP:'bapp',
   BAPP_PROMPT:'bapp-prompt',
+
+  LOCK: 'lock'
 };
 
 const routers = [
@@ -85,7 +87,7 @@ const routers = [
   {
     path: '/enable',
     name: RouteNames.ENABLE,
-    meta: { title: '授权' },
+    meta: { title: '授权', nolock: true },
     component: resolve => {
       require(['@/views/prompts/authentication.vue'], resolve)
     }
@@ -93,7 +95,7 @@ const routers = [
   {
     path: '/bappPrompt',
     name: RouteNames.BAPP_PROMPT,
-    meta: { title: 'Bapp请求' },
+    meta: { title: 'Bapp请求', nolock: true },
     component: resolve => {
       require(['@/views/prompts/bappPrompt.vue'], resolve)
     }
@@ -176,14 +178,14 @@ const routers = [
   {
     path: '/protocol',
     name: RouteNames.PROTOCOL,
-    meta: { title: '用户协议' },
+    meta: { title: '用户协议', nolock: true },
     component: resolve => {
       require(['@/views/welcome/protocol.vue'], resolve)
     }
   },{
     path: '/privacy',
     name: RouteNames.PRIVACY,
-    meta: { title: '隐私服务' },
+    meta: { title: '隐私服务', nolock: true },
     component: resolve => {
       require(['@/views/welcome/privacy.vue'], resolve)
     }
@@ -191,7 +193,7 @@ const routers = [
   {
     path: '/welcome',
     name: RouteNames.ENTRY,
-    meta: { title: '创建账户' },
+    meta: { title: '创建账户', nolock: true },
     component: resolve => {
       require(['@/views/welcome/welcome.vue'], resolve)
     }
@@ -199,7 +201,7 @@ const routers = [
   {
     path: '/creation',
     name: RouteNames.CREATE_ACCOUNT,
-    meta: { title: '创建账户' },
+    meta: { title: '创建账户', nolock: true },
     component: resolve => {
       require(['@/views/welcome/creation.vue'], resolve)
     }
@@ -215,7 +217,7 @@ const routers = [
   {
     path: '/verify-mnemonic',
     name: RouteNames.VERIFY_MNEMONIC,
-    meta: { title: '验证助记词' },
+    meta: { title: '验证助记词', nolock: true },
     component: resolve => {
       require(['@/views/welcome/verifyMnemonic.vue'], resolve)
     }
@@ -223,7 +225,7 @@ const routers = [
   {
     path: '/import',
     name: RouteNames.RESTORE_ACCOUNT,
-    meta: { title: '创建账户' },
+    meta: { title: '创建账户', nolock: true },
     component: resolve => {
       require(['@/views/welcome/import.vue'], resolve)
     }
@@ -231,9 +233,17 @@ const routers = [
   {
     path: '/restore-password',
     name: RouteNames.SETTING_PASSWORD,
-    meta: { title: '密码' },
+    meta: { title: '密码', nolock: true },
     component: resolve => {
       require(['@/views/welcome/password/setting.vue'], resolve)
+    }
+  },
+  {
+    path: '/lock',
+    name: RouteNames.LOCK,
+    meta: { title: '锁屏', nolock: true },
+    component: resolve => {
+      require(['@/views/lock.vue'], resolve)
     }
   }
 ]
